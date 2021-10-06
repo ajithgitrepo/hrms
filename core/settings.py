@@ -62,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -120,7 +121,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 #############################################################
 # SRC: https://devcenter.heroku.com/articles/django-assets
@@ -137,10 +138,8 @@ STATICFILES_DIRS = (
 #############################################################
 #############################################################
 
-MEDIA_URL = '/onboarding/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'files/onboarding')
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

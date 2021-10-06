@@ -779,5 +779,5 @@ def change_status(request, pk,val):
     data = Leave_Type.objects.get(id=pk)
     data.is_active = val
     data.save()
-    messages.success(request,'Leave type status was changed! ')
+    messages.success(request,'Leave type status was changed!')
     return redirect('leave_types')

@@ -45,11 +45,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 {% block content %}
 
 
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
-  <!-- Page plugins -->
- 
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -103,16 +98,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <th>Action</th>
                 </tr>
               </thead>
-              <!-- <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
-                </tr>
-              </tfoot> -->
+             
               <tbody>
                 {% for emp in employees %}
                 <tr>
@@ -264,8 +250,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-  <!-- Optional JS -->
-
   
     <script type="text/javascript">
         $(document).on('click', '.confirm-delete', function(){
@@ -412,35 +396,7 @@ function csrfSafeMethod(method) {
 
     </script>
 
-     <!-- Optional JS -->
-  <!-- <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script> -->
-  <!-- <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script> -->
-
   
-  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
-
-  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-
-  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-
-  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-
-
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
-
-
 
   <script>
    
@@ -448,24 +404,12 @@ function csrfSafeMethod(method) {
     $('#example').DataTable( {
         dom: 'Bfrtip',
         buttons: [
-            // {
-            //     extend: 'copyHtml5',
-            //     exportOptions: {
-            //         columns: [ 0, ':visible' ]
-            //     }
-          //  },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
-            // {
-            //     extend: 'pdfHtml5',
-            //     exportOptions: {
-            //         columns: [ 0, 1 ]
-            //     }
-           // },
             'colvis'
         ]
     } );

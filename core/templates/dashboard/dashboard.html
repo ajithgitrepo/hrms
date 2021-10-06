@@ -1,0 +1,385 @@
+
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+    <style>
+        .Usrimg
+        {
+            border-radius: 50%;
+            border-style: solid;
+            border-width: 1px;
+            padding: 2px;
+            width: 40px;
+        }
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 d-inline-block mb-0">Dashboard</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Alternative</li> -->
+                </ol>
+              </nav>
+            </div>
+            <!-- <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral">New</a>
+              <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      
+      <div class="card-deck flex-column flex-xl-row">
+       
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <!-- <h6 class="text-muted text-uppercase ls-1 mb-1">Overview</h6> -->
+            <h2 class="h3 mb-0">Birthday</h2>
+          </div>
+          
+          <div class="card-body">
+            <!-- Chart -->
+            <a href="birthdays/" style="color: #5a5858;">
+            <div class="chart overflow-dashboard">
+              
+                <div class="row">
+                    {% for data in birthdays %}
+                        <div class="col-lg-2">
+                            <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                        </div>
+                        <div class="col-lg-10" style="margin-bottom: 10px;">
+                            <span class="CP"><span>{{ data.employee_id}} &nbsp;-&nbsp;</span><b>{{ data.first_name}} {{ data.last_name}}</b> </span><br>
+                            <small>{{ data.role.name}}&nbsp;-&nbsp;{{ data.department.name}}</small> 
+                            <div class="usr_cl">
+                                <small><i class="fas fa-mobile"></i>&nbsp; {{ data.work_phone}}</small> 
+                            </div> 
+                            <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                        </div>
+                        <hr>
+                        {% empty %}
+                        <div style="margin: auto; text-align: center;margin-top: 70px;">
+                            <img src="{% static 'images/no_birthday.png' %}" width="100" > <br>
+                            <span>No Birthday buddies found.</span>
+                        </div>
+                    {% endfor %}
+                </div>
+              
+            </div>
+          </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">New Hires</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+          <a href="new_hires/" style="color:#5a5858;">
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for new in new_hires %}
+                  <div class="col-lg-2">
+                      <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                  </div>
+                  <div class="col-lg-10" style="margin-bottom: 10px;">
+                      <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
+                      <small>{{ new.role.name}}&nbsp;-&nbsp;{{ new.department.name}}</small> 
+                      <div class="usr_cl">
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
+                      </div> 
+                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                  </div>
+                  {% empty %}
+                  <div style="margin: auto; text-align: center;margin-top: 70px;">
+                      <img src="{% static 'images/eyes_looking.png' %}" width="130"  > <br>
+                      <span>No New Joinees in past 15 days.</span>
+                  </div>
+                {% endfor %}
+            </div>
+            </div>
+          </a>
+          </div>
+        </div>
+        <!-- Progress track -->
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h5 class="h3 mb-0">Attendance</h5>
+              </div>
+            </div>
+          </div>
+          <!-- Card body -->
+          <div class="card-body">
+           
+              {% if request.session.checkin_session %}
+              <form method="POST" class="post-form" action="check_out_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-4">
+                    <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
+                    
+                </div>
+              </div>
+                 
+              </form>
+              {% else %}
+              <form method="POST" class="post-form" action="check_in_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-4">
+                    <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                  
+                </div>
+              </div>
+                 
+              </form>
+
+              {% endif %}
+              
+            
+              <div class="d-flex justify-content-center align-items-center mt-10" style="margin-top: 25%;">
+                
+                <h1 class="d-flex justify-content-center align-items-center mt-10" >{{ check_in }} Hrs</h1><br>
+                
+              </div>
+
+              <div class="d-flex justify-content-center align-items-center mt-10" >
+                
+                <span>{% now "d M Y" %}</span>
+            
+              </div>
+
+             
+          </div>
+        </div>
+      </div>
+
+      <div class="card-deck flex-column flex-xl-row">
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <!-- <h6 class="text-muted text-uppercase ls-1 mb-1">Overview</h6> -->
+            <span class="h3 mb-0">Announcements</span>&nbsp;<a href="/add_announcements/" data-toggle="tooltip" data-original-title="Announcements"><i class="fas fa-plus-circle"></i></a>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for data in announcements %}
+                
+                
+                <div class="col-lg-9" style="margin-bottom: 10px;">
+                    <a href="{% url 'announcement_view' data.pk %}" style="color:rgb(59, 59, 59);">
+                        <span class="CP" style="font-size: 16px;">{{ data.title}}</span><br>
+                        <small style="font-size: 10px;">{{ data.created_at }}</small> 
+                    </a>
+                    <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                </div>
+               
+
+                <div class="col-lg-3">
+                    <img src="{% static 'images/admin.png' %}" width="40" class="Usrimg"> 
+                </div>
+
+                {% empty %}
+                <div style="margin: auto; text-align: center;margin-top: 70px;">
+                    <img src="{% static 'images/announcement.png' %}" width="130"> <br>
+                    <span>No Announcement in last 30 days.</span>
+                </div>
+                {% endfor %}
+            </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">Leave Report</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+            <div class="chart">
+              
+            </div>
+          </div>
+        </div>
+        <!-- Progress track -->
+      
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <!-- <h6 class="text-muted text-uppercase ls-1 mb-1">Overview</h6> -->
+            <h2 class="h3 mb-0">Upcoming Holidays</h2>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+            <div class="chart">
+              <!-- Chart wrapper -->
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+        
+      <div class="card-deck flex-column flex-xl-row">
+       
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h5 class="h3 mb-0">My Timelogs</h5>
+              </div>
+            </div>
+          </div>
+          <!-- Card body -->
+          <div class="card-body">
+            <div id="TIMELOGS" class="dash-body ">
+              <div id="dashboardTimelogsNavBar">
+                    <ul class="Dnav" id="date_my_timelogs">
+                      <!-- <li id="day3" onclick=""><b>3</b>Mon</li>
+                      <li id="day4" onclick="" class="sel"><b>4</b>Tue</li>
+                      <li id="day5" onclick=""><b>5</b>Wed</li>
+                      <li id="day6" onclick=""><b>6</b>Thu</li>
+                      <li id="day7" onclick=""><b>7</b>Fri</li>
+                      <li id="day8" onclick=""><b>8</b>Sat</li>
+                      <li id="day9" onclick=""><b>9</b>Sun</li> -->
+                    </ul>
+                </div>
+                <div id="dashboardTimelogs" class="tlogscrl">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr id="dashTimelog57753000000234023">
+                                <td class="CP" onclick="">test<span><span class="timelg-dot">.</span>test</span></td>
+                                <td width="100"><bclass="zp_font">00:00</bclass="zp_font"></td><td width="75"><i class="IC-player grn S18" tid="57753000000234023" onclick=""></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">On Leave Today</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+            <div class="chart">
+              
+            </div>
+          </div>
+        </div>
+        <!-- Progress track -->
+       
+      </div>
+
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+  <script src="/static/assets/vendor/jvectormap-next/jquery-jvectormap.min.js"></script>
+  <script src="/static/assets/js/vendor/jvectormap/jquery-jvectormap-world-mill.js"></script>
+
+  <script>
+
+    setInterval(function(){ 
+
+        // var start = new Date;
+        // var dt = new Date();
+        // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+        // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
+
+        var dt = new Date();
+        var h =  dt.getHours(), m = dt.getMinutes();
+        var time = (h > 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+
+        $('.Timer').text(time); 
+
+    }, 1000);
+
+    let curr = new Date 
+    let days_name = []
+    let days_no = []
+
+    for (let i = 1; i <= 7; i++) {
+        let first = curr.getDate() - curr.getDay() + i 
+        let date_initial = new Date(curr.setDate(first)).toISOString().slice(0, 10)
+        let date_convert = new Date(date_initial);
+        let day = date_convert.toLocaleString("default", { weekday: "short" })
+        split_date = date_initial.split('-');
+        days_name.push(day)
+        days_no.push(split_date[2])
+
+    }
+
+    // alert(days_name)
+    // alert(days_no)
+
+    html = '';
+    for(i=0;i<=days_no.length-1;i++){
+        
+        html +='<li id="day3" onclick=""><b>'+days_no[i]+'</b>'+days_name[i]+'</li>';
+       
+    }
+
+    $("#date_my_timelogs").empty();
+    $("#date_my_timelogs").html(html);
+
+  </script>
+
+{% endblock javascripts %}

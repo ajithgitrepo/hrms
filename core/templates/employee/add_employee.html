@@ -429,17 +429,24 @@ input[type=number] {
                         </select>
                       
                         {{ form.department.errors }}
-                  </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Role</label>
+                         
+                           <select class="form-control" value="{{ form.data.role }}" name="role">
+                                 <option value="">select</option>
+                                 {% for role in roles %}
+                                     <option value="{{ role.id }}" {% if form.data.role == "{{ role.id }}" %} selected{% endif %}>  {{ role.name }}</option>
+                                 {% endfor %} 
+                           </select>
+                           {{ form.role.errors }}
+                          
+                        </div>
                     </div>
                      
-                    <div class="col-md-4"> 
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-address">Reporting To</label>
-                          <input name="reporting_to" value="{{ form.data.reporting_to }}" class="form-control" placeholder="Enter Reporting To"  type="text">
-                          {{ form.reporting_to.errors }}
-                        </div>
-                      </div>
-
                       <div class="col-md-4">
                         <div class="form-group">
                           <label class="form-control-label" for="input-address">Source of hire</label>
@@ -534,28 +541,14 @@ input[type=number] {
                   </div>
                   <div class="col-lg-4">
                     <div class="form-group">
-                      <label class="form-control-label" for="input-country">Role</label>
-                     
-                       <select class="form-control" value="{{ form.data.role }}" name="role">
-                             <option value="">select</option>
-                             {% for role in roles %}
-                                 <option value="{{ role.id }}" {% if form.data.role == "{{ role.id }}" %} selected{% endif %}>  {{ role.name }}</option>
-                             {% endfor %} 
-                       </select>
-                       {{ form.role.errors }}
-                
-                      
-                  </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-4">
-                    <div class="form-group">
                       <label class="form-control-label" for="input-city">Total experience</label>
                       <input type="number" name="total_experience" value="{{ form.data.total_experience }}" class="form-control" placeholder="Enter Total experience" >
                     </div>
                   </div>
+                </div>
+
+                <div class="row">
+                 
                   <div class="col-lg-4">
                     <div class="form-group">
                       <label class="form-control-label" for="input-country">Experience</label>
@@ -567,8 +560,31 @@ input[type=number] {
             </div>
 
             <hr class="my-4" />
+
+            <h6 class="heading-small text-muted mb-4">Hierarchy Information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-md-4"> 
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-address">Reporting To</label>
+
+                  
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
+                        <option value="" selected >Select</option>
+                        {% for report in reporting %}
+                            <option value="{{ report.employee_id }}" {% if form.data.reporting_to == "{{ report.employee_id }}" %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                        {% endfor %} 
+                      </select>
+                    
+                    {{ form.reporting_to.errors }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4" />
            
-                  <select style="display: none;" id="address-country"></select>
+                <select style="display: none;" id="address-country"></select>
             
                 <h6 class="heading-small text-muted mb-4">Personal</h6>
                 <div class="pl-lg-4">

@@ -19,7 +19,7 @@ class Role(models.Model):
  Group.add_to_class('created_by', models.CharField(max_length=180, null=True))
 
  Group.add_to_class('updated_at', models.DateTimeField(auto_now_add=True, null=True))
- Group.add_to_class('is_active', models.CharField(max_length=50,null=True, blank=True,default='1'))
+ Group.add_to_class('is_active', models.IntegerField(null=True, blank=True,default='1'))
     
 
  User.add_to_class('role', models.IntegerField(null=True, blank=True))

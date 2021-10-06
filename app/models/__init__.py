@@ -9,3 +9,9 @@ from .department_model import Department
 from .leave_type_model import *
 from .leave_balance import *
 from .customize_leave_balance import *
+from .onboard_employee_model import *
+from .attendance_model import *
+from .organization_files_model import *
+from .folder_model import *
+from .employee_files_model import *
+from .announcement_model import *
