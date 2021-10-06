@@ -23,39 +23,39 @@
             <!-- Nav items -->
             <ul class="navbar-nav">
                        
-                <a class="nav-link {% if 'index' in segment %} active {% endif %} {% if 'alternative' in segment %} active {% endif %}" 
+                <a class="nav-link {% if request.resolver_match.url_name == "home" %}active{% endif %}" 
                 href="#navbar-dashboards" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-dashboards">
                     <i class="ni ni-shop text-primary"></i>
                     <span class="nav-link-text">Dashboards</span>
                 </a>
-                <div class="collapse {% if 'index' in segment %} show {% endif %} " id="navbar-dashboards">
+                <div class="collapse {% if request.resolver_match.url_name == "home" %}show{% endif %} " id="navbar-dashboards">
                     <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                        <a href="/" class="nav-link {% if 'index' in segment %} active {% endif %}">
+                        <a href="/" class="nav-link {% if request.resolver_match.url_name == "home" %}active{% endif %}">
                         <span class="sidenav-mini-icon"> D </span>
                         <span class="sidenav-normal"> Dashboard </span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="/alternative.html" class="nav-link {% if 'alternative' in segment %} active {% endif %}">
                         <span class="sidenav-mini-icon"> A </span>
                         <span class="sidenav-normal"> Alternative </span>
                         </a>
-                    </li>
+                    </li> -->
                     </ul>
                 </div>
 
                 
                  
-                <a class="nav-link {% if 'candidate' in segment %} active {% endif %} {% if 'candidate' in segment %} active {% endif %}" 
+                <a class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}{% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}" 
                 href="#navbar-onboarding" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-onboarding">
                 <i class="fas fa-user-plus text-primary"></i>
                     <span class="nav-link-text">Onboarding</span>
                 </a>
-                <div class="collapse {% if 'candidate' in segment %} show {% endif %} " id="navbar-onboarding">
+                <div class="collapse {% if request.resolver_match.url_name == "onboard_employees" %}show{% endif %} {% if request.resolver_match.url_name == "add_onboard_employee" %}show{% endif %}" id="navbar-onboarding">
                     <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                        <a href="/" class="nav-link {% if 'index' in segment %} active {% endif %}">
+                        <a href="/onboard_employees/" class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %} {% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %} ">
                         <span class="sidenav-mini-icon"> C </span>
                         <span class="sidenav-normal"> Candidate </span>
                         </a>
@@ -63,83 +63,128 @@
                    
                     </ul>
                 </div>
-                
-                   
-                    <li class="nav-item">
-                      <a class="nav-link " href="/roles/">
-                        <i class="fas fa-user-tag text-primary"></i>
-                            <span class="nav-link-text">Role</span>
-                        </a>
-                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link " href="/departments/">
-                                <i class="fas fa-building text-primary"></i>
-                                  <span class="nav-link-text">Department</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " href="/employees/">
-                              <i class="fas fa-user text-primary"></i>
-                              <span class="nav-link-text">Employees</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " href="/leave_request/">
-                                <i class="fas fa-calendar-alt text-primary"></i>
-                                <span class="nav-link-text">Leave Request</span>
-                            </a>
-                        </li>
-
-
-                <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} " 
-                   href="#navbar-leave" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave">
-                   <i class="fas fa-calendar-alt text-primary"></i>
-                    <span class="nav-link-text">Leave</span>
+                <a class="nav-link  {% if request.resolver_match.url_name == "employees" %}active{% endif %} {% if request.resolver_match.url_name == "roles" %}active{% endif %} {% if request.resolver_match.url_name == "departments" %}active{% endif %} {% if request.resolver_match.url_name == "new_hires" %}active{% endif %} {% if request.resolver_match.url_name == "birthdays" %}active{% endif %} " 
+                href="#navbar-organization" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-organization">
+                <i class="fas fa-building text-primary"></i>
+                    <span class="nav-link-text">Organization</span>
                 </a>
-                <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
+                <div class="collapse {% if request.resolver_match.url_name == "employees" %}show{% endif %} {% if request.resolver_match.url_name == "roles" %}show{% endif %} {% if request.resolver_match.url_name == "departments" %}show{% endif %} {% if request.resolver_match.url_name == "new_hires" %}show{% endif %} {% if request.resolver_match.url_name == "birthdays" %}show{% endif %}  " id="navbar-organization">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                        
-                            <a class="nav-link" href="#leave-settings" data-toggle="collapse" {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %}   role="button" aria-expanded="true" aria-controls="navbar-leave">
-                                <span class="sidenav-mini-icon"> S </span>
-                                <span class="sidenav-normal"> Settings </span>
+                            <a class="nav-link {% if request.resolver_match.url_name == "employees" %}active{% endif %} " href="/employees/">
+                                <span class="sidenav-mini-icon"> E </span>
+                                <span class="nav-link-text">Employees</span>
                             </a>
-
-                            <div id="leave-settings" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
-                                
-                                <ul>
-                                    <li class="nav-item">
-                                        <a href="{% url 'leave_types' %}" class="nav-link {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  ">
-                                            <span class="sidenav-mini-icon"> LT </span>
-                                            <span class="sidenav-normal"> Leave Type </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'leave_types' %}" class="nav-link {% if request.resolver_match.url_name == "" %}active{% endif %} ">
-                                            <span class="sidenav-mini-icon"> CP </span>
-                                            <span class="sidenav-normal"> Customize Policy </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'leave_balance' %}" class="nav-link {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %} ">
-                                            <span class="sidenav-mini-icon"> CB </span>
-                                            <span class="sidenav-normal"> Customize Balance </span>
-                                        </a>
-                                    </li>
-                                </ul>
-
-                            </div>
-
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "departments" %}active{% endif %}" href="/departments/">
+                                <span class="sidenav-mini-icon"> D </span>
+                                <span class="nav-link-text">Department</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "roles" %}active{% endif %}" href="/roles/">
+                                <span class="sidenav-mini-icon"> R </span>
+                                <span class="nav-link-text">Role</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "new_hires" %}active{% endif %}" href="/new_hires/">
+                                <span class="sidenav-mini-icon"> N </span>
+                                <span class="nav-link-text">New Hires</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "birthdays" %}active{% endif %}" href="/birthdays/">
+                                <span class="sidenav-mini-icon"> B </span>
+                                <span class="nav-link-text">Birthday Folks</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
+                
+                <a class="nav-link  {% if request.resolver_match.url_name == "organinzation_files" %}active{% endif %} {% if request.resolver_match.url_name == "employee_files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_org_files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_emp_files" %}active{% endif %}  " 
+                href="#navbar-files" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-files">
+                <i class="fas fa-calendar-check text-primary"></i>
+                    <span class="nav-link-text">Files</span>
+                </a>
+                <div class="collapse {% if request.resolver_match.url_name == "organinzation_files" %}show{% endif %} {% if request.resolver_match.url_name == "employee_files" %}show{% endif %} {% if request.resolver_match.url_name == "add_org_files" %}show{% endif %} {% if request.resolver_match.url_name == "add_emp_files" %}show{% endif %} " id="navbar-files">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "organinzation_files" %}active{% endif %} {% if request.resolver_match.url_name == "add_org_files" %}active{% endif %} " href="/organinzation_files/">
+                                <span class="sidenav-mini-icon"> O </span>
+                                <span class="nav-link-text">Organization Files</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "employee_files" %}active{% endif %} {% if request.resolver_match.url_name == "add_emp_files" %}active{% endif %} " href="/employee_files/">
+                                <span class="sidenav-mini-icon"> E </span>
+                                <span class="nav-link-text">Employee Files</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %}  " href="/announcements/">
+                        <i class="fas fa-bullhorn text-primary"></i>
+                        <span class="nav-link-text">Announcements</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link " href="/leave_request/">
+                        <i class="fas fa-calendar-alt text-primary"></i>
+                        <span class="nav-link-text">Leave Request</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} " 
+                    href="#navbar-leave" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave">
+                    <i class="fas fa-calendar-alt text-primary"></i>
+                        <span class="nav-link-text">Leave Tracker</span>
+                    </a>
+                    <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                            
+                                <a class="nav-link" href="#leave-settings" data-toggle="collapse" {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %}   role="button" aria-expanded="true" aria-controls="navbar-leave">
+                                    <span class="sidenav-mini-icon"> S </span>
+                                    <span class="sidenav-normal"> Settings </span>
+                                </a>
+
+                                <div id="leave-settings" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
+                                    
+                                    <ul>
+                                        <li class="nav-item">
+                                            <a href="{% url 'leave_types' %}" class="nav-link {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  ">
+                                                <span class="sidenav-mini-icon"> LT </span>
+                                                <span class="sidenav-normal"> Leave Type </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{% url 'leave_types' %}" class="nav-link {% if request.resolver_match.url_name == "" %}active{% endif %} ">
+                                                <span class="sidenav-mini-icon"> CP </span>
+                                                <span class="sidenav-normal"> Customize Policy </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{% url 'leave_balance' %}" class="nav-link {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %} ">
+                                                <span class="sidenav-mini-icon"> CB </span>
+                                                <span class="sidenav-normal"> Customize Balance </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div>
                 </li>
 
 

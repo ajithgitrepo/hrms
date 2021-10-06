@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Datatables {% endblock %}
+{% block title %} Roles {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -50,7 +50,7 @@
             </p> --> 
           </div>
           <div class="table-responsive py-4">
-            <table class="table table-flush" id="datatable-buttons">
+            <table class="table table-flush" id="example">
               <thead class="thead-light">
                 <tr>
                   <th>#</th>
@@ -61,16 +61,6 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <!-- <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
-                </tr>
-              </tfoot> -->
               <tbody>
                 {% for role in roles %}
                 <tr>
@@ -108,20 +98,22 @@
         })
 
 
-        // $(document).ready(function() {
-        //     $('#datatable').DataTable( {
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'copy', 'csv', 'excel', 'pdf', 'print'
-        //         ],
-        //         language: {
-        //         paginate: {
-        //             previous: "<i class='fas fa-angle-left'>",
-        //             next: "<i class='fas fa-angle-right'>"
-        //         }
-        //     }
-        //     } );
-        // } );
+        
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        //dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            'colvis'
+        ]
+    } );
+    
+} );
 
 
     </script>

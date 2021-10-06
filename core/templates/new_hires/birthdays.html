@@ -1,0 +1,319 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Birthdays {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+    <style>
+    .card-birthday{
+        margin-right: 15px;
+        margin-bottom: 30px;
+        max-height: 300px;
+        margin-left: 10px;
+    }
+    </style>
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Organization</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Birthdays</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <!-- <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a> 
+            <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header ">
+            <h2 class="h3 mb-0">Birthdays</h2>
+
+            <form method="POST" enctype="multipart/form-data" name="form" class="post-form" > 
+            <div class="row" style="justify-content: center;">
+                
+                <div class="col-lg-1">
+                    <span class="btn" id="date_pre" title="Previous Date"><i class="fas fa-chevron-left"></i></span>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <input type="text" class="form-control startdate" id="date_get" autocomplete="off"  name="date_get" value="{{ date }}" >
+                    </div>
+                </div>
+
+                <div class="col-lg-1">
+                    <span class="btn" id="date_next" title="Next Date"><i class="fas fa-chevron-right"></i></span>
+                </div>
+
+                <button type="submit" class="btn" id="get_birthday" style="display: none;">submit</button>
+                
+            </div>
+            </form>
+
+          </div>
+          <!-- <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Role</th>
+                  
+                </tr>
+              </thead>
+             
+              <tbody>
+                {% for day in birthdays %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{day.first_name}}</td>
+                    <td>{{day.last_name}}</td>
+                    <td>{{day.email_id}}</td>
+                    <td>{{day.department.name}}</td>
+                    <td>{{day.role.name}}</td>
+                   
+                   
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div> -->
+
+         
+      <div class="row" style="margin-left: 0px;" id="dynamic_birthdays">
+
+        {% for data in birthdays %}
+        
+        <div class="card col-lg-3 text-center card-birthday" >
+            <div class="card-header bg-transparent">
+              <h2 class="h3 mb-0">{{ data.birth_date|date:'d M' }} </h2>
+            </div>
+            <div class="card-body">
+             
+                <div class="chart overflow-dashboard text-center">
+                
+                    <div class="">
+                        <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                    </div>
+                    <div>
+                        <strong><span>{{data.employee_id}}</span> - <span>{{data.first_name}} {{data.last_name}}</span></strong>
+                    </div>
+                    <div>
+                        <small>{{ data.department__name}}</span><span>&nbsp;-&nbsp;{{ data.role__name}}</small>
+                    </div>
+                    <div>
+                        <small><a href="mailto:{{data.email_id}}">{{ data.email_id}}</a></span></small>
+                    </div>
+                  
+                </div>
+            </div>
+          </div>
+
+          {% empty %}
+          <div style="    margin: auto;text-align: center;margin-top: 50px;margin-bottom: 30px;">
+              <img src="{% static 'images/no_birthday.png' %}" width="100"  class="Usrimg"> <br>
+              <span>No Birthday buddies found today.</span>
+          </div>
+        {% endfor %}
+       
+      </div>
+
+    
+
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this role?');
+        })
+
+    $(function () {
+
+        var MyDate = new Date();
+        var strDate;
+
+        strDate = ('0' + MyDate.getDate()).slice(-2) + '-' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '-' + MyDate.getFullYear();
+
+        $('.startdate').val(strDate);
+        
+        $(".startdate").datepicker({
+            format: 'dd-mm-yyyy',  
+            autoclose: true,
+            todayBtn: "linked",
+            todayHighlight: true,
+            
+        });
+            
+    });
+
+    $('#date_next').click(function () {
+        var date2 = $('.startdate').datepicker('getDate'); 
+        date2.setDate(date2.getDate()+1); 
+        $('.startdate').datepicker('setDate', date2);
+
+        //$('#get_birthday').click();
+
+        get_birthdays()
+
+    });
+
+    $('#date_pre').click(function () {
+        var date2 = $('.startdate').datepicker('getDate'); 
+        date2.setDate(date2.getDate()-1); 
+        $('.startdate').datepicker('setDate', date2);
+
+        get_birthdays()
+        
+    });
+
+    function get_birthdays()
+    {
+        date = $('.startdate').val(); 
+        //alert(date)
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({  
+            type: "POST",  
+            url: "/get_birthday/",  
+            data: {csrfmiddlewaretoken : csrftoken, date_get : date},
+            dataType: 'json',
+            success: $.proxy(function(data) {
+            
+                //console.log(JSON.stringify(data['birthdays']));
+                html = '';
+                split_date = date.split('-');
+                date = new Date(split_date[2], (split_date[1])-1, split_date[0]);
+                month_name =  date.toLocaleString('default', { month: 'short' });
+               
+                if(data['birthdays'].length != 0)
+                {
+                    $.each(data['birthdays'], function (index, value) {
+
+                        //alert(data['birthdays'][index]['first_name']);
+                        
+                        html += '<div class="card col-lg-3 text-center card-birthday" >';
+                        html += '<div class="card-header bg-transparent">';
+                        html += '<h2 class="h3 mb-0">'+split_date[0]+' '+month_name+'</h2>';
+                        html += '</div>';
+                        html += '<div class="card-body">';
+                        
+                        html += '<div class="chart overflow-dashboard text-center">';
+                            
+                        html += '<div class="">';
+                        html += '<img src="/static/images/admin.png" width="50" class="Usrimg">';
+                        html += '</div>';
+                        html += '<div>';
+                        html += '<strong><span>'+data['birthdays'][index]['employee_id'] +'</span> - <span>'+data['birthdays'][index]['first_name'] + data['birthdays'][index]['last_name'] +' </span></strong>';
+                        html += '</div>';
+                        html += '<div>';
+                        html += '<small>'+data['birthdays'][index]['department__name'] +'</span><span>&nbsp;-&nbsp;'+data['birthdays'][index]['role__name'] +'</small>';
+                        html += '</div>';
+                        html += '<div>';
+                        html += '<small><a href="mailto:'+data['birthdays'][index]['email_id'] +'">'+data['birthdays'][index]['email_id'] +'</a></span></small>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+
+                    });
+                }
+                else{
+                    html += '<div style="margin: auto; text-align: center;margin-top: 50px;margin-bottom: 30px;">';
+                    html += '<img src="/static/images/no_birthday.png" width="100"  class="Usrimg"> <br>';
+                    html += '<span>No Birthday buddies found.</span>';
+                    html += '</div>';
+                }
+
+                $('#dynamic_birthdays').empty();
+                $('#dynamic_birthdays').html(html);
+
+                    
+            })
+		});
+
+    }
+        
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        //dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            'colvis'
+        ],
+        language: {
+            "emptyTable": "No New Joinees in past 15 days.",
+            "loadingRecords": "Please wait .. ", 
+        }
+    } );
+    
+} );
+
+
+    </script>
+
+{% endblock javascripts %}
+
+

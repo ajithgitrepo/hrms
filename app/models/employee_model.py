@@ -6,6 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 from django.db import models
 from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group
+from app.models.department_model import Department 
 
 # Create your models here.
 
@@ -29,7 +30,7 @@ class Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     nick_name = models.CharField(max_length=30) 
 
-    department = models.CharField(max_length=20, blank = True, null = True) 
+    department = models.ForeignKey(Department, max_length=50, blank=True, related_name='department_emp', null=True, on_delete= models.SET_NULL)
     reporting_to = models.CharField(max_length=20, blank = True, null = True)  
     source_of_hire = models.CharField(max_length=200, blank = True, null = True)  
     seating_location = models.CharField(max_length=50, blank = True, null = True)  
@@ -42,7 +43,7 @@ class Employee(models.Model):
     code_name = models.CharField(max_length=50, blank = True, null = True)  
     code_num = models.CharField(max_length=50, blank = True, null = True)  
     extension = models.CharField(max_length=20, blank = True, null = True)  
-    role = models.IntegerField( blank = True, null = True)  
+    role = models.ForeignKey(Group, blank=True, related_name='role', null=True, on_delete= models.SET_NULL)
     total_experience = models.CharField(max_length=20, blank = True, null = True)  
     experience = models.CharField(max_length=20, blank = True, null = True)  
 
@@ -86,7 +87,7 @@ class Work_Experience(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
 
-    # employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
+    employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
 
 
     class Meta:  
@@ -105,7 +106,7 @@ class Education(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
 
-    # employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
+    employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
 
 
     class Meta:  

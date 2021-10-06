@@ -122,8 +122,7 @@ def roles(request):
 def employees(request):
    # return HttpResponse("employee")
     employee = Employee.objects.filter(is_active='1')
-   # return HttpResponse(employee)
-    print(employee);
+    # print(employee)
     context = {'employees':employee}
     return render(request, "employee/index.html", context)
 
@@ -329,16 +328,16 @@ def add_employee(request):
                 return render(request, "employee/add_employee.html", context)
                 
        
-    role = Group.objects.all()
+    role = Group.objects.filter(is_active = 1)
+    reporting = Employee.objects.filter(is_active = 1)
     context_role = {
-          'roles': role,
-         #  'country': 'in'
-       }
+        'roles': role,
+        'reporting': reporting,
+    }
    
     #
    # tes = Group.objects.all()
     context_role.update({"form":form})
-    print(context_role)
     return render(request, "employee/add_employee.html",  context_role )
    
 
