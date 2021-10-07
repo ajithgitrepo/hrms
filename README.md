@@ -1,1 +1,1 @@
-This is HRMS project developed by TTFs
+This is HRMS project developed by TTF
