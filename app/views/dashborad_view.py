@@ -82,12 +82,38 @@ def index(request):
 
     announcements = Announcement.objects.filter(added_by__is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=30)).order_by('-created_at')
     # print(announcements)
+
+    start_week = myDate - datetime.timedelta(myDate.weekday())
+    end_week = start_week + datetime.timedelta(7)
+   
+    week_atten = Attendance.objects.filter(is_active = 1, date__range=[start_week, end_week])
+   
+    weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+    now = datetime.datetime.now()
+
+    now_day_1 = now - datetime.timedelta(days=now.weekday())
+
+    dates = []
+    date_no = []
+
+    for n_week in range(1):
+        dates= [(now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%Y-%m-%d") for d in range(7)]
+        date_no= [(now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%d") for d in range(7)]
+
+    zipped_data = zip(weekdays, date_no)
+    # print(week_atten[0].date)
   
     context = {
         'birthdays':query,
         'check_in':tdelta,
         'new_hires':new_hires,
-        'announcements':announcements
+        'announcements':announcements,
+        'week_atten':week_atten,
+        'weekdays':zipped_data,
+        'dates':dates,
+        # 'date_no':date_no,
+
     }
 
     return render(request, "dashboard/dashboard.html", context)

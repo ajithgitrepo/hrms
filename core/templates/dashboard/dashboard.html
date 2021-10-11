@@ -131,15 +131,107 @@
           <!-- Card header -->
           <div class="card-header">
             <div class="row align-items-center">
-              <div class="col-8">
-                <h5 class="h3 mb-0">Attendance</h5>
+              <div class="col-12">
+                <span class="h3 mb-0">Attendance</span>
+                <a onclick="Attendance_week(this);" id="remove_sel_week" class="IC-week float-right margin-right">
+                    <i class="fas fa-calendar-week"></i>
+                </a>
+                
+                <a onclick="Attendance_today(this);" id="remove_sel_today" class="IC-today float-right margin-right sel">
+                    <i class="far fa-calendar-alt"></i>
+                </a>
+               
               </div>
             </div>
           </div>
           <!-- Card body -->
-          <div class="card-body">
-           
-              {% if request.session.checkin_session %}
+          <div class="card-body card-body-attn">
+
+              <div class="zp-sm-4" name="ATTENDANCE" widget="true" widid="57753000000210063" loaded="true">
+                <div class="dash-col  ">
+                
+                   <div id="ATTENDANCE" class="dash-body ">
+                      <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                         <tbody>
+                            
+                            {% now "d" as todays_date %}
+
+                            {% for days,date in weekdays %}
+                           
+                            <tr>
+                                {% if todays_date == date %}
+                                    <td width="75" class="sel">{{ days }} <span> {{ date }} </span></td>
+                                {% else %}
+                                    <td width="75" class="">{{ days }} <span> {{ date }} </span></td>
+                                {% endif %}
+                                
+                                <td colspan="3">
+                                    {% for week in week_atten %}
+
+                                        {% if week.date|date:"d" in date %}
+                                            {% if week.is_present == 1 %}
+                                                <div class="lingr present-bg"><span data-toggle="tooltip" data-original-title="Present">{{ week.checkin_time }} - {{ week.checkout_time }}</span></div>
+                                            {% endif %}
+                                            {% if week.is_leave == 1 %}
+                                                <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                </td>
+
+                            </tr>
+                            
+                            {% endfor %}
+
+                            
+                            <!-- <tr>
+                               <td width="75" class="">Sun<span> 03 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr wkend-bg"><span>Weekend</span></div>
+                               </td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="">Mon<span> 04 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr absent-bg"><span>Absent</span></div>
+                               </td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="">Tue<span> 05 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr absent-bg"><span>Absent</span></div>
+                               </td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="">Wed<span> 06 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr absent-bg"><span>Absent</span></div>
+                               </td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="">Thu<span> 07 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr absent-bg"><span>Absent</span></div>
+                               </td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="sel">Fri<span> 08 </span></td>
+                               <td class="red">-04:10</td>
+                               <td width="145">01:10 PM - 01:14 PM</td>
+                               <td class="red">-04:46</td>
+                            </tr>
+                            <tr>
+                               <td width="75" class="">Sat<span> 09 </span></td>
+                               <td colspan="3">
+                                  <div class="lingr wkend-bg"><span>Weekend</span></div>
+                               </td>
+                            </tr> -->
+                         </tbody>
+                      </table>
+            <div id="ZPAtt_dashboard_dayCont">
+            {% if request.session.checkin_session %}
               <form method="POST" class="post-form" action="check_out_attn/">  
                 {% csrf_token %}  
                 <div class="row">
@@ -184,10 +276,16 @@
               <div class="d-flex justify-content-center align-items-center mt-10" >
                 
                 <span>{% now "d M Y" %}</span>
+
+                
             
               </div>
+            </div>
+            </div>
+        </div>
+        </div>
 
-             
+
           </div>
         </div>
       </div>
@@ -367,6 +465,32 @@
   <script src="/static/assets/js/vendor/jvectormap/jquery-jvectormap-world-mill.js"></script>
 
   <script>
+
+    $(function(){
+        $('#ZPAtt_dashboard_weekCont').hide();
+    })
+
+    function Attendance_today(val)
+    {
+        $('#ZPAtt_dashboard_weekCont').hide();
+        $('#ZPAtt_dashboard_dayCont').show();
+
+        $("#remove_sel_week").removeClass("sel");
+        $(val).addClass("sel")
+    }
+
+    function Attendance_week(val)
+    {
+        
+        $('#ZPAtt_dashboard_dayCont').hide();
+        $('#ZPAtt_dashboard_weekCont').show();
+
+        $("#remove_sel_today").removeClass("sel");
+        $(val).addClass("sel")
+       
+    }
+
+    
 
     setInterval(function(){ 
 

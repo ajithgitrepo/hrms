@@ -185,8 +185,8 @@
             
         });
             
-    });
-
+    });   
+ 
     $('#date_next').click(function () {
         var date2 = $('.startdate').datepicker('getDate'); 
         date2.setDate(date2.getDate()+1); 
@@ -205,6 +205,11 @@
 
         get_birthdays()
         
+    });
+
+    $('#date_get').on('change', function() {
+      // alert( this.value );
+      get_birthdays()
     });
 
     function get_birthdays()
