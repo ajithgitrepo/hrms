@@ -2,7 +2,7 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+from app.views.restriction_view import admin_only,role_name
 from app.views.employee_view import employees
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
@@ -45,13 +45,17 @@ from app.models.employee_model import Employee , Work_Experience, Education, Dep
 import datetime
 from app.models.attendance_model import Attendance
 from app.models.announcement_model import Announcement 
+from django.core.exceptions import PermissionDenied
 
 #from app.models import QuillModel
 
-@login_required(login_url="/login/")
+@login_required
+@admin_only
 def index(request):
     query = Employee.objects.filter(role__is_active ='1', department__is_active ='1', birth_date= datetime.date.today() )
 
+    role = role_name(request)
+    # print(role)
     # last 15 days records
     new_hires = Employee.objects.filter(is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=15))
    
@@ -86,7 +90,7 @@ def index(request):
     start_week = myDate - datetime.timedelta(myDate.weekday())
     end_week = start_week + datetime.timedelta(7)
    
-    week_atten = Attendance.objects.filter(is_active = 1, date__range=[start_week, end_week])
+    week_atten = Attendance.objects.filter(is_active = 1,  employee_id = request.user.emp_id, date__range=[start_week, end_week])
    
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 

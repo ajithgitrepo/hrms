@@ -3,6 +3,8 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block title %} Dashboard {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -55,9 +57,19 @@
         <div class="card">
           <div class="card-header bg-transparent">
             <!-- <h6 class="text-muted text-uppercase ls-1 mb-1">Overview</h6> -->
-            <h2 class="h3 mb-0">Birthdays<h2>
+            <h2 class="h3 mb-0">Birthdays<h2> 
           </div>
-          
+
+            {% role_name as role %}
+
+            <!-- {{ role }} -->
+
+            <!-- {% if role == "Admin" %}
+                <span>entered</span>
+            {% else %}
+                <span>exist</span>
+            {% endif %} -->
+              
           <div class="card-body">
             <!-- Chart -->
             <a href="birthdays/" style="color: #5a5858;">
@@ -138,7 +150,7 @@
                 </a>
                 
                 <a onclick="Attendance_today(this);" id="remove_sel_today" class="IC-today float-right margin-right sel">
-                    <i class="far fa-calendar-alt"></i>
+                    <i class="far fa-calendar-check"></i>
                 </a>
                
               </div>

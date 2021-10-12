@@ -15,7 +15,7 @@ from .organization_files_view import *
 from .employee_files_view import *
 from .new_hires_view import *
 from .announcements_view import *
-
+from .restriction_view import *
 
 
 
