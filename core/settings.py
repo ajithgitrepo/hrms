@@ -30,8 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',  # Enable the inner app 
-    #'app.models.leave_request_model'
+    'app', 
+    "django_unicorn",
+    "unicorn",
 
 ]
 

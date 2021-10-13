@@ -10,6 +10,11 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
+{% load unicorn %}
+
+{% unicorn_scripts %}
+
+
     <style>
         .Usrimg
         {
@@ -24,6 +29,8 @@
 {% endblock stylesheets %}
 
 {% block content %}
+
+{% csrf_token %}
 
     <!-- Header -->
     <div class="header pb-6">
@@ -128,8 +135,8 @@
                       <hr style="margin-top: 1rem;margin-bottom: 1rem;">
                   </div>
                   {% empty %}
-                  <div style="margin: auto; text-align: center;margin-top: 70px;">
-                      <img src="{% static 'images/eyes_looking.png' %}" width="130"  > <br>
+                  <div style="margin: auto; text-align: center;margin-top: 100px;">
+                      <img src="{% static 'images/eyes_looking.png' %}" width="100"  > <br>
                       <span>No New Joinees in past 15 days.</span>
                   </div>
                 {% endfor %}
@@ -182,7 +189,7 @@
 
                                         {% if week.date|date:"d" in date %}
                                             {% if week.is_present == 1 %}
-                                                <div class="lingr present-bg"><span data-toggle="tooltip" data-original-title="Present">{{ week.checkin_time }} - {{ week.checkout_time }}</span></div>
+                                                <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
                                             {% endif %}
                                             {% if week.is_leave == 1 %}
                                                 <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
@@ -197,49 +204,6 @@
                             
                             {% endfor %}
 
-                            
-                            <!-- <tr>
-                               <td width="75" class="">Sun<span> 03 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr wkend-bg"><span>Weekend</span></div>
-                               </td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="">Mon<span> 04 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr absent-bg"><span>Absent</span></div>
-                               </td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="">Tue<span> 05 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr absent-bg"><span>Absent</span></div>
-                               </td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="">Wed<span> 06 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr absent-bg"><span>Absent</span></div>
-                               </td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="">Thu<span> 07 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr absent-bg"><span>Absent</span></div>
-                               </td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="sel">Fri<span> 08 </span></td>
-                               <td class="red">-04:10</td>
-                               <td width="145">01:10 PM - 01:14 PM</td>
-                               <td class="red">-04:46</td>
-                            </tr>
-                            <tr>
-                               <td width="75" class="">Sat<span> 09 </span></td>
-                               <td colspan="3">
-                                  <div class="lingr wkend-bg"><span>Weekend</span></div>
-                               </td>
-                            </tr> -->
                          </tbody>
                       </table>
             <div id="ZPAtt_dashboard_dayCont">
@@ -289,8 +253,6 @@
                 
                 <span>{% now "d M Y" %}</span>
 
-                
-            
               </div>
             </div>
             </div>

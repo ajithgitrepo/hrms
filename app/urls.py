@@ -95,6 +95,8 @@ urlpatterns = [
     path('delete_announcement/<str:pk>/', views.announcements_view.delete_announcement, name="delete_announcement"),
     path('status_announcement/<str:pk>/<str:val>/', views.announcements_view.status_announcement, name="status_announcement"),
 
+    path("unicorn/", include("django_unicorn.urls")),
+
    # path('emp', views.emp, name='emp'),
    # re_path(r'^.*\.*', views.emp, name='emp'),
     # Matches any html file
