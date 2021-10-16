@@ -30,7 +30,6 @@
 
 {% block content %}
 
-{% csrf_token %}
 
     <!-- Header -->
     <div class="header pb-6">
@@ -153,11 +152,11 @@
               <div class="col-12">
                 <span class="h3 mb-0">Attendance</span>
                 <a onclick="Attendance_week(this);" id="remove_sel_week" class="IC-week float-right margin-right">
-                    <i class="fas fa-calendar-week"></i>
+                    <i class="fas fa-calendar-week" data-toggle="tooltip" data-original-title="Week View"></i>
                 </a>
                 
                 <a onclick="Attendance_today(this);" id="remove_sel_today" class="IC-today float-right margin-right sel">
-                    <i class="far fa-calendar-check"></i>
+                    <i class="far fa-calendar-check" data-toggle="tooltip" data-original-title="Today View"></i>
                 </a>
                
               </div>

@@ -52,6 +52,9 @@ from django.core.exceptions import PermissionDenied
 @login_required
 @admin_only
 def index(request):
+
+    # print(request.session['checkin_session'])
+
     query = Employee.objects.filter(role__is_active ='1', department__is_active ='1', birth_date= datetime.date.today() )
 
     role = role_name(request)
@@ -84,7 +87,7 @@ def index(request):
         # check_in = tdelta.seconds/3600
         # print(check_in)
 
-    announcements = Announcement.objects.filter(added_by__is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=30)).order_by('-created_at')
+    announcements = Announcement.objects.filter(added_by__is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=30), expiry_date__gte=datetime.datetime.today() ).order_by('-created_at')
     # print(announcements)
 
     start_week = myDate - datetime.timedelta(myDate.weekday())

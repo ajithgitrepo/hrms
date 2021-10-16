@@ -1,0 +1,169 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Attendance {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Attendance</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-list"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">List View</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row col-lg-6">
+                <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                    <option value="general" selected >Select employee</option>
+                    {% for emp in employees %}
+                        <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                    {% endfor %} 
+                </select>
+               
+            </div>  
+           
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                <tr>
+                    <th></th>
+                    <th>Check-in</th>
+                    <th></th>
+                    <th>Check-out</th>
+                    <th>Total Hours</th>
+                   
+                </tr>
+                <tbody>
+
+                    {% for date,date_no in zipped_data %}
+
+                        <tr>
+                            <td width="75" class="">{{ date|date:'l'|slice:"0:3"  }}, <span> {{ date_no }} </span></td>
+
+                            {% for attn in month_atten %}
+
+                                {% if attn.date|date:"d" == date_no %}
+
+                                    {% if attn.is_present == 1 %}
+                                        <td width="145">{{ attn.checkin_time }}</td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr present-bg"><span>Present</span></div>
+                                        </td>
+                                        <td width="145">{{ attn.checkout_time }}</td>
+                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                    {% endif %}
+
+                                    {% if attn.is_leave == 1 %}
+                                        <td width="145"></td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr absent-bg"><span>Absent</span></div>
+                                        </td>
+                                        <td width="145"></td>
+                                    {% endif %}
+
+
+                                {% endif %}
+
+                               
+
+                            {% endfor %}
+
+                        </tr>
+
+                    {% endfor %}
+
+                    <!-- <tr>
+                       <td width="75" class="">Sun<span> 03 </span></td>
+                       <td width="145">01:10 PM</td>
+                       <td colspan="1" class="text-center">
+                          <div class="lingr wkend-bg"><span>Weekend</span></div>
+                       </td>
+                       <td width="145">01:10 PM</td>
+                       <td width="145">9 Hrs</td>
+                    </tr> -->
+                   
+                 </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this role?');
+        })
+
+        $('#employee_change').on('change', function () {
+            var url = $(this).val(); // get selected value
+            //alert(url);
+            if (url) { // require a URL
+                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"; // redirect
+            }
+            return false;
+        });
+        
+//    $(document).ready(function() {
+//     $('#example').DataTable( {
+//         //dom: 'Bfrtip',
+//         buttons: [
+//             {
+//                 extend: 'excelHtml5',
+//                 exportOptions: {
+//                     columns: ':visible'
+//                 }
+//             },
+//             'colvis'
+//         ]
+//     } );
+    
+// } );
+
+
+    </script>
+
+{% endblock javascripts %}
+
+
