@@ -3,7 +3,67 @@
 {% block title %} Attendance {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+
+    
+<style>
+
+    .tab-content>.active {
+        display: contents !important;
+    }
+
+    .Dtyps {
+        border-left: 4px solid;
+        max-width: 150px;
+        height: 40px;
+        margin-right: 20px;
+        float: left;
+        padding-left: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .Dtyps span {
+        width: 100%;
+        float: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding-bottom: 0px;
+        line-height: 14px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .Dtyps .Avadat, .Dtyps .digit-type {
+        margin-top: 2px;
+        line-height: 14px;
+    }
+
+    .comp-present {
+        border-color: #2fb136 !important;
+    }
+
+    .comp-absent {
+        border-color: #ee0d20 !important;
+    }
+
+    .comp-holyday {
+        border-color: #25d6c7 !important;
+    }
+
+    .comp-weekend {
+        border-color: #d3862fcc !important;
+    }
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
 
 {% block content %}
 
@@ -26,7 +86,7 @@
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a> 
+            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a>  -->
             <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
@@ -44,14 +104,16 @@
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <div class="row col-lg-6">
-                <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
-                    <option value="general" selected >Select employee</option>
-                    {% for emp in employees %}
-                        <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
-                    {% endfor %} 
-                </select>
-               
+            <div class="row" style="justify-content: center;">
+                <div class="col-lg-6">
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                        <option value="general" selected disabled>Select employee</option>
+                        {% for emp in employees %}
+                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                        {% endfor %} 
+                    </select>
+                
+                </div> 
             </div>  
            
           </div>
@@ -117,6 +179,41 @@
                  </tbody>
               </table>
           </div>
+
+            <div class="card-footer">
+                <div class="tab-content PL100">
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-present">
+                            <span>Present Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ present_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-absent">
+                            <span>Absent Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ absent_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-holyday">
+                            <span>Holidays</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">2.5 Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-weekend">
+                            <span>Weekend</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">2.5 Day(s)</div>
+                        </div>
+                    </div>
+         
+                    </div>
+                </div>
+            </div>
+
         </div>
       </div>
     </div>

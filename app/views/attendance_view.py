@@ -90,6 +90,12 @@ def attn_listview(request):
     month_atten = Attendance.objects.filter(is_active = 1,  employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
+    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(present_days)
+
+    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(absent_days)
+
     zipped_data = zip(dates, date_no)
 #    print(zipped_data)
     employees = Employee.objects.filter(is_active = 1)
@@ -98,6 +104,8 @@ def attn_listview(request):
         'month_atten':month_atten,
         'zipped_data':zipped_data,
         'employees':employees,
+        'present_days':present_days,
+        'absent_days':absent_days,
 
     }
 
