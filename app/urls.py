@@ -70,7 +70,9 @@ urlpatterns = [
     path('check_in_attn/', views.attendance_view.check_in_attn, name="check_in_attn"),
     path('check_out_attn/', views.attendance_view.check_out_attn, name="check_out_attn"),
     path('attn_listview/', views.attendance_view.attn_listview, name="attn_listview"),
-    path('search_listview/<str:pk>/', views.attendance_view.search_listview, name="search_listview"),
+    path('search_listview/<str:pk>/<str:month>/', views.attendance_view.search_listview, name="search_listview"),
+    path('export_excel/', views.attendance_view.export_excel, name="export_excel"),
+    path('attn_calendarview/', views.attendance_view.attn_calendarview, name="attn_calendarview"),
 
     # Organization Files
     path('add_folder/', views.organization_files_view.add_folder, name="add_folder"),

@@ -47,7 +47,7 @@
     }
 
     .comp-absent {
-        border-color: #ee0d20 !important;
+        border-color: #f0989a !important;
     }
 
     .comp-holyday {
@@ -55,8 +55,90 @@
     }
 
     .comp-weekend {
-        border-color: #d3862fcc !important;
+        border-color: #ff8700 !important;
     }
+
+    .showLeft{
+                    /* background-color: #0d77b6 !important;
+                    border:1px solid #0d77b6 !important; */
+                    text-shadow: none !important;
+                    color:#fff !important;
+                    padding:10px;
+                    transform: rotate(90deg);
+                }
+
+                .icons li {
+                    background: none repeat scroll 0 0 #a09d9d;;
+                    height: 7px;
+                    width: 7px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    right: 0.4em;
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 0.24em;
+                }
+
+                .dropbtn {
+                    /* background-color: #4CAF50; */
+                    position: absolute;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+                .dropbtn:hover, .dropbtn:focus {
+                    /* background-color: #3e8e41; */
+                }
+
+                .drop{
+                    width: 100%;
+                    /* background-color: #0d77b6 !important; */
+                    height: 60px;
+                }
+
+                .dropdown-dot {
+                    position: absolute !important;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: relative;
+                    margin-top: 60px;
+                    background-color: #f9f9f9;
+                    min-width: 160px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                .dropdown-dot a:hover {background-color: #f1f1f1}
+
+                .show {display:block;}
 
 
 
@@ -104,16 +186,51 @@
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <div class="row" style="justify-content: center;">
-                <div class="col-lg-6">
+            <div class="row" >
+                <div class="col-lg-5">
                     <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
                         <option value="general" selected disabled>Select employee</option>
                         {% for emp in employees %}
                             <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
                         {% endfor %} 
                     </select>
-                
                 </div> 
+
+                <div class="col-lg-5">
+                    <div class="form-group">
+                      <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
+                      
+                  </div>
+                </div>
+
+
+                <div class="col-lg-2 drop">
+
+                    <form name="form" class="post-form" id="submit_export_form" action=" {% url 'export_excel' %} " method="POST">
+                        {% csrf_token %}  
+                        <input type="hidden" value="{{ emp_id }}" name="employee_id">
+                        <input type="hidden" value="{{ month_no }}-{{ year }}" name="month">
+                        
+                        <button type="submit" hidden></button>
+                    </form>
+
+                    <div class="dropdown-dot">
+                        <!-- three dots -->
+                        <ul class="dropbtn icons btn-right showLeft" data-toggle="tooltip" data-original-title="More Options" onclick="showDropdown()">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <!-- menu -->
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#export" id="export_attn">Export</a>
+                            <!-- <a href="#about">About</a>
+                            <a href="#contact">Contact</a> -->
+                        </div>
+                    </div>
+                </div>
+
+
             </div>  
            
           </div>
@@ -229,36 +346,97 @@
   <!-- Optional JS -->
   
     <script type="text/javascript">
+
+                function changeLanguage(language) {
+                    var element = document.getElementById("url");
+                    element.value = language;
+                    element.innerHTML = language;
+                }
+
+                function showDropdown() {
+                    document.getElementById("myDropdown").classList.toggle("show");
+                }
+
+                // Close the dropdown if the user clicks outside of it
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropbtn')) {
+                        var dropdowns = document.getElementsByClassName("dropdown-content");
+                        var i;
+                        for (i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.classList.contains('show')) {
+                                openDropdown.classList.remove('show');
+                            }
+                        }
+                    }
+                }
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                todayHighlight: false,
+                // defaultDate: new Date(dateToday.getMonth()+1,year)
+            });
+                
+        });
+
         $(document).on('click', '.confirm-delete', function(){
             return confirm('Are you sure you want to delete this role?');
         })
 
         $('#employee_change').on('change', function () {
-            var url = $(this).val(); // get selected value
-            //alert(url);
-            if (url) { // require a URL
-                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"; // redirect
+            var url = $(this).val();
+            month = $("#month_year").val();
+            if (url) { 
+                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
             }
             return false;
         });
         
-//    $(document).ready(function() {
-//     $('#example').DataTable( {
-//         //dom: 'Bfrtip',
-//         buttons: [
-//             {
-//                 extend: 'excelHtml5',
-//                 exportOptions: {
-//                     columns: ':visible'
-//                 }
-//             },
-//             'colvis'
-//         ]
-//     } );
-    
-// } );
+        $('#month_year').on('change', function () {
+            var month = $(this).val(); 
+            url = $("#employee_change").val();
+            if (url) {
+                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
+            }
+            return false;
+        });
 
+        $('#export_attn').on('click', function () {
 
+            month = $("#month_year").val();
+            employee = $("#employee_change").val();
+
+            $("#submit_export_form").submit();
+          
+        });
+
+        
     </script>
 
 {% endblock javascripts %}
