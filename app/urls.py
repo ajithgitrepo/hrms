@@ -73,6 +73,10 @@ urlpatterns = [
     path('search_listview/<str:pk>/<str:month>/', views.attendance_view.search_listview, name="search_listview"),
     path('export_excel/', views.attendance_view.export_excel, name="export_excel"),
     path('attn_calendarview/', views.attendance_view.attn_calendarview, name="attn_calendarview"),
+    path('show_cal_view', views.attendance_view.show_cal_view, name='show_cal_view'),
+    path('show_attn_time', views.attendance_view.show_attn_time, name='show_attn_time'),
+    path('search_attn_time', views.attendance_view.search_attn_time, name='search_attn_time'),
+    path('search_attn_date', views.attendance_view.search_attn_date, name='search_attn_date'),
 
     # Organization Files
     path('add_folder/', views.organization_files_view.add_folder, name="add_folder"),
@@ -100,6 +104,13 @@ urlpatterns = [
     path('status_announcement/<str:pk>/<str:val>/', views.announcements_view.status_announcement, name="status_announcement"),
 
     path("unicorn/", include("django_unicorn.urls")),
+
+    # Calender
+    path('calendar/', views.calendar_details_view.calendar, name='calendar'),
+    path('add_event',views.calendar_details_view.add_event, name='add_event'),
+    path('update/', views.calendar_details_view.update, name='update'),
+    path('remove', views.calendar_details_view.remove, name='remove'),
+    path('all_events', views.calendar_details_view.all_events, name='all_events'),
 
    # path('emp', views.emp, name='emp'),
    # re_path(r'^.*\.*', views.emp, name='emp'),

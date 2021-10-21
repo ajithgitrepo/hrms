@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 from django import http
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
@@ -13,6 +10,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from app.models.employee_model import Employee
+from app.models.holiday_details_model import Holiday_Detail 
 import datetime 
 from datetime import datetime, timedelta
 from django.db.models import Q
@@ -20,7 +18,10 @@ import calendar
 from app.models.attendance_model import Attendance 
 from django.contrib.auth.models import Group
 from io import BytesIO
-
+from django.core import serializers
+from django.http import JsonResponse
+from django.db import connection
+import json
 import xlsxwriter
 
 
@@ -240,4 +241,172 @@ def export_excel(request):
         return response
 
 def attn_calendarview(request):
-    return render(request, "attendance/attn_calendar.html")
+
+    employees = Employee.objects.filter(is_active = 1)
+
+    context = {
+        "employees":employees,
+    }
+
+    return render(request, "attendance/attn_calendar.html",context)
+
+
+def show_cal_view(request):   
+    #return HttpResponse('work')  
+
+    date = datetime.now()
+    # print(now)
+    current_year = datetime.now().strftime("%Y")
+    current_month = datetime.now().strftime("%m")
+    month_year = current_month+'-'+current_year
+    
+    first_day = date.replace(day = 1)
+    last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
+
+    month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
+    # print(month_atten)
+    
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
+                                                                                       
+    out = []                                                                                                             
+    for attn in month_atten:     
+        if attn.is_present == 1:
+            out.append({                                                                                                     
+                'title': 'Present',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3dce4cd9',                                                           
+            })   
+        else:
+            out.append({                                                                                                     
+                'title': 'Absent',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'color': '#f0989a',                                                           
+            })   
+
+         
+    for holi in all_holidays:                                                                                             
+        out.append({                                                                                                     
+            'title': holi.holiday_name,                                                                                         
+            'id': holi.id,                                                                                              
+            'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+            'end': holi.date.strftime("%m/%d/%Y"),  
+            'color': '#0de2ffd9',                                                           
+        })                                                                                                                    
+    #return HttpResponse(out)                                                                                                                   
+    return JsonResponse(out, safe=False)  
+
+
+def show_attn_time(request):
+    id = request.GET.get("id", None)
+    data = Attendance.objects.filter(id=id)
+    tmpJson = serializers.serialize("json",data)
+    tmpObj = json.loads(tmpJson)
+    
+    return JsonResponse(tmpObj, safe=False)
+
+
+
+def search_attn_time(request):   
+
+    emp_id = request.GET.get("emp_id", None)
+
+    date = datetime.now()
+    # print(now)
+    current_year = datetime.now().strftime("%Y")
+    current_month = datetime.now().strftime("%m")
+    month_year = current_month+'-'+current_year
+    
+    first_day = date.replace(day = 1)
+    last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
+
+    month_atten = Attendance.objects.filter(is_active = 1, employee_id = emp_id, date__range=[first_day, last_day])
+    # print(month_atten)
+    
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
+                                                                                       
+    out = []                                                                                                             
+    for attn in month_atten:     
+        if attn.is_present == 1:
+            out.append({                                                                                                     
+                'title': 'Present',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#2fb136',                                                           
+            })   
+        else:
+            out.append({                                                                                                     
+                'title': 'Absent',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'color': '#f0989a',                                                           
+            })   
+
+         
+    for holi in all_holidays:                                                                                             
+        out.append({                                                                                                     
+            'title': holi.holiday_name,                                                                                         
+            'id': holi.id,                                                                                              
+            'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+            'end': holi.date.strftime("%m/%d/%Y"),  
+            'color': '#ff1a1a',                                                           
+        })          
+
+    return JsonResponse(out, safe=False)  
+
+
+def search_attn_date(request):   
+
+    date = request.GET.get("date")
+    emp_id = request.GET.get("emp_id")
+   
+    date_c = datetime.strptime(date, "%m/%d/%Y")
+    first_day = date_c.replace(day = 1)
+    last_day = date_c.replace(day = calendar.monthrange(date_c.year, date_c.month)[1])
+    print(first_day)
+    
+    month_atten = Attendance.objects.filter(is_active = 1, employee_id = emp_id, date__range=[first_day, last_day])
+    
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
+                                                                                       
+    out = []                                                                                                             
+    for attn in month_atten:     
+        if attn.is_present == 1:
+            out.append({                                                                                                     
+                'title': 'Present',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#2fb136',                                                           
+            })   
+        else:
+            out.append({                                                                                                     
+                'title': 'Absent',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'color': '#f0989a',                                                           
+            })   
+
+         
+    for holi in all_holidays:                                                                                             
+        out.append({                                                                                                     
+            'title': holi.holiday_name,                                                                                         
+            'id': holi.id,                                                                                              
+            'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+            'end': holi.date.strftime("%m/%d/%Y"),  
+            'color': '#ff1a1a',                                                           
+        })          
+                                                                                                                        
+    return JsonResponse(out, safe=False)  

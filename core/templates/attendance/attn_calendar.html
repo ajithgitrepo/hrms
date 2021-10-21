@@ -1,12 +1,60 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Calendar {% endblock %}
+{% block title %} Attendance-Calendar View {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
-  <link rel="stylesheet" href="/static/assets/vendor/fullcalendar/dist/fullcalendar.min.css">
-  <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+  <!-- <link rel="stylesheet" href="/static/assets/vendor/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+
+  <style>
+      .fc-time {
+        display: none !important;
+    }
+
+    .fc-header-toolbar {
+        display: block !important;
+    }
+
+    .fc-right{
+        display: none !important;
+    }
+    
+    .fc-toolbar .fc-center {
+        display: block !important;
+        margin-left: 10px;
+    }
+
+    .fc-toolbar .fc-left {
+        float: right !important;
+    }
+
+    button.fc-prev-button.fc-button.fc-state-default.fc-corner-left {
+        background: turquoise;
+        
+        margin-right: 10px !important;
+    }
+
+    button.fc-next-button.fc-button.fc-state-default.fc-corner-right {
+        /* color: blue; */
+        background: turquoise;
+        margin-right: 10px !important;
+    }
+
+    button.fc-today-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+        color: beige;
+        background: rgb(6, 36, 167);
+        margin-right: 10px !important;
+    }
+
+    
+    
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+
+  
 
 {% endblock stylesheets %}
 
@@ -18,26 +66,16 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6">
-            <h6 class="fullcalendar-title h2 text-white d-inline-block mb-0">Full calendar</h6>
-            <nav aria-label="breadcrumb" class="d-none d-lg-inline-block ml-lg-4">
-              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Calendar</li>
-              </ol>
-            </nav>
+            <h6 class="fullcalendar-title h2 text-white d-inline-block mb-0">Attendance </h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-calendar-alt"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">Calendar View</a></li>
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+                </ol>
+              </nav>
           </div>
-          <div class="col-lg-6 mt-3 mt-lg-0 text-lg-right">
-            <a href="#" class="fullcalendar-btn-prev btn btn-sm btn-neutral">
-              <i class="fas fa-angle-left"></i>
-            </a>
-            <a href="#" class="fullcalendar-btn-next btn btn-sm btn-neutral">
-              <i class="fas fa-angle-right"></i>
-            </a>
-            <a href="#" class="btn btn-sm btn-neutral" data-calendar-view="month">Month</a>
-            <a href="#" class="btn btn-sm btn-neutral" data-calendar-view="basicWeek">Week</a>
-            <a href="#" class="btn btn-sm btn-neutral" data-calendar-view="basicDay">Day</a>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -52,99 +90,29 @@
         <div class="card card-calendar">
           <!-- Card header -->
           <div class="card-header">
-            <!-- Title -->
-            <h5 class="h3 mb-0">Calendar</h5>
+            <div class="row" style="justify-content: center;">
+                <div class="col-lg-5">
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                        <option value="general" selected disabled>Select employee</option>
+                        {% for emp in employees %}
+                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                        {% endfor %} 
+                    </select>
+                </div> 
+
+
+
+            </div>  
           </div>
           <!-- Card body -->
           <div class="card-body p-0">
-            <div class="calendar" data-toggle="calendar" id="calendar"></div>
-          </div>
-        </div>
-        <!-- Modal - Add new event -->
-        <!--* Modal header *-->
-        <!--* Modal body *-->
-        <!--* Modal footer *-->
-        <!--* Modal init *-->
-        <div class="modal fade" id="new-event" tabindex="-1" role="dialog" aria-labelledby="new-event-label" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-secondary" role="document">
-            <div class="modal-content">
-              <!-- Modal body -->
-              <div class="modal-body">
-                <form class="new-event--form">
-                  <div class="form-group">
-                    <label class="form-control-label">Event title</label>
-                    <input type="text" class="form-control form-control-alternative new-event--title" placeholder="Event Title">
-                  </div>
-                  <div class="form-group mb-0">
-                    <label class="form-control-label d-block mb-3">Status color</label>
-                    <div class="btn-group btn-group-toggle btn-group-colors event-tag" data-toggle="buttons">
-                      <label class="btn bg-info active"><input type="radio" name="event-tag" value="bg-info" autocomplete="off" checked></label>
-                      <label class="btn bg-warning"><input type="radio" name="event-tag" value="bg-warning" autocomplete="off"></label>
-                      <label class="btn bg-danger"><input type="radio" name="event-tag" value="bg-danger" autocomplete="off"></label>
-                      <label class="btn bg-success"><input type="radio" name="event-tag" value="bg-success" autocomplete="off"></label>
-                      <label class="btn bg-default"><input type="radio" name="event-tag" value="bg-default" autocomplete="off"></label>
-                      <label class="btn bg-primary"><input type="radio" name="event-tag" value="bg-primary" autocomplete="off"></label>
-                    </div>
-                  </div>
-                  <input type="hidden" class="new-event--start" />
-                  <input type="hidden" class="new-event--end" />
-                </form>
-              </div>
-              <!-- Modal footer -->
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary new-event--add">Add event</button>
-                <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Modal - Edit event -->
-        <!--* Modal body *-->
-        <!--* Modal footer *-->
-        <!--* Modal init *-->
-        <div class="modal fade" id="edit-event" tabindex="-1" role="dialog" aria-labelledby="edit-event-label" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-secondary" role="document">
-            <div class="modal-content">
-              <!-- Modal body -->
-              <div class="modal-body">
-                <form class="edit-event--form">
-                  <div class="form-group">
-                    <label class="form-control-label">Event title</label>
-                    <input type="text" class="form-control form-control-alternative edit-event--title" placeholder="Event Title">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-control-label d-block mb-3">Status color</label>
-                    <div class="btn-group btn-group-toggle btn-group-colors event-tag mb-0" data-toggle="buttons">
-                      <label class="btn bg-info active"><input type="radio" name="event-tag" value="bg-info" autocomplete="off" checked></label>
-                      <label class="btn bg-warning"><input type="radio" name="event-tag" value="bg-warning" autocomplete="off"></label>
-                      <label class="btn bg-danger"><input type="radio" name="event-tag" value="bg-danger" autocomplete="off"></label>
-                      <label class="btn bg-success"><input type="radio" name="event-tag" value="bg-success" autocomplete="off"></label>
-                      <label class="btn bg-default"><input type="radio" name="event-tag" value="bg-default" autocomplete="off"></label>
-                      <label class="btn bg-primary"><input type="radio" name="event-tag" value="bg-primary" autocomplete="off"></label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-control-label">Description</label>
-                    <textarea class="form-control form-control-alternative edit-event--description textarea-autosize" placeholder="Event Desctiption"></textarea>
-                    <i class="form-group--bar"></i>
-                  </div>
-                  <input type="hidden" class="edit-event--id">
-                </form>
-              </div>
-              <!-- Modal footer -->
-              <div class="modal-footer">
-                <button class="btn btn-primary" data-calendar="update">Update</button>
-                <button class="btn btn-danger" data-calendar="delete">Delete</button>
-                <button class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
-              </div>
-            </div>
+            <div id="calendar"></div>
+         
           </div>
         </div>
       </div>
     </div>
 
-    {% include 'includes/footer.html' %}
-    
   </div>
 
 {% endblock content %}
@@ -152,8 +120,127 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-  <script src="/static/assets/vendor/moment/min/moment.min.js"></script>
-  <script src="/static/assets/vendor/fullcalendar/dist/fullcalendar.min.js"></script>
-  <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+
+  <script>
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+    var data = function () {
+        var tmp = null;
+        $.ajax({
+            'async': false,
+            type: "GET",
+            url: '/show_cal_view',
+            data: {"csrfmiddlewaretoken": csrftoken},
+            dataType: "json",
+            'success': function (data) {
+                tmp = data;
+            }
+        });
+        return tmp;
+    }();
+
+    // alert(data)
+
+    var calendar = $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month'
+        },       
+        events: data,
+        selectable: true,
+        selectHelper: true,
+        editable: false,
+        eventLimit: true,
+        
+
+        eventRender: function(event, element) {
+            if(event.title == "Present")
+            {
+                $(element).tooltip({title: 'Check - In : '+event.checkin + ' / Check - Out : ' +event.checkout});    
+            }
+                        
+        },
+
+        viewRender: function(view, element) {
+            var month = $('#calendar').fullCalendar('getDate');
+            var date = month.format('L');
+            var emp_id = $('#employee_change').val();
+            $.ajax({
+                type: "GET",
+                url: '/search_attn_date',
+                data: {'date': date, 'emp_id': emp_id, "csrfmiddlewaretoken": csrftoken},
+                dataType: "json",
+                success: function (data) {
+                    calendar.fullCalendar('refetchEvents');
+                   
+                },
+                error: function (data) {
+                    alert('There is a problem!!!');
+                }
+            });
+
+        },
+
+    });
+
+    $('#employee_change').on('change', function () {
+        var emp = $(this).val();
+        // var month = $("#month_year").val();
+        $('#calendar').fullCalendar('removeEventSources');
+        var events = null;
+        $.ajax({
+            'async': false,
+            type: "GET",
+            url: '/search_attn_time',
+            data: {"csrfmiddlewaretoken": csrftoken, "emp_id": emp},
+            dataType: "json",
+            'success': function (data) {
+                events = data;
+
+                
+            },
+           
+        });
+            
+        //alert(events)
+
+        $('#calendar').fullCalendar('removeEventSource', events);
+        $('#calendar').fullCalendar('addEventSource', events);
+        $('#calendar').fullCalendar('refetchEvents');
+
+    });
+
+   
+
+  </script>
+
 
 {% endblock javascripts %}

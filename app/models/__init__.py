@@ -15,3 +15,5 @@ from .organization_files_model import *
 from .folder_model import *
 from .employee_files_model import *
 from .announcement_model import *
+from .calendar_model import *
+from .holiday_details_model import *
