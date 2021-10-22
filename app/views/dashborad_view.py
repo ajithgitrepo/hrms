@@ -46,6 +46,7 @@ import datetime
 from app.models.attendance_model import Attendance
 from app.models.announcement_model import Announcement 
 from django.core.exceptions import PermissionDenied
+from app.models.holiday_details_model import Holiday_Detail 
 
 #from app.models import QuillModel
 
@@ -94,7 +95,11 @@ def index(request):
     end_week = start_week + datetime.timedelta(7)
    
     week_atten = Attendance.objects.filter(is_active = 1,  employee_id = request.user.emp_id, date__range=[start_week, end_week])
-   
+
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[start_week, end_week]) 
+    # print(holidays)
+    upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1, date__gt= datetime.datetime.now())[:5]
+    # print(upcoming_holidays)
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     now = datetime.datetime.now()
@@ -119,6 +124,8 @@ def index(request):
         'week_atten':week_atten,
         'weekdays':zipped_data,
         'dates':dates,
+        'holidays':holidays,
+        'upcoming_holidays':upcoming_holidays,
         # 'date_no':date_no,
 
     }

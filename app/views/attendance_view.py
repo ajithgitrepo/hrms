@@ -107,11 +107,14 @@ def attn_listview(request):
     # print(absent_days)
 
     zipped_data = zip(dates, date_no)
-#    print(zipped_data)
+    # print(date_no)
     employees = Employee.objects.filter(is_active = 1)
+
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
  
     context = {
         'month_atten':month_atten,
+        'holidays':holidays,
         'zipped_data':zipped_data,
         'employees':employees,
         'present_days':present_days,
@@ -124,6 +127,8 @@ def attn_listview(request):
     }
 
     return render(request, "attendance/attn_list.html",context)
+
+
 
 def search_listview(request,pk,month):
    
@@ -159,9 +164,13 @@ def search_listview(request,pk,month):
 
     absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(absent_days)
+
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+ 
  
     context = {
         'month_atten':month_atten,
+        'holidays':holidays,
         'zipped_data':zipped_data,
         'employees':employees,
         'present_days':present_days,
@@ -175,6 +184,116 @@ def search_listview(request,pk,month):
     
 
     return render(request, "attendance/attn_list.html",context)
+
+
+
+def attn_tableview(request):
+    
+    now = datetime.now()
+    current_year = datetime.now().strftime("%Y")
+    current_month = datetime.now().strftime("%m")
+    month_year = current_month+'-'+current_year
+    first_day = now.replace(day = 1)
+    last_day = now.replace(day = calendar.monthrange(now.year, now.month)[1])
+    # no_of_days = calendar.monthrange(current_year, current_month )
+    
+    dates = []
+    date_no = []
+
+    delta = last_day - first_day
+
+    for i in range(delta.days + 1):
+        dates.append( (first_day + timedelta(days=i)) )
+        date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+
+    month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
+    # print(month_atten)
+
+    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(present_days)
+
+    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(absent_days)
+
+    zipped_data = zip(dates, date_no)
+#    print(zipped_data)
+    employees = Employee.objects.filter(is_active = 1)
+
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+ 
+ 
+    context = {
+        'month_atten':month_atten,
+        'holidays':holidays,
+        'zipped_data':zipped_data,
+        'employees':employees,
+        'present_days':present_days,
+        'absent_days':absent_days,
+        'month':now.strftime("%b"),
+        'month_no':now.strftime("%m"),
+        'year':now.strftime("%Y"),
+        'emp_id':request.user.emp_id,
+
+    }
+
+    return render(request, "attendance/attn_tabular.html",context)
+
+
+
+def search_tableview(request,pk,month):
+   
+    now = datetime.now()
+    current_year = datetime.now().strftime("%Y")
+    current_month = datetime.now().strftime("%m")
+    # first_day = now.replace(day = 1)
+    # last_day = now.replace(day = calendar.monthrange(now.year, now.month)[1])
+    # no_of_days = calendar.monthrange(current_year, current_month )
+    date = datetime.strptime(month, "%m-%Y")
+    first_day = date.replace(day = 1)
+    last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
+    # print(date.strftime("%Y"))
+
+    dates = []
+    date_no = []
+
+    delta = last_day - first_day
+
+    for i in range(delta.days + 1):
+        dates.append( (first_day + timedelta(days=i)) )
+        date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+
+    month_atten = Attendance.objects.filter(is_active = 1,  employee_id = pk, date__range=[first_day, last_day])
+    # print(month_atten)
+
+    zipped_data = zip(dates, date_no)
+#    print(zipped_data)
+    employees = Employee.objects.filter(is_active = 1)
+
+    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = pk, date__range=[first_day, last_day]).count()
+    # print(present_days)
+
+    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = pk, date__range=[first_day, last_day]).count()
+    # print(absent_days)
+
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+ 
+
+    context = {
+        'month_atten':month_atten,
+        'holidays':holidays,
+        'zipped_data':zipped_data,
+        'employees':employees,
+        'present_days':present_days,
+        'absent_days':absent_days,
+        'search_id':pk,
+        'month':date.strftime("%b"),
+        'month_no':date.strftime("%m"),
+        'year':date.strftime("%Y"),
+        'emp_id':pk,
+    }
+    
+
+    return render(request, "attendance/attn_tabular.html",context)
 
 def export_excel(request):
         
@@ -219,11 +338,9 @@ def export_excel(request):
             sheet.write('A'+str(row_num), row_data.employee.employee_id)
             sheet.write('B'+str(row_num), row_data.employee.first_name +" "+row_data.employee.last_name)
             sheet.write('C'+str(row_num), (row_data.date).strftime("%d-%m-%Y"))
-            sheet.write('D'+str(row_num), (row_data.checkin_time).strftime("%I:%M%p"))
-            if row_data.checkout_time:
-                sheet.write('E'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p"))
-            else:
-                sheet.write('E'+str(row_num), '-')
+            sheet.write('D'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
+            sheet.write('E'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
+           
             row_num += 1
 
         book.close()

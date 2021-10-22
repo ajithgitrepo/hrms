@@ -103,6 +103,7 @@
                 }
 
                
+
                 .drop{
                     width: 100%;
                     /* background-color: #0d77b6 !important; */
@@ -141,6 +142,22 @@
                     color: #fff;
                 }
 
+                .ellipsis {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    width: 120px;
+                    display: block;
+                    padding-bottom: 1px;
+                }
+
+                .RTC1 {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    float: left;
+                    margin: 3px 8px 0 0;
+                }
 
 
 </style>
@@ -162,8 +179,8 @@
             <h6 class="h2 text-white d-inline-block mb-0">Attendance</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                <li class="breadcrumb-item"><a href="#"><i class="fas fa-list"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">List View</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-table"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Table View</a></li>
                 <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
               </ol>
             </nav>
@@ -238,11 +255,11 @@
           <div class="table-responsive py-4">
             <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
                 <tr>
-                    <th></th>
+                    <th>Date</th>
                     <th>First Check-in</th>
-                    <th></th>
                     <th>Last Check-out</th>
                     <th>Total Hours</th>
+                    <th>Status</th>
                    
                 </tr>
                 <tbody>
@@ -250,43 +267,56 @@
                     {% for date,date_no in zipped_data %}
 
                         <tr>
-                            <td width="75" class="">{{ date|date:'l'|slice:"0:3"  }}, <span> {{ date_no }} </span></td>
+                            <td  class="">{{ date|date:'l'|slice:"0:3"  }}, <span> {{  date|date:'d-m-Y' }} </span></td>
 
                             {% for attn in month_atten %}
 
                                 {% if attn.date|date:"d" == date_no %}
 
-                                    {% if attn.is_present == 1 %}
-                                        <td width="145">{{ attn.checkin_time }}</td>
-                                        <td colspan="1" class="text-center">
-                                            <div class="lingr present-bg"><span>Present</span></div>
-                                        </td>
-                                        <td width="145">{{ attn.checkout_time }}</td>
-                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
-                                    {% endif %}
 
-                                    {% if attn.is_leave == 1 %}
-                                        <td width="145"></td>
-                                        <td colspan="1" class="text-center">
-                                            <div class="lingr absent-bg"><span>Absent</span></div>
-                                        </td>
-                                        <td width="145"></td>
-                                    {% endif %}
+                                        {% if attn.is_present == 1 %}
+                                        <td>{{ attn.checkin_time }}</td>
+                                        <td>{{ attn.checkout_time }}</td>
+                                        <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                        <td>
+                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                <div class="RTC1 present-bg">
 
+                                                </div>Present
+                                            </span>
+                                        </td>
+                                        {% endif %}
+
+                                        {% if attn.is_leave == 1 %}
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>
+                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                                <div class="RTC1 absent-bg">
+
+                                                </div>Absent
+                                            </span>
+                                        </td>
+                                        {% endif %}
 
                                 {% endif %}
-
 
                             {% endfor %}
 
                             {% for holi in holidays %}
                                 {% if holi.date|date:"d" == date_no %}
 
-                                    <td width="145"></td>
-                                    <td colspan="1" class="text-center">
-                                        <div class="lingr holyday-bg"><span>{{ holi.holiday_name }}</span></div>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                            <div class="RTC1 holyday-bg">
+
+                                            </div>Holiday
+                                        </span>
                                     </td>
-                                    <td width="145"></td>
 
                                 {% endif %}
                             
@@ -358,12 +388,8 @@
 {% block javascripts %}
 
   <!-- Optional JS -->
-
   
     <script type="text/javascript">
-
-        var date_selected = ' {{ month_no }}-{{ year }} ';
-
 
                 function changeLanguage(language) {
                     var element = document.getElementById("url");
@@ -417,22 +443,18 @@
                 format: "mm-yyyy",
                 startView: "months", 
                 minViewMode: "months",
-                'setDate': date_selected
-                // todayHighlight: true,
+                todayHighlight: false,
                 // defaultDate: new Date(dateToday.getMonth()+1,year)
             });
                 
         });
 
-        $(document).on('click', '.confirm-delete', function(){
-            return confirm('Are you sure you want to delete this role?');
-        })
 
         $('#employee_change').on('change', function () {
             var url = $(this).val();
             month = $("#month_year").val();
             if (url) { 
-                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
+                window.location = "http://127.0.0.1:8000/search_tableview/"+url+"/"+month+"/"; // redirect
             }
             return false;
         });
@@ -441,7 +463,7 @@
             var month = $(this).val(); 
             url = $("#employee_change").val();
             if (url) {
-                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
+                window.location = "http://127.0.0.1:8000/search_tableview/"+url+"/"+month+"/"; // redirect
             }
             return false;
         });

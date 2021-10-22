@@ -79,25 +79,30 @@ def index(request):
 
     balance = Leave_Balance.objects.filter(is_active='1')
 
-    # balance = Leave_Balance.objects.raw('SELECT leave_balance.id,leave_balance.balance,lt.name FROM leave_balance JOIN leave_type lt ON lt.id = leave_balance.leave_type_id where leave_balance.is_active = "1" ')
+    balance_raw = Leave_Balance.objects.raw('SELECT lb.id,lb.balance,lt.name,lt.id as l_id,employee.first_name,employee.employee_id FROM employee LEFT JOIN leave_balance lb ON lb.employee_id = employee.employee_id JOIN leave_type lt ON lt.id = lb.leave_type_id where lb.is_active = "1" ')
    
-    # print(types[0].leave_type_id_balance.all.bala)
+    # print(balance_raw[0].first_name)
 
-    res = ""
+    # for balance in balance_raw:
+    #     print(balance.first_name)
 
+    res = []
 
-    for bal in balance:
-        res = str(res) + str({'name': 'name', 'type': 'leave_type', 'unit': 'leave_unit', 'description': 'leave_no_of_days', 'id': 'leave_id'}) + (",") 
-        string_res = res.strip(' " " ') #.replace("'","")
-        Leave_Types =  eval(string_res)
+    for bal in balance_raw:
+        # res = str(res) + {'name':bal.first_name,'type':bal.name,'balance':str(bal.balance),'emp_id':bal.employee_id,'l_id': bal.l_id}
+        res.append( {'name':bal.first_name,'type':bal.name,'balance':str(bal.balance),'emp_id':bal.employee_id,'l_id': bal.l_id} )
+        # string_res = res.strip(' " " ') #.replace("'","")
+        # Leave_Types =  eval(string_res)
 
     
     # print(res)
+    
 
     context = {
         'employees': employees,
         'types': types,
         'balance': balance,
+        'object':res,
         
     }
 

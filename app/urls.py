@@ -77,6 +77,8 @@ urlpatterns = [
     path('show_attn_time', views.attendance_view.show_attn_time, name='show_attn_time'),
     path('search_attn_time', views.attendance_view.search_attn_time, name='search_attn_time'),
     path('search_attn_date', views.attendance_view.search_attn_date, name='search_attn_date'),
+    path('attn_tableview/', views.attendance_view.attn_tableview, name='attn_tableview'),
+    path('search_tableview/<str:pk>/<str:month>/', views.attendance_view.search_tableview, name="search_tableview"),
 
     # Organization Files
     path('add_folder/', views.organization_files_view.add_folder, name="add_folder"),
