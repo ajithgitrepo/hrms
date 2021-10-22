@@ -114,6 +114,43 @@ urlpatterns = [
     path('remove', views.calendar_details_view.remove, name='remove'),
     path('all_events', views.calendar_details_view.all_events, name='all_events'),
 
+    # Travel Expenses
+    path('travel_expense_details/', views.travel_expense_view.travel_expense_details, name="travel_expense_details"),
+    path('add_travel_expense_details/', views.travel_expense_view.add_travel_expense_details, name="add_travel_expense_details"),
+    path('snippets_travel_details_travel_expense_more_all_info', views.travel_expense_view.snippets_travel_details_travel_expense_more_all_info, name="snippets_travel_details_travel_expense_more_all_info"),
+    path('delete_expense_details/<str:pk>/', views.travel_expense_view.delete_expense_details, name="delete_expense_details"),
+   
+    # Travel Request
+    path('travel_request_details/', views.travel_request_view.travel_request_details, name="travel_request_details"),
+    path('add_travel_request_details', views.travel_request_view.add_travel_request_details, name="add_travel_request_details"),
+    path('delete_asset_details/<str:pk>/', views.asset_deatails_view.delete_asset_details, name="delete_asset_details"),
+    path('snippets_travel_details_employee_all_info', views.travel_request_view.snippets_travel_details_employee_all_info, name="snippets_travel_details_employee_all_info"),
+    
+    # Compensatory Request
+    path('compensatory_request_details/', views.compensatory_request_view.compensatory_request_details, name="compensatory_request_details"),
+    path('add_compensatory_request_details/', views.compensatory_request_view.add_compensatory_request_details, name="add_compensatory_request_details"),
+    path('delete_compensatory_details/<str:pk>/', views.compensatory_request_view.delete_compensatory_details, name="delete_compensatory_details"),
+    path('snippets_compensatory_details_employee_all_info', views.compensatory_request_view.snippets_compensatory_details_employee_all_info, name="snippets_compensatory_details_employee_all_info"),
+
+    # Asset Details
+    path('asset_details/', views.asset_deatails_view.asset_details, name="asset_details"),
+    path('add_asset_details', views.asset_deatails_view.add_asset_details, name="add_asset_details"),
+    path('delete_asset_details/<str:pk>/', views.asset_deatails_view.delete_asset_details, name="delete_asset_details"),
+    path('snippets_asset_all_info', views.asset_deatails_view.snippets_asset_all_info, name="snippets_asset_all_info"),
+    
+    # Holiday Details
+    path('holiday_details/', views.holiday_details_view.holiday_details, name="holiday_details"),
+    path('add_holiday_details', views.holiday_details_view.add_holiday_details, name="add_holiday_details"),
+    path('delete_holiday_details/<str:pk>/', views.holiday_details_view.delete_holiday_details, name="delete_holiday_details"),
+    
+    # Exit Details
+    path('exit_details/', views.exit_deatails_view.exit_details, name="exit_details"),
+    path('add_exit_details', views.exit_deatails_view.add_exit_details, name="add_exit_details"),
+    path('delete_employee_exit_details/<str:pk>/', views.exit_deatails_view.delete_employee_exit_details, name="delete_employee_exit_details"),
+    path('snippets_exit_employee_all_info', views.snippets_exit_employee_all_info, name="snippets_exit_employee_all_info"),
+    
+
+
    # path('emp', views.emp, name='emp'),
    # re_path(r'^.*\.*', views.emp, name='emp'),
     # Matches any html file

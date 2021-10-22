@@ -16,6 +16,7 @@ from app.forms.EmployeeForm import EmployeeForm
 #from app.forms import UserGroupForm  
 
 from app.models.employee_model import Employee , Work_Experience, Education, Dependent 
+from app.models.reporting_to_model import Reporting_to
 from django.contrib.auth.models import User
 # from app.models import Group 
 
@@ -115,14 +116,14 @@ def snippets(request):
 def roles(request):
     roles = Group.objects.filter(is_active='1')
    # return HttpResponse("date")
-    print(roles);
+    # print(roles);
     context = {'roles':roles}
     return render(request, "employee/index.html", context)
 
 def employees(request):
    # return HttpResponse("employee")
     employee = Employee.objects.filter(is_active='1')
-    # print(employee)
+    print(employee)
     context = {'employees':employee}
     return render(request, "employee/index.html", context)
 
@@ -216,7 +217,7 @@ def add_employee(request):
             if not Employee.objects.filter(Q(employee_id=employee_id) | Q(email_id=email_id)).exists():
                 obj = Employee.objects.create(employee_id=employee_id, first_name=first_name, 
                 last_name=last_name, email_id=email_id, nick_name=nick_name,
-                department=department,
+                department=department if department else None,
                 reporting_to=reporting_to,
                 source_of_hire=source_of_hire,
                 seating_location=seating_location,
@@ -247,17 +248,17 @@ def add_employee(request):
                 hashed_pwd = make_password("secret")
 
                 obj = User(
-                password=hashed_pwd,
-                is_superuser=1, 
-                username=first_name, 
-                first_name=first_name,
-                last_name=last_name,
-                email=email_id,
-                role=role,
-                emp_id=latest_id,
-                is_staff=1,
-                is_active=1,
-                date_joined=datetime.datetime.now(),
+                    password=hashed_pwd,
+                    is_superuser=1, 
+                    username=first_name, 
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email_id,
+                    role=role,
+                    emp_id=latest_id,
+                    is_staff=1,
+                    is_active=1,
+                    date_joined=datetime.datetime.now(),
                
                 ) 
 
@@ -311,6 +312,20 @@ def add_employee(request):
                         d = datetime.datetime.strptime(date_of_birth[i], '%d-%m-%Y')
                         dept = Dependent.objects.create(dependent_name=dependent_name[i], relationship=relationship[i], date_of_birth= d.strftime('%Y-%m-%d'), employee_id= latest_id )
                         #dept.save()
+
+                if reporting_to !=None:
+                    obj = Reporting_to(
+                        created_at=datetime.datetime.now(),
+                        updated_at=datetime.datetime.now(),
+                        device='web',
+                        employee_id=latest_id,
+                        reporting_id=reporting_to,
+                        updated_by_id=request.user.emp_id,
+                        
+                    ) 
+
+                    obj.save()
+
                 messages.success(request, first_name + ' Employee was created! ')
                 html_template = loader.get_template( 'employee/index.html' )
                 #return HttpResponse(html_template.render(request))

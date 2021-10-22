@@ -17,3 +17,12 @@ from .employee_files_model import *
 from .announcement_model import *
 from .calendar_model import *
 from .holiday_details_model import *
+from .reporting_to_model import *
+
+from .exit_details_model import *
+from .asset_model import *
+from .holiday_details_model import *
+from .calendar_model import *
+from .travel_request_model import *
+from .compensatory_request_model import *
+from .travel_expense_model import *

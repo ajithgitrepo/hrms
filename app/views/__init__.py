@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 from .dashborad_view import *
 from .leave_request_view import *
 from .employee_view import *
@@ -17,6 +14,13 @@ from .new_hires_view import *
 from .announcements_view import *
 from .restriction_view import *
 from .calendar_details_view import *
+
+from .exit_deatails_view import *
+from .asset_deatails_view import *
+from .holiday_details_view import *
+from .travel_request_view import *
+from .travel_expense_view import *
+from .compensatory_request_view import *
 
 
 

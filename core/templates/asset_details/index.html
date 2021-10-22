@@ -1,0 +1,535 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Asset Details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+
+
+.LockOn {
+    
+}
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Oraganization</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Asset</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_asset_details' %}" class="btn btn-sm btn-neutral">Add</a>
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Asset Details</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee ID</th>
+                  <th>Given Date</th>
+                  <th>Type of asset</th>
+                  <th>Asset Details</th>
+                  <th>Return Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for emp in employees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="nr" data-queryid="{{ emp.employee_id  }}">{{emp.employee_id }} - {{emp.employee.first_name}} {{emp.employee.last_name}}</td>
+                   
+                    <td>{{emp.given_date |date:"d-m-Y" }}</td>
+                    <td>{{emp.type_of_asset}}</td>
+                    <td>{{emp.asset_details}}</td>
+                    <td>{{emp.return_date |date:"d-m-Y" }}</td>
+                   
+
+                    
+                    <td> 
+                        <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> -->
+                        &nbsp; &nbsp;
+                       
+                        <a href="{% url 'delete_asset_details' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
+                              <i class="fas fa-trash"></i>
+                            </a> 
+                      
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    
+  </div>
+
+
+  {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Exit Employee Other Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                      
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;">Separation date :</span></div> 
+                     <div class="col-lg-3"><span style="font-weight: 700;" id="seperation_date_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Reason for leaving : </span></div> 
+                     <div class="col-lg-3"> <span style="font-weight: 700;" id="reason_leaving_other"></span></div>
+                 </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Working for this organization again :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="rejoin_again_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">What did you like the most of the organization : </span></div>
+                   <div class="col-lg-3"> <span style="font-weight: 700;" id="like_organi_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Think the organization do to improve staff welfare :</span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="improve_staff_welfare_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Anything you wish to share with us : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="share_with_us_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Company Vehicle handed in :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="vehicle_handled_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">All equipments handed in : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="equip_handled_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">All library books submitted :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="library_book_submit_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Security : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="security_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Exit interview conducted :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="exit_interv_conduct_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Notice period followed : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="notice_period_follow_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Manager/Supervisor clearance :</span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="manager_clearance_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Resignation letter submitted : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="resignation_letter_other"></span></div>
+              </div>
+             
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+  <script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+
+  
+<script type="text/javascript">
+
+// $(window).on('load', function () {
+// // $("#coverScreen").hide();
+// });
+
+$('[data-type="adhaar-number"]').keyup(function() {
+  var value = $(this).val(); //alert(value);
+  value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
+  $(this).val(value);
+});
+
+$('[data-type="adhaar-number"]').on("change, blur", function() {
+  var value = $(this).val(); // alert(value);
+  var maxLength = $(this).attr("maxLength");
+  if (value.length != maxLength) {
+    $(this).addClass("highlight-error"); 
+  } else {
+    $(this).removeClass("highlight-error");
+  }
+});
+
+
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this employee exit details?');
+        }) 
+
+           $(document).ready(function()
+            {
+               $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+                  todayBtn: "linked",
+                  todayHighlight: true,
+                  });
+
+            });
+
+     
+
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+$(".use-mail").click(function() { //alert('n');  
+           $('#my_email_Modal').modal('show');
+
+
+});
+
+//         $.ajaxSetup({
+//   headers: { "X-CSRFToken": '{{csrf_token}}' }
+// });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//         }
+//     }
+// });
+
+// $(window).load(function() {
+//       $('#myModal').modal('show');
+// });
+
+
+
+ $(".use-address").click(function() { //alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+          var base_url = window.location.origin;
+        // "http://stackoverflow.com"
+
+           var host = window.location.host;
+        // stackoverflow.com
+
+      var pathArray = window.location.pathname.split( '/' );
+    //  alert(base_url);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");  
+      $.ajax({  
+            type: "POST",  
+            url: "/snippets_exit_employee_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                       //  alert(item.fields.name);
+                        if(check == false)
+                        {
+                              check = true;
+                             // var name = item.fields.first_name + " " + item.fields.last_name; 
+                            //  var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                            //  $('#employee_id_other').html(item.pk);
+                            //  $('#first_name_other').html(name);
+                              $('#seperation_date_other').html(item.fields.seperation_date);
+                              $('#reason_leaving_other').html(item.fields.reason_leaving);
+                              $('#rejoin_again_other').html(item.fields.rejoin_again);
+                              $('#like_organi_other').html(item.fields.like_organi);
+                              $('#improve_staff_welfare_other').html(item.fields.improve_staff_welfare);
+                              $('#share_with_us_other').html(item.fields.share_with_us);
+                              $('#vehicle_handled_other').html(item.fields.vehicle_handled);
+                              $('#equip_handled_other').html(item.fields.equip_handled);
+                              $('#library_book_submit_other').html(item.fields.library_book_submit);
+                              $('#security_other').html(item.fields.security);
+                              $('#exit_interv_conduct_other').html(item.fields.exit_interv_conduct);
+                              $('#notice_period_follow_other').html(item.fields.notice_period_follow);
+                              $('#resignation_letter_other').html(item.fields.resignation_letter);
+                              $('#manager_clearance_other').html(item.fields.manager_clearance);
+                             
+                         
+                        }
+                   //now you can access properties using dot notation
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+});
+
+        $('td.query-main').live('click', function() { //alert();
+  var queryid = $(this).data("queryid");
+  
+ 
+});
+
+
+        // $(document).ready(function() {
+        //     $('#datatable').DataTable( {
+        //         dom: 'Bfrtip',
+        //         buttons: [
+        //             'copy', 'csv', 'excel', 'pdf', 'print'
+        //         ],
+        //         language: {
+        //         paginate: {
+        //             previous: "<i class='fas fa-angle-left'>",
+        //             next: "<i class='fas fa-angle-right'>"
+        //         }
+        //     }
+        //     } );
+        // } );
+
+
+     
+
+    </script>
+
+     <!-- Optional JS -->
+  <!-- <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script> -->
+  <!-- <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script> -->
+
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+
+
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            // {
+            //     extend: 'copyHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, ':visible' ]
+            //     }
+          //  },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            // {
+            //     extend: 'pdfHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, 1 ]
+            //     }
+           // },
+            'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+
