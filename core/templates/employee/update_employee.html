@@ -24,6 +24,8 @@ ul.errorlist {
     border: 2px red solid;
 }
 
+
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -41,24 +43,6 @@ input[type=number] {
 {% endblock stylesheets %}
 
 {% block content %}
-
-    <!-- Header -->
-    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: cenher top;">
-      
-      <span class="mask bg-gradient-default opacity-8"></span>
-    
-      <div class="container-fluid d-flex align-items-center">
-        <div class="row">
-          <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
-            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
-            <a href="#!" class="btn btn-neutral">Edit profile</a>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-   
 
     <!-- Page content -->
     <div class="container-fluid mt-6">
@@ -86,37 +70,6 @@ input[type=number] {
                   <form method="POST" class="post-form" action="">  
                     {% csrf_token %}  
                    
-                    <!-- {{ form.errors }} 
-                     {{ form.non_field_errors }}  --> 
-                      <!-- {{ context.employee_id }}  -->
-                    
-                      <!-- {% for worker in workers %}
-                      <tr>
-                          <td>{{worker.id}}</td>
-                          <td>{{worker.first_name}}</td>
-                          <td>{{worker.last_name}}</td>
-                          <td>{{worker.email}}</td>
-                      </tr>
-                      {% endfor %}. -->
-
-                    <!-- {{ form.errors }}
-                    {{ form.non_field_errors }}
-                    {% if form.errors %}
-                    <div style="color:red;"  role="alert">
-                        {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                        {{ error }}
-                      
-                        {% endfor %}
-                        {% endfor %}
-                    </div>
-                    {% endif %} -->
-
-    <!-- {% for item in context %}
-        {% ifchanged item.name %}
-              {{ item.name }}
-        {% endifchanged %}
-        {% endfor %} -->
 
             <h6 class="heading-small text-muted mb-4">Basic Info</h6>
             <div class="pl-lg-4">
@@ -155,13 +108,6 @@ input[type=number] {
                   </div>
                 </div>
 
-                <!-- <div class="col-lg-4">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-username">Mobile Number</label>
-                      <input type="text" name="mobile_number" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Enter Mobile Number" >
-                      {{ form.mobile_number.errors }}
-                    </div>
-                  </div> -->
                  
                 <div class="col-lg-4">
                   <div class="form-group">
@@ -170,89 +116,47 @@ input[type=number] {
                     <!-- {{ form.nick_name.errors }} -->
                   </div>
                 </div>
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-email">Added By</label>
-                    <input type="text" name="input-addedby" class="form-control" placeholder="Enter Added By" >
-                    {{ form.employee_id.errors }}
-                  </div>
-                </div> -->
+             
               </div>
 
-              <div class="row">
-                
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-email">Nick Name</label>
-                    <input type="email" id="input-email" class="form-control" placeholder="{{ request.user.email }}">
-                  </div>
-                </div> -->
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-email">Added By</label>
-                    <input type="text" name="input-email" class="form-control"  placeholder="Enter Added By">
-                  </div>
-                </div>-->
-               
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Added time</label>
-                    <input type="text" name="input-addedtime" class="form-control" placeholder="Enter Added time" >
-                    {{ form.employee_id.errors }}
-                  </div>
-                </div>    -->
-
-              </div>
-
-              <div class="row">
-               
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Modified By</label>
-                    <input type="text" name="input-modifiedby" class="form-control" placeholder="Enter Modified By" >
-                    {{ form.employee_id.errors }}
-                  </div>
-                </div> -->
-                <!-- <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Modified time</label>
-                    <input type="text" name="input-modifiedtime" class="form-control" placeholder="Enter Modified time" >
-                    {{ form.employee_id.errors }}
-                  </div>
-                </div> -->
-              </div>
             </div>
             <hr class="my-4" />
           
-            <!-- Address -->
-            <!-- <button type="submit" class="btn btn-primary">Submit</button>  -->
             <h6 class="heading-small text-muted mb-4">Work</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-address">Department</label>
-                    <!-- <input name="department" value="{{ form.data.department }}" class="form-control" placeholder="Enter Department"  type="text"> -->
-                    <select name="department" class="form-control" placeholder="Enter Department">
-                          <option value="">select</option>
-                          <option value="HR" {% if employee.department == "HR" %} selected{% endif %}>HR</option>
-                          <option value="Accounts and Finance" {% if employee.department == "Accounts and Finance" %} selected{% endif %}>Accounts and Finance</option>
-                          <option value="Sales and marketing" {% if employee.department == "Sales and marketing" %} selected{% endif %}>Sales and marketing</option>
-                          <option value="Technical Publications and Training" {% if employee.department == "Technical Publications and Training" %} selected{% endif %}>Technical Publications and Training</option>
-                          <option value="Technical (or Customer) Support" {% if employee.department == "Technical (or Customer) Support" %} selected{% endif %}>Technical (or Customer) Support</option>
-                    </select>
+                  
+                    <select class="form-control" value="{{ form.data.role }}" name="department">
+                        <option value="">select</option>
+                          {% for dept in department %}
+                              <option value="{{ dept.id }}" {% if form.data.department == "{{ dept.id }}" %} selected{% endif %}>  {{ dept.name }}</option>
+                          {% endfor %} 
+                        </select>
                   
                     {{ form.department.errors }}
               </div>
                 </div>
-                 
-                <div class="col-md-4"> 
+
+                <div class="col-lg-4">
                     <div class="form-group">
-                      <label class="form-control-label" for="input-address">Reporting To</label>
-                      <input name="reporting_to" value="{{ employee.reporting_to }}" class="form-control" placeholder="Enter Reporting To"  type="text">
-                      {{ form.reporting_to.errors }}
-                    </div>
+                      <label class="form-control-label" for="input-country">Role</label>
+                     
+                       <select class="form-control"  name="role">
+                             <option value="">select</option>
+                             {% for role in roles %}
+                                 <option value="{{ role.id }}" {% if employee.role == role.id %} selected{% endif %}>  {{ role.name }}</option>
+                             {% endfor %} 
+                       </select>
+                       {{ form.role.errors }}
+                       
+                      <!-- <input type="number" name="role" value="{{ form.data.role }}" class="form-control" placeholder="Enter Role"> -->
+                      
                   </div>
+                  </div>
+              
 
                   <div class="col-md-4">
                     <div class="form-group">
@@ -348,57 +252,55 @@ input[type=number] {
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
-                  <label class="form-control-label" for="input-country">Role</label>
-                 
-                   <select class="form-control"  name="role">
-                         <option value="">select</option>
-                         {% for role in roles %}
-                             <option value="{{ role.id }}" {% if employee.role == role.id %} selected{% endif %}>  {{ role.name }}</option>
-                         {% endfor %} 
-                   </select>
-                   {{ form.role.errors }}
-                   
-                  <!-- <input type="number" name="role" value="{{ form.data.role }}" class="form-control" placeholder="Enter Role"> -->
-                  
-              </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group">
                   <label class="form-control-label" for="input-city">Total experience</label>
                   <input type="number" name="total_experience" value="{{ employee.total_experience }}" class="form-control" placeholder="Enter Total experience" >
                 </div>
               </div>
+             
+            </div>
+
+            <div class="row">
+            
               <div class="col-lg-4">
                 <div class="form-group">
                   <label class="form-control-label" for="input-country">Experience</label>
                   <input type="number" name="experience" value="{{ employee.experience }}" class="form-control" placeholder="Enter Experience" >
                 </div>
               </div>
-              <!-- <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label" for="input-country">Role</label>
-                  <input type="number" name="input-postal-code" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Postal code">
-                </div>
-              </div> -->
             </div>
         </div>
 
         <hr class="my-4" />
+
+        <h6 class="heading-small text-muted mb-4">Hierarchy Information</h6>
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-4"> 
+              <div class="form-group">
+                <label class="form-control-label" for="input-address">Reporting To</label>
+                
+                <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
+                    <option value="" selected >Select</option>
+                    {% for report in reporting %}
+                        <option value="{{ report.employee_id }}" {% if reporting_to.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                    {% endfor %} 
+                  </select>
+                
+                {{ form.reporting_to.errors }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4" />
        
-              <select style="display: none;" id="address-country"></select>
+            <select style="display: none;" id="address-country"></select>
             
-            <!-- Address -->
-            <!-- <button type="submit" class="btn btn-primary">Submit</button>  -->
             <h6 class="heading-small text-muted mb-4">Personal</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                        <!-- <select name="country"></select> --> 
-                        <!-- value="{{ employee.mobile_phone }}" -->
                         <label class="form-control-label" for="input-address">Mobile Phone</label>
                         <input type="hidden"  id="Hid_mobi"  value="{{ employee.mobile_phone }}" name =""  >
 
@@ -448,18 +350,12 @@ input[type=number] {
                                       <label class="custom-control-label" for="customRadio7"> Married</label>
                                     </div>
                               </td>
-                              <!-- <td><input type="radio" name="marital_status"  value="Single"><label for="html">Single</label></td> -->
-                              
-                              <!-- <td><input type="radio" name="marital_status"  value="Married">Married</td> -->
-                              
+                            
                       
                             </tr>
                           </tbody>
                         </table>
                    
-                        
-                     
-                    <!-- <input type="text" name="marital_status" value="{{ form.data.marital_status }}" class="form-control" placeholder="Enter Marital status " > -->
                   </div>
                 </div>
                 <div class="col-lg-4">
@@ -478,38 +374,6 @@ input[type=number] {
               </div>
             
           
-            <!-- <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label" for="input-city">Work phone</label>
-                  <input type="text" name="work_phone" value="{{ form.data.work_phone }}" class="form-control" placeholder="Enter Work phone" >
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label" for="input-country">Extension</label>
-                  <input type="text" name="extension" value="{{ form.data.extension }}" class="form-control" placeholder="Enter Extension" >
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label" for="input-country">Role</label>
-                 
-                   <select class="form-control" value="{{ form.data.role }}" name="role">
-                         <option value="">select</option>
-                         {% for role in roles %}
-                             <option value="{{ role.id }}">  {{ role.name }}</option>
-                         {% endfor %}
-                   </select>
-                   {{ form.role.errors }} 
-                   
-                  
-                  
-              </div>
-        </div>
-  </div> -->
-
-
   <h6 class="heading-small text-muted mb-4">Summary</h6>
   <div class="pl-lg-4">
     <div class="row">
@@ -554,13 +418,6 @@ input[type=number] {
         </div>
       </div>
 
-      <!-- <div class="col-lg-4">
-          <div class="form-group">
-            <label class="form-control-label" for="input-username">Mobile Number</label>
-            <input type="text" name="mobile_number" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Enter Mobile Number" >
-            {{ form.mobile_number.errors }}
-          </div>
-        </div> -->
        
       <div class="col-lg-4">
         <div class="form-group">
@@ -569,13 +426,7 @@ input[type=number] {
           <!-- {{ form.nick_name.errors }} -->
         </div>
       </div>
-      <!-- <div class="col-lg-4">
-        <div class="form-group">
-          <label class="form-control-label" for="input-email">Added By</label>
-          <input type="text" name="input-addedby" class="form-control" placeholder="Enter Added By" >
-          {{ form.employee_id.errors }}
-        </div>
-      </div> -->
+    
     </div>
 
             </div>
@@ -583,20 +434,29 @@ input[type=number] {
               
             </div>
         </div>
-        <center> <button class="btn btn-primary" onclick="emp" id="submit_button" name="submit_button" type="submit">Update</button></center>
+
+
+        <div class="card-footer">
+
+            <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Update<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+           
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        </div>
+
         <hr class="my-4" />
 
           </div>
           
-              </form>
-            </div>
-          </div>
+            </form>
         </div>
-      </div>
-
-      {% include 'includes/footer.html' %}
-
+        </div>
     </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+</div>
 
 {% endblock content %}
 

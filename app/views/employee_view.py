@@ -11,7 +11,8 @@ from django.http import HttpResponse
 from django import template
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from app.forms.EmployeeForm import EmployeeForm 
+from app.forms.EmployeeForm import EmployeeForm
+from app.models.department_model import Department 
 
 #from app.forms import UserGroupForm  
 
@@ -44,75 +45,6 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 @login_required(login_url="/login/")
-def index(request):
-    
-    context = {}
-    context['segment'] = 'index' 
-
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
-
-
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
-        
-        load_template      = request.path.split('/')[-1]
-        context['segment'] = load_template
-        
-        html_template = loader.get_template( load_template )
-        return HttpResponse(html_template.render(context, request))
-        
-    except template.TemplateDoesNotExist:
-
-        html_template = loader.get_template( 'page-404.html' )
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-    
-        html_template = loader.get_template( 'page-500.html' )
-        return HttpResponse(html_template.render(context, request))
-
-def snippets(request):
-    roles = Group.objects.filter(is_active='1')
-    emp_id =    request.POST.get('emp_id')
-    csrf =    request.POST.get('csrfmiddlewaretoken')
-    #employee = Employee.objects.filter(employee_id = emp_id)#.prefetch_related('id')
-    #roles = Group.objects.filter(is_active='1') 
-    #final_list = list(chain(employee, roles)) 
-    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type')))
-    #final_list = Employee.objects.filter(roles).values_list('name', flat=True)
-    #final_list =  Employee.objects.raw('select * from auth_group where  id = 3')
-    #final_list = Employee.objects.all().prefetch_related(Prefetch('id', queryset=Group.objects.filter(is_active='1')))
-    #print(final_list)
-    
-    test = final_list.values_list('role', flat=True)
-    x = str(test)
-    y = int(x[11])
-    roles = Group.objects.filter(id = y)
-    final_list_arr = list(chain(final_list, roles)) 
-    #return HttpResponse(roles)
-    jsondata = serializers.serialize('json', final_list_arr)
-    
-#     sql = "SELECT * FROM employee AS emp JOIN auth_group AS grp ON emp.role = grp.id" 
-#     cursor = connection.cursor()
-#     cursor.execute(sql, ['localhost'])
-#     row = cursor.fetchall()
-    
-#     print(row)
-#     return HttpResponse(sql)
-    return HttpResponse(jsondata, content_type='application/json')
-   # result = serializers.serialize('json', [employee,])
-   # return HttpResponse(employee) #WHERE #a.name = %s
-#     return HttpResponse(test)
-#     print(roles);
-#     context = {'roles':roles} 
-#     return render(request, "employee/index.html", context)
-
-
-
 def roles(request):
     roles = Group.objects.filter(is_active='1')
    # return HttpResponse("date")
@@ -120,11 +52,31 @@ def roles(request):
     context = {'roles':roles}
     return render(request, "employee/index.html", context)
 
+@login_required(login_url="/login/")
 def employees(request):
    # return HttpResponse("employee")
-    employee = Employee.objects.filter(is_active='1')
-    print(employee)
-    context = {'employees':employee}
+    employee = Employee.objects.select_related().filter(is_active='1')
+    # print(employee)
+
+    test = Reporting_to.objects.select_related().filter(is_active='1')
+    print(test[0].employee.first_name)
+
+    obj = []
+
+    for data in employee:
+        reporting = Reporting_to.objects.filter(employee_id=data.employee_id)
+        if reporting:
+            reporting_name = Employee.objects.get(employee_id = reporting[0].reporting_id)
+            # print(reporting_name.first_name)
+            obj.append( { 'employee_id':data.employee_id,'name':data.first_name+' '+data.last_name,'email':data.email_id,'reportee':reporting_name.first_name+' '+reporting_name.last_name, 'role':data.role.name if data.role else None, 'dept': data.department.name if data.department else None  } )
+        else:
+            obj.append( { 'employee_id':data.employee_id,'name':data.first_name+' '+data.last_name,'email':data.email_id,'reportee':None,  'role':data.role.name if data.role else None, 'dept': data.department.name if data.department else None  } )
+
+
+    # print(obj)
+
+
+    context = {'employees':obj}
     return render(request, "employee/index.html", context)
 
 def add_employee(request):  
@@ -344,10 +296,12 @@ def add_employee(request):
                 
        
     role = Group.objects.filter(is_active = 1)
+    department = Department.objects.filter(is_active = 1)
     reporting = Employee.objects.filter(is_active = 1)
     context_role = {
         'roles': role,
         'reporting': reporting,
+        'department':department,
     }
    
     #
@@ -476,17 +430,48 @@ def update_employee(request, pk):
                 gender=gender,
 
                 ) 
-           # obj.save()
 
-            #employee.save()
-            #form.save()
+            check_reporting = Reporting_to.objects.filter(employee_id=pk, is_active = 1)
+            
+
+            if check_reporting:
+               
+               if reporting_to:
+                    Reporting_to.objects.filter(employee_id=pk).update(
+                        updated_at=datetime.datetime.now(),
+                        employee_id=pk,
+                        reporting_id= reporting_to,
+                        updated_by_id=request.user.emp_id,
+                    )
+
+            else:
+                obj = Reporting_to(
+                    created_at=datetime.datetime.now(),
+                    updated_at=datetime.datetime.now(),
+                    device='web',
+                    employee_id=pk,
+                    reporting_id=reporting_to,
+                    updated_by_id=request.user.emp_id,
+                    
+                ) 
+
+                obj.save()
+
+
             messages.success(request, ' Employee was updated! ')
             return redirect('employees')
+
     role = Group.objects.all()
+    department = Department.objects.filter(is_active = 1)
+    reporting = Employee.objects.filter(is_active = 1).exclude(employee_id = pk)
+    reporting_to = Reporting_to.objects.get(is_active = 1, employee_id = pk)
+    # print(reporting_to.employee_id)
     context_role = {
-          'roles': role,
-         #  'country': 'in'
-       }
+        'roles': role,
+        'reporting': reporting,
+        'department':department,
+        'reporting_to':reporting_to,
+    }
     
    # tes = Group.objects.all()
     context_role.update({"form":form, 'employee':employee})
