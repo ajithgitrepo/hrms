@@ -45,6 +45,7 @@ from app.models.employee_model import Employee , Work_Experience, Education, Dep
 import datetime
 from app.models.attendance_model import Attendance
 from app.models.announcement_model import Announcement 
+from app.models.weekend_model import Weekend
 from django.core.exceptions import PermissionDenied
 from app.models.holiday_details_model import Holiday_Detail 
 
@@ -98,8 +99,13 @@ def index(request):
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[start_week, end_week]) 
     # print(holidays)
+
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(weekend)
+
     upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1, date__gt= datetime.datetime.now())[:5]
     # print(upcoming_holidays)
+
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     now = datetime.datetime.now()
@@ -110,11 +116,14 @@ def index(request):
     date_no = []
 
     for n_week in range(1):
-        dates= [(now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%Y-%m-%d") for d in range(7)]
+        dates= [(now_day_1 + datetime.timedelta(days=d+n_week*7)) for d in range(7)]
         date_no= [(now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%d") for d in range(7)]
 
-    zipped_data = zip(weekdays, date_no)
-    # print(week_atten[0].date)
+        # dates.append( (now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%Y-%m-%d") for d in range(7) )
+        # date_no.append( (now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%d") for d in range(7) )
+
+    zipped_data = zip(weekdays, date_no, dates)
+    # print(dates)
   
     context = {
         'birthdays':query,
@@ -123,10 +132,10 @@ def index(request):
         'announcements':announcements,
         'week_atten':week_atten,
         'weekdays':zipped_data,
-        'dates':dates,
+        # 'dates':dates,
         'holidays':holidays,
         'upcoming_holidays':upcoming_holidays,
-        # 'date_no':date_no,
+        'weekend':weekend,
 
     }
 

@@ -148,3 +148,5 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ajithdevop1@gmail.com'
 EMAIL_HOST_PASSWORD = 'GmailPassword7'
+
+DATE_INPUT_FORMATS = ('%d/%m/%Y','%d-%m-%Y','%Y-%m-%d')

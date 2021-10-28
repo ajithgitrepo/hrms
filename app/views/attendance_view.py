@@ -9,8 +9,10 @@ from django import template
 from django.contrib import messages 
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from app.models import weekend_model
 from app.models.employee_model import Employee
 from app.models.holiday_details_model import Holiday_Detail 
+from app.models.weekend_model import Weekend
 import datetime 
 from datetime import datetime, timedelta
 from django.db.models import Q
@@ -97,6 +99,8 @@ def attn_listview(request):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
 
+    print(dates)
+
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
@@ -111,6 +115,12 @@ def attn_listview(request):
     employees = Employee.objects.filter(is_active = 1)
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(weekend)
+
+    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+
  
     context = {
         'month_atten':month_atten,
@@ -123,6 +133,8 @@ def attn_listview(request):
         'month_no':now.strftime("%m"),
         'year':now.strftime("%Y"),
         'emp_id':request.user.emp_id,
+        'weekend':weekend,
+        'weekend_count':num_days,
 
     }
 
@@ -220,7 +232,18 @@ def attn_tableview(request):
     employees = Employee.objects.filter(is_active = 1)
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
- 
+    
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(weekend)
+
+    year = 2021
+    month = 10
+    day_to_count = calendar.SUNDAY
+   
+    
+    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+
+    # print(num_days)
  
     context = {
         'month_atten':month_atten,
@@ -233,12 +256,21 @@ def attn_tableview(request):
         'month_no':now.strftime("%m"),
         'year':now.strftime("%Y"),
         'emp_id':request.user.emp_id,
+        'weekend':weekend,
+        'weekend_count':num_days,
 
     }
 
     return render(request, "attendance/attn_tabular.html",context)
 
-
+def weeknum(dayname):
+    if dayname == 'Monday':   return 0
+    if dayname == 'Tuesday':  return 1
+    if dayname == 'Wednesday':return 2
+    if dayname == 'Thursday': return 3
+    if dayname == 'Friday':   return 4
+    if dayname == 'Saturday': return 5
+    if dayname == 'Sunday':   return 6
 
 def search_tableview(request,pk,month):
    
@@ -475,7 +507,7 @@ def search_attn_time(request):
             'id': holi.id,                                                                                              
             'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
             'end': holi.date.strftime("%m/%d/%Y"),  
-            'color': '#ff1a1a',                                                           
+            'color': '#0de2ffd9',                                                           
         })          
 
     return JsonResponse(out, safe=False)  

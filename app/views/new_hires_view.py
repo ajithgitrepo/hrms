@@ -56,7 +56,8 @@ def index(request):
 
     # last 15 days records
     new_hires = Employee.objects.filter(is_active = 1, role__is_active ='1', department__is_active ='1', created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=15))
-   
+    # print(new_hires)
+    
     # last 3 records
     # new_hires = Employee.objects.filter(is_active = 1).order_by('-created_at')[:3]
     # print(new_hires)

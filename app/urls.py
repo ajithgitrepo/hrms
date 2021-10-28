@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from django.urls import path, re_path, include
 from app import views 
@@ -148,6 +144,28 @@ urlpatterns = [
     path('delete_employee_exit_details/<str:pk>/', views.exit_deatails_view.delete_employee_exit_details, name="delete_employee_exit_details"),
     path('snippets_exit_employee_all_info', views.snippets_exit_employee_all_info, name="snippets_exit_employee_all_info"),
     
+    # Organization Tree
+    path('organization_tree/', views.heirarchy_view.index, name="organization_tree"),
+
+    #Task
+    path('tasks/', views.task_view.tasks, name="tasks"),
+    path('add_task/', views.task_view.add_task, name="add_task"),
+    path('delete_task/<str:pk>/', views.task_view.delete_task, name="delete_task"),
+    path('update_task/<str:pk>/', views.task_view.update_task, name="update_task"),
+    path('search/', views.task_view.search, name="search"),
+
+    # Location
+    path('locations/', views.location_view.locations, name="locations"),
+    path('add_location/', views.location_view.add_location, name="add_location"),
+    path('update_location/<str:pk>/', views.location_view.update_location, name="update_location"),
+    path('delete_location/<str:pk>/', views.location_view.delete_location, name="delete_location"),
+    path('filter_location/', views.location_view.filter_location, name="filter_location"),
+
+    # Weekend
+    path('weekends/', views.weekend_view.weekends, name="weekends"),
+    path('add_weekend/', views.weekend_view.add_weekend, name="add_weekend"),
+    path('update_weekend/<str:pk>/', views.weekend_view.update_weekend, name="update_weekend"),
+    path('delete_weekend/<str:pk>/', views.weekend_view.delete_weekend, name="delete_weekend"),
 
 
    # path('emp', views.emp, name='emp'),

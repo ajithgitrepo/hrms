@@ -26,3 +26,7 @@ from .calendar_model import *
 from .travel_request_model import *
 from .compensatory_request_model import *
 from .travel_expense_model import *
+
+from .location_model import *
+from .task_model import *
+from .weekend_model import *

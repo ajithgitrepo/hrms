@@ -6,7 +6,7 @@ from app.models.employee_model import *
 
 # Create your models here.
 
-class Reporting_to(models.Model):  
+class Reporting(models.Model):  
    
     id = models.AutoField(primary_key=True)
     employee = models.ForeignKey(Employee, max_length=50, blank=True, related_name='report_employee', null=True, on_delete= models.SET_NULL)

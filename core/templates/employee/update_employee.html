@@ -282,9 +282,11 @@ input[type=number] {
                 <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
                     <option value="" selected >Select</option>
                     {% for report in reporting %}
-                        <option value="{{ report.employee_id }}" {% if reporting_to.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                        {% for data in reporting_to %}
+                            <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                        {% endfor %} 
                     {% endfor %} 
-                  </select>
+                </select>
                 
                 {{ form.reporting_to.errors }}
               </div>

@@ -31,7 +31,7 @@ class Employee(models.Model):
     nick_name = models.CharField(max_length=30) 
 
     department = models.ForeignKey(Department, max_length=50, blank=True, related_name='department_emp', null=True, on_delete= models.SET_NULL)
-    reporting_to = models.CharField(max_length=20, blank = True, null = True)  
+    # reporting_to = models.CharField(max_length=20, blank = True, null = True)  
     source_of_hire = models.CharField(max_length=200, blank = True, null = True)  
     seating_location = models.CharField(max_length=50, blank = True, null = True)  
     location = models.CharField(max_length=50, blank = True, null = True)  

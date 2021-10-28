@@ -21,6 +21,11 @@ from .holiday_details_view import *
 from .travel_request_view import *
 from .travel_expense_view import *
 from .compensatory_request_view import *
+from .heirarchy_view import *
+
+from .location_view import *
+from .task_view import *
+from .weekend_view import *
 
 
 

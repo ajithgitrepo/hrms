@@ -211,19 +211,20 @@
                             
                             {% now "d" as todays_date %}
 
-                            {% for days,date in weekdays %}
-                           
+                            {% for days,date_no,dates in weekdays %}
+
+                            
                             <tr>
-                                {% if todays_date == date %}
-                                    <td width="75" class="sel">{{ days }} <span> {{ date }} </span></td>
+                                {% if todays_date == date_no %}
+                                    <td width="75" class="sel">{{ days }} <span> {{ date_no }} </span></td>
                                 {% else %}
-                                    <td width="75" class="">{{ days }} <span> {{ date }} </span></td>
+                                    <td width="75" class="">{{ days }} <span> {{ date_no }} </span></td>
                                 {% endif %}
                                 
                                 <td colspan="3">
                                     {% for week in week_atten %}
 
-                                        {% if week.date|date:"d" in date %}
+                                        {% if week.date|date:"d" in date_no %}
                                             {% if week.is_present == 1 %}
                                                 <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
                                             {% endif %}
@@ -235,10 +236,22 @@
                                     {% endfor %}
 
                                     {% for holi in holidays %}
-                                        {% if holi.date|date:"d" in date %}
+                                        {% if holi.date|date:"d" in date_no %}
                                             <div class="lingr holyday-bg"><span data-toggle="tooltip" data-original-title="Absent">{{ holi.holiday_name }}</span></div>
                                         {% endif %}
                                     {% endfor %}
+
+                                    {% for week in weekend %}
+                               
+                                        {% if dates|date:'l'|lower in week.week_off %}
+                                        
+                                            <div class="lingr weekend-bg"><span data-toggle="tooltip" data-original-title="Weekend">Weekend</span></div>
+
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
 
                                 </td>
 
@@ -385,7 +398,7 @@
           <div class="card-body">
             <!-- Chart -->
             <div class="chart text-center">
-              <span class="">Development Stage</span>
+              <span class="">Under Development</span>
             </div>
           </div>
         </div>
@@ -428,7 +441,7 @@
           <!-- Card body -->
           <div class="card-body">
             <div class="chart text-center">
-              <span class="">Development Stage</span>
+              <span class="">Under Development</span>
             </div>
             <div id="TIMELOGS" class="dash-body ">
               <!-- <div id="dashboardTimelogsNavBar">
@@ -461,7 +474,7 @@
           <div class="card-body">
             <!-- Chart -->
             <div class="chart text-center">
-              <span class="">Development Stage</span>
+              <span class="">Under Development</span>
             </div>
           </div>
         </div>

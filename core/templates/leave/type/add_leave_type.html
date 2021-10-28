@@ -437,12 +437,12 @@ input[type="radio"] {
                                     <td><select class="form-control half" name="effective_period">
                                           <option value="1" {% if  form.data.effective_period == "1" %} selected{% endif %}>Year(s)</option>
                                           <option value="2" {% if  form.data.effective_period == "2" %} selected{% endif %}>Month(s)</option>
-                                          <option value="3" {% if  form.data.effective_period == "3" %} selected{% endif %}>Day(s)</option></select>
+                                          <!-- <option value="3" {% if  form.data.effective_period == "3" %} selected{% endif %}>Day(s)</option></select> -->
                                     </td>
                                     <td><label class="form-control-label" for="input-email" >From</label></td>
                                     <td> <select class="form-control" name="effective_from">
                                           <option value="date_of_joining" {% if  form.data.effective_from == "date_of_joining" %} selected{% endif %}>Date of Joining</option>
-                                          <option value="date_of_confirmation" {% if  form.data.effective_from == "date_of_confirmation" %} selected{% endif %}>Date of Confirmation</option>
+                                          <!-- <option value="date_of_confirmation" {% if  form.data.effective_from == "date_of_confirmation" %} selected{% endif %}>Date of Confirmation</option> -->
                                          </select>
                                     </td>
                               </tr>
@@ -458,15 +458,15 @@ input[type="radio"] {
                                     <!-- <td><input style="width:50px;" type="number" name="effect_number" value="{{ form.data.name }}" class="form-control" placeholder="Name" ></td> -->
                                     <td class="accur"><select id="ddl_accural_1st" name="accrual_period" class="form-control">
                                           <option unit="0" value="01" {% if  form.data.accrual_period == "01" %} selected{% endif %}>Yearly</option>
-                                          <option unit="0" value="00" {% if  form.data.accrual_period == "00" %} selected{% endif %}>One Time</option>
                                           <option unit="1" value="11" {% if  form.data.accrual_period == "11" %} selected{% endif %}>Monthly</option>
+                                          <!-- <option unit="0" value="00" {% if  form.data.accrual_period == "00" %} selected{% endif %}>One Time</option>
                                           <option unit="1" value="16" {% if  form.data.accrual_period == "16" %} selected{% endif %}>Half Yearly</option>
                                           <option unit="1" value="14" {% if  form.data.accrual_period == "14" %} selected{% endif %}>Triannually</option>
                                           <option unit="1" value="13" {% if  form.data.accrual_period == "13" %} selected{% endif %}>Quarterly</option>
                                           <option unit="1" value="12" {% if  form.data.accrual_period == "12" %} selected{% endif %}>Bi Monthly</option>
                                           <option unit="3" value="315" {% if  form.data.accrual_period == "315" %} selected{% endif %}>Semi Monthly</option>
                                           <option unit="2" value="22" {% if  form.data.accrual_period == "22" %} selected{% endif %}>Bi Weekly</option>
-                                          <option unit="2" value="21" {% if  form.data.accrual_period == "21" %} selected{% endif %}>Weekly</option> 
+                                          <option unit="2" value="21" {% if  form.data.accrual_period == "21" %} selected{% endif %}>Weekly</option>  -->
                                         </select>
                                     </td>
                                     <td class="accur"><label class="form-control-label" for="input-email">on</label></td>
@@ -503,9 +503,9 @@ input[type="radio"] {
                                           <option value="30" {% if  form.data.effective_on == "30" %} selected{% endif %}>30th</option>
                                           <option value="31" {% if  form.data.effective_on == "31" %} selected{% endif %}>31st</option>
                                           <option value="32" {% if  form.data.effective_on == "32" %} selected{% endif %}>Last Day</option>
-                                          <option value="-1" {% if  form.data.effective_on == "-1" %} selected{% endif %}>Policy Date</option>
+                                          <!-- <option value="-1" {% if  form.data.effective_on == "-1" %} selected{% endif %}>Policy Date</option>
                                           <option value="-2" {% if  form.data.effective_on == "-2" %} selected{% endif %}>Joining Date</option>
-                                          <option value="-3" {% if  form.data.effective_on == "-3" %} selected{% endif %}>Birth Date</option>
+                                          <option value="-3" {% if  form.data.effective_on == "-3" %} selected{% endif %}>Birth Date</option> -->
                                          </select>
                                     </td>
                                     <td class="accur" id="accural_3rd_td"> <select class="form-control" id="ddl_accural_3rd" name="effective_month">
@@ -521,9 +521,9 @@ input[type="radio"] {
                                           <option value="10" {% if  form.data.effective_month == "10" %} selected{% endif %}>Oct</option>
                                           <option value="11" {% if  form.data.effective_month == "11" %} selected{% endif %}>Nov</option>
                                           <option value="12" {% if  form.data.effective_month == "12" %} selected{% endif %}>Dec</option>
-                                          <option value="-1" {% if  form.data.effective_month == "-1" %} selected{% endif %}>Policy Month</option>
+                                          <!-- <option value="-1" {% if  form.data.effective_month == "-1" %} selected{% endif %}>Policy Month</option>
                                           <option value="-2" {% if  form.data.effective_month == "-2" %} selected{% endif %}>Joining Month</option>
-                                          <option value="-3" {% if  form.data.effective_month == "-3" %} selected{% endif %}>Birth Month</option>
+                                          <option value="-3" {% if  form.data.effective_month == "-3" %} selected{% endif %}>Birth Month</option> -->
                                          </select>
                                     </td>
                                     <td class="accur" id="num_of_days"><label class="form-control-label" for="input-email">No. of Days</label></td>
@@ -548,15 +548,16 @@ input[type="radio"] {
                                     <!-- <td><input style="width:50px;" type="number" name="effect_number" value="{{ form.data.name }}" class="form-control" placeholder="Name" ></td> -->
                                     <td class="reset"><select name="reset_period" id="reset_ddl_1st"  class="form-control">
                                           <option unit="0" value="01" {% if  form.data.reset_period == "01" %} selected{% endif %}>Yearly</option>
-                                          <option unit="0" value="00" {% if  form.data.reset_period == "00" %} selected{% endif %}>One Time</option>
                                           <option unit="1" value="11" {% if  form.data.reset_period == "11" %} selected{% endif %}>Monthly</option>
+                                          <!-- <option unit="0" value="00" {% if  form.data.reset_period == "00" %} selected{% endif %}>One Time</option>
+                                          
                                           <option unit="1" value="16" {% if  form.data.reset_period == "16" %} selected{% endif %}>Half Yearly</option>
                                           <option unit="1" value="14" {% if  form.data.reset_period == "14" %} selected{% endif %}>Triannually</option>
                                           <option unit="1" value="13" {% if  form.data.reset_period == "13" %} selected{% endif %}>Quarterly</option>
                                           <option unit="1" value="12" {% if  form.data.reset_period == "12" %} selected{% endif %}>Bi Monthly</option>
                                           <option unit="3" value="315" {% if  form.data.reset_period == "315" %} selected{% endif %}>Semi Monthly</option>
                                           <option unit="2" value="22" {% if  form.data.reset_period == "22" %} selected{% endif %}>Bi Weekly</option>
-                                          <option unit="2" value="21" {% if  form.data.reset_period == "21" %} selected{% endif %}>Weekly</option>
+                                          <option unit="2" value="21" {% if  form.data.reset_period == "21" %} selected{% endif %}>Weekly</option> -->
                                         </select>
                                     </td>
                                     <td class="reset" ><label class="form-control-label" for="input-email">on</label></td>
@@ -594,9 +595,9 @@ input[type="radio"] {
                                             <option value="30" {% if  form.data.reset_on == "30" %} selected{% endif %}>30th</option>
                                             <option value="31" {% if  form.data.reset_on == "31" %} selected{% endif %}>31st</option>
                                             <option value="32" {% if  form.data.reset_on == "32" %} selected{% endif %}>Last Day</option>
-                                            <option value="-1" {% if  form.data.reset_on == "-1" %} selected{% endif %}>Policy Date</option>
+                                            <!-- <option value="-1" {% if  form.data.reset_on == "-1" %} selected{% endif %}>Policy Date</option>
                                             <option value="-2" {% if  form.data.reset_on == "-2" %} selected{% endif %}>Joining Date</option>
-                                            <option value="-3" {% if  form.data.reset_on == "-3" %} selected{% endif %}>Birth Date</option>
+                                            <option value="-3" {% if  form.data.reset_on == "-3" %} selected{% endif %}>Birth Date</option> -->
                                            
                                          </select>
                                     </td>
@@ -614,9 +615,9 @@ input[type="radio"] {
                                           <option value="10" {% if  form.data.reset_month == "10" %} selected{% endif %}>Oct</option>
                                           <option value="11" {% if  form.data.reset_month == "11" %} selected{% endif %}>Nov</option>
                                           <option value="12" {% if  form.data.reset_month == "12" %} selected{% endif %}>Dec</option>
-                                          <option value="-1" {% if  form.data.reset_month == "-1" %} selected{% endif %}>Policy Month</option>
+                                          <!-- <option value="-1" {% if  form.data.reset_month == "-1" %} selected{% endif %}>Policy Month</option>
                                           <option value="-2" {% if  form.data.reset_month == "-2" %} selected{% endif %}>Joining Month</option>
-                                          <option value="-3" {% if  form.data.reset_month == "-3" %} selected{% endif %}>Birth Month</option>
+                                          <option value="-3" {% if  form.data.reset_month == "-3" %} selected{% endif %}>Birth Month</option> -->
                                          </select>
                                     </td>
                               </tr>
@@ -626,8 +627,8 @@ input[type="radio"] {
                                     <td><select class="form-control" name="reset_carry_forward" id="reset_ddl_carry_1st">
                                        
                                         <option value="1" {% if  form.data.reset_carry_forward == "1" %} selected{% endif %} >Carry Forward</option>
-                                        <option value="2" {% if  form.data.reset_carry_forward == "2" %} selected{% endif %} >Carry Forward With Expiry</option>
-                                        <option value="3" {% if  form.data.reset_carry_forward == "3" %} selected{% endif %} >Carry Forward With Overall Limit</option>
+                                        <!-- <option value="2" {% if  form.data.reset_carry_forward == "2" %} selected{% endif %} >Carry Forward With Expiry</option>
+                                        <option value="3" {% if  form.data.reset_carry_forward == "3" %} selected{% endif %} >Carry Forward With Overall Limit</option> -->
 
                                         </select>
                                     </td>

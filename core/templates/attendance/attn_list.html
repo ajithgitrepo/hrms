@@ -292,6 +292,20 @@
                             
                             {% endfor %}
 
+                            {% for week in weekend %}
+                               
+                                {% if date|date:'l'|lower in week.week_off %}
+                                   
+                                    <td width="145"></td>
+                                    <td colspan="1" class="text-center">
+                                        <div class="lingr weekend-bg"><span>Weekend</span></div>
+                                    </td>
+                                    <td width="145"></td>
+
+                                {% endif %}
+
+                            {% endfor %}
+
 
                         </tr>
 
@@ -337,7 +351,7 @@
                     <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
                         <div class="Dtyps comp-weekend">
                             <span>Weekend</span> 
-                            <div class="Avadat" id="ZPAtt_payDaysCount">2.5 Day(s)</div>
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ weekend_count }} Day(s)</div>
                         </div>
                     </div>
          

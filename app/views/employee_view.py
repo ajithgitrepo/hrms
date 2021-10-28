@@ -17,7 +17,7 @@ from app.models.department_model import Department
 #from app.forms import UserGroupForm  
 
 from app.models.employee_model import Employee , Work_Experience, Education, Dependent 
-from app.models.reporting_to_model import Reporting_to
+from app.models.reporting_to_model import Reporting
 from django.contrib.auth.models import User
 # from app.models import Group 
 
@@ -58,13 +58,31 @@ def employees(request):
     employee = Employee.objects.select_related().filter(is_active='1')
     # print(employee)
 
-    test = Reporting_to.objects.select_related().filter(is_active='1')
-    print(test[0].employee.first_name)
+    # test = Employee.objects.select_related().filter(is_active='1')
+    # print(test[0].reporting.first_name)
+
+    # report =  Reporting.objects.filter(employee__employee_id__isnull=False)
+   
+    # emp =  Employee.objects.filter(reporting__device__contains='web')
+
+    # print(emp)
+
+    # Sub query
+    query = Employee.objects.annotate(
+    reporting_id=Subquery(
+        Reporting.objects.select_related().filter(employee_id=OuterRef('employee_id')).values('reporting_id')
+    ),
+    reportee_name=Subquery(
+        Employee.objects.filter(employee_id= OuterRef('reporting_id')).values('first_name')
+    )
+    ).values_list('employee_id', 'first_name', 'reportee_name','pk' )
+
+    # print(query)
 
     obj = []
 
     for data in employee:
-        reporting = Reporting_to.objects.filter(employee_id=data.employee_id)
+        reporting = Reporting.objects.filter(employee_id=data.employee_id)
         if reporting:
             reporting_name = Employee.objects.get(employee_id = reporting[0].reporting_id)
             # print(reporting_name.first_name)
@@ -170,7 +188,7 @@ def add_employee(request):
                 obj = Employee.objects.create(employee_id=employee_id, first_name=first_name, 
                 last_name=last_name, email_id=email_id, nick_name=nick_name,
                 department=department if department else None,
-                reporting_to=reporting_to,
+                # reporting_to=reporting_to,
                 source_of_hire=source_of_hire,
                 seating_location=seating_location,
                 location=location,
@@ -266,7 +284,7 @@ def add_employee(request):
                         #dept.save()
 
                 if reporting_to !=None:
-                    obj = Reporting_to(
+                    obj = Reporting(
                         created_at=datetime.datetime.now(),
                         updated_at=datetime.datetime.now(),
                         device='web',
@@ -402,7 +420,7 @@ def update_employee(request, pk):
             obj = Employee.objects.filter(employee_id=pk).update(employee_id=employee_id, first_name=first_name, 
                 last_name=last_name, email_id=email_id, nick_name=nick_name,
                 department=department,
-                reporting_to=reporting_to,
+                # reporting_to=reporting_to,
                 source_of_hire=source_of_hire,
                 seating_location=seating_location,
                 location=location,
@@ -431,13 +449,13 @@ def update_employee(request, pk):
 
                 ) 
 
-            check_reporting = Reporting_to.objects.filter(employee_id=pk, is_active = 1)
+            check_reporting = Reporting.objects.filter(employee_id=pk, is_active = 1)
             
 
             if check_reporting:
                
                if reporting_to:
-                    Reporting_to.objects.filter(employee_id=pk).update(
+                    Reporting.objects.filter(employee_id=pk).update(
                         updated_at=datetime.datetime.now(),
                         employee_id=pk,
                         reporting_id= reporting_to,
@@ -445,7 +463,7 @@ def update_employee(request, pk):
                     )
 
             else:
-                obj = Reporting_to(
+                obj = Reporting(
                     created_at=datetime.datetime.now(),
                     updated_at=datetime.datetime.now(),
                     device='web',
@@ -464,8 +482,8 @@ def update_employee(request, pk):
     role = Group.objects.all()
     department = Department.objects.filter(is_active = 1)
     reporting = Employee.objects.filter(is_active = 1).exclude(employee_id = pk)
-    reporting_to = Reporting_to.objects.get(is_active = 1, employee_id = pk)
-    # print(reporting_to.employee_id)
+    reporting_to = Reporting.objects.filter(is_active = 1, employee_id = pk)
+    # print(reporting_to[0].employee_id)
     context_role = {
         'roles': role,
         'reporting': reporting,
