@@ -161,7 +161,7 @@ urlpatterns = [
     path('delete_location/<str:pk>/', views.location_view.delete_location, name="delete_location"),
     path('filter_location/', views.location_view.filter_location, name="filter_location"),
 
-    # Weekend
+    # Weekend details
     path('weekends/', views.weekend_view.weekends, name="weekends"),
     path('add_weekend/', views.weekend_view.add_weekend, name="add_weekend"),
     path('update_weekend/<str:pk>/', views.weekend_view.update_weekend, name="update_weekend"),
