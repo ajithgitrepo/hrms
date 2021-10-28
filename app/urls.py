@@ -154,7 +154,7 @@ urlpatterns = [
     path('update_task/<str:pk>/', views.task_view.update_task, name="update_task"),
     path('search/', views.task_view.search, name="search"),
 
-    # Location
+    # Location details
     path('locations/', views.location_view.locations, name="locations"),
     path('add_location/', views.location_view.add_location, name="add_location"),
     path('update_location/<str:pk>/', views.location_view.update_location, name="update_location"),
