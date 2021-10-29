@@ -14,7 +14,7 @@ from app.models.employee_model import Employee
 from app.models.holiday_details_model import Holiday_Detail 
 from app.models.weekend_model import Weekend
 import datetime 
-from datetime import datetime, timedelta
+from datetime import date, time, datetime, timedelta
 from django.db.models import Q
 import calendar
 from app.models.attendance_model import Attendance 
@@ -99,7 +99,7 @@ def attn_listview(request):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
 
-    print(dates)
+    # print(dates)
 
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
@@ -196,7 +196,6 @@ def search_listview(request,pk,month):
     
 
     return render(request, "attendance/attn_list.html",context)
-
 
 
 def attn_tableview(request):
@@ -403,6 +402,8 @@ def attn_calendarview(request):
 def show_cal_view(request):   
     #return HttpResponse('work')  
 
+    from datetime import date, datetime, timedelta
+
     date = datetime.now()
     # print(now)
     current_year = datetime.now().strftime("%Y")
@@ -411,11 +412,13 @@ def show_cal_view(request):
     
     first_day = date.replace(day = 1)
     last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
-
+    # print(first_day)
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
     
-    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+
+    weekend = Weekend.objects.filter(is_active = 1)
                                                                                        
     out = []                                                                                                             
     for attn in month_atten:     
@@ -446,9 +449,57 @@ def show_cal_view(request):
             'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
             'end': holi.date.strftime("%m/%d/%Y"),  
             'color': '#0de2ffd9',                                                           
-        })                                                                                                                    
-    #return HttpResponse(out)                                                                                                                   
+        })        
+
+            
+    for week in weekend:
+        # for day in week.week_off:
+        remove_single_quotes = week.week_off.replace("'", "")
+        remove_square_brackets = str(remove_single_quotes)[1:-1]
+        days_list = list(remove_square_brackets.split(","))
+        
+        day_no = []
+
+        for days in days_list:
+
+            day_name = day_names(days.capitalize())
+            
+            weekend_dates = [first_day + timedelta(days=x) for x in range((last_day-first_day).days + 1) if (first_day + timedelta(days=x)).weekday() == day_name]
+            # print(weekend_dates)  
+            
+            for w_day in weekend_dates:
+                # print(w_day.strftime("%d"))
+                if w_day.strftime("%d") not in day_no:
+                    day_no.append(w_day.strftime("%d"))
+                    out.append({                                                                                                     
+                        'title': "Weekend",                                                                                         
+                        'id': '0',                                                                                              
+                        'start': w_day.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                        'end': w_day.strftime("%m/%d/%Y"),  
+                        'color': '#ff8700',                                                           
+                    })  
+              
+
+   
     return JsonResponse(out, safe=False)  
+
+def day_names(name):
+   
+    if name =="Monday":
+        return 0
+    if name =="Tuesday":
+        return 1
+    if name =="Wednesday":
+        return 2
+    if name =="Thursday":
+        return 3
+    if name =="Friday":
+        return 4
+    if name =="Saturday":
+        return 5
+    if name =="Sunday":
+        return 6
+
 
 
 def show_attn_time(request):
@@ -465,19 +516,101 @@ def search_attn_time(request):
 
     emp_id = request.GET.get("emp_id", None)
 
-    date = datetime.now()
+    # date = datetime.now()
+    date = request.GET.get("date")
     # print(now)
     current_year = datetime.now().strftime("%Y")
     current_month = datetime.now().strftime("%m")
     month_year = current_month+'-'+current_year
     
-    first_day = date.replace(day = 1)
-    last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
-
+    date_c = datetime.strptime(date, "%m/%d/%Y")
+    first_day = date_c.replace(day = 1)
+    last_day = date_c.replace(day = calendar.monthrange(date_c.year, date_c.month)[1])
+    # print(first_day)
+    
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = emp_id, date__range=[first_day, last_day])
     # print(month_atten)
     
-    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+
+    weekend = Weekend.objects.filter(is_active = 1)
+                                                                            
+    out = []                                                                                                             
+    for attn in month_atten:     
+        if attn.is_present == 1:
+            out.append({                                                                                                     
+                'title': 'Present',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#2fb136',                                                           
+            })   
+        else:
+            out.append({                                                                                                     
+                'title': 'Absent',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'color': '#f0989a',                                                           
+            })   
+
+         
+    for holi in all_holidays:                                                                                             
+        out.append({                                                                                                     
+            'title': holi.holiday_name,                                                                                         
+            'id': holi.id,                                                                                              
+            'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+            'end': holi.date.strftime("%m/%d/%Y"),  
+            'color': '#0de2ffd9',                                                           
+        })        
+
+    for week in weekend:
+        # for day in week.week_off:
+        remove_single_quotes = week.week_off.replace("'", "")
+        remove_square_brackets = str(remove_single_quotes)[1:-1]
+        days_list = list(remove_square_brackets.split(","))
+        
+        day_no = []
+
+        for days in days_list:
+
+            day_name = day_names(days.capitalize())
+            
+            weekend_dates = [first_day + timedelta(days=x) for x in range((last_day-first_day).days + 1) if (first_day + timedelta(days=x)).weekday() == day_name]
+            # print(weekend_dates)  
+            
+            for w_day in weekend_dates:
+                # print(w_day.strftime("%d-%m-%Y"))
+                if w_day.strftime("%d") not in day_no:
+                    day_no.append(w_day.strftime("%d"))
+                    out.append({                                                                                                     
+                        'title': "Weekend",                                                                                         
+                        'id': 1,                                                                                              
+                        'start': w_day.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                        'end': w_day.strftime("%m/%d/%Y"),  
+                        'color': '#ff8700',                                                           
+                    })  
+                
+
+    return JsonResponse(out, safe=False)  
+
+
+def search_attn_date(request):   
+
+    date = request.GET.get("date")
+    emp_id = request.GET.get("emp_id")
+   
+    date_c = datetime.strptime(date, "%m/%d/%Y")
+    first_day = date_c.replace(day = 1)
+    last_day = date_c.replace(day = calendar.monthrange(date_c.year, date_c.month)[1])
+    # print(first_day)
+    month_atten = Attendance.objects.filter(is_active = 1, employee_id = emp_id, date__range=[first_day, last_day])
+    
+    all_holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+
+    weekend = Weekend.objects.filter(is_active = 1)
                                                                                        
     out = []                                                                                                             
     for attn in month_atten:     
@@ -508,54 +641,35 @@ def search_attn_time(request):
             'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
             'end': holi.date.strftime("%m/%d/%Y"),  
             'color': '#0de2ffd9',                                                           
-        })          
+        })        
 
-    return JsonResponse(out, safe=False)  
+    for week in weekend:
+        # for day in week.week_off:
+        remove_single_quotes = week.week_off.replace("'", "")
+        remove_square_brackets = str(remove_single_quotes)[1:-1]
+        days_list = list(remove_square_brackets.split(","))
+        
+        day_no = []
 
+        for days in days_list:
 
-def search_attn_date(request):   
-
-    date = request.GET.get("date")
-    emp_id = request.GET.get("emp_id")
-   
-    date_c = datetime.strptime(date, "%m/%d/%Y")
-    first_day = date_c.replace(day = 1)
-    last_day = date_c.replace(day = calendar.monthrange(date_c.year, date_c.month)[1])
-    print(first_day)
-    
-    month_atten = Attendance.objects.filter(is_active = 1, employee_id = emp_id, date__range=[first_day, last_day])
-    
-    all_holidays = Holiday_Detail.objects.filter(is_active = 1) 
-                                                                                       
-    out = []                                                                                                             
-    for attn in month_atten:     
-        if attn.is_present == 1:
-            out.append({                                                                                                     
-                'title': 'Present',                                                                                         
-                'id': attn.id,                                                                                              
-                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
-                'end': attn.date.strftime("%m/%d/%Y"),  
-                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
-                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
-                'color': '#2fb136',                                                           
-            })   
-        else:
-            out.append({                                                                                                     
-                'title': 'Absent',                                                                                         
-                'id': attn.id,                                                                                              
-                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
-                'end': attn.date.strftime("%m/%d/%Y"),  
-                'color': '#f0989a',                                                           
-            })   
-
-         
-    for holi in all_holidays:                                                                                             
-        out.append({                                                                                                     
-            'title': holi.holiday_name,                                                                                         
-            'id': holi.id,                                                                                              
-            'start': holi.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
-            'end': holi.date.strftime("%m/%d/%Y"),  
-            'color': '#ff1a1a',                                                           
-        })          
-                                                                                                                        
+            day_name = day_names(days.capitalize())
+            
+            weekend_dates = [first_day + timedelta(days=x) for x in range((last_day-first_day).days + 1) if (first_day + timedelta(days=x)).weekday() == day_name]
+            # print(weekend_dates)  
+            
+            for w_day in weekend_dates:
+                # print(w_day.strftime("%d-%m-%Y"))
+                if w_day.strftime("%d") not in day_no:
+                    day_no.append(w_day.strftime("%d"))
+                    out.append({                                                                                                     
+                        'title': "Weekend",                                                                                         
+                        'id': w_day.strftime("%d"),                                                                                              
+                        'start': w_day.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                        'end': w_day.strftime("%m/%d/%Y"),  
+                        'color': '#ff8700',                                                           
+                    })  
+        
+        # print(day_no)
+                                                                                                                
     return JsonResponse(out, safe=False)  

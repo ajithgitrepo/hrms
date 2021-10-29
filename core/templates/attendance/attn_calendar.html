@@ -193,13 +193,16 @@ function csrfSafeMethod(method) {
             var month = $('#calendar').fullCalendar('getDate');
             var date = month.format('L');
             var emp_id = $('#employee_change').val();
+            $('#calendar').fullCalendar('removeEventSources');
             $.ajax({
                 type: "GET",
                 url: '/search_attn_date',
                 data: {'date': date, 'emp_id': emp_id, "csrfmiddlewaretoken": csrftoken},
                 dataType: "json",
                 success: function (data) {
-                    calendar.fullCalendar('refetchEvents');
+                    $('#calendar').fullCalendar('removeEventSource');
+                    $('#calendar').fullCalendar('addEventSource', data);
+                    $('#calendar').fullCalendar('refetchEvents');
                    
                 },
                 error: function (data) {
@@ -213,28 +216,28 @@ function csrfSafeMethod(method) {
 
     $('#employee_change').on('change', function () {
         var emp = $(this).val();
-        // var month = $("#month_year").val();
+        var month = $('#calendar').fullCalendar('getDate');
+        var date = month.format('L');
+        // alert(date)
         $('#calendar').fullCalendar('removeEventSources');
         var events = null;
         $.ajax({
             'async': false,
             type: "GET",
             url: '/search_attn_time',
-            data: {"csrfmiddlewaretoken": csrftoken, "emp_id": emp},
+            data: {"csrfmiddlewaretoken": csrftoken, "emp_id": emp, 'date': date},
             dataType: "json",
             'success': function (data) {
-                events = data;
-
-                
+               
+                $('#calendar').fullCalendar('removeEventSource');
+                $('#calendar').fullCalendar('addEventSource', data);
+                $('#calendar').fullCalendar('refetchEvents');
             },
            
         });
             
         //alert(events)
 
-        $('#calendar').fullCalendar('removeEventSource', events);
-        $('#calendar').fullCalendar('addEventSource', events);
-        $('#calendar').fullCalendar('refetchEvents');
 
     });
 
