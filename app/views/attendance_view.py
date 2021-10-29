@@ -344,34 +344,97 @@ def export_excel(request):
         first_day = date.replace(day = 1)
         last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
 
+        dates = []
+        date_no = []
+
+        delta = last_day - first_day
+
+        for i in range(delta.days + 1):
+            dates.append( (first_day + timedelta(days=i)) )
+            date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+
+        # print(dates)
+
         book = xlsxwriter.Workbook(output)
         sheet = book.add_worksheet('test')
         sheet.set_column(0, 5, 25)
         
         # Set up some formats to use.
         bold = book.add_format({'bold': True})
+        weekend_color = book.add_format({'font_color': '#ff8700'})
+        absent_color = book.add_format({'font_color': '#f0989a'})
+        holiday_color = book.add_format({'font_color': '#0de2ff'})
+        present_color = book.add_format({'font_color': '#3dce4c'})
 
         sheet.write('A1', 'Employee Id', bold)
         sheet.write('B1', 'Employee Name', bold)
         sheet.write('C1', 'Date', bold)
-        sheet.write('D1', 'First Check-In', bold)
-        sheet.write('E1', 'First Check-Out', bold)
-        sheet.write('F1', 'Check-In Location', bold)
+        sheet.write('D1', 'Status', bold)
+        sheet.write('E1', 'First Check-In', bold)
+        sheet.write('F1', 'First Check-Out', bold)
+        sheet.write('G1', 'Check-In Location', bold)
 
 
         month_atten = Attendance.objects.filter(is_active = 1,  employee_id = request.POST.get('employee_id'), employee__is_active = 1, date__range=[first_day, last_day])
         # print(month_atten)
 
+        holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
+
+        weekend = Weekend.objects.filter(is_active = 1)
+        # print(holidays)
+
+      
         row_num = 2
-        for row_data in month_atten.iterator():
-            # print(row_data.employee.first_name)
-            # sheet.write_row(row_num, 0, row_data)
-            sheet.write('A'+str(row_num), row_data.employee.employee_id)
-            sheet.write('B'+str(row_num), row_data.employee.first_name +" "+row_data.employee.last_name)
-            sheet.write('C'+str(row_num), (row_data.date).strftime("%d-%m-%Y"))
-            sheet.write('D'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
-            sheet.write('E'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
-           
+        
+        for date in dates:
+            for row_data in month_atten.iterator():
+                
+                date_time_attn = datetime.strptime(str(row_data.date), '%Y-%m-%d')
+                
+                if date_time_attn == date:
+                    # print(dates[0])
+
+                    sheet.write('A'+str(row_num), row_data.employee.employee_id)
+                    sheet.write('B'+str(row_num), row_data.employee.first_name +" "+row_data.employee.last_name)
+                    sheet.write('C'+str(row_num), (row_data.date).strftime("%d-%m-%Y"))
+                    if row_data.is_present == 1:
+                        sheet.write('D'+str(row_num), "Present", present_color)
+                    if row_data.is_leave == 1:
+                        sheet.write('D'+str(row_num), "Absent", absent_color)
+                    sheet.write('E'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
+                    sheet.write('F'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
+                
+            for holi in holidays:
+                date_time_holi = datetime.strptime(str(holi.date), '%Y-%m-%d')
+                
+                if date_time_holi == date:
+                    sheet.write('A'+str(row_num), '-')
+                    sheet.write('B'+str(row_num), '-')
+                    sheet.write('C'+str(row_num), (date).strftime("%d-%m-%Y"))
+                    sheet.write('D'+str(row_num), holi.holiday_name	+ '(Holiday)', holiday_color)
+                    sheet.write('E'+str(row_num), '-')
+                    sheet.write('F'+str(row_num), '-')
+
+            for week in weekend:
+                remove_single_quotes = week.week_off.replace("'", "")
+                remove_square_brackets = str(remove_single_quotes)[1:-1]
+                days_list = list(remove_square_brackets.split(","))
+                
+                day_no = []
+                
+                # print(date.strftime("%A"))
+
+                for days in days_list:
+                    day_name = days.capitalize()
+                    if date.strftime("%A") == day_name:
+                        sheet.write('A'+str(row_num), '-')
+                        sheet.write('B'+str(row_num), '-')
+                        sheet.write('C'+str(row_num), (date).strftime("%d-%m-%Y"))
+                        sheet.write('D'+str(row_num), 'Weekend', weekend_color)
+                        sheet.write('E'+str(row_num), '-')
+                        sheet.write('F'+str(row_num), '-')
+            
+
             row_num += 1
 
         book.close()
@@ -387,6 +450,8 @@ def export_excel(request):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
         return response
+
+        # return HttpResponse('ok')
 
 def attn_calendarview(request):
 
