@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core import mail
-from django.utils.html import strip_tags
+from django.utils.html import escape, strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from io import BytesIO
@@ -102,9 +102,13 @@ def add_org_files(request):
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')  
             handle_uploaded_file(request.FILES['file'], request.POST.get('name'), request.POST.get('folder'), current_date_time)
             extesion = os.path.splitext(str(request.FILES['file']))[1]
-            date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
             
-
+            if request.POST.get('date_until'):
+                date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
+                db_date = date.strftime('%Y-%m-%d')
+            else:
+                db_date = None
+            
             obj = Organization_Files.objects.create( 
                 file = request.POST.get('name')+"-"+current_date_time+""+extesion,
                 name = request.POST.get('name'),
@@ -112,7 +116,7 @@ def add_org_files(request):
                 device = 'web',
                 added_by_id= request.user.emp_id,
                 updated_by_id= request.user.emp_id,
-                valid_until= date.strftime('%Y-%m-%d'), 
+                valid_until= db_date, 
                 folder = request.POST.get('folder'),
                
             )

@@ -45,6 +45,40 @@
                     </ul>
                 </div>
 
+                <a class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %}  {% if request.resolver_match.url_name == "attendance" %}active{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} {% if request.resolver_match.url_name == "files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_files" %}active{% endif %} {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %}" 
+                href="#navbar-service" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-service">
+                <i class="fas fa-user text-primary"></i>
+                    <span class="nav-link-text">Self-service</span>
+                </a>
+                <div class="collapse {% if request.resolver_match.url_name == "profile" %}show{% endif %}  {% if request.resolver_match.url_name == "attendance" %}show{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}show{% endif %} {% if request.resolver_match.url_name == "files" %}show{% endif %}  {% if request.resolver_match.url_name == "add_files" %}show{% endif %} {% if request.resolver_match.url_name == "assets" %}show{% endif %} {% if request.resolver_match.url_name == "add_asset" %}show{% endif %} " id="navbar-service">
+                    <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                        <a href="/profile/" class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> P </span>
+                        <span class="sidenav-normal"> Profile </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/attendance/" class="nav-link {% if request.resolver_match.url_name == "attendance" %}active{% endif %} {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> AT </span>
+                        <span class="sidenav-normal"> Attendance </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/files/" class="nav-link {% if request.resolver_match.url_name == "files" %}active{% endif %} {% if request.resolver_match.url_name == "add_files" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> F </span>
+                        <span class="sidenav-normal"> Files </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/assets/" class="nav-link {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> A </span>
+                        <span class="sidenav-normal"> Assets </span>
+                        </a>
+                    </li>
+                   
+                    </ul>
+                </div>
                 
                  
                 <a class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}{% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}" 
@@ -169,20 +203,6 @@
                 </div>
 
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %}  " href="/announcements/">
-                        <i class="fas fa-bullhorn text-primary"></i>
-                        <span class="nav-link-text">Announcements</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link " href="/leave_request/">
-                        <i class="fas fa-calendar-alt text-primary"></i>
-                        <span class="nav-link-text">Leave Request</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  {% if request.resolver_match.url_name == "holiday_details" %}active{% endif %} {% if request.resolver_match.url_name == "weekends" %}active{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}active{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}active{% endif %} " 
                     href="#navbar-leave" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave">
                     <i class="fas fa-calendar-alt text-primary"></i>
@@ -245,12 +265,12 @@
 
                 
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %}  {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "tasks" %}active{% endif %} {% if request.resolver_match.url_name == "add_task" %}active{% endif %} {% if request.resolver_match.url_name == "update_task" %}active{% endif %} {% if request.resolver_match.url_name == "locations" %}active{% endif %} {% if request.resolver_match.url_name == "add_location" %}active{% endif %} {% if request.resolver_match.url_name == "update_location" %}active{% endif %} {% if request.resolver_match.url_name == "search" %}active{% endif %} " 
+                    <a class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %}  {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "tasks" %}active{% endif %} {% if request.resolver_match.url_name == "add_task" %}active{% endif %} {% if request.resolver_match.url_name == "update_task" %}active{% endif %} {% if request.resolver_match.url_name == "locations" %}active{% endif %} {% if request.resolver_match.url_name == "add_location" %}active{% endif %} {% if request.resolver_match.url_name == "update_location" %}active{% endif %} {% if request.resolver_match.url_name == "search" %}active{% endif %}{% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %} " 
                     href="#navbar-more" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-more">
                     <i class="fas fa-info-circle text-primary"></i>
                         <span class="nav-link-text">More</span>
                     </a>
-                    <div id="navbar-more" class="collapse {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "tasks" %}show{% endif %} {% if request.resolver_match.url_name == "add_task" %}show{% endif %} {% if request.resolver_match.url_name == "update_task" %}show{% endif %} {% if request.resolver_match.url_name == "locations" %}show{% endif %} {% if request.resolver_match.url_name == "add_location" %}show{% endif %} {% if request.resolver_match.url_name == "update_location" %}show{% endif %} {% if request.resolver_match.url_name == "search" %}show{% endif %} " >
+                    <div id="navbar-more" class="collapse {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "tasks" %}show{% endif %} {% if request.resolver_match.url_name == "add_task" %}show{% endif %} {% if request.resolver_match.url_name == "update_task" %}show{% endif %} {% if request.resolver_match.url_name == "locations" %}show{% endif %} {% if request.resolver_match.url_name == "add_location" %}show{% endif %} {% if request.resolver_match.url_name == "update_location" %}show{% endif %} {% if request.resolver_match.url_name == "search" %}show{% endif %} {% if request.resolver_match.url_name == "add_announcements" %}show{% endif %} {% if request.resolver_match.url_name == "announcements" %}show{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}show{% endif %} " >
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                             
@@ -281,6 +301,14 @@
                                 </div>
 
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %}  " href="/announcements/">
+                                    <span class="sidenav-mini-icon"> A </span>
+                                    <span class="sidenav-normal">Announcements</span>
+                                </a>
+                            </li>
+                          
 
                             <li class="nav-item">
                                 <a href="{% url 'compensatory_request_details' %}" class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} ">

@@ -528,7 +528,8 @@
 
         var dt = new Date();
         var h =  dt.getHours(), m = dt.getMinutes();
-        var time = (h > 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+        
+        var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
 
         $('.Timer').text(time); 
 

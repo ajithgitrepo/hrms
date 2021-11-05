@@ -15,7 +15,16 @@ urlpatterns = [
     
     #path('leave_request/', views.leave_request, name="leave_request"),
     
-     
+    
+    #Self Service
+    path('profile/', views.self_service_view.profile, name="profile"),
+    path('attendance/', views.self_service_view.attendance, name="attendance"),
+    path('filter_attendance/<str:month>/', views.self_service_view.filter_attendance, name="filter_attendance"),
+    path('files/', views.self_service_view.files, name="files"),
+    path('add_files/', views.self_service_view.add_files, name="add_files"),
+    path('assets/', views.self_service_view.assets, name="assets"),
+    path('add_asset/', views.self_service_view.add_asset, name="add_asset"),
+
     # Employee 
     path('employees/', views.employee_view.employees, name="employees"),
     path('add_employee/', views.employee_view.add_employee, name="add_employee"),

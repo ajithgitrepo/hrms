@@ -3,7 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from app.models.leave_balance import Leave_Balance
+from app.models.leave_balance_model import Leave_Balance
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect

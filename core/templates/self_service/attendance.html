@@ -159,11 +159,11 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">Attendance</h6>
+            <h6 class="h2 text-white d-inline-block mb-0">Self-service</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                <li class="breadcrumb-item"><a href="#"><i class="fas fa-list"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">List View</a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-calendar-check"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Attendance</a></li>
                 <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
               </ol>
             </nav>
@@ -187,54 +187,65 @@
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <div class="row" >
-                <div class="col-lg-5">
-                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
-                        <option value="general" selected disabled>Select employee</option>
-                        {% for emp in employees %}
-                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
-                        {% endfor %} 
-                    </select>
-                </div> 
-
-                <div class="col-lg-5">
+            <div class="row justify-content-center" >
+               
+                <div class="col-lg-4">
                     <div class="form-group">
                       <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
                       
                   </div>
                 </div>
 
-
-                <div class="col-lg-2 drop">
-
-                    <form name="form" class="post-form" id="submit_export_form" action=" {% url 'export_excel' %} " method="POST">
-                        {% csrf_token %}  
-                        <input type="hidden" value="{{ emp_id }}" name="employee_id">
-                        <input type="hidden" value="{{ month_no }}-{{ year }}" name="month">
-                        
-                        <button type="submit" hidden></button>
-                    </form>
-
-                    <div class="dropdown-dot">
-                        <!-- three dots -->
-                        <ul class="dropbtn icons btn-right showLeft" data-toggle="tooltip" data-original-title="More Options" onclick="showDropdown()">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                        <!-- menu -->
-                        <div id="myDropdown" class="dropdown-content">
-                            <a href="#export" id="export_attn">Export</a>
-                            <!-- <a href="#about">About</a>
-                            <a href="#contact">Contact</a> -->
-                        </div>
-                    </div>
-                </div>
-
-
             </div>  
            
           </div>
+
+          <div class="attn_div" style="padding:10px;">
+          {% if request.session.checkin_session %}
+              <form method="POST" class="post-form" action="/check_out_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-2" style="text-align: center;">
+                    <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
+                        <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
+                        <time class="DB"> [ 12AM - 12AM ] </time>
+                    </span>
+                  
+                </div>
+
+                <div class="col-lg-2">
+                    <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
+                    
+                </div>
+              </div>
+                 
+              </form>
+              {% else %}
+              <form method="POST" class="post-form" action="/check_in_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-4">
+                    <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                  
+                </div>
+              </div>
+                 
+              </form>
+
+              {% endif %}
+
+            </div>
+
           <div class="table-responsive py-4">
             <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
                 <tr>
@@ -311,15 +322,7 @@
 
                     {% endfor %}
 
-                    <!-- <tr>
-                       <td width="75" class="">Sun<span> 03 </span></td>
-                       <td width="145">01:10 PM</td>
-                       <td colspan="1" class="text-center">
-                          <div class="lingr wkend-bg"><span>Weekend</span></div>
-                       </td>
-                       <td width="145">01:10 PM</td>
-                       <td width="145">9 Hrs</td>
-                    </tr> -->
+                   
                    
                  </tbody>
               </table>
@@ -378,30 +381,21 @@
 
         var date_selected = ' {{ month_no }}-{{ year }} ';
 
+        setInterval(function(){ 
 
-                function changeLanguage(language) {
-                    var element = document.getElementById("url");
-                    element.value = language;
-                    element.innerHTML = language;
-                }
+            // var start = new Date;
+            // var dt = new Date();
+            // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+            // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
 
-                function showDropdown() {
-                    document.getElementById("myDropdown").classList.toggle("show");
-                }
+            var dt = new Date();
+            var h =  dt.getHours(), m = dt.getMinutes();
+            var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
 
-                // Close the dropdown if the user clicks outside of it
-                window.onclick = function(event) {
-                    if (!event.target.matches('.dropbtn')) {
-                        var dropdowns = document.getElementsByClassName("dropdown-content");
-                        var i;
-                        for (i = 0; i < dropdowns.length; i++) {
-                            var openDropdown = dropdowns[i];
-                            if (openDropdown.classList.contains('show')) {
-                                openDropdown.classList.remove('show');
-                            }
-                        }
-                    }
-                }
+            $('.Timer').text(time); 
+
+        }, 1000);
+
 
     // using jQuery
     function getCookie(name) {
@@ -438,33 +432,16 @@
                 
         });
 
-        $('#employee_change').on('change', function () {
-            var url = $(this).val();
-            month = $("#month_year").val();
-            if (url) { 
-                window.location = "/search_listview/"+url+"/"+month+"/"; // redirect
-            }
-            return false;
-        });
-        
+      
         $('#month_year').on('change', function () {
             var month = $(this).val(); 
-            url = $("#employee_change").val();
-            if (url) {
-                window.location = "/search_listview/"+url+"/"+month+"/"; // redirect
+            if (month) {
+                window.location = "/filter_attendance/"+month+"/"; // redirect
             }
             return false;
         });
 
-        $('#export_attn').on('click', function () {
-
-            month = $("#month_year").val();
-            employee = $("#employee_change").val();
-
-            $("#submit_export_form").submit();
-          
-        });
-
+      
         
     </script>
 

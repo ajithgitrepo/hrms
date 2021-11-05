@@ -316,41 +316,23 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
                 <input type="hidden" id="candidate_id">
                        
-                 <div class="row">
-					<div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
-					<div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
-					
-                  	<!-- <div class="col-lg-3"><span style="color: blue;">Candidate Name : </span></div> 
-                  	<div class="col-lg-3"> <input class="form-control" type="text" placeholder="Enter Name" id="TxtName"></input></div> -->
-                    <div class="col-lg-3"><span style="color: blue;">Aadhar Number :</span></div> 
-                    <div class="col-lg-3"><input class="form-control" required type="text" data-type="adhaar-number" maxLength="19" placeholder="Enter Aadhar Number" id="TxtAadharNumber"></input></div>
-                     
-                 </div>
-                 <hr class="my-3" />
-                 <div class="row">
-                  <div class="col-lg-3"><span style="color: blue;">Nationality :</span></div> 
-                  <div class="col-lg-3"> <input class="form-control" type="text" placeholder="Enter Nationality" id="TxtNation"></input></div>
-				  <div class="col-lg-3"><span style="color: blue;">Mobile Number : </span></div>
-                  <div class="col-lg-3"> <input class="form-control" required type="number" placeholder="Enter Mobile Number" id="TxtMobileNumber"></input></div>
-                 
-              </div>
+                <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
+                    <div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
+                    
+                    <div class="col-lg-3"><span style="color: blue;">Joining Date : </span></div>
+                    <div class="col-lg-3"> <input  required class="form-control startdate" type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate"></input></div>
+
+                </div>
+               
               <hr class="my-3" />
               
-              <div class="row">
-                  <div class="col-lg-3"><span style="color: blue;">Joining Date : </span></div>
-                  <div class="col-lg-3"> <input  required class="form-control startdate" type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate"></input></div>
-                  <div class="col-lg-3"><span style="color: blue;">Salary :</span> </div> 
-                  <div class="col-lg-3"><input class="form-control" required type="number" placeholder="Enter Salary" id="TxtSalary"></input></div>
-                   
-              </div>
-              <hr class="my-3" />
-              <div class="row">
-                  <div class="col-lg-3"><span style="color: blue;">Acceptance Date : </span></div>
-                  <div class="col-lg-3"> <input class="form-control startdate" type="text" required placeholder="dd-mm-yyyy" id="TxtAcceptDate"></input></div>
-                  <!-- <div class="col-lg-3"><span style="color: blue;">Salary :</span> </div> 
-                  <div class="col-lg-3"><span style="font-weight: 700;" id="emirate_id_other"></span></div> -->
-                  
-              </div>
+                <div class="row">
+                 
+                    <div class="col-lg-3"><span style="color: blue;">Salary :</span> </div> 
+                    <div class="col-lg-3"><input class="form-control" required type="number" placeholder="Enter Salary" id="TxtSalary"></input></div>
+                    
+                </div>
             
               
               <hr class="my-3" />
@@ -429,14 +411,14 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 
             var csrftoken = getCookie('csrftoken');
             // var can_name = $("#TxtName").val();
-            var can_nation = $("#TxtNation").val();
-            var can_mobile = $("#TxtMobileNumber").val();
+            // var can_nation = $("#TxtNation").val();
+            // var can_mobile = $("#TxtMobileNumber").val();
             var can_joindate = $("#TxtJoinDate").val();
-            var can_acceptdate = $("#TxtAcceptDate").val();
+            // var can_acceptdate = $("#TxtAcceptDate").val();
             var can_salary = $("#TxtSalary").val();
             var can_position = $("#TxtPosition").val();
             // var can_email = $("#TxtEmailID").val();
-            var can_aadhar = $("#TxtAadharNumber").val();
+            // var can_aadhar = $("#TxtAadharNumber").val();
             var can_id = $("#candidate_id").val();
 
            // alert(can_aadhar);
@@ -503,7 +485,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                 
             }
 
-            if (can_nation && can_mobile && can_joindate && can_acceptdate && can_salary && can_position && can_aadhar ) {
+            if (can_joindate && can_salary && can_position ) {
                 $("#just_wait").show();
                 swal({
                     title: 'Are you sure?',
@@ -520,7 +502,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                         $.ajax({  
                         type: "GET",  
                         url: "/send_offer_letter/",  
-                        data: {can_id : can_id, can_nation : can_nation, can_mobile :can_mobile, can_joindate : can_joindate, can_acceptdate : can_acceptdate, can_salary : can_salary, can_position : can_position, can_aadhar : can_aadhar},
+                        data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position},
                         success: $.proxy(function(data) {
                             
                             console.log(JSON.stringify(data));
@@ -566,17 +548,17 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 
 		var csrftoken = getCookie('csrftoken');
 		// var can_name = $("#TxtName").val();
-		var can_nation = $("#TxtNation").val();
-		var can_mobile = $("#TxtMobileNumber").val();
+		// var can_nation = $("#TxtNation").val();
+		// var can_mobile = $("#TxtMobileNumber").val();
 		var can_joindate = $("#TxtJoinDate").val();
-		var can_acceptdate = $("#TxtAcceptDate").val();
+		// var can_acceptdate = $("#TxtAcceptDate").val();
 		var can_salary = $("#TxtSalary").val();
 		var can_position = $("#TxtPosition").val();
 		// var can_email = $("#TxtEmailID").val();
-		var can_aadhar = $("#TxtAadharNumber").val();
+		// var can_aadhar = $("#TxtAadharNumber").val();
 		var can_id = $("#candidate_id").val();
 
-		// alert(can_aadhar);
+        // alert(can_joindate)
 
 		$("#TxtName").css("border", "1px solid black");
 		$("#TxtNation").css("border", "1px solid black");
@@ -621,31 +603,19 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 			$("#TxtPosition").focus();
 			
 		}
-		// var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;  
-		// if(!emailReg.test($("#TxtEmailID").val())) { 
-		//       $("#TxtEmailID").css("border", "1px solid red");
-		//       $("#TxtEmailID").focus(); 
-		//       alert("Please enter valid email id");
-			
-		//   }  
-		// if ($('#TxtEmailID').val() == "") {
-
-		//       $("#TxtEmailID").css("border", "1px solid red");
-		//       $("#TxtEmailID").focus();
-			
-		// }
+		
 		if ($('#TxtAadharNumber').val() == "") {
 			$("#TxtAadharNumber").css("border", "1px solid red");
 			$("#TxtAadharNumber").focus();
 			
 		}
 
-		if (can_nation && can_mobile && can_joindate && can_acceptdate && can_salary && can_position && can_aadhar ) {
+		if (can_joindate && can_salary && can_position ) {
 			$("#just_wait").show();
 			$.ajax({  
 			type: "GET",  
 			url: "/preview_offer_letter/",  
-			data: {can_id : can_id, can_nation : can_nation, can_mobile :can_mobile, can_joindate : can_joindate, can_acceptdate : can_acceptdate, can_salary : can_salary, can_position : can_position, can_aadhar : can_aadhar},
+			data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position},
 			success: $.proxy(function(data) {
 				
 				console.log(JSON.stringify(data));

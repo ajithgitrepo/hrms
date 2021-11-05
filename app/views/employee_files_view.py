@@ -109,8 +109,13 @@ def add_emp_files(request):
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')  
             handle_uploaded_file(request.FILES['file'], request.POST.get('name'), request.POST.get('folder'), current_date_time)
             extesion = os.path.splitext(str(request.FILES['file']))[1]
-            date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
             
+            if request.POST.get('date_until'):
+                date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
+                db_date = date.strftime('%Y-%m-%d')
+            else:
+                db_date = None
+
 
             obj = Employee_Files.objects.create( 
                 file = request.POST.get('name')+"-"+current_date_time+""+extesion,
@@ -120,7 +125,7 @@ def add_emp_files(request):
                 employee_id= request.POST.get('employee'),
                 added_by_id= request.user.emp_id,
                 updated_by_id= request.user.emp_id,
-                valid_until= date.strftime('%Y-%m-%d'), 
+                valid_until= db_date, 
                 folder = request.POST.get('folder'),
                
             )
@@ -163,4 +168,6 @@ def delete_emp_file(request, pk):
     data.is_active = 0
     data.save()
     messages.success(request, 'File was deleted! ')
-    return redirect('employee_files')
+    # return redirect('employee_files')
+
+    return redirect(request.META.get('HTTP_REFERER'))

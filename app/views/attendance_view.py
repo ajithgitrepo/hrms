@@ -51,7 +51,8 @@ def check_in_attn(request):
                     is_present = 1,
                 )
             messages.success(request,' Checked in successfully ')
-            return redirect('home')
+            # return redirect('home')
+            return redirect(request.META.get('HTTP_REFERER'))
         else:
             update = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
                 updated_at = datetime.now(),
@@ -59,7 +60,8 @@ def check_in_attn(request):
             request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             # print(request.session['checkin_session'])
 
-    return redirect('home')
+   
+    return redirect(request.META.get('HTTP_REFERER'))
 
 def check_out_attn(request):
     if request.method == 'POST':
@@ -71,14 +73,16 @@ def check_out_attn(request):
             )
             del request.session['checkin_session']
             messages.success(request,' Checked out successfully ')
-            return redirect('home')
+            # return redirect('home')
+            return redirect(request.META.get('HTTP_REFERER'))
 
         else:
             del request.session['checkin_session']
             messages.success(request,' Checked out successfully ')
-            return redirect('home')
+            # return redirect('home')
+            return redirect(request.META.get('HTTP_REFERER'))
 
-    return redirect('home')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def attn_listview(request):
@@ -180,6 +184,11 @@ def search_listview(request,pk,month):
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
  
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(weekend)
+
+    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+
  
     context = {
         'month_atten':month_atten,
@@ -193,6 +202,8 @@ def search_listview(request,pk,month):
         'month_no':date.strftime("%m"),
         'year':date.strftime("%Y"),
         'emp_id':pk,
+        'weekend':weekend,
+        'weekend_count':num_days,
     }
     
 
@@ -309,6 +320,12 @@ def search_tableview(request,pk,month):
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
  
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(weekend)
+
+    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+
+ 
 
     context = {
         'month_atten':month_atten,
@@ -322,6 +339,8 @@ def search_tableview(request,pk,month):
         'month_no':date.strftime("%m"),
         'year':date.strftime("%Y"),
         'emp_id':pk,
+        'weekend':weekend,
+        'weekend_count':num_days,
     }
     
 

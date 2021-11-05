@@ -6,6 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 from django.db import models
 from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group
+from app.models.employee_model import Employee
 
 # Create your models here.
 
@@ -23,7 +24,7 @@ class Role(models.Model):
     
 
  User.add_to_class('role', models.IntegerField(null=True, blank=True))
- User.add_to_class('emp_id', models.CharField(max_length=50,null=True, blank=True))
+ User.add_to_class('emp', models.ForeignKey(Employee,blank=True, null=True, related_name='emp_id', on_delete= models.SET_NULL))
     
     
 
