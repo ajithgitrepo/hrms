@@ -51,6 +51,7 @@ from django.contrib.auth.models import User
 from app.forms.OrganizationFilesForm import Organization_Files_Form
 from app.models.folder_model import Folder
 from django.views import generic
+from django.db.models import Avg, Count, Min, Sum
 
 # def index(request): 
 #     org_files = Organization_Files.objects.filter(is_active = 1)
@@ -62,12 +63,15 @@ from django.views import generic
 class IndexView(generic.ListView):
     model = Organization_Files
     template_name = "organization_files/index.html"
-    context_object_name = 'org_files'
+    context_object_name = 'files'
 
     def get_context_data(self, *args, **kwargs):
         queryset = Organization_Files.objects.filter(is_active = 1)
+        folders = (Organization_Files.objects.filter(is_active = 1).values('folder').annotate(dcount=Count('folder')).order_by('folder'))
+    
         context = {
-            'org_files' : queryset,
+            'files' : queryset,
+            'folders':folders,
         }
 
         # context = super().get_context_data(**kwargs)

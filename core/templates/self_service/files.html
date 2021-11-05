@@ -121,23 +121,11 @@ hr {
                
               </thead>
 
-              
-           
                 <tbody>
                 {% for fold in folders %}
                     
-                        <!-- <div class="dropdown" style="padding:16px;" >
-                            <a  type="text" id="dropdownMenuButton" value="{{ fold.folder }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-folder fa-2x"></i> {{ fold.folder }} </td>
-                            </a>
-                            <div class="dropdown-menu files{{ forloop.counter }}" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="https://www.aukdemerchant.com/mi-cuenta"><img src="http://www.aukdemerchant.com/wp-content/uploads/2019/11/1486564400-account_81513-e1573572938865.png"> Mi cuenta</a>
-                                <a class="dropdown-item" href="https://www.aukdemerchant.com/wp-login.php?action=logout&redirect_to=https%3A%2F%2Fwww.aukdemerchant.com%2F&_wpnonce=2537f31616"><img src="http://www.aukdemerchant.com/wp-content/uploads/2019/11/Graphicloads-100-Flat-2-Inside-logout-0-e1573572899209.png"> Cerrar Sesión</a>
-                            </div>
-                        </div><br> -->
-
                         <div id="nav-mobile">
-                            <a href="#" id="tab1"><i class="fas fa-folder fa-2x" style="color: #e5e517d4;"></i> <span> {{ fold.folder }} - <small>{{ fold.dcount }} File(s)</small> </span> </td></a>
+                            <a href="#" id="tab1"><i class="fas fa-folder fa-2x" style="color: #FFC107;"></i> <span> {{ fold.folder }} - <small>{{ fold.dcount }} File(s)</small> </span> </td></a>
                             <ul style="display: none;">
                                 {% for file in files %}
                                     {% if file.folder == fold.folder %}
@@ -217,12 +205,7 @@ hr {
         });
     });
 
-    // $(".link").on('click', function(){
-       
-    //     // alert($(this).attr('value'));
-    //     window.open($(this).attr('value'));
-    // });
-   
+  
 
      
 // var csrftoken = getCookie('csrftoken');

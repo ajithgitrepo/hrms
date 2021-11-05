@@ -45,6 +45,21 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     list-style: none;
     border-radius: .375rem;
 }
+
+#tab1, #tab2, #tab3{
+  /* background-color:grey; */
+  color:grey;
+  padding:10px 20px;
+  display:block;
+  /* width:200px; */
+  /* border-bottom:1px solid; */
+}
+
+hr {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important
+}
+
 </style>
 
 {% endblock stylesheets %}
@@ -98,33 +113,41 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
           <div class="table-responsive py-4">
             <table class="table table-flush" id="example">
               <thead class="thead-light">
-                <tr>
-                  <th>#</th>
-                  <th>File Name</th>
-                  <th>Folder</th>
-                  <th>Modified On</th>
-                  <th>Action</th>
-                </tr>
+              
               </thead>
            
               <tbody>
-                {% for file in org_files %}
-                <tr>
-                    <td> {{ forloop.counter }}</td>
-                    <td> <a href="{% static '' %}files/organization_files/{{file.folder}}/{{file.file}}" target="_blank">{{file.file}}</a> </td>
-                    <!-- <td>{{emp.description}}</td> -->
-                    <td>{{file.folder}}</td>
-                    <td>{{file.created_at}}</td>
-                    <td>
-                      <a href="{% static '' %}files/organization_files/{{file.folder}}/{{file.file}}" download class="table-action-delete" data-toggle="tooltip" data-original-title="Download File">
-                        <i class="fas fa-download"></i>&nbsp;&nbsp;
-                    </a>
-                      <a href="{% url 'delete_org_file' file.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete File">
-                        <i class="fas fa-trash"></i>
-                      </a>
-                    </td>
-                 </tr>
-                {% endfor %}
+             
+
+            {% for fold in folders %}
+                    
+                <div id="nav-mobile">
+                    <a href="#" id="tab1"><i class="fas fa-folder fa-2x" style="color: #FFC107;"></i> <span> {{ fold.folder }} - <small>{{ fold.dcount }} File(s)</small> </span> </td></a>
+                    <ul style="display: none;">
+                        {% for file in files %}
+                            {% if file.folder == fold.folder %}
+                                <li style="padding: 10px;"><i class="fas fa-file fa-1x"></i>&nbsp;&nbsp;
+                                    <a class="link" style="cursor: pointer;" href="{% static '' %}files/organization_files/{{file.folder}}/{{file.file}}" target="_blank" data-toggle="tooltip" data-original-title="View File">{{ file.name }} </a>
+                                    
+                                    <a class="confirm-delete float-right float-right" href="{% url 'delete_org_file' file.pk %}"  data-toggle="tooltip" data-original-title="Delete File">
+                                        <i class="fas fa-trash"></i></i>&nbsp;&nbsp;
+                                    </a>&nbsp;&nbsp;
+                                    <a class="float-right" href="{% static '' %}files/organization_files/{{file.folder}}/{{file.file}}" download data-toggle="tooltip" data-original-title="Download File">
+                                        <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                                    </a>
+                                    <hr>
+                                </li>
+
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                   
+                </div>
+
+          
+            {% endfor %}
+
+
               </tbody>
             </table>
           </div>
@@ -170,8 +193,18 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
     });
 
+    $(document).ready(function() {
+        $('#nav-mobile ul').hide();
+        $('#nav-mobile a').click(function(e) {
+            // e.preventDefault();
+            var $menuItem = $(this).next('ul');
+            $menuItem.slideToggle();
+            $('#nav-mobile ul').not($menuItem).slideUp();
+        });
+    });
+
      
-var csrftoken = getCookie('csrftoken');
+//var csrftoken = getCookie('csrftoken');
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));

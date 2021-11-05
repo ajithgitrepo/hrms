@@ -52,6 +52,7 @@ from django.contrib.auth.models import User
 from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
 from django.views import generic
+from django.db.models import Avg, Count, Min, Sum
 
 # def index(request): 
 #     org_files = Organization_Files.objects.filter(is_active = 1)
@@ -77,6 +78,8 @@ class IndexView(generic.ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['emp_files'] = Employee_Files.objects.filter(is_active = 1, employee__is_active = 1)
+        context['folders'] = (Employee_Files.objects.filter(is_active = 1).values('folder').annotate(dcount=Count('folder')).order_by('folder'))
+    
         return context
 
     
