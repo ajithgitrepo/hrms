@@ -414,6 +414,11 @@
                         <div class="hdname MT8">{{ data.holiday_name }}</div>
                         <div class="hdate">{{ data.date|date:'d' }} - {{ data.date|date:'M' }} <h6>{{ data.date|date:'l' }}</h6></div>
                     </li>
+                    {% empty %}
+                    <div style="margin: auto; text-align: center;margin-top: 70px;">
+                        <i class="far fa-calendar fa-6x" style="color: #010101a6;"></i> <br>
+                        <span>No Holidays Found..</span>
+                    </div> 
                     {% endfor %}
                 </ul>
             </div>
