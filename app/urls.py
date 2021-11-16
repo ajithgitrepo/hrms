@@ -3,8 +3,6 @@ from django.urls import path, re_path, include
 from app import views 
 #from app import emloyee_views 
 
-
-
 urlpatterns = [
    
     #path('leave_request/', views.leave_request, name="leave_request"),

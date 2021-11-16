@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0033_alter_group_is_active'),
         ('app', '0021_alter_customize_leave_balance_date'),
     ]
 
