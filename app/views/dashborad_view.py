@@ -48,11 +48,12 @@ from app.models.announcement_model import Announcement
 from app.models.weekend_model import Weekend
 from django.core.exceptions import PermissionDenied
 from app.models.holiday_details_model import Holiday_Detail 
+from app.models.leave_balance_model import Leave_Balance
 
 #from app.models import QuillModel
 
 @login_required
-@admin_only
+
 def index(request):
 
     # print(request.session['checkin_session'])
@@ -61,6 +62,7 @@ def index(request):
 
     role = role_name(request)
     # print(role)
+
     # last 15 days records
     new_hires = Employee.objects.filter(is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=15))
    
@@ -100,6 +102,9 @@ def index(request):
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[start_week, end_week]) 
     # print(holidays)
 
+    leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
+    # print(leaves[0].leave_type.name)
+
     weekend = Weekend.objects.filter(is_active = 1)
     # print(weekend)
 
@@ -136,6 +141,7 @@ def index(request):
         'holidays':holidays,
         'upcoming_holidays':upcoming_holidays,
         'weekend':weekend,
+        'leaves':leaves,
 
     }
 

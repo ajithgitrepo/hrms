@@ -6,27 +6,29 @@ Copyright (c) 2019 - present AppSeed.us
 from django.db import models
 from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group
+from app.models.employee_model import Employee
+from app.models.leave_type_model import *
 
 # Create your models here.
 
 class LeaveRequest(models.Model):  
    
     id = models.AutoField(primary_key=True)
-    employee_id = models.CharField(max_length=20, blank = False, null = False)  
-    leave_type = models.CharField(max_length=30 , blank = False, null = False)
+    employee_id = models.ForeignKey(Employee, blank=False, null=True, related_name='employee_id_leave_request', on_delete= models.SET_NULL)
+    leave_type = models.ForeignKey(Leave_Type, blank=False, null=True, related_name='leave_type_id_request', on_delete= models.SET_NULL)
     from_date = models.DateField(blank = False, null = False)  
     to_date = models.DateField(blank = False, null = False)  
     total_days = models.CharField(max_length=12) 
-    reason = models.TextField (blank = True, null = True)  
+    reason = models.TextField (blank = False, null = True)  
     is_approved = models.PositiveSmallIntegerField(default=0)
     is_rejected = models.PositiveSmallIntegerField(default=0) 
 
-    team_mailid = models.CharField(max_length=250 , blank = True, null = True)
+    team_mailid = models.CharField(max_length=250 , blank = False, null = True)
 
-    action_by = models.CharField (max_length=30,blank = True, null = True)  
+    action_by = models.ForeignKey(Employee, blank=True, null=True, related_name='action_by_leave_request', on_delete= models.SET_NULL)  
     
-    added_by = models.CharField(max_length=30,blank = True, null = True) 
-    updated_by = models.CharField(max_length=30,blank = True, null = True)
+    added_by = models.ForeignKey(Employee, blank=True, null=True, related_name='added_by_leave_request', on_delete= models.SET_NULL)
+    updated_by = models.ForeignKey(Employee, blank=True, null=True, related_name='updated_by_leave_request', on_delete= models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now_add = True,blank = True, null = True)
     is_active = models.PositiveSmallIntegerField(default=1)

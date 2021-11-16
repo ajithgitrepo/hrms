@@ -117,7 +117,7 @@ def add_employee(request):
             email_id = request.POST.get('email_id')
 
             department = request.POST.get('department')
-
+            
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
             seating_location = request.POST.get('seating_location')
@@ -193,7 +193,7 @@ def add_employee(request):
             if not Employee.objects.filter(Q(employee_id=employee_id) | Q(email_id=email_id)).exists():
                 obj = Employee.objects.create(employee_id=employee_id, first_name=first_name,
                     last_name=last_name, email_id=email_id, nick_name=nick_name,
-                    department=department if department else None,
+                    department=Department.objects.get(id = department) if department else None,
                     # reporting_to=reporting_to,
                     source_of_hire=source_of_hire,
                     seating_location=seating_location,
@@ -206,7 +206,7 @@ def add_employee(request):
                     code_name=code_name,
                     code_num=code_num,
                     extension=extension,
-                    role=role,
+                    role=Group.objects.get(id = role) if role else None,
                     total_experience=total_experience, experience=experience,
 
                     other_email=other_email, mobile_phone=mobile_phone,
@@ -217,7 +217,7 @@ def add_employee(request):
                     about_me=about_me, date_of_exit=date_of_exit, gender=gender,
 
                     )
-                obj.save()
+                # obj.save()
 
                 latest_id = employee_id  # Employee.objects.latest('id').id
 
@@ -312,21 +312,19 @@ def add_employee(request):
 
                     obj.save()
 
-                emp_id = employee_id  # 'HRMS 1011'
-                # .values_list('date_of_joining', flat=True).first()
-                Employees = Employee.objects.filter(
-                    is_active='1', employee_id=emp_id)
+                                
+                emp_id = latest_id  # 'HRMS 1011'
+                Employees = Employee.objects.filter(is_active='1', employee_id=emp_id)
                 Leave_Types = Leave_Type.objects.filter(is_active='1')
-                Leave_Effective_all = Leave_Effective.objects.filter(
-                    is_active='1',)
-                Leave_Applicable_all = Leave_Applicable.objects.filter(
-                    is_active='1', )
-                Leave_Restrictions_all = Leave_Restrictions.objects.filter(
-                    is_active='1')  # no
+                Leave_Effective_all = Leave_Effective.objects.filter(is_active='1',)
+                Leave_Applicable_all = Leave_Applicable.objects.filter(is_active='1', )
+                Leave_Restrictions_all = Leave_Restrictions.objects.filter(is_active='1')  # no
                 months = 0
                 years = 0
                 if Employees[0].date_of_joining != None:
+                    
                     for each in Employee.objects.filter(is_active='1', employee_id=emp_id):
+                        
                         emp_name = each.first_name
                         date_of_joing = each.date_of_joining
                         # return HttpResponse(date_of_joing)
@@ -340,12 +338,14 @@ def add_employee(request):
                         string_res = ""
                         leave_no_of_days = 0
                         for each in Leave_Type.objects.filter(is_active='1'):
+                            
                             leave_type = each.type
                             leave_name = each.name
                             leave_unit = each.unit
                             leave_id = each.id
                         # leave_no_of_days = each.effective_no_of_days  # Number Of Leaves
                             for each_effect in Leave_Effective.objects.filter(is_active='1', leave_type_id=leave_id):
+                                
                                 # return HttpResponse(each_effect.effective_after)
                                 effective_after = each_effect.effective_after
                                 effective_period = each_effect.effective_period
@@ -374,6 +374,7 @@ def add_employee(request):
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
                                 for each_applic in Leave_Applicable.objects.filter(is_active='1', leave_type_id=leave_id):
+                                    
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
                                     exception_location = each_applic.exception_location
@@ -384,15 +385,19 @@ def add_employee(request):
                                     designation1 = each_applic.designation
                                     location1 = each_applic.location
                                     role1 = each_applic.role
-                                   # return HttpResponse(gender1)
+                                    # return HttpResponse(gender1)
                                     applic = "not_applic"
                                     if each_applic.all_employees == "1":
-                                        applic = "ok2"
-                                        if (exception_dept != None) and (exception_role.role == None):
-                                            if (department == exception_dept) or (each_effect.role == exception_role):
+                                        
+                                        applic = "ok"
+                                        if (exception_dept != None) and (exception_role != None):
+                                            
+                                            if (department == exception_dept) or (each_applic.role == exception_role):
                                                 applic = "not_applic"
+                                                
                                     elif (gender1 != None) or (marital_status1 != None) or (department1 != None) or (designation1 != None) or (location1 != None) or (role1 != None):
                                         applic = "mok"
+                                        
                                         if str(role) != None and str(role) in str(role1):
                                             applic = "ok"
                                         if str(gender) != None and (str(gender) in str(gender1)):
@@ -403,6 +408,8 @@ def add_employee(request):
                                             applic = "ok"
                                     #       applic = "ttttok"
                                     # return HttpResponse(applic)
+
+                                
                                     if (applic == "ok"):
                                         # (gender == gender1) or (marital_status == marital_status1) or (department == department1)  or (location == location1) or
                                         # return HttpResponse(date_of_joing)
@@ -421,8 +428,9 @@ def add_employee(request):
                                         # effective_on = each_effect.effective_on
                                         # effective_month = each_effect.effective_month
                                         # effective_in = each_effect.effective_on
-
+                                    
                                         if date_of_joing != "":
+                                            
                                             if accrual == "1":  # ACCURAL
                                                 leave_no_of_days = each_effect.effective_no_of_days
                                         # return HttpResponse(each_effect.accrual_period)
@@ -433,8 +441,10 @@ def add_employee(request):
                                                 leave_no_of_days = each_effect.effective_no_of_days
                                         # float(float(each_effect.effective_no_of_days) * years)
                                             elif each_effect.accrual_period == "11":  # monthly
+                                                
                                                 leave_no_of_days = float(
                                                     float(each_effect.effective_no_of_days) * months)
+                                                
                                         #leave_no_of_days = 1
                                             elif each_effect.accrual_period == "16":  # half yearly
                                                 total_month = float(months / 2)
@@ -466,88 +476,92 @@ def add_employee(request):
                                             leave_no_of_days = float(
                                                 float(each_effect.effective_no_of_days) * week)
                                         # return HttpResponse(leave_no_of_days)
-                                    if reset == "1":  # RESET
-                                        # return HttpResponse(reset_carry_method)
-                                        Forward_leave_cont = 0
-                                        # return HttpResponse(reset_carry_method)
-                                        if reset_carry_method == "0":
-                                            Forward_leave_cont = reset_carry_count
-                                        elif reset_carry_method == "1":
-                                            Forward_leave_cont = (
-                                                float(reset_carry_count) * (years))
-                                            #print(Forward_leave_cont )
-                                            # return HttpResponse(Forward_leave_cont)
-                                        # if reset_carry_forward == "0": # carry forward
-                                        #     if reset_carry_method == "0":
-                                        #      Forward_leave_cont = reset_carry_count
-                                        #      print(reset_carry_count)
-                                        #      return HttpResponse(reset_carry_count)
-                                        #     elif  reset_carry_forward == "1":
-                                        #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
-                                        # elif  reset_carry_forward == "1":
-                                        #     if reset_carry_method == "0":
-                                        #      Forward_leave_cont = reset_carry_count
-                                        #     elif  reset_carry_forward == "1":
-                                        #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
-                                        # if reset_carry_forward == "1":
-                                        #     if reset_carry_method == "0":
-                                        #      Forward_leave_cont = reset_carry_count
-                                        #     elif  reset_carry_forward == "1":
-                                        #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
-                                        if each_effect.reset_period == "01":  # Yearly  o unit 1 percent
-                                            # if reset_carry_forward == "1":
-                                            #reset_max_count = reset_carry_forward_max
-                                            # reset_carry_method
-                                            # reset_carry_count
-                                            #float(float(each_effect.effective_no_of_days) * months)
-                                            # return HttpResponse(Forward_leave_cont)
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * years)
-                                            # return HttpResponse(Forward_leave_cont)
-                                            # each_effect.effective_no_of_days
-                                            # return HttpResponse(Forward_leave_cont)
-                                        elif each_effect.reset_period == "00":  # One Time
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * years)
-                                        elif each_effect.reset_period == "11":  # monthly
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
-                                        elif each_effect.reset_period == "16":  # Halfly
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 2)
-                                        elif each_effect.reset_period == "14":  # Triannually
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 3)
-                                        elif each_effect.reset_period == "13":  # Quarterly
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 4)
-                                        elif each_effect.reset_period == "12":  # Bi Monthly
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
-                                        elif each_effect.reset_period == "315":  # Semi Monthly
-                                            monday1 = (
-                                                date1 - timedelta(days=date1.weekday()))
-                                            monday2 = (
-                                                date2 - timedelta(days=date2.weekday()))
-                                            week = (monday2 - monday1).days / 7
-                                        #leave_no_of_days = float(float(each_effect.effective_no_of_days) * week)
-                                            leave_no_of_days = float(
-                                                float(Forward_leave_cont) * week)
-                                        # if  Leave_Balance.objects.filter(Q( employee_id=emp_id) and Q(leave_type_id=leave_id)).exists():
-                                            # return HttpResponse(request.user.emp_id)
-                                        balance_leave = Leave_Balance.objects.create(
-                                            created_at=timezone.now(),
-                                            updated_at=timezone.now(),
-                                            modified_at=timezone.now(),
-                                            total_month=months,
-                                            balance=leave_no_of_days,
-                                            employee_id=emp_id,
-                                            leave_type_id=leave_id,
-                                            type=None,
-                                            device='web',
-                                            modified_by_id=request.user.emp_id,
-                                        )
-                                        balance_leave.save()
+
+                                    
+                                        
+                                    # if reset == "1":  # RESET
+                                    #     # return HttpResponse(reset_carry_method)
+                                    #     Forward_leave_cont = 0
+                                    #     # return HttpResponse(reset_carry_method)
+                                    #     if reset_carry_method == "0":
+                                    #         Forward_leave_cont = reset_carry_count
+                                    #     elif reset_carry_method == "1":
+                                    #         Forward_leave_cont = (
+                                    #             float(reset_carry_count) * (years))
+                                    #         #print(Forward_leave_cont )
+                                    #         # return HttpResponse(Forward_leave_cont)
+                                    #     # if reset_carry_forward == "0": # carry forward
+                                    #     #     if reset_carry_method == "0":
+                                    #     #      Forward_leave_cont = reset_carry_count
+                                    #     #      print(reset_carry_count)
+                                    #     #      return HttpResponse(reset_carry_count)
+                                    #     #     elif  reset_carry_forward == "1":
+                                    #     #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
+                                    #     # elif  reset_carry_forward == "1":
+                                    #     #     if reset_carry_method == "0":
+                                    #     #      Forward_leave_cont = reset_carry_count
+                                    #     #     elif  reset_carry_forward == "1":
+                                    #     #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
+                                    #     # if reset_carry_forward == "1":
+                                    #     #     if reset_carry_method == "0":
+                                    #     #      Forward_leave_cont = reset_carry_count
+                                    #     #     elif  reset_carry_forward == "1":
+                                    #     #      Forward_leave_cont =  float(leave_no_of_days) *  float(reset_carry_count) /100
+                                    #     if each_effect.reset_period == "01":  # Yearly  o unit 1 percent
+                                    #         # if reset_carry_forward == "1":
+                                    #         #reset_max_count = reset_carry_forward_max
+                                    #         # reset_carry_method
+                                    #         # reset_carry_count
+                                    #         #float(float(each_effect.effective_no_of_days) * months)
+                                    #         # return HttpResponse(Forward_leave_cont)
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * years)
+                                    #         # return HttpResponse(Forward_leave_cont)
+                                    #         # each_effect.effective_no_of_days
+                                    #         # return HttpResponse(Forward_leave_cont)
+                                    #     elif each_effect.reset_period == "00":  # One Time
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * years)
+                                    #     elif each_effect.reset_period == "11":  # monthly
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * months)
+                                    #     elif each_effect.reset_period == "16":  # Halfly
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * months / 2)
+                                    #     elif each_effect.reset_period == "14":  # Triannually
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * months / 3)
+                                    #     elif each_effect.reset_period == "13":  # Quarterly
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * months / 4)
+                                    #     elif each_effect.reset_period == "12":  # Bi Monthly
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * months)
+                                    #     elif each_effect.reset_period == "315":  # Semi Monthly
+                                    #         monday1 = (
+                                    #             date1 - timedelta(days=date1.weekday()))
+                                    #         monday2 = (
+                                    #             date2 - timedelta(days=date2.weekday()))
+                                    #         week = (monday2 - monday1).days / 7
+                                    #     #leave_no_of_days = float(float(each_effect.effective_no_of_days) * week)
+                                    #         leave_no_of_days = float(
+                                    #             float(Forward_leave_cont) * week)
+                                    #     # if  Leave_Balance.objects.filter(Q( employee_id=emp_id) and Q(leave_type_id=leave_id)).exists():
+                                    #         # return HttpResponse(request.user.emp_id)
+
+                    
+                                    balance_leave = Leave_Balance.objects.create(
+                                        created_at=timezone.now(),
+                                        updated_at=timezone.now(),
+                                        modified_at=timezone.now(),
+                                        total_month=months,
+                                        balance=leave_no_of_days,
+                                        employee_id=emp_id,
+                                        leave_type_id=leave_id,
+                                        device='web',
+                                        modified_by_id=request.user.emp_id,
+                                    )
+                                    balance_leave.save()
 
                 messages.success(request, first_name +
                                  ' Employee was created! ')

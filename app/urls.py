@@ -24,6 +24,8 @@ urlpatterns = [
     path('add_files/', views.self_service_view.add_files, name="add_files"),
     path('assets/', views.self_service_view.assets, name="assets"),
     path('add_asset/', views.self_service_view.add_asset, name="add_asset"),
+    path('leave_tracker/', views.self_service_view.leave_tracker, name="leave_tracker"),
+    path('apply_leave/', views.self_service_view.apply_leave, name="apply_leave"),
 
     # Employee 
     path('employees/', views.employee_view.employees, name="employees"),
@@ -49,13 +51,14 @@ urlpatterns = [
     path('update_leave_request/<str:pk>/', views.update_leave_request, name="update_leave_request"),
     path('delete_leave_request/<str:pk>/', views.delete_leave_request, name="delete_leave_request"),
     path('leave_request_more_info', views.leave_request_more_info, name="leave_request_more_info"),
-
+    path('change_leave_status/', views.leave_request_view.change_leave_status, name="change_leave_status"),
+   
     # leave type / settings
     path('leave_types/', views.leave_type_view.index, name="leave_types"),
     path('add_leave_type/', views.leave_type_view.add_leave_type, name="add_leave_type"),
     path('edit_leave_type/<str:pk>/', views.leave_type_view.edit_leave_type, name="edit_leave_type"),
     path('change_status/<str:pk>/<str:val>/', views.leave_type_view.change_status, name="change_status"),
-
+   
     #leave balance
     path('leave_balance/', views.leave_balance_view.index, name="leave_balance"),
     path('customize_leave_balance/<str:pk>/', views.leave_balance_view.customize_leave_balance, name="customize_leave_balance"),

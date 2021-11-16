@@ -45,7 +45,7 @@ import datetime
 @login_required(login_url="/login/")
 def index(request):
     
-    leave_types = Leave_Type.objects.filter()
+    leave_types = Leave_Type.objects.filter(is_active = 1)
 
     # print(leave_types)
 

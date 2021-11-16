@@ -1,5 +1,6 @@
 
 from app.models import exit_details_model
+from app.models import leave_type_model
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
 from app.models.asset_model import Asset_Detail
 from app.models.employee_model import Employee
@@ -12,6 +13,7 @@ from django import template
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from app.forms.Asset_DetailsForm import Asset_DetailForm
+from app.forms.ApplyLeaveForm import Apply_Leave_Form
 from django.conf import settings
 from app.models.holiday_details_model import Holiday_Detail
 from app.models.weekend_model import Weekend
@@ -30,10 +32,13 @@ import calendar
 from django.utils import timezone
 from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
+from app.models.leave_balance_model import Leave_Balance
 from django.views import generic
 from app.models.employee_files_model import Employee_Files
+from app.models.leave_type_model import *
+from app.models.leave_request_model import *
 import os
-from django.db.models import Avg, Count, Min, Sum
+from django.db.models import Avg, Count, Min, Sum, Case, When, F
 
 
 @login_required(login_url="/login/")
@@ -270,7 +275,7 @@ def add_asset(request):
        
         form = Asset_DetailForm(request.POST)
         if  form.is_valid():
-            print('enter')
+            # print('enter')
             employee = request.user.emp_id
            
             type_of_asset = request.POST.get('type_of_asset')
@@ -324,5 +329,110 @@ def add_asset(request):
     return render(request, "self_service/add_asset.html",  context_role )
    
 
+def leave_tracker(request):
 
-   
+    leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
+    # print(leaves[0].leave_type.name)
+
+    requested = LeaveRequest.objects.filter(to_date__gte=datetime.now(), employee_id=request.user.emp_id)
+    # print(requested)
+
+    all_requestes = LeaveRequest.objects.filter(leave_type__is_active = 1, employee_id=request.user.emp_id).order_by('-created_at')
+    # print(all_requestes)
+
+
+
+
+    obj = []
+    ids = []
+    count = 0
+
+    myDict = {}
+
+    # for index, data in enumerate(requested):
+        
+    #     if data.leave_type_id in ids:
+
+    #         print(index)
+    #         # (obj[data.leave_type_id]['count']) += int(data.total_days)
+    #         # print(myDict)
+    #         count += int(data.total_days)
+    #         # obj.append({'id': data.leave_type_id, 'count': count})
+    #     else:
+    #         ids.append(data.leave_type_id)
+    #         obj.append({int(data.leave_type_id):{'id': data.leave_type_id, 'count': int(data.total_days)}})
+    #         # print(obj)
+    #         # count = int(data.total_days)
+    #         # obj.append({'id': data.leave_type_id, 'count': count})
+
+    # # print(obj)
+
+    context = {
+        'leaves': leaves,
+        'requested': requested,
+        'all_requestes': all_requestes,
+    }
+
+    return render(request, "self_service/leave_tracker.html",  context )
+
+
+def apply_leave(request):
+    form = Apply_Leave_Form()
+    if request.method == 'POST':
+       
+        form = Apply_Leave_Form(request.POST)
+        if  form.is_valid():
+            emp_id = request.POST.get('employee_id')
+            leave = request.POST.get('leave_type')
+            from_date = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y')
+            to_date = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y')
+            reason = request.POST.get('reason')
+            created_at = timezone.now()
+            updated_at = timezone.now()
+
+            start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
+            end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
+            diff = abs((end_date-start_date).days)+1
+            # print(diff)
+
+            delta = end_date - start_date       # as timedelta
+
+            obj = LeaveRequest.objects.create( 
+                employee_id=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
+                leave_type=Leave_Type.objects.get(id = leave) if leave else None,
+                from_date=from_date.strftime('%Y-%m-%d'),
+                to_date=to_date.strftime('%Y-%m-%d'),
+                total_days = diff,
+                reason=reason,
+                created_at=created_at,
+                updated_at=updated_at, 
+                is_active=1,
+                added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
+                device = 'web',
+
+            ) 
+            obj.save()
+
+            for i in range(delta.days + 1):
+                day = start_date + timedelta(days=i)
+                # print(datetime.strftime(day, "%d-%m-%Y"))  
+                insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1 )
+
+            messages.success(request, 'Leave Requested Successfully ! ')
+            return redirect('leave_tracker') 
+
+
+    employee = Employee.objects.get(is_active = 1, employee_id = request.user.emp_id)
+    
+    leaves = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 1).exclude(exception_dept = employee.department_id, exception_role = employee.role_id, exception_location = employee.location )
+    
+    leave_condition = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 0, gender = employee.gender, marital_status = employee.marital_status, department = employee.department_id, role = employee.role_id, location = employee.location, employment_type = employee.employee_type )
+    # print(leaves)
+
+    context = {
+        'form' : form,
+        'leaves' : leaves,
+        'leave_condition':leave_condition,
+    }
+
+    return render(request, "self_service/apply_leave.html",  context )

@@ -3,7 +3,13 @@
 {% block title %} Datatables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+
+    
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -44,7 +50,7 @@
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <h3 class="mb-0">Leave Request</h3>
+            <h3 class="mb-0">Leave Requests</h3>
             <!-- <p class="text-sm mb-0">
               This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
             </p> --> 
@@ -69,15 +75,19 @@
                 {% for req in leave_request %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
-                  <td class="nr" data-queryid="{{ req.id }}">{{req.employee_id}} {{req.name}}</td>
-                  <td>{{req.leave_type}}</td> 
+                  <td class="nr" data-queryid="{{ req.id }}">{{req.name}} {{req.employee.employee_id}} </td>
+                  <td>{{req.leave_type.name}}</td> 
                   <td>{{req.from_date|date:"d-m-Y" }}</td>
                   <td>{{req.to_date|date:"d-m-Y" }}</td>
-                  <!-- <td>{{req.total_days}}</td> -->
-                  <!-- <td>{{req.team_mailid}}</td> -->
-                  <!-- <td>{{req.reason}}</td> -->
-                  <!-- <td>{{req.is_approved}}</td> -->
-                  <td>pending</td>
+                  <td>
+
+                    <select class="form-control change_status" name="change_status" id="{{ req.id }}">
+                        <option value="0" {% if req.is_approved == 0 %} selected{% endif %} >Pending</option>
+                        <option value="1" {% if req.is_approved == 1 %} selected{% endif %} >Approve</option>
+                        <option value="2" {% if req.is_approved == 2 %} selected{% endif %} >Reject</option>
+                    </select>
+
+                  </td>
                     <td>
                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
                         &nbsp;&nbsp;
@@ -97,7 +107,6 @@
       </div>
     </div>
 
-    {% include 'includes/footer.html' %}
     
   </div>
 
@@ -158,7 +167,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-  <!-- Optional JS -->
+    <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
   
     <script type="text/javascript">
         $(document).on('click', '.confirm-delete', function(){
@@ -167,53 +176,49 @@
 
 
         $(".use-address").click(function() {   
-           $('#myModal').modal('show');
+            $('#myModal').modal('show');
             var csrftoken = getCookie('csrftoken');
-          //  alert(csrftoken);
+         
+            var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                .find(".nr")     // Gets a descendent with class="nr"
+                .data("queryid"); //alert($id);
+            $.ajax({  
+                    type: "POST",  
+                    url: "/leave_request_more_info",  
+                    data: {"csrfmiddlewaretoken": csrftoken,"id": $id},
+                    success: function(data) {  //alert(JSON.stringify(data));
+                        var check = false;
+                        jQuery.each(data, function(index, item) {
+                            // alert(item.fields.employee_id);
+                            if(check == false)
+                            {
 
-      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
-                       .find(".nr")     // Gets a descendent with class="nr"
-                       .data("queryid"); //alert($id);
-      $.ajax({  
-            type: "POST",  
-            url: "/leave_request_more_info",  
-            data: {"csrfmiddlewaretoken": csrftoken,"id": $id},
-            success: function(data) {  //alert(JSON.stringify(data));
-                  var check = false;
-                  jQuery.each(data, function(index, item) {
-                        // alert(item.fields.employee_id);
-                        if(check == false)
-                        {
-
-                              var d =new Date(item.fields.created_at);
-                              var day = d.getDate();
-                              var month= d.getMonth()+1;
-                              var year = d.getFullYear();
-                              var time = d.getTime();
-                              var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-                              var result = day + "-" + month + "-" + year + " " + time;
-                              
-                              
+                                var d =new Date(item.fields.created_at);
+                                var day = d.getDate();
+                                var month= d.getMonth()+1;
+                                var year = d.getFullYear();
+                                var time = d.getTime();
+                                var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+                                var result = day + "-" + month + "-" + year + " " + time;
+                                
+                                
 
 
-                              check = true;
-                             // var name = item.fields.first_name + " " + item.fields.last_name; 
-                             // var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
-                              $('#total_days_other').html(item.fields.total_days);
-                              $('#team_mailid_other').html(item.fields.team_mailid);
-                              $('#reason_other').html(item.fields.reason);
-                              $('#request_date_other').html(result);
-                              // $('#department_other').html(item.fields.department);
-                             
-                        }
-                   //now you can access properties using dot notation
-                 });
-                 // alert(data);
-                 // $('#query-focus').html(data);
-            }
-            });
+                                check = true;
+                                $('#total_days_other').html(item.fields.total_days);
+                                $('#team_mailid_other').html(item.fields.team_mailid);
+                                $('#reason_other').html(item.fields.reason);
+                                $('#request_date_other').html(result);
+                                    
+                                    
+                            }
 
-});
+                        });
+                    
+                    }
+                    });
+
+        });
 
 
         $(document).ready(function() {
@@ -231,27 +236,81 @@
             } );
         } );
 
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
+
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $('.change_status').on('change', function() {
+        value = this.value;
+        id = $(this).attr("id");
+
+        swal({
+            title: 'Are you sure?',
+            text: "You want to change status!",
+            type: 'warning',
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, change it!',
+            cancelButtonClass: 'btn btn-secondary'
+        }).then((result) => {
+            if (result.value) {
+                // Show confirmation
+                $.ajax({  
+                type: "POST",  
+                url: "/change_leave_status/",  
+                data: {value : value, id : id, csrfmiddlewaretoken : csrftoken},
+                success: $.proxy(function(data) {
+                    
+                    if(data == 1){
+                     
+                        swal({
+                            title: 'Changed!',
+                            text: 'Leave Request has been updated.',
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-primary'
+                        });
+                    }
+
+                    if(data == 0){
+                     
+                        swal({
+                            title: 'Error!',
+                            text: 'Someting went wrong.',
+                            type: 'error',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-primary'
+                        });
+                    }
+                   
+        
+                })
+                });
+
+            }
+        })
+
+    });
 
     </script>
 
