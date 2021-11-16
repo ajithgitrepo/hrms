@@ -29,7 +29,7 @@ class Employee(models.Model):
     mobile_number = models.CharField(max_length=12) 
     created_at = models.DateTimeField(auto_now_add = True)
     nick_name = models.CharField(max_length=30) 
-
+    emirate_id = models.CharField(max_length=30, blank = True, null = True) 
     department = models.ForeignKey(Department, max_length=50, blank=True, related_name='department_emp', null=True, on_delete= models.SET_NULL)
     # reporting_to = models.CharField(max_length=20, blank = True, null = True)  
     source_of_hire = models.CharField(max_length=200, blank = True, null = True)  

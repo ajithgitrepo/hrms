@@ -21,7 +21,7 @@ from app.forms.LeaveTypeForm import LeaveTypeForm
 
 from app.models.employee_model import Employee , Work_Experience, Education, Dependent 
 from app.models.leave_type_model import * 
-from app.models.leave_balance import *
+from app.models.leave_balance_model import *
 from app.models.customize_leave_balance import *
 from app.models.department_model import *
 from app.models.role_model import *

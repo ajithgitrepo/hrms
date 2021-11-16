@@ -132,7 +132,7 @@ input[type=number] {
                     <select class="form-control" value="{{ form.data.role }}" name="department">
                         <option value="">select</option>
                           {% for dept in department %}
-                              <option value="{{ dept.id }}" {% if form.data.department == "{{ dept.id }}" %} selected{% endif %}>  {{ dept.name }}</option>
+                              <option value="{{ dept.id }}" {% if employee.department_id ==  dept.id %} selected{% endif %}>  {{ dept.name }}</option>
                           {% endfor %} 
                         </select>
                   
@@ -145,10 +145,10 @@ input[type=number] {
                       <label class="form-control-label" for="input-country">Role</label>
                      
                        <select class="form-control"  name="role">
-                             <option value="">select</option>
-                             {% for role in roles %}
-                                 <option value="{{ role.id }}" {% if employee.role == role.id %} selected{% endif %}>  {{ role.name }}</option>
-                             {% endfor %} 
+                            <option value="">select</option>
+                            {% for role in roles %}
+                                <option value="{{ role.id }}" {% if employee.role_id == role.id %} selected{% endif %} >  {{ role.name }}</option>
+                            {% endfor %} 
                        </select>
                        {{ form.role.errors }}
                        
@@ -282,9 +282,13 @@ input[type=number] {
                 <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
                     <option value="" selected >Select</option>
                     {% for report in reporting %}
-                        {% for data in reporting_to %}
-                            <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
-                        {% endfor %} 
+                        {% if notes %}
+                            {% for data in reporting_to %}
+                                <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                            {% endfor %} 
+                        {% else %}
+                            <option value="{{ report.employee_id }}"> {{ report.first_name }} {{ report.last_name }}</option>
+                        {% endif %}
                     {% endfor %} 
                 </select>
                 

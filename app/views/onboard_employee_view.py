@@ -51,6 +51,8 @@ from django.core.mail.message import EmailMessage
 import random
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
+import socket
+import random
 
 #from app.models import QuillModel
 
@@ -110,12 +112,11 @@ def onboard_employees(request):
     return render(request, "onboard_employee/index.html", context)
 
 def add_onboard_employee(request):  
-   # return render(request, "onboard_employee/add_onboard_employee.html")
+  
     form = Onboard_EmployeeForm()
-    #return HttpResponse(request.method)
-   # """
+    
     if request.method == 'POST':
-        form = Onboard_EmployeeForm(request.POST)
+        form = Onboard_EmployeeForm(request.POST, request.FILES)
         if form.is_valid():
            
             """
@@ -124,17 +125,21 @@ def add_onboard_employee(request):
             file_url = fss.url(file_name)
             """
             Photo_name = ""
-            upload = request.FILES['upload']
-            if upload != None: 
-                logoRoot = os.path.join(settings.MEDIA_ROOT, 'profile_images/')
+           
+            if request.FILES:
+                
+                upload = request.FILES['photo_url']
             
-                #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
-                logoRoot=logoRoot.replace("\\","/")
-                Photo_name = upload.name
-               # return HttpResponse(upload.name) 
-                fs = FileSystemStorage(location=logoRoot)
-                file_name = fs.save(upload.name, upload)
-                file_url = fs.url(file_name)
+                if upload != None: 
+                    logoRoot = os.path.join(settings.MEDIA_ROOT, 'profile_images/')
+                
+                    #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
+                    logoRoot=logoRoot.replace("\\","/")
+                    Photo_name = upload.name
+                # return HttpResponse(upload.name) 
+                    fs = FileSystemStorage(location=logoRoot)
+                    file_name = fs.save(upload.name, upload)
+                    file_url = fs.url(file_name)
 
             number = random.randint(1000, 9999)
             res = str('CAD') + str(number)
@@ -317,7 +322,7 @@ def send_offer_letter(request):
     # print(details[0].first_name)
 
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': request.GET.get('can_nation'), 'mobile': request.GET.get('can_mobile'), 'joining_date': request.GET.get('can_joindate'), 'accept_date': request.GET.get('can_acceptdate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': request.GET.get('can_aadhar'), 'hr_name': request.user.first_name }
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name }
     template = get_template('mail_templates/appoinment.html')
     html  = template.render(context_dict)
     result = BytesIO()
@@ -341,7 +346,7 @@ def send_offer_letter(request):
                 offer_letter_url = filename,
             )
 
-            subject = 'Welcome to TTF world'
+            subject = 'Welcome to TTF'
             html_message = render_to_string('mail_templates/candidate_greetings.html', {'fname': details[0].first_name, 'lname': details[0].last_name, 'hr_name': request.user.first_name})
             plain_message = strip_tags(html_message)
             email_from = settings.EMAIL_HOST_USER
@@ -373,12 +378,11 @@ def send_offer_letter(request):
 
 
 def preview_offer_letter(request):
-   
+    
     details = Onboard_Employee.objects.filter(candidate_id=request.GET.get('can_id'))
-    # print(details[0].first_name)
-
+    
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': request.GET.get('can_nation'), 'mobile': request.GET.get('can_mobile'), 'joining_date': request.GET.get('can_joindate'), 'accept_date': request.GET.get('can_acceptdate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': request.GET.get('can_aadhar'), 'hr_name': request.user.first_name }
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name }
     template = get_template('mail_templates/appoinment.html')
     html  = template.render(context_dict)
     result = BytesIO()
@@ -412,8 +416,9 @@ def convert_to_emp(request, pk):
     experience = Onboard_Work_Experience.objects.filter(candidate_id = pk)
     # print(experience)
 
-    number = random.randint(1000, 9999)
-    employee_id = str('Emp') + str(number)
+    rand_number = random.randint(1111,9999)
+
+    employee_id = str('Emp') + str(rand_number)
     
     if not Employee.objects.filter(Q(email_id=candidate[0].email_id)).exists():
         obj = Employee.objects.create(
@@ -425,6 +430,7 @@ def convert_to_emp(request, pk):
             department_id=1, 
             role_id=1,
             mobile_phone=candidate[0].mobile_number,
+            emirate_id = candidate[0].emirate_id,
         
         ) 
         obj.save()
@@ -436,6 +442,7 @@ def convert_to_emp(request, pk):
         obj = User(
             password=hashed_pwd,
             is_superuser=1, 
+            username=candidate[0].first_name.lower()+'_'+candidate[0].last_name.lower()+'_'+str(rand_number), 
             first_name=candidate[0].first_name, 
             last_name=candidate[0].last_name, 
             email=candidate[0].email_id,
@@ -458,6 +465,22 @@ def convert_to_emp(request, pk):
         update = Onboard_Employee.objects.filter(candidate_id=pk).update(
             is_active = 0,
         )
+
+        subject = 'Welcome to TTF'
+        html_message = render_to_string('mail_templates/candidate_login.html', {'fname': candidate[0].first_name, 'lname': candidate[0].last_name, 'hr_name': request.user.first_name, 'username': candidate[0].first_name.lower()+'_'+candidate[0].last_name.lower()+'_'+str(rand_number), 'psw': 'secret' })
+        plain_message = strip_tags(html_message)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [candidate[0].email_id]
+    
+        email = EmailMultiAlternatives(
+            subject,
+            plain_message,
+            email_from,
+            recipient_list,
+        )
+
+        email.attach_alternative(html_message, 'text/html')
+        email.send()
 
         messages.success(request, ' Candidate Converted as Employee! ')
    

@@ -711,7 +711,7 @@ input[type="radio"] {
                             <div class="col-sm-1">
                                
                                 <div class="custom-control custom-checkbox mb-2 mt-2">
-                                  <input name="gender" value="1" {% if '1' in  form.data.gender %} checked {% endif %} class="custom-control-input samefields" id="customCheck" type="checkbox">
+                                  <input name="gender" value="Male" {% if 'Male' in  form.data.gender %} checked {% endif %} class="custom-control-input samefields" id="customCheck" type="checkbox">
                                   <label class="custom-control-label" for="customCheck">Male</label>
                                 </div>
 
@@ -719,7 +719,7 @@ input[type="radio"] {
                             <div class="col-sm-1">
                                
                                     <div class="custom-control custom-checkbox mb-2 mt-2">
-                                      <input name="gender" value="2" {% if '2' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck2" type="checkbox" >
+                                      <input name="gender" value="Female" {% if 'Female' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck2" type="checkbox" >
                                       <label class="custom-control-label" for="customCheck2">Female</label>
                                     </div>
                                
@@ -727,7 +727,7 @@ input[type="radio"] {
                             <div class="col-sm-1">
                                
                                     <div class="custom-control custom-checkbox mb-2 mt-2">
-                                      <input name="gender" value="3" {% if '3' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck3" type="checkbox">
+                                      <input name="gender" value="Others" {% if 'Others' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck3" type="checkbox">
                                       <label class="custom-control-label" for="customCheck3">Others</label>
                                     </div>
                                
@@ -739,14 +739,14 @@ input[type="radio"] {
                             <div class="col-sm-1">
                                
                                 <div class="custom-control custom-checkbox mb-2 mt-2">
-                                  <input name="marital_status" value="1" {% if '1' in form.data.marital_status %} checked {% endif %} class="custom-control-input samefields" id="customCheck4" type="checkbox">
+                                  <input name="marital_status" value="1" {% if 'Single' in form.data.marital_status %} checked {% endif %} class="custom-control-input samefields" id="customCheck4" type="checkbox">
                                   <label class="custom-control-label" for="customCheck4">Single</label>
                                 </div>
 
                             </div>
                             <div class="col-sm-1">
                                 <div class="custom-control custom-checkbox mb-2 mt-2">
-                                  <input name="marital_status" value="2" {% if '2' in form.data.marital_status %} checked {% endif %}  class="custom-control-input samefields" id="customCheck5" type="checkbox" >
+                                  <input name="marital_status" value="2" {% if 'Married' in form.data.marital_status %} checked {% endif %}  class="custom-control-input samefields" id="customCheck5" type="checkbox" >
                                   <label class="custom-control-label" for="customCheck5">Married</label>
                                 </div>
                             </div>

@@ -52,6 +52,7 @@ from django.contrib.auth.models import User
 from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
 from django.views import generic
+from django.db.models import Avg, Count, Min, Sum
 
 # def index(request): 
 #     org_files = Organization_Files.objects.filter(is_active = 1)
@@ -77,6 +78,8 @@ class IndexView(generic.ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['emp_files'] = Employee_Files.objects.filter(is_active = 1, employee__is_active = 1)
+        context['folders'] = (Employee_Files.objects.filter(is_active = 1).values('folder').annotate(dcount=Count('folder')).order_by('folder'))
+    
         return context
 
     
@@ -109,8 +112,13 @@ def add_emp_files(request):
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')  
             handle_uploaded_file(request.FILES['file'], request.POST.get('name'), request.POST.get('folder'), current_date_time)
             extesion = os.path.splitext(str(request.FILES['file']))[1]
-            date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
             
+            if request.POST.get('date_until'):
+                date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
+                db_date = date.strftime('%Y-%m-%d')
+            else:
+                db_date = None
+
 
             obj = Employee_Files.objects.create( 
                 file = request.POST.get('name')+"-"+current_date_time+""+extesion,
@@ -120,7 +128,7 @@ def add_emp_files(request):
                 employee_id= request.POST.get('employee'),
                 added_by_id= request.user.emp_id,
                 updated_by_id= request.user.emp_id,
-                valid_until= date.strftime('%Y-%m-%d'), 
+                valid_until= db_date, 
                 folder = request.POST.get('folder'),
                
             )
@@ -163,4 +171,6 @@ def delete_emp_file(request, pk):
     data.is_active = 0
     data.save()
     messages.success(request, 'File was deleted! ')
-    return redirect('employee_files')
+    # return redirect('employee_files')
+
+    return redirect(request.META.get('HTTP_REFERER'))

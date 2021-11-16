@@ -13,7 +13,7 @@ class LeaveRequestForm(forms.ModelForm):
     class Meta:  
         model = LeaveRequest  
        # fields = "__all__",   "mobile_number",
-        fields =("employee_id", "leave_type",  "reason", 'team_mailid', 'reason') #"role", "department") #"date_of_joining")
+        fields =("employee_id", "leave_type",  "reason", 'team_mailid', 'reason', 'from_date', 'to_date') #"role", "department") #"date_of_joining")
         readonly_fields = ['created', 'updated_at', 'is_active']
       
 #     def __init__(self, *args, **kwargs): "from_date", "to_date",
