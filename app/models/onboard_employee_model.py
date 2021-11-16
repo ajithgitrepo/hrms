@@ -28,17 +28,17 @@ class Onboard_Employee(models.Model):
     email_id = models.EmailField(max_length=50)  
     code_name = models.CharField(max_length=50, blank = True, null = True)  
     code_num = models.CharField(max_length=50, blank = True, null = True)  
-    mobile_number = models.CharField(max_length=12) 
+    mobile_number = models.CharField(max_length=15, blank = False, null = False) 
     official_email_id = models.CharField(max_length=50, blank = True, null = True) 
-    emirate_id = models.CharField(max_length=50, blank = True, null = True) 
-    photo_url = models.CharField(max_length=500, blank = True, null = True)
+    emirate_id = models.CharField(max_length=50, blank = False, null = False) 
+    photo_url = models.FileField(max_length=500, blank = True, null = True)
 
     # Address
     address = models.TextField (blank = True, null = True) 
     state = models.CharField(max_length=20, blank = True, null = True) 
     city = models.CharField(max_length=20, blank = True, null = True) 
     pin_code = models.CharField(max_length=20, blank = True, null = True) 
-    country = models.CharField(max_length=20, blank = True, null = True) 
+    country = models.CharField(max_length=20, blank = False, null = False) 
 
     # Professional Details
 
@@ -55,49 +55,7 @@ class Onboard_Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
-  #  is_active1 = models.PositiveSmallIntegerField(default=1)
-
-
-#     department = models.CharField(max_length=20, blank = True, null = True) 
-#     reporting_to = models.CharField(max_length=20, blank = True, null = True)  
-   
-#     seating_location = models.CharField(max_length=50, blank = True, null = True)  
-     
-     
-#     date_of_joining = models.DateField( blank = True, null = True)  
-#     employee_status = models.CharField(max_length=20, blank = True, null = True)  
-#     employee_type = models.CharField(max_length=20, blank = True, null = True)  
-#     work_phone = models.CharField(max_length=20, blank = True, null = True)  
-    
-#     extension = models.CharField(max_length=20, blank = True, null = True)  
-#     role = models.IntegerField( blank = True, null = True)  
-#     total_experience = models.CharField(max_length=20, blank = True, null = True)  
-      
-
-#     mobile_phone = models.CharField(max_length=20, blank = True, null = True)
-#     #code_name = models.CharField(max_length=30) 
-#     #code_num = models.CharField(max_length=30) 
-    
-#     other_email = models.CharField(max_length=20, blank = True, null = True)  
-#     birth_date = models.DateField( blank = True, null = True)  
-#     marital_status = models.CharField(max_length=20, choices= boolChoice,  blank = True, null = True)  
-      
-#     tags = models.CharField(max_length=20, blank = True, null = True)  
-
-#     job_description = models.CharField(max_length=500, blank = True, null = True)  
-#     expertise = models.CharField(max_length=200, blank = True, null = True)  
-#     date_of_exit = models.DateField( blank = True, null = True)  
-#     gender = models.TextField (max_length=20,blank = True, null = True)  
-#     about_me = models.CharField(max_length=500, blank = True, null = True)  
-    
-    
-    #added_by = models.CharField(max_length=30) 
-    #added_time = models.DateTimeField() 
-    #modified_by = models.CharField(max_length=30)
-    #modified_time = models.TimeField()
-    #created_at = models.DateTimeField()
-   
-      
+  
     class Meta:  
         db_table = "onboard_employee"  
 

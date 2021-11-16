@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 from app.views.restriction_view import admin_only,role_name
 from app.views.employee_view import employees
 from django.contrib.auth.decorators import login_required
@@ -19,7 +16,7 @@ from app.forms.LeaveTypeForm import LeaveTypeForm
 
 from app.models.employee_model import Employee , Work_Experience, Education, Dependent 
 from app.models.leave_type_model import * 
-from app.models.leave_balance import *
+from app.models.leave_balance_model import *
 from app.models.department_model import *
 from app.models.role_model import *
 # from app.models.leave_balance_model import *
@@ -48,11 +45,11 @@ from app.models.announcement_model import Announcement
 from app.models.weekend_model import Weekend
 from django.core.exceptions import PermissionDenied
 from app.models.holiday_details_model import Holiday_Detail 
+from app.models.leave_balance_model import Leave_Balance
 
 #from app.models import QuillModel
 
 @login_required
-@admin_only
 def index(request):
 
     # print(request.session['checkin_session'])
@@ -61,9 +58,10 @@ def index(request):
 
     role = role_name(request)
     # print(role)
+
     # last 15 days records
     new_hires = Employee.objects.filter(is_active = 1, created_at__lte=datetime.datetime.today(), created_at__gt=datetime.datetime.today()-datetime.timedelta(days=15))
-   
+
     # last 3 records
     # new_hires = Employee.objects.filter(is_active = 1).order_by('-created_at')[:3]
     # print(new_hires)
@@ -99,6 +97,9 @@ def index(request):
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[start_week, end_week]) 
     # print(holidays)
+
+    leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
+    # print(leaves[0].leave_type.name)
 
     weekend = Weekend.objects.filter(is_active = 1)
     # print(weekend)
@@ -136,6 +137,7 @@ def index(request):
         'holidays':holidays,
         'upcoming_holidays':upcoming_holidays,
         'weekend':weekend,
+        'leaves':leaves,
 
     }
 

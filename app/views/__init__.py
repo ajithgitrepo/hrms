@@ -26,6 +26,7 @@ from .heirarchy_view import *
 from .location_view import *
 from .task_view import *
 from .weekend_view import *
+from .self_service_view import *
 
 
 

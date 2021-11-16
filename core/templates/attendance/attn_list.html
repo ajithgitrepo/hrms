@@ -438,15 +438,11 @@
                 
         });
 
-        $(document).on('click', '.confirm-delete', function(){
-            return confirm('Are you sure you want to delete this role?');
-        })
-
         $('#employee_change').on('change', function () {
             var url = $(this).val();
             month = $("#month_year").val();
             if (url) { 
-                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
+                window.location = "/search_listview/"+url+"/"+month+"/"; // redirect
             }
             return false;
         });
@@ -455,7 +451,7 @@
             var month = $(this).val(); 
             url = $("#employee_change").val();
             if (url) {
-                window.location = "http://127.0.0.1:8000/search_listview/"+url+"/"+month+"/"; // redirect
+                window.location = "/search_listview/"+url+"/"+month+"/"; // redirect
             }
             return false;
         });

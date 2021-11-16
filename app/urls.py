@@ -1,9 +1,7 @@
 
 from django.urls import path, re_path, include
 from app import views 
-#from app import emloyee_views 
-
-
+from app.views.restriction_view import admin_only,role_name
 
 urlpatterns = [
    
@@ -15,7 +13,18 @@ urlpatterns = [
     
     #path('leave_request/', views.leave_request, name="leave_request"),
     
-     
+    
+    #Self Service
+    path('profile/', views.self_service_view.profile, name="profile"),
+    path('attendance/', views.self_service_view.attendance, name="attendance"),
+    path('filter_attendance/<str:month>/', views.self_service_view.filter_attendance, name="filter_attendance"),
+    path('files/', views.self_service_view.files, name="files"),
+    path('add_files/', views.self_service_view.add_files, name="add_files"),
+    path('assets/', views.self_service_view.assets, name="assets"),
+    path('add_asset/', views.self_service_view.add_asset, name="add_asset"),
+    path('leave_tracker/', views.self_service_view.leave_tracker, name="leave_tracker"),
+    path('apply_leave/', views.self_service_view.apply_leave, name="apply_leave"),
+
     # Employee 
     path('employees/', views.employee_view.employees, name="employees"),
     path('add_employee/', views.employee_view.add_employee, name="add_employee"),
@@ -40,13 +49,14 @@ urlpatterns = [
     path('update_leave_request/<str:pk>/', views.update_leave_request, name="update_leave_request"),
     path('delete_leave_request/<str:pk>/', views.delete_leave_request, name="delete_leave_request"),
     path('leave_request_more_info', views.leave_request_more_info, name="leave_request_more_info"),
-
+    path('change_leave_status/', views.leave_request_view.change_leave_status, name="change_leave_status"),
+   
     # leave type / settings
     path('leave_types/', views.leave_type_view.index, name="leave_types"),
     path('add_leave_type/', views.leave_type_view.add_leave_type, name="add_leave_type"),
     path('edit_leave_type/<str:pk>/', views.leave_type_view.edit_leave_type, name="edit_leave_type"),
     path('change_status/<str:pk>/<str:val>/', views.leave_type_view.change_status, name="change_status"),
-
+   
     #leave balance
     path('leave_balance/', views.leave_balance_view.index, name="leave_balance"),
     path('customize_leave_balance/<str:pk>/', views.leave_balance_view.customize_leave_balance, name="customize_leave_balance"),
@@ -81,10 +91,10 @@ urlpatterns = [
     path('add_org_files/', views.organization_files_view.add_org_files, name="add_org_files"),
     path('delete_org_file/<str:pk>/', views.organization_files_view.delete_org_file, name="delete_org_file"),
     # Class based view
-    path('organinzation_files/', views.organization_files_view.IndexView.as_view(), name="organinzation_files"),
+    path('organinzation_files/', admin_only(views.organization_files_view.IndexView.as_view()), name="organinzation_files"),
 
     #Employee Files
-    path('employee_files/', views.employee_files_view.IndexView.as_view(), name="employee_files"),
+    path('employee_files/', admin_only(views.employee_files_view.IndexView.as_view()), name="employee_files"),
     path('add_emp_files/', views.employee_files_view.add_emp_files, name="add_emp_files"),
     path('delete_emp_file/<str:pk>/', views.employee_files_view.delete_emp_file, name="delete_emp_file"),
 

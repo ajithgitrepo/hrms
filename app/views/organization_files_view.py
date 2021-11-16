@@ -1,5 +1,6 @@
 
 from app.models.organization_files_model import Organization_Files
+from app.views.restriction_view import admin_only,role_name
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
@@ -11,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core import mail
-from django.utils.html import strip_tags
+from django.utils.html import escape, strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from io import BytesIO
@@ -51,6 +52,7 @@ from django.contrib.auth.models import User
 from app.forms.OrganizationFilesForm import Organization_Files_Form
 from app.models.folder_model import Folder
 from django.views import generic
+from django.db.models import Avg, Count, Min, Sum
 
 # def index(request): 
 #     org_files = Organization_Files.objects.filter(is_active = 1)
@@ -59,15 +61,19 @@ from django.views import generic
 #     }
 #     return render(request, "organization_files/index.html",  context )
 
+
 class IndexView(generic.ListView):
     model = Organization_Files
     template_name = "organization_files/index.html"
-    context_object_name = 'org_files'
+    context_object_name = 'files'
 
     def get_context_data(self, *args, **kwargs):
         queryset = Organization_Files.objects.filter(is_active = 1)
+        folders = (Organization_Files.objects.filter(is_active = 1).values('folder').annotate(dcount=Count('folder')).order_by('folder'))
+    
         context = {
-            'org_files' : queryset,
+            'files' : queryset,
+            'folders':folders,
         }
 
         # context = super().get_context_data(**kwargs)
@@ -89,7 +95,6 @@ def add_folder(request):
         return HttpResponse(0)
         
 
-
 def add_org_files(request):  
 
     form = Organization_Files_Form()
@@ -102,9 +107,13 @@ def add_org_files(request):
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')  
             handle_uploaded_file(request.FILES['file'], request.POST.get('name'), request.POST.get('folder'), current_date_time)
             extesion = os.path.splitext(str(request.FILES['file']))[1]
-            date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
             
-
+            if request.POST.get('date_until'):
+                date = datetime.datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
+                db_date = date.strftime('%Y-%m-%d')
+            else:
+                db_date = None
+            
             obj = Organization_Files.objects.create( 
                 file = request.POST.get('name')+"-"+current_date_time+""+extesion,
                 name = request.POST.get('name'),
@@ -112,7 +121,7 @@ def add_org_files(request):
                 device = 'web',
                 added_by_id= request.user.emp_id,
                 updated_by_id= request.user.emp_id,
-                valid_until= date.strftime('%Y-%m-%d'), 
+                valid_until= db_date, 
                 folder = request.POST.get('folder'),
                
             )

@@ -1,4 +1,8 @@
 
+    {% load custom_tags %}
+
+    {% role_name as role %}
+
     <!-- The Inner links -->
     <div class="scrollbar-inner">
         <!-- Brand -->
@@ -36,17 +40,51 @@
                         <span class="sidenav-normal"> Dashboard </span>
                         </a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a href="/alternative.html" class="nav-link {% if 'alternative' in segment %} active {% endif %}">
-                        <span class="sidenav-mini-icon"> A </span>
-                        <span class="sidenav-normal"> Alternative </span>
-                        </a>
-                    </li> -->
                     </ul>
                 </div>
 
+                <a class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %}  {% if request.resolver_match.url_name == "attendance" %}active{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} {% if request.resolver_match.url_name == "files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_files" %}active{% endif %} {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}active{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}active{% endif %} " 
+                href="#navbar-service" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-service">
+                <i class="fas fa-user text-primary"></i>
+                    <span class="nav-link-text">Self-service</span>
+                </a>
+                <div class="collapse {% if request.resolver_match.url_name == "profile" %}show{% endif %}  {% if request.resolver_match.url_name == "attendance" %}show{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}show{% endif %} {% if request.resolver_match.url_name == "files" %}show{% endif %}  {% if request.resolver_match.url_name == "add_files" %}show{% endif %} {% if request.resolver_match.url_name == "assets" %}show{% endif %} {% if request.resolver_match.url_name == "add_asset" %}show{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}show{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}show{% endif %} " id="navbar-service">
+                    <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                        <a href="/profile/" class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> P </span>
+                        <span class="sidenav-normal"> Profile </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/leave_tracker/" class="nav-link {% if request.resolver_match.url_name == "leave_tracker" %}active{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> LT </span>
+                        <span class="sidenav-normal"> Leave Tracker </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/attendance/" class="nav-link {% if request.resolver_match.url_name == "attendance" %}active{% endif %} {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> AT </span>
+                        <span class="sidenav-normal"> Attendance </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/files/" class="nav-link {% if request.resolver_match.url_name == "files" %}active{% endif %} {% if request.resolver_match.url_name == "add_files" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> F </span>
+                        <span class="sidenav-normal"> Files </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/assets/" class="nav-link {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %} ">
+                        <span class="sidenav-mini-icon"> A </span>
+                        <span class="sidenav-normal"> Assets </span>
+                        </a>
+                    </li>
+                   
+                    </ul>
+                </div>
                 
-                 
+            {% if role == "Admin" %}    
                 <a class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}{% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}" 
                 href="#navbar-onboarding" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-onboarding">
                 <i class="fas fa-user-plus text-primary"></i>
@@ -101,12 +139,12 @@
                                 <span class="sidenav-normal">Birthday Folks</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == "birthdays" %}active{% endif %}" href="/organization_tree/">
                                 <span class="sidenav-mini-icon"> O </span>
                                 <span class="sidenav-normal">Organization Tree</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == "exit_details" %}active{% endif %}" href="/exit_details/">
                                 <span class="sidenav-mini-icon"> E </span>
@@ -169,26 +207,12 @@
                 </div>
 
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %}  " href="/announcements/">
-                        <i class="fas fa-bullhorn text-primary"></i>
-                        <span class="nav-link-text">Announcements</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link " href="/leave_request/">
-                        <i class="fas fa-calendar-alt text-primary"></i>
-                        <span class="nav-link-text">Leave Request</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  {% if request.resolver_match.url_name == "holiday_details" %}active{% endif %} {% if request.resolver_match.url_name == "weekends" %}active{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}active{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}active{% endif %} " 
+                    <a class="nav-link {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  {% if request.resolver_match.url_name == "holiday_details" %}active{% endif %} {% if request.resolver_match.url_name == "weekends" %}active{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}active{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}active{% endif %} {% if request.resolver_match.url_name == "add_leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} " 
                     href="#navbar-leave" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave">
                     <i class="fas fa-calendar-alt text-primary"></i>
                         <span class="nav-link-text">Leave Tracker</span>
                     </a>
-                    <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "holiday_details" %}show{% endif %} {% if request.resolver_match.url_name == "weekends" %}show{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}show{% endif %}  " >
+                    <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "holiday_details" %}show{% endif %} {% if request.resolver_match.url_name == "weekends" %}show{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "add_leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "leave_request" %}show{% endif %}  " >
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                             
@@ -232,6 +256,20 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{% url 'leave_request' %}" class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} ">
+                                    <span class="sidenav-mini-icon"> LA </span>
+                                    <span class="sidenav-normal"> Leave Applications </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'add_leave_request' %}" class="nav-link {% if request.resolver_match.url_name == "add_leave_request" %}active{% endif %} ">
+                                    <span class="sidenav-mini-icon"> AL </span>
+                                    <span class="sidenav-normal"> Add Leave Request </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{% url 'weekends' %}" class="nav-link {% if request.resolver_match.url_name == "weekends" %}active{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}active{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}active{% endif %} ">
                                     <span class="sidenav-mini-icon"> W </span>
                                     <span class="sidenav-normal"> Weekends </span>
@@ -245,12 +283,12 @@
 
                 
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %}  {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "tasks" %}active{% endif %} {% if request.resolver_match.url_name == "add_task" %}active{% endif %} {% if request.resolver_match.url_name == "update_task" %}active{% endif %} {% if request.resolver_match.url_name == "locations" %}active{% endif %} {% if request.resolver_match.url_name == "add_location" %}active{% endif %} {% if request.resolver_match.url_name == "update_location" %}active{% endif %} {% if request.resolver_match.url_name == "search" %}active{% endif %} " 
+                    <a class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %}  {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "tasks" %}active{% endif %} {% if request.resolver_match.url_name == "add_task" %}active{% endif %} {% if request.resolver_match.url_name == "update_task" %}active{% endif %} {% if request.resolver_match.url_name == "locations" %}active{% endif %} {% if request.resolver_match.url_name == "add_location" %}active{% endif %} {% if request.resolver_match.url_name == "update_location" %}active{% endif %} {% if request.resolver_match.url_name == "search" %}active{% endif %}{% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %} " 
                     href="#navbar-more" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-more">
                     <i class="fas fa-info-circle text-primary"></i>
                         <span class="nav-link-text">More</span>
                     </a>
-                    <div id="navbar-more" class="collapse {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "tasks" %}show{% endif %} {% if request.resolver_match.url_name == "add_task" %}show{% endif %} {% if request.resolver_match.url_name == "update_task" %}show{% endif %} {% if request.resolver_match.url_name == "locations" %}show{% endif %} {% if request.resolver_match.url_name == "add_location" %}show{% endif %} {% if request.resolver_match.url_name == "update_location" %}show{% endif %} {% if request.resolver_match.url_name == "search" %}show{% endif %} " >
+                    <div id="navbar-more" class="collapse {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_expense_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "tasks" %}show{% endif %} {% if request.resolver_match.url_name == "add_task" %}show{% endif %} {% if request.resolver_match.url_name == "update_task" %}show{% endif %} {% if request.resolver_match.url_name == "locations" %}show{% endif %} {% if request.resolver_match.url_name == "add_location" %}show{% endif %} {% if request.resolver_match.url_name == "update_location" %}show{% endif %} {% if request.resolver_match.url_name == "search" %}show{% endif %} {% if request.resolver_match.url_name == "add_announcements" %}show{% endif %} {% if request.resolver_match.url_name == "announcements" %}show{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}show{% endif %} " >
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                             
@@ -281,6 +319,14 @@
                                 </div>
 
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %}  " href="/announcements/">
+                                    <span class="sidenav-mini-icon"> A </span>
+                                    <span class="sidenav-normal">Announcements</span>
+                                </a>
+                            </li>
+                          
 
                             <li class="nav-item">
                                 <a href="{% url 'compensatory_request_details' %}" class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} ">
@@ -314,264 +360,8 @@
                     </div>
                 </li>
 
-                <!-- </li> -->
-                <!-- <li class="nav-item">
-                <a class="nav-link {% if 'page-' in segment %} active {% endif %}" 
-                   href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                    <i class="ni ni-ungroup text-orange"></i>
-                    <span class="nav-link-text">Examples</span>
-                </a>
-                <div class="collapse" id="navbar-examples">
-                    <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                        <a href="/page-pricing.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> P </span>
-                        <span class="sidenav-normal"> Pricing </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-sign-in.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> L </span>
-                        <span class="sidenav-normal"> Login </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-sign-up.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> R </span>
-                        <span class="sidenav-normal"> Register </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-lock.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> L </span>
-                        <span class="sidenav-normal"> Lock </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-timeline.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> T </span>
-                        <span class="sidenav-normal"> Timeline </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-profile.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> P </span>
-                        <span class="sidenav-normal"> Profile </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/page-rtl-support.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> RP </span>
-                        <span class="sidenav-normal"> RTL Support </span>
-                        </a>
-                    </li> -->
-                    </ul>
-                </div>
-                </li>
-                <!-- <li class="nav-item">
-                <a class="nav-link {% if 'components-' in segment %} active {% endif %}" 
-                   href="#navbar-components" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-components">
-                    <i class="ni ni-ui-04 text-info"></i>
-                    <span class="nav-link-text">Components</span>
-                </a> -->
-                <!-- <div class="collapse" id="navbar-components"> -->
-                    <!-- <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                        <a href="/components-buttons.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> B </span>
-                        <span class="sidenav-normal"> Buttons </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/components-cards.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> C </span>
-                        <span class="sidenav-normal"> Cards </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/components-grid.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> G </span>
-                        <span class="sidenav-normal"> Grid </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/components-notifications.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> N </span>
-                        <span class="sidenav-normal"> Notifications </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/components-icons.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> I </span>
-                        <span class="sidenav-normal"> Icons </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/components-typography.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> T </span>
-                        <span class="sidenav-normal"> Typography </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#navbar-multilevel" class="nav-link" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-multilevel">
-                        <span class="sidenav-mini-icon"> M </span>
-                        <span class="sidenav-normal"> Multi level </span>
-                        </a>
-                        <div class="collapse show" id="navbar-multilevel" style="">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                            <a href="#!" class="nav-link ">Third level menu</a>
-                            </li>
-                            <li class="nav-item">
-                            <a href="#!" class="nav-link ">Just another link</a>
-                            </li>
-                            <li class="nav-item">
-                            <a href="#!" class="nav-link ">One last link</a>
-                            </li>
-                        </ul>
-                        </div>
-                    </li>
-                    </ul>
-                </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link {% if 'forms' in segment %} active {% endif %}" 
-                   href="#navbar-forms" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-forms">
-                    <i class="ni ni-single-copy-04 text-pink"></i>
-                    <span class="nav-link-text">Forms</span>
-                </a>
-                <div class="collapse" id="navbar-forms">
-                    <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                        <a href="/forms-elements.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> E </span>
-                        <span class="sidenav-normal"> Elements </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/forms-components.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> C </span>
-                        <span class="sidenav-normal"> Components </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/forms-validation.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> V </span>
-                        <span class="sidenav-normal"> Validation </span>
-                        </a>
-                    </li>
-                    </ul>
-                </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link {% if 'tables' in segment %} active {% endif %}" 
-                   href="#navbar-tables" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-tables">
-                    <i class="ni ni-align-left-2 text-default"></i>
-                    <span class="nav-link-text">Tables</span>
-                </a>
-                <div class="collapse" id="navbar-tables">
-                    <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                        <a href="/tables.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> T </span>
-                        <span class="sidenav-normal"> Tables </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/tables-sortable.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> S </span>
-                        <span class="sidenav-normal"> Sortable </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/tables-datatables.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> D </span>
-                        <span class="sidenav-normal"> Datatables </span>
-                        </a>
-                    </li>
-                    </ul>
-                </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link {% if 'maps-' in segment %} active {% endif %}" 
-                   href="#navbar-maps" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-maps">
-                    <i class="ni ni-map-big text-primary"></i>
-                    <span class="nav-link-text">Maps</span>
-                </a>
-                <div class="collapse" id="navbar-maps">
-                    <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                        <a href="/maps-google.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> G </span>
-                        <span class="sidenav-normal"> Google </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/maps-vector.html" class="nav-link">
-                        <span class="sidenav-mini-icon"> V </span>
-                        <span class="sidenav-normal"> Vector </span>
-                        </a>
-                    </li>
-                    </ul>
-                </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link {% if 'widgets' in segment %} active {% endif %}" 
-                   href="/widgets.html">
-                    <i class="ni ni-archive-2 text-green"></i>
-                    <span class="nav-link-text">Widgets</span>
-                </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'charts' in segment %} active {% endif %}" 
-                       href="/charts.html">
-                        <i class="ni ni-chart-pie-35 text-info"></i>
-                        <span class="nav-link-text">Charts</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'calendar' in segment %} active {% endif %}" 
-                       href="/calendar.html">
-                        <i class="ni ni-calendar-grid-58 text-red"></i>
-                        <span class="nav-link-text">Calendar</span>
-                    </a>
-                </li>
+            {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}" >
-                        <i class="ni ni-user-run text-red"></i>
-                        <span class="nav-link-text">Logout</span>
-                    </a>
-                </li>
-            </ul> -->
-            <!-- Divider -->
-            <!-- <hr class="my-3"> -->
-            <!-- Heading -->
-            <!-- <h6 class="navbar-heading p-0 text-muted">
-                <span class="docs-normal">Documentation</span>
-                <span class="docs-mini">D</span>
-            </h6> -->
-            <!-- Navigation -->
-            <!-- <ul class="navbar-nav mb-md-3">
-
-                <li class="nav-item">
-                    <a class="nav-link" 
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://www.creative-tim.com/product/argon-dashboard-pro-django" >
-                        <i class="ni ni-spaceship"></i>
-                        <span class="nav-link-text">Product Info</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" 
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://demos.creative-tim.com/argon-dashboard-pro-django/docs/1.0/getting-started/getting-started-django.html" >
-                        <i class="ni ni-chart-pie-35"></i>
-                        <span class="nav-link-text">Product Docs</span>
-                    </a>
-                </li>
-            </ul> -->
-            <!-- </div> -->
         </div>
     </div>
+</div>

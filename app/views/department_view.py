@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
@@ -18,21 +15,11 @@ import datetime
 from app.models.department_model import Department 
 
 from django.contrib.auth.models import Group
-
-#from app.models import QuillModel
+from app.views.restriction_view import admin_only,role_name
 
 
 @login_required(login_url="/login/")
-def index(request):
-    
-    context = {}
-    context['segment'] = 'index' 
-
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
-
-
-
+@admin_only
 def departments(request):
     #return HttpResponse('work')
     departments = Department.objects.filter(is_active='1')
@@ -40,6 +27,7 @@ def departments(request):
     context = {'departments':departments}
     return render(request, "department/index.html", context)
 
+@admin_only
 def add_departments(request):
     form = DepartmentForm()
     if request.method == 'POST':
@@ -57,6 +45,7 @@ def add_departments(request):
     context = {'form':form}
     return render(request, "department/add_department.html", context)
 
+@admin_only
 def update_department(request, pk):
     dept = Department.objects.get(id=pk)
     form = DepartmentForm(instance=dept)
@@ -76,6 +65,7 @@ def update_department(request, pk):
     context = {'form':form,'department':dept}
     return render(request, "department/update_department.html", context)
 
+@admin_only
 def delete_department(request, pk):
     # return HttpResponse('working..')
     data = Department.objects.get(id=pk)

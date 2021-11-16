@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from app.models import exit_details_model
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
@@ -76,11 +72,7 @@ def pages(request):
         return HttpResponse(html_template.render(context, request))
 
 def asset_details(request):
-   # return HttpResponse("employee")
     employee = Asset_Detail.objects.filter(is_active='1')
-#     Asset_Detail.objects.select_related('employee').get(is_active='1')
-   # return HttpResponse(employee)
-    print(employee)
     context = {'employees':employee}
     return render(request, "asset_details/index.html", context)
 
@@ -174,7 +166,7 @@ def add_asset_details(request):
     #
    # tes = Group.objects.all()
     context_role.update({"form":form})
-    print(context_role)
+    # print(context_role)
     return render(request, "asset_details/add_asset_details.html",  context_role )
    
 def delete_asset_details(request, pk):
@@ -182,5 +174,6 @@ def delete_asset_details(request, pk):
     data = Asset_Detail.objects.get(id =pk)
     data.is_active = 0
     data.save()
-    messages.error(request, 'asset was deleted! ')
-    return redirect('asset_details')
+    messages.error(request, 'Asset was deleted! ')
+    # return redirect('asset_details')
+    return redirect(request.META.get('HTTP_REFERER'))
