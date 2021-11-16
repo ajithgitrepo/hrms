@@ -1,9 +1,7 @@
 
 from django.urls import path, re_path, include
 from app import views 
-#from app import emloyee_views 
-
-
+from app.views.restriction_view import admin_only,role_name
 
 urlpatterns = [
    
@@ -93,10 +91,10 @@ urlpatterns = [
     path('add_org_files/', views.organization_files_view.add_org_files, name="add_org_files"),
     path('delete_org_file/<str:pk>/', views.organization_files_view.delete_org_file, name="delete_org_file"),
     # Class based view
-    path('organinzation_files/', views.organization_files_view.IndexView.as_view(), name="organinzation_files"),
+    path('organinzation_files/', admin_only(views.organization_files_view.IndexView.as_view()), name="organinzation_files"),
 
     #Employee Files
-    path('employee_files/', views.employee_files_view.IndexView.as_view(), name="employee_files"),
+    path('employee_files/', admin_only(views.employee_files_view.IndexView.as_view()), name="employee_files"),
     path('add_emp_files/', views.employee_files_view.add_emp_files, name="add_emp_files"),
     path('delete_emp_file/<str:pk>/', views.employee_files_view.delete_emp_file, name="delete_emp_file"),
 

@@ -1,5 +1,6 @@
 
 from app.models.organization_files_model import Organization_Files
+from app.views.restriction_view import admin_only,role_name
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
@@ -60,6 +61,7 @@ from django.db.models import Avg, Count, Min, Sum
 #     }
 #     return render(request, "organization_files/index.html",  context )
 
+
 class IndexView(generic.ListView):
     model = Organization_Files
     template_name = "organization_files/index.html"
@@ -92,7 +94,6 @@ def add_folder(request):
     else:
         return HttpResponse(0)
         
-
 
 def add_org_files(request):  
 
