@@ -440,7 +440,7 @@ def apply_leave(request):
 
 def leave(request,leave):
     path = request.path.split("/")
-    print(path[2])
+    # print(path[2])
     leave_type=path[2]
     form = Apply_Leave_Form()
     if request.method == 'POST':
