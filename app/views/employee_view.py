@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
@@ -850,8 +847,7 @@ def add_employee(request):
 
 
 def update_employee(request, pk):
-    # return HttpResponse('working..')
-    #role = Group.objects.get(id=pk)
+   
     employee = Employee.objects.get(employee_id=pk)
     form = EmployeeForm(instance=employee)
     # print(role)

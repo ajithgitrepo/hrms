@@ -202,6 +202,7 @@ def add_files(request):
 
     form = Employee_Files_Form()
 
+
     if request.method == 'POST':
         form = Employee_Files_Form(request.POST, request.FILES)
 

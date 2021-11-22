@@ -16,7 +16,7 @@ class Compoensatory_Request_Detail(models.Model):
 
     # Separation
 
-    id = models.AutoField(primary_key=True,auto_created = True,serialize = False,verbose_name ='ID')   
+    id = models.AutoField(primary_key=True,verbose_name ='ID')   
     employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
     worked_date = models.DateField(blank = True, null = True) 
     unit = models.CharField(max_length=130 , blank = True, null = True)
