@@ -142,20 +142,22 @@ input[type=number] {
                     <input type="hidden" class="form-control startdate" id="employee_id" name="employee_id" value="{{ request.user.emp_id }}"/>
 
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="form-control-label" for="input-city">Leave Type</label>
-                            <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
-                                <option value="" selected >Select</option>
-                                {% for leave in leaves %}
-                                    <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}> {{ leave.leave_type.name }} </option>
-                                {% endfor %} 
-                                {% for leave in leave_condition %}
-                                    <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}> {{ leave.leave_type.name }} </option>
-                                {% endfor %} 
-                            </select>
-                            {{ form.leave_type.errors }}
-                        </div>
-                    </div>
+                      <div class="form-group">
+                          <label class="form-control-label" for="input-city">Leave Type</label>
+                          <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
+                              <option value="" selected >Select</option>
+                              {% for leave in leaves %}
+                                  <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}
+                                  {% if leave_type  == leave.leave_type.name %} selected{% endif %}
+                                  > {{ leave.leave_type.name }} </option>
+                              {% endfor %}
+                              {% for leave in leave_condition %}
+                                  <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}> {{ leave.leave_type.name }} </option>
+                              {% endfor %}
+                          </select>
+                          {{ form.leave_type.errors }}
+                      </div>
+                  </div>
 
                     <div class="row dates">
                         <div class="col-lg-3">

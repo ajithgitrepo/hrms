@@ -24,6 +24,7 @@ urlpatterns = [
     path('add_asset/', views.self_service_view.add_asset, name="add_asset"),
     path('leave_tracker/', views.self_service_view.leave_tracker, name="leave_tracker"),
     path('apply_leave/', views.self_service_view.apply_leave, name="apply_leave"),
+    path('leave/<str:leave>/', views.self_service_view.leave, name="leave"),
 
     # Employee 
     path('employees/', views.employee_view.employees, name="employees"),

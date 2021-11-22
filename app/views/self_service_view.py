@@ -437,3 +437,55 @@ def apply_leave(request):
     }
 
     return render(request, "self_service/apply_leave.html",  context )
+
+def leave(request,leave):
+    path = request.path.split("/")
+    print(path[2])
+    leave_type=path[2]
+    form = Apply_Leave_Form()
+    if request.method == 'POST':
+        form = Apply_Leave_Form(request.POST)
+        if  form.is_valid():
+            emp_id = request.POST.get('employee_id')
+            leave = request.POST.get('leave_type')
+            from_date = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y')
+            to_date = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y')
+            reason = request.POST.get('reason')
+            created_at = timezone.now()
+            updated_at = timezone.now()
+            start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
+            end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
+            diff = abs((end_date-start_date).days)+1
+            # print(diff)
+            delta = end_date - start_date       # as timedelta
+            obj = LeaveRequest.objects.create(
+                employee_id=Employee.objects.get(employee_id = emp_id) if emp_id else None,
+                leave_type=Leave_Type.objects.get(id = leave) if leave else None,
+                from_date=from_date.strftime('%Y-%m-%d'),
+                to_date=to_date.strftime('%Y-%m-%d'),
+                total_days = diff,
+                reason=reason,
+                created_at=created_at,
+                updated_at=updated_at,
+                is_active=1,
+                added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None,
+                device = 'web',
+            )
+            obj.save()
+            for i in range(delta.days + 1):
+                day = start_date + timedelta(days=i)
+                # print(datetime.strftime(day, "%d-%m-%Y"))
+                insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1 )
+            messages.success(request, 'Leave Requested Successfully ! ')
+            return redirect('leave_tracker')
+    employee = Employee.objects.get(is_active = 1, employee_id = request.user.emp_id)
+    leaves = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 1).exclude(exception_dept = employee.department_id, exception_role = employee.role_id, exception_location = employee.location )
+    leave_condition = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 0, gender = employee.gender, marital_status = employee.marital_status, department = employee.department_id, role = employee.role_id, location = employee.location, employment_type = employee.employee_type )
+    # print(leaves)
+    context = {
+        'form' : form,
+        'leaves' : leaves,
+        'leave_condition':leave_condition,
+        'leave_type':leave_type,
+    }
+    return render(request, "self_service/apply_leave.html",  context )
