@@ -66,8 +66,8 @@ input[type=number] {
               </div>
             </div>
             <div class="card-body">
-                  <form method="POST" class="post-form" action="">  
-                    {% csrf_token %}  
+              <form method="POST" class="post-form" action="" enctype="multipart/form-data">  
+                {% csrf_token %}  
                    
 
             <h6 class="heading-small text-muted mb-4">Basic Info</h6>
@@ -115,6 +115,12 @@ input[type=number] {
                     <!-- {{ form.nick_name.errors }} -->
                   </div>
                 </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Profile</label>
+                      <input type="file" name="profile" value="{{ form.data.profile }}" accept=".doc, .png, .pdf, .txt"class="form-control" >
+                  </div>
              
               </div>
 

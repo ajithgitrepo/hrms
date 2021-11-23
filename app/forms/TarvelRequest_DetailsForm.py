@@ -17,7 +17,7 @@ class TarvelRequest_DetailForm(forms.ModelForm):
         model = Travel_Request_Detail  
        # fields = "__all__",   "mobile_number",  "employee",
      
-        fields = [ "place_of_visit", "employee_department", "employee", ] #"role", "department") #"date_of_joining")
+        fields = [ "place_of_visit", "employee", ]
         readonly_fields = ['created', 'updated_at', 'is_active' ]
 
 
@@ -27,9 +27,9 @@ class TarvelRequest_DetailForm(forms.ModelForm):
         self.fields['place_of_visit'].widget.attrs['required'] = 'required'
         self.fields['place_of_visit'].error_messages = {'required': 'Place of visit is required'}
         
-        self.fields['employee_department'].required = True
-        self.fields['employee_department'].widget.attrs['required'] = 'required'
-        self.fields['employee_department'].error_messages = {'required': 'Department is required'}  
+        # self.fields['employee_department'].required = True
+        # self.fields['employee_department'].widget.attrs['required'] = 'required'
+        # self.fields['employee_department'].error_messages = {'required': 'Department is required'}  
 
         self.fields['employee'].required = True
         self.fields['employee'].widget.attrs['required'] = 'required'

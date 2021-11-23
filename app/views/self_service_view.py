@@ -33,12 +33,16 @@ from django.utils import timezone
 from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
 from app.models.leave_balance_model import Leave_Balance
+from app.forms.TarvelRequest_DetailsForm import TarvelRequest_DetailForm
+from app.models.travel_request_model import Travel_Request_Detail
 from django.views import generic
 from app.models.employee_files_model import Employee_Files
 from app.models.leave_type_model import *
 from app.models.leave_request_model import *
 import os
 from django.db.models import Avg, Count, Min, Sum, Case, When, F
+
+from app.views.employee_view import employees
 
 
 @login_required(login_url="/login/")
@@ -489,3 +493,91 @@ def leave(request,leave):
         'leave_type':leave_type,
     }
     return render(request, "self_service/apply_leave.html",  context )
+
+def self_travel_request(request):
+    requests = Travel_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
+    context = {'requests':requests}
+    return render(request, "self_service/self_travel_request.html", context)
+
+
+def add_self_travel_request(request):
+
+    form = TarvelRequest_DetailForm()
+
+    if request.method == 'POST':
+        form = TarvelRequest_DetailForm(request.POST)
+        if form.is_valid(): 
+            employee = request.POST.get('employee')
+            place_of_visit = request.POST.get('place_of_visit')
+            employee_department = Employee.objects.filter(employee_id = employee, department__is_active = 1, is_active = 1)
+            # print(employee_department)
+
+            
+            expected_date_of_arrival = request.POST.get('expected_date_of_arrival')
+            if expected_date_of_arrival != "":
+               #return HttpResponse(date)   
+               d = datetime.strptime(expected_date_of_arrival, '%d-%m-%Y')
+               expected_date_of_arrival = d.strftime('%Y-%m-%d')
+            else:
+               expected_date_of_arrival = None  
+
+            expected_date_of_depature = request.POST.get('expected_date_of_depature')
+            if expected_date_of_depature != "":
+               #return HttpResponse(date)   
+               d = datetime.strptime(expected_date_of_depature, '%d-%m-%Y')
+               expected_date_of_depature = d.strftime('%Y-%m-%d')
+            else:
+               expected_date_of_depature = None   
+
+            expected_duration_days = request.POST.get('expected_duration_days')
+
+            purpose_of_visit = request.POST.get('purpose_of_visit')
+
+            billable_to_customer = None
+
+
+            customer_name = request.POST.get('customer_name')    
+            
+            created_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
+            updated_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
+            is_active = '1'
+
+            obj = Travel_Request_Detail.objects.create( 
+
+            employee_id=employee, 
+            place_of_visit=place_of_visit,
+            expected_date_of_arrival=expected_date_of_arrival,
+            expected_date_of_depature=expected_date_of_depature,
+            expected_duration_days=expected_duration_days,
+            purpose_of_visit=purpose_of_visit,
+            customer_name=customer_name,
+            employee_department=employee_department[0].department.name,
+            billable_to_customer=billable_to_customer,
+            created_at=created_at, updated_at=updated_at, is_active=is_active,
+
+            ) 
+               # return HttpResponse(employee)   
+            obj.save()
+            messages.success(request, 'travel request details was added ! ')
+            return redirect('/')
+
+    context = {
+          'form': form,
+    }
+   
+    return render(request, "self_service/add_self_travel_request.html", context )
+
+
+def delete_travel_request(request, pk):
+   # return HttpResponse('working..')
+    data = Travel_Request_Detail.objects.get(id =pk)
+    data.is_active = 0
+    data.save()
+    messages.error(request, 'Travel request was deleted! ')
+    return redirect('self_travel_request')
+
+
+def self_travel_expense(request):
+    requests = Travel_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
+    context = {'requests':requests}
+    return render(request, "self_service/self_travel_request.html", context)

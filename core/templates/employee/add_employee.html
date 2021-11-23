@@ -151,7 +151,7 @@ input[type=number] {
               </div>
             </div>
             <div class="card-body">
-                <form method="POST" name="form" class="post-form" >  
+              <form method="POST" name="form" class="post-form"  enctype="multipart/form-data">
                 {% csrf_token %}  
                    
 
@@ -200,8 +200,17 @@ input[type=number] {
                         <!-- {{ form.nick_name.errors }} -->
                       </div>
                     </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                          <label class="form-control-label" for="input-email">Profile</label>
+                          <input type="file" name="profile" value="{{ form.data.profile }}" accept=".doc, .png, .pdf, .txt"class="form-control" >
+                      </div>
                  
                   </div>
+
+               
+
 
                 </div>
                 <hr class="my-4" />

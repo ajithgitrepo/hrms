@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 from app.models import exit_details_model
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
@@ -99,11 +96,8 @@ def snippets_travel_details_employee_all_info(request):
 
 
 def add_travel_request_details(request):  
-    #return HttpResponse('working..') 
-   # return render(request, "exit_details/add_exit_details.html")
     form = TarvelRequest_DetailForm()
-   # return HttpResponse(form)
-   # """
+ 
     if request.method == 'POST':
         form = TarvelRequest_DetailForm(request.POST)
         if  form.is_valid(): 
@@ -176,11 +170,8 @@ def add_travel_request_details(request):
     employee = Employee.objects.all()
     context_role = {
           'employees': employee,
-         #  'country': 'in'
        }
    
-    #
-   # tes = Group.objects.all()
     context_role.update({"form":form})
     print(context_role)
     return render(request, "travel_request_details/add_travel_request_details.html",  context_role )

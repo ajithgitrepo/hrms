@@ -43,12 +43,12 @@
                     </ul>
                 </div>
 
-                <a class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %}  {% if request.resolver_match.url_name == "attendance" %}active{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} {% if request.resolver_match.url_name == "files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_files" %}active{% endif %} {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}active{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}active{% endif %} " 
+                <a class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %}  {% if request.resolver_match.url_name == "attendance" %}active{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}active{% endif %} {% if request.resolver_match.url_name == "files" %}active{% endif %}  {% if request.resolver_match.url_name == "add_files" %}active{% endif %} {% if request.resolver_match.url_name == "assets" %}active{% endif %} {% if request.resolver_match.url_name == "add_asset" %}active{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}active{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}active{% endif %} {% if request.resolver_match.url_name == "add_self_travel_request" %}active{% endif %} {% if request.resolver_match.url_name == "self_travel_request" %}active{% endif %} " 
                 href="#navbar-service" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-service">
                 <i class="fas fa-user text-primary"></i>
                     <span class="nav-link-text">Self-service</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "profile" %}show{% endif %}  {% if request.resolver_match.url_name == "attendance" %}show{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}show{% endif %} {% if request.resolver_match.url_name == "files" %}show{% endif %}  {% if request.resolver_match.url_name == "add_files" %}show{% endif %} {% if request.resolver_match.url_name == "assets" %}show{% endif %} {% if request.resolver_match.url_name == "add_asset" %}show{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}show{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}show{% endif %} " id="navbar-service">
+                <div class="collapse {% if request.resolver_match.url_name == "profile" %}show{% endif %}  {% if request.resolver_match.url_name == "attendance" %}show{% endif %}  {% if request.resolver_match.url_name == "filter_attendance" %}show{% endif %} {% if request.resolver_match.url_name == "files" %}show{% endif %}  {% if request.resolver_match.url_name == "add_files" %}show{% endif %} {% if request.resolver_match.url_name == "assets" %}show{% endif %} {% if request.resolver_match.url_name == "add_asset" %}show{% endif %} {% if request.resolver_match.url_name == "leave_tracker" %}show{% endif %} {% if request.resolver_match.url_name == "apply_leave" %}show{% endif %} {% if request.resolver_match.url_name == "add_self_travel_request" %}show{% endif %} {% if request.resolver_match.url_name == "self_travel_request" %}show{% endif %} " id="navbar-service">
                     <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
                         <a href="/profile/" class="nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %} ">
@@ -80,6 +80,36 @@
                         <span class="sidenav-normal"> Assets </span>
                         </a>
                     </li>
+
+                        <li class="nav-item">
+                        
+                            <a class="nav-link" href="#self-travel-info" data-toggle="collapse" {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "add_self_travel_request" %}active{% endif %} {% if request.resolver_match.url_name == "self_travel_request" %}active{% endif %}  role="button" aria-expanded="true" aria-controls="navbar-more">
+                                <span class="sidenav-mini-icon"> T </span>
+                                <span class="sidenav-normal"> Travel </span>
+                            </a>
+
+                            <div id="self-travel-info" class="collapse {% if request.resolver_match.url_name == "travel_expense_details" %}show{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "add_self_travel_request" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "self_travel_request" %}show{% endif %}  " >
+                                
+                                <ul>
+                                    <li class="nav-item">
+                                        <a href="{% url 'self_travel_request' %}" class="nav-link {% if request.resolver_match.url_name == "add_self_travel_request" %}active{% endif %} {% if request.resolver_match.url_name == "self_travel_request" %}active{% endif %} ">
+                                            <span class="sidenav-mini-icon"> TR </span>
+                                            <span class="sidenav-normal"> Travel Request </span>
+                                        </a>
+                                    </li>
+                                   
+                                    <!-- <li class="nav-item">
+                                        <a href="{% url 'travel_expense_details' %}" class="nav-link {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %}  ">
+                                            <span class="sidenav-mini-icon"> TE </span>
+                                            <span class="sidenav-normal"> Travel Expenses </span>
+                                        </a>
+                                    </li> -->
+                                   
+                                </ul>
+
+                            </div>
+
+                        </li>
                    
                     </ul>
                 </div>
@@ -301,7 +331,7 @@
                                     <ul>
                                         <li class="nav-item">
                                             <a href="{% url 'travel_request_details' %}" class="nav-link {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %} ">
-                                                <span class="sidenav-mini-icon"> CP </span>
+                                                <span class="sidenav-mini-icon"> TR </span>
                                                 <span class="sidenav-normal"> Travel Request </span>
                                             </a>
                                         </li>

@@ -183,6 +183,110 @@ px
     display: table;
 }
 
+.avatar-upload {
+  position: relative;
+  max-width: 205px;
+  margin: 0px auto;
+}
+.avatar-upload .avatar-edit {
+  position: absolute;
+  right: 12px;
+  z-index: 1;
+  top: 10px;
+}
+.avatar-upload .avatar-edit input {
+  display: none;
+}
+.avatar-upload .avatar-edit input + label {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 0;
+  border-radius: 100%;
+  background: #FFFFFF;
+  border: 1px solid transparent;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font-weight: normal;
+  transition: all 0.2s ease-in-out;
+}
+.avatar-upload .avatar-edit input + label:hover {
+  background: #f1f1f1;
+  border-color: #d6d6d6;
+}
+.avatar-upload .avatar-edit input + label:after {
+  content: "\f040";
+  font-family: 'FontAwesome';
+  color: #757575;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+}
+.avatar-upload .avatar-preview {
+  width: 192px;
+  height: 192px;
+  position: relative;
+  border-radius: 100%;
+  border: 3px solid #d4d4d4;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+.avatar-upload .avatar-preview > div {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+ .ZPuserinfo {
+    width: 100%;
+    min-height: 45px;
+    padding: 20px 0 10px;
+    position: relative;
+    z-index: 5;
+    font-family: "LatoWeb";
+}
+
+.ZPuserinfo ul {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.ZPuserinfo ul li:first-child {
+    margin-left: 0;
+}
+
+.ZPuserinfo ul li {
+    color: #1b1b1b;
+    display: inline-block;
+    font-family: "LatoWeb";
+    margin: 0 21.5px;
+    vertical-align: middle;
+    cursor: default;
+}
+
+.username>span {
+    font-size: 12px;
+    color: #1b1b1b;
+    border-radius: 5px;
+    height: 20px;
+    line-height: 21px;
+    min-width: 40px;
+    padding: 0 8px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 13px;
+    vertical-align: baseline;
+}
+
+.ZPuserinfo ul li a {
+    color: #1b1b1b !important;
+}
+
 </style>
 
 {% endblock stylesheets %}
@@ -235,6 +339,35 @@ px
           </div>
 
           <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card">
+                   
+                    <div class="card-body">
+                        <div class="avatar-upload">
+                            <!-- <div class="avatar-edit">
+                                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                <label for="imageUpload"></label>
+                            </div> -->
+                            <div class="avatar-preview">
+                              {% if employee.profile %}
+                                <div id="imagePreview" style="background-image: url({% static '' %}profile_images/{{employee.profile}}) "></div>
+                              {% else %}
+                                <div id="imagePreview" style="background-image: url({% static '' %}profile_images/dummy_profile.png) "></div>
+                              {% endif %}
+                              </div>
+                        </div>
+                        <nav class="ZPuserinfo">
+                            <ul>
+                                <li class="username"><span class="in DNI" id="zp_ss_uava"></span>{{ employee.employee_id }} - {{ employee.first_name }}</li>
+                                <li labelname="Department"><a href="#">{{ employee.role.name }}</a></li>
+                                <li><a href="#">{{ employee.email_id }}</a></li><li id="zp_ss_eloc"></li>
+                            </ul>
+                        </nav>
+                    </div>
+                  </div>
+            </div>
+
           <div class="col-lg-6">
             
             <div class="col-lg-12">
@@ -615,34 +748,14 @@ px
     });
 
      
-var csrftoken = getCookie('csrftoken');
+//var csrftoken = getCookie('csrftoken');
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 
-        $('td.query-main').live('click', function() { //alert();
-  var queryid = $(this).data("queryid");
-  
- 
-});
 
-
-        // $(document).ready(function() {
-        //     $('#datatable').DataTable( {
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'copy', 'csv', 'excel', 'pdf', 'print'
-        //         ],
-        //         language: {
-        //         paginate: {
-        //             previous: "<i class='fas fa-angle-left'>",
-        //             next: "<i class='fas fa-angle-right'>"
-        //         }
-        //     }
-        //     } );
-        // } );
 
 
      

@@ -40,6 +40,11 @@ from django.contrib.auth.hashers import make_password, check_password
 from app.models.leave_type_model import Leave_Type, Leave_Effective, Leave_Applicable, Leave_Restrictions
 from app.models.leave_balance_model import Leave_Balance
 from dateutil import relativedelta
+import os
+from django.conf import settings
+from app.views.restriction_view import admin_only,role_name
+
+
 
 
 @login_required(login_url="/login/")
@@ -114,6 +119,15 @@ def add_employee(request):
             email_id = request.POST.get('email_id')
 
             department = request.POST.get('department')
+
+            current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+            if len(request.FILES) != 0:
+                name = os.path.splitext(str(request.FILES['profile']))[0]
+                extesion = os.path.splitext(str(request.FILES['profile']))[1]
+                handle_uploaded_file(request.FILES['profile'], current_date_time)
+                file_name = name+"-"+current_date_time+""+extesion
+            else:
+                file_name = None
 
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
@@ -214,6 +228,7 @@ def add_employee(request):
 
                                               job_description=job_description, expertise=expertise,
                                               about_me=about_me, date_of_exit=date_of_exit, gender=gender,
+                                              profile = file_name,
 
                                               )
                 # obj.save()
@@ -846,6 +861,16 @@ def add_employee(request):
     return render(request, "employee/add_employee.html",  context_role)
 
 
+def handle_uploaded_file(f, current_date_time):
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+"-"+current_date_time+""+extesion
+    file_upload_dir = os.path.join(settings.MEDIA_ROOT, 'profile_images')
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 def update_employee(request, pk):
    
     employee = Employee.objects.get(employee_id=pk)
@@ -863,6 +888,20 @@ def update_employee(request, pk):
             email_id = request.POST.get('email_id')
 
             department = request.POST.get('department')
+
+            current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+            if len(request.FILES) != 0:
+                name = os.path.splitext(str(request.FILES['profile']))[0]
+                extesion = os.path.splitext(str(request.FILES['profile']))[1]
+                handle_uploaded_file(request.FILES['profile'], current_date_time)
+                file_name = name+"-"+current_date_time+""+extesion
+            else:
+                employee = Employee.objects.get(employee_id = request.user.emp_id)
+                # print(employee.profile)
+                if employee.profile == None:
+                    file_name = None
+                else:
+                    file_name = employee.profile
 
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
@@ -934,37 +973,39 @@ def update_employee(request, pk):
             expertise = request.POST.get('expertise')
             job_description = request.POST.get('job_description')
             # return HttpResponse(pk)
-            obj = Employee.objects.filter(employee_id=pk).update(employee_id=employee_id, first_name=first_name,
-                                                                 last_name=last_name, email_id=email_id, nick_name=nick_name,
-                                                                 department=department,
-                                                                 # reporting_to=reporting_to,
-                                                                 source_of_hire=source_of_hire,
-                                                                 seating_location=seating_location,
-                                                                 location=location,
-                                                                 title=title,
-                                                                 date_of_joining=date_of_joining,
-                                                                 employee_status=employee_status,
-                                                                 employee_type=employee_type,
-                                                                 work_phone=work_phone,
-                                                                 code_name=code_name,
-                                                                 code_num=code_num,
-                                                                 extension=extension,
-                                                                 role=role,
-                                                                 total_experience=total_experience,
-                                                                 experience=experience,
-                                                                 other_email=other_email,
-                                                                 mobile_phone=mobile_phone,
-                                                                 marital_status=marital_status,
-                                                                 birth_date=birth_date,
-                                                                 address=address,
-                                                                 tags=tags,
-                                                                 job_description=job_description,
-                                                                 expertise=expertise,
-                                                                 about_me=about_me,
-                                                                 date_of_exit=date_of_exit,
-                                                                 gender=gender,
+            obj = Employee.objects.filter(employee_id=pk).update(
+                employee_id=employee_id, first_name=first_name,
+                last_name=last_name, email_id=email_id, nick_name=nick_name,
+                department=department,
+                # reporting_to=reporting_to,
+                source_of_hire=source_of_hire,
+                seating_location=seating_location,
+                location=location,
+                title=title,
+                date_of_joining=date_of_joining,
+                employee_status=employee_status,
+                employee_type=employee_type,
+                work_phone=work_phone,
+                code_name=code_name,
+                code_num=code_num,
+                extension=extension,
+                role=role,
+                total_experience=total_experience,
+                experience=experience,
+                other_email=other_email,
+                mobile_phone=mobile_phone,
+                marital_status=marital_status,
+                birth_date=birth_date,
+                address=address,
+                tags=tags,
+                job_description=job_description,
+                expertise=expertise,
+                about_me=about_me,
+                date_of_exit=date_of_exit,
+                gender=gender,
+                profile=file_name,
 
-                                                                 )
+            )
 
             check_reporting = Reporting.objects.filter(
                 employee_id=pk, is_active=1)
@@ -993,8 +1034,14 @@ def update_employee(request, pk):
 
                     obj.save()
 
+            role = role_name(request)
+
             messages.success(request, ' Employee was updated! ')
-            return redirect('employees')
+            
+            if role == 'Admin':
+                return redirect('employees')
+            else:
+                return redirect('profile')
 
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)

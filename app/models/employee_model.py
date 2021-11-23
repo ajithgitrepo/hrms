@@ -71,6 +71,7 @@ class Employee(models.Model):
     #created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
+    profile = models.ImageField(blank = True, null = True)
       
     class Meta:  
         db_table = "employee"  

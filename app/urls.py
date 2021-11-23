@@ -25,6 +25,12 @@ urlpatterns = [
     path('leave_tracker/', views.self_service_view.leave_tracker, name="leave_tracker"),
     path('apply_leave/', views.self_service_view.apply_leave, name="apply_leave"),
     path('leave/<str:leave>/', views.self_service_view.leave, name="leave"),
+    path('self_travel_request/', views.self_service_view.self_travel_request, name="self_travel_request"),
+    path('add_self_travel_request/', views.self_service_view.add_self_travel_request, name="add_self_travel_request"),
+    path('delete_travel_request/<str:pk>/', views.self_service_view.delete_travel_request, name="delete_travel_request"),
+    path('self_travel_expense/', views.self_service_view.self_travel_expense, name="self_travel_expense"),
+    # path('add_self_travel_expense/', views.self_service_view.add_self_travel_expense, name="add_self_travel_expense"),
+    # path('delete_travel_expense/<str:pk>/', views.self_service_view.delete_travel_expense, name="delete_travel_expense"),
 
     # Employee 
     path('employees/', views.employee_view.employees, name="employees"),
@@ -129,7 +135,7 @@ urlpatterns = [
     # Travel Request
     path('travel_request_details/', views.travel_request_view.travel_request_details, name="travel_request_details"),
     path('add_travel_request_details', views.travel_request_view.add_travel_request_details, name="add_travel_request_details"),
-    path('delete_asset_details/<str:pk>/', views.asset_deatails_view.delete_asset_details, name="delete_asset_details"),
+    path('delete_asset_details/<str:pk>/', views.travel_request_view.delete_asset_details, name="delete_asset_details"),
     path('snippets_travel_details_employee_all_info', views.travel_request_view.snippets_travel_details_employee_all_info, name="snippets_travel_details_employee_all_info"),
     
     # Compensatory Request
