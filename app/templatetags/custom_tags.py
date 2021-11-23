@@ -22,3 +22,9 @@ def print_timestamp(timestamp):
     return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts))
 
 register.filter(print_timestamp)
+
+@register.simple_tag(takes_context=True)
+def profile_pic(context):
+    request = context['request']
+    profile = Employee.objects.filter(role__is_active ='1',  employee_id= request.user.emp_id)
+    return profile[0].profile

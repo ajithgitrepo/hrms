@@ -107,6 +107,9 @@ def index(request):
     upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1, date__gt= datetime.datetime.now())[:5]
     # print(upcoming_holidays)
 
+    leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
+    # print(leave_today[0].employee.department.name)
+
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     now = datetime.datetime.now()
@@ -138,6 +141,7 @@ def index(request):
         'upcoming_holidays':upcoming_holidays,
         'weekend':weekend,
         'leaves':leaves,
+        'leave_today':leave_today,
 
     }
 

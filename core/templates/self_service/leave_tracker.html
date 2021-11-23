@@ -255,6 +255,7 @@ hr {
                   <th>#</th>
                   <th>From Date</th>
                   <th>To Date</th>
+                  <th>Total Days</th>
                   <th>Leave Type</th>
                   <th>Description</th>
                   <th>Status</th>
@@ -268,10 +269,11 @@ hr {
                    
                     <td>{{ requests.from_date }}</td>
                     <td>{{ requests.to_date }}</td>
+                    <td>{{ requests.total_days }}</td>
                     <td>{{ requests.leave_type.name }}</td>
                     <td>{{ requests.reason }}</td>
                     {% if requests.is_approved == 1 %}
-                        <td style="color: darkgreen;">Approved</td>
+                        <td style="color: rgb(42, 206, 42);">Approved</td>
                     {% else %}
                         <td style="color:darkorange">Pending</td>
                     {% endif %}

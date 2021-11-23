@@ -111,6 +111,7 @@
     <div class="container-fluid mt--6">
       
       <div class="card-deck flex-column flex-xl-row">
+
        
         {% if role == "Admin" %}
         <div class="card">
@@ -132,7 +133,7 @@
                         </div>
                         <div class="col-lg-10" style="margin-bottom: 10px;">
                             <span class="CP"><span>{{ data.employee_id}} &nbsp;-&nbsp;</span><b>{{ data.first_name}} {{ data.last_name}}</b> </span><br>
-                            <small>{{ data.role.name}}&nbsp;-&nbsp;{{ data.department.name}}</small> 
+                            <small>{{ data.department.name}}&nbsp;-&nbsp;{{ data.role.name}}</small> 
                             <div class="usr_cl">
                                 <small><i class="fas fa-mobile"></i>&nbsp; {{ data.work_phone}}</small> 
                             </div> 
@@ -174,7 +175,7 @@
                   </div>
                   <div class="col-lg-10" style="margin-bottom: 10px;">
                       <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
-                      <small>{{ new.role.name}}&nbsp;-&nbsp;{{ new.department.name}}</small> 
+                      <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
                       <div class="usr_cl">
                           <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
                       </div> 
@@ -492,9 +493,33 @@
             </div>
           </div>
           <div class="card-body">
-            <!-- Chart -->
-            <div class="chart text-center">
-              <span class="">Under Development</span>
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for today in leave_today %}
+                  <div class="col-lg-2">
+
+                    {% if today.employee.profile %}
+                      <img src="{% static '' %}profile_images/{{ today.employee.profile}}" width="50" class="Usrimg"> 
+                    {% else %}
+                      <img src="{% static '' %}profile_images/admin.png" width="50" class="Usrimg"> 
+                    {% endif %}
+
+                  </div>
+                  <div class="col-lg-10" style="margin-bottom: 10px;">
+                      <span class="CP"><span>{{ today.employee_id}} &nbsp;-&nbsp;</span><b>{{ today.employee.first_name}} {{ today.employee.last_name}}</b> </span><br>
+                      <small>{{ today.employee.department.name}}&nbsp;-&nbsp;{{ today.employee.role.name}}</small> 
+                      <div class="usr_cl">
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ today.employee.mobile_number}}</small> 
+                      </div> 
+                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                  </div>
+                  {% empty %}
+                  <div style="margin: auto; text-align: center;margin-top: 100px;">
+                    <i class="fas fa-calendar-times fa-5x"></i> <br>
+                      <span>No records found.</span>
+                  </div>
+                {% endfor %}
+            </div>
             </div>
           </div>
         </div>
