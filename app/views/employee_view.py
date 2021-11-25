@@ -399,7 +399,7 @@ def add_employee(request):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(is_active='1', leave_type_id=leave_id):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender1) | Q(gender=None) , is_active='1', leave_type_id=leave_id ):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -657,7 +657,8 @@ def add_employee(request):
                                     reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                     reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                     reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                    for each_applic in Leave_Applicable.objects.filter(is_active='1', leave_type_id=leave_id):
+
+                                    for each_applic in Leave_Applicable.objects.filter(Q(gender=gender1) | Q(gender=None), is_active='1', leave_type_id=leave_id):
                                         exception_dept = each_applic.exception_dept
                                         exception_desgn = each_applic.exception_desgn
                                         exception_location = each_applic.exception_location
@@ -1065,6 +1066,10 @@ def update_employee(request, pk):
                         date_of_joing = each.date_of_joining
                         # return HttpResponse(date_of_joing)
                         gender = each.gender
+                        # print(gender)
+                        if not gender:
+                            messages.error(request,'Please Update your gender! ')
+                            return redirect('profile')
                         marital_status = each.marital_status
                         department = each.department
                         # designation = each.designation
@@ -1109,7 +1114,7 @@ def update_employee(request, pk):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(is_active='1', leave_type_id=leave_id):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -1298,7 +1303,7 @@ def update_employee(request, pk):
                                     )
                                     balance_leave.save()
 
-                    messages.success(request, first_name + ' Employee was created! ')
+                    messages.success(request, first_name + ' Employee profile was updated! ')
                     if role == 'Admin':
                         return redirect('employees')
                     else:
