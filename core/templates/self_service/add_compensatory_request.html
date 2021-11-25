@@ -116,43 +116,6 @@ button#button-addon2 {
         </div>
         <div class="col-xl-12 order-xl-1">
         
-
-          {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'success'%}
-
-               
-                    <script type=text/javascript>
-                     toastr.options = {
-                  "closeButton": true,
-                  "debug": false,
-                  "newestOnTop": true,
-                  "progressBar": true,
-                  "positionClass": "toast-top-right",
-                  "preventDuplicates": true,
-                  "onclick": null,
-                  "showDuration": "300",
-                  "hideDuration": "1000",
-                  "timeOut": "5000",
-                  "extendedTimeOut": "1000",
-                  "showEasing": "swing",
-                  "hideEasing": "linear",
-                  "showMethod": "fadeIn",
-                  "hideMethod": "fadeOut"
-                }
-                    
-                    toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'info' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'warning' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'error' %}
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-
           <div class="card">
             <div class="card-header">
               <div class="row align-items-center">
@@ -172,29 +135,9 @@ button#button-addon2 {
                 <!-- <h6 class="heading-small text-muted mb-4">Add Exit Details</h6> -->
                 <div class="pl-lg-4">
                   <div class="row">
-                    <!--<div class="col-lg-4">
-                      <div class="form-group">
-                            <span>{{ request.message }}</span>
-                           
-                        <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
-                        <input type="text" name="employee_id" value="{{ form.data.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
-                     
-                        {{ form.employee_id.errors }}
-                      </div>
-                    </div>-->
-                    
-                    <div class="col-lg-4"> 
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-username">Employee Name</label>
-                          <select data-toggle="select"  class="form-control" value="{{ form.data.employee }}" name="employee">
-                              <option value="">select</option>
-                              {% for emp in employees %}
-                                  <option value="{{ emp.employee_id  }}" {% if emp.employee_id == form.data.employee %} selected{% endif %}>  {{ emp.first_name }} {{ emp.last_name }}  ({{ emp.employee_id }})</option>
-                              {% endfor %} 
-                        </select>
-                        {{ form.errors.employee  }}
-                        </div>
-                      </div>
+                
+                          <input type="hidden" name="employee" id="employee" value="{{ request.user.emp_id }}" ></input>
+                      
 
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
@@ -227,15 +170,14 @@ button#button-addon2 {
                                      {{ form.errors.unit }}
                               </td>
   
-                                  
+                                 
                                   </tr>
                                 </tbody>
                               </table>
+                         
                      
                         </div>
                       </div>
-
-                      
 
                       <div class="col-lg-4">
                         <div class="form-group">
@@ -251,6 +193,7 @@ button#button-addon2 {
                         </div>
                       </div> 
 
+                      
                       <div class="col-lg-4">
                         <div class="form-group">
                           <label class="form-control-label" for="input-country">Worked From Time</label>
@@ -264,60 +207,54 @@ button#button-addon2 {
                        
                         </div>
                       </div>
+
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Worked To Time</label>
+                            <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
+                              <input type="text"   class="form-control" name="to_time"  value="{{ form.data.to_time }}">
+                              <span class="input-group-addon input-group-append">
+                                    <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                                  </span>
+                                  <!-- {{ form.errors.to_time }} -->
+                              <!-- <span class="input-group-addon">
+                                  <span class="fa fa-clock-o"></span>
+                              </span> -->
+                            </div>
+                            <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
+                           
+                       
+                        </div>
+                      </div>
                     
                    
                   </div>
                   
                   <div class="row">
                      
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label class="form-control-label" for="input-country">Worked To Time</label>
-                                  <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
-                                    <input type="text"   class="form-control" name="to_time"  value="{{ form.data.to_time }}">
-                                    <span class="input-group-addon input-group-append">
-                                          <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
-                                        </span>
-                                        <!-- {{ form.errors.to_time }} -->
-                                    <!-- <span class="input-group-addon">
-                                        <span class="fa fa-clock-o"></span>
-                                    </span> -->
-                                  </div>
-                                  <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
-                                 
-                             
-                              </div>
-                            </div>
 
-                            <div class="col-lg-4"> 
-                              <div class="form-group"> 
-                                <label class="form-control-label" for="input-email">Expiry Date</label>
-                                <input type="text"   name="expiry_date" value="{{ form.data.expiry_date }}"  class="form-control startdate" placeholder="" >
+                            <div class="col-lg-8"> 
+                                <div class="form-group">
+                                  <label class="form-control-label" for="input-country">Reason</label>
+                                  <textarea  name="reason" value="{{ form.data.reason }}" class="form-control" placeholder="" ></textarea>
+                                </div>
+                              </div>
                              
-                              </div>
-                            </div> 
 
-                          <div class="col-lg-4"> 
-                              <div class="form-group">
-                                <label class="form-control-label" for="input-country">Reason</label>
-                                <textarea  name="reason" value="{{ form.data.reason }}" class="form-control" placeholder="" ></textarea>
-                              </div>
-                            </div>
-                           
-      
+          
                   </div>
 
 
                 </div>
 
-         
+                
             </div>
 
             <div class="card-footer">
 
                 <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
                
-                <a  href="{% url 'compensatory_request_details' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                <a  href="{% url 'compensatory_request' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
 
             </div>
 
@@ -449,28 +386,9 @@ function DisplayCurrentTime() {
   return "";
 };
 
-//       $('#datetimepicker1').datetimepicker({
-//            // datepicker:false,
-//             // format:'H:i'
-//         icons: {
-//             dateFormat: '', 
-// timeFormat: 'hh:mm tt', 
-// timeOnly: true ,    
-//           time: "fa fa-clock",
-//           date: "fa fa-calendar-day",
-//           up: "fa fa-chevron-up",
-//           down: "fa fa-chevron-down",
-//           previous: 'fa fa-chevron-left',
-//           next: 'fa fa-chevron-right',
-//           today: 'fa fa-screenshot',
-//           clear: 'fa fa-trash',
-//           close: 'fa fa-remove'
-//         }
-//       });
-       
      
 
-    });
+});
 
 $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
         todayBtn: "linked",

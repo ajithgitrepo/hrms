@@ -17,7 +17,7 @@ class CompensatoryRequest_DetailForm(forms.ModelForm):
         model = Compoensatory_Request_Detail  
        # fields = "__all__",   "mobile_number",  "employee",
      
-        fields = [  "worked_date",  "duration", "unit", "employee", ] #  "from_time",   "to_time",   ] #"role", "department") #"date_of_joining")
+        fields = [  "worked_date", "compoensatory_date", "duration", "unit", "employee", ] #  "from_time",   "to_time",   ] #"role", "department") #"date_of_joining")
         readonly_fields = ['created', 'updated_at', 'is_active' ]
 
 # "duration",  "expiry_date", "reason",
@@ -28,6 +28,11 @@ class CompensatoryRequest_DetailForm(forms.ModelForm):
         self.fields['worked_date'].widget.attrs['required'] = 'required'
         self.fields['worked_date'].error_messages = {'required': 'Worked Date is required'}
         self.fields['worked_date'].input_formats = [ '%d-%m-%Y' ]
+
+        self.fields['compoensatory_date'].required = True
+        self.fields['compoensatory_date'].widget.attrs['required'] = 'required'
+        self.fields['compoensatory_date'].error_messages = {'required': 'Compoensatory Date is required'}
+        self.fields['compoensatory_date'].input_formats = [ '%d-%m-%Y' ]
       
         self.fields['unit'].required = True
         self.fields['unit'].widget.attrs['required'] = 'required'

@@ -516,7 +516,18 @@ def show_cal_view(request):
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3dce4cd9',                                                           
-            })   
+            }) 
+        elif attn.is_present == 2:
+            out.append({                                                                                                     
+                'title': 'Comp Off',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3d81ced9',                                                           
+            }) 
+
         else:
             out.append({                                                                                                     
                 'title': 'Absent',                                                                                         
@@ -631,7 +642,17 @@ def search_attn_time(request):
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#2fb136',                                                           
-            })   
+            })  
+        elif attn.is_present == 2:
+            out.append({                                                                                                     
+                'title': 'Comp Off',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3d81ced9',                                                           
+            })  
         else:
             out.append({                                                                                                     
                 'title': 'Absent',                                                                                         
@@ -709,6 +730,16 @@ def search_attn_date(request):
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#2fb136',                                                           
             })   
+        elif attn.is_present == 2:
+            out.append({                                                                                                     
+                'title': 'Comp Off',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3d81ced9',                                                           
+            })  
         else:
             out.append({                                                                                                     
                 'title': 'Absent',                                                                                         

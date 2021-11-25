@@ -5,15 +5,9 @@ from app.views.restriction_view import admin_only,role_name
 
 urlpatterns = [
    
-    #path('leave_request/', views.leave_request, name="leave_request"),
-    # The home page
+    #Home page
     path('', views.dashborad_view.index, name='home'),
-    
-    #path('roles', views.roles, name="roles"),
-    
-    #path('leave_request/', views.leave_request, name="leave_request"),
-    
-    
+  
     #Self Service
     path('profile/', views.self_service_view.profile, name="profile"),
     path('attendance/', views.self_service_view.attendance, name="attendance"),
@@ -29,6 +23,8 @@ urlpatterns = [
     path('add_self_travel_request/', views.self_service_view.add_self_travel_request, name="add_self_travel_request"),
     path('delete_travel_request/<str:pk>/', views.self_service_view.delete_travel_request, name="delete_travel_request"),
     path('self_travel_expense/', views.self_service_view.self_travel_expense, name="self_travel_expense"),
+    path('compensatory_request/', views.self_service_view.compensatory_request, name="compensatory_request"),
+    path('add_compensatory_request/', views.self_service_view.add_compensatory_request, name="add_compensatory_request"),
     # path('add_self_travel_expense/', views.self_service_view.add_self_travel_expense, name="add_self_travel_expense"),
     # path('delete_travel_expense/<str:pk>/', views.self_service_view.delete_travel_expense, name="delete_travel_expense"),
 
@@ -143,6 +139,7 @@ urlpatterns = [
     path('add_compensatory_request_details/', views.compensatory_request_view.add_compensatory_request_details, name="add_compensatory_request_details"),
     path('delete_compensatory_details/<str:pk>/', views.compensatory_request_view.delete_compensatory_details, name="delete_compensatory_details"),
     path('snippets_compensatory_details_employee_all_info', views.compensatory_request_view.snippets_compensatory_details_employee_all_info, name="snippets_compensatory_details_employee_all_info"),
+    path('compensatory_request_status/', views.compensatory_request_view.compensatory_request_status, name="compensatory_request_status"),
 
     # Asset Details
     path('asset_details/', views.asset_deatails_view.asset_details, name="asset_details"),
@@ -185,14 +182,8 @@ urlpatterns = [
     path('delete_weekend/<str:pk>/', views.weekend_view.delete_weekend, name="delete_weekend"),
 
 
-   # path('emp', views.emp, name='emp'),
-   # re_path(r'^.*\.*', views.emp, name='emp'),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
-    #re_path(r'^.*\.*', views.emp, name='emp'),
-    #re_path(r'^.*\.*', views.emp, name='pages'),
-   
-    #path("emp/", views.emp, name='emp') 
 
 ]

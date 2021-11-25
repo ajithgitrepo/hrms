@@ -276,6 +276,15 @@
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                     {% endif %}
 
+                                    {% if attn.is_present == 2 %}
+                                        <td width="145">{{ attn.checkin_time }}</td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr comp-bg"><span>Comp Off</span></div>
+                                        </td>
+                                        <td width="145">{{ attn.checkout_time }}</td>
+                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                    {% endif %}
+
                                     {% if attn.is_leave == 1 %}
                                         <td width="145"></td>
                                         <td colspan="1" class="text-center">

@@ -34,9 +34,11 @@ from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
 from app.models.leave_balance_model import Leave_Balance
 from app.forms.TarvelRequest_DetailsForm import TarvelRequest_DetailForm
+from app.forms.CompensatoryRequest_DetailsForm import CompensatoryRequest_DetailForm
 from app.models.travel_request_model import Travel_Request_Detail
 from django.views import generic
 from app.models.employee_files_model import Employee_Files
+from app.models.compensatory_request_model import Compoensatory_Request_Detail
 from app.models.leave_type_model import *
 from app.models.leave_request_model import *
 import os
@@ -581,3 +583,68 @@ def self_travel_expense(request):
     requests = Travel_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
     context = {'requests':requests}
     return render(request, "self_service/self_travel_request.html", context)
+
+
+def compensatory_request(request):
+    data = Compoensatory_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
+    # print(employee)
+    context = {'employees':data}
+    return render(request, "self_service/compensatory_request.html", context)
+
+def add_compensatory_request(request):
+    form = CompensatoryRequest_DetailForm()
+    if request.method == 'POST':
+        form = CompensatoryRequest_DetailForm(request.POST)
+        if  form.is_valid(): 
+            # return HttpResponse('working.') 
+            employee = request.POST.get('employee')
+            unit = request.POST.get('unit')
+            duration = request.POST.get('duration')
+            
+            compoensatory_date = request.POST.get('compoensatory_date')
+            if compoensatory_date != "":
+               d = datetime.strptime(compoensatory_date, '%d-%m-%Y')
+               compoensatory_date = d.strftime('%Y-%m-%d')
+            else:
+               compoensatory_date = None  
+
+            worked_date = request.POST.get('worked_date')
+            if worked_date != "":
+               d = datetime.strptime(worked_date, '%d-%m-%Y')
+               worked_date = d.strftime('%Y-%m-%d')
+            else:
+               worked_date = None  
+
+            ftime = request.POST.get('clockpicker_one')
+            from_time = datetime.strptime(ftime, '%H:%M:%S')
+            ttime = request.POST.get('clockpicker_two')
+            to_time = datetime.strptime(ttime, '%H:%M:%S')
+            reason = request.POST.get('reason')
+
+            created_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
+            updated_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
+
+            obj = Compoensatory_Request_Detail.objects.create( 
+
+                employee_id=employee, 
+                worked_date=worked_date,
+                compoensatory_date=compoensatory_date,
+                unit=unit,
+                duration=duration,
+                from_time=from_time,
+                to_time=to_time,
+                reason=reason,
+                created_at=created_at, 
+                updated_at=updated_at, 
+                is_active=1,
+
+            ) 
+            obj.save()
+            messages.success(request, 'Compensatory request was requested ! ')
+            return redirect('compensatory_request') 
+
+    context = {
+          'form': form,
+    }
+
+    return render(request, "self_service/add_compensatory_request.html", context)

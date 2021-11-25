@@ -72,9 +72,10 @@ def index(request):
     # print(check_in_time[0].checkin_time) 
     # t1 = request.session['checkin_session']
     if check_in_time:
-        t1 = check_in_time[0].checkin_time.strftime('%H:%M:%S')
+        if check_in_time[0].checkin_time:
+            t1 = check_in_time[0].checkin_time.strftime('%H:%M:%S')
 
-        if(check_in_time[0].checkout_time):
+        if check_in_time[0].checkout_time:
             if 'checkin_session' in request.session:
                 t2 = datetime.datetime.now().strftime('%H:%M:%S')
             else:
@@ -136,7 +137,7 @@ def index(request):
         'announcements':announcements,
         'week_atten':week_atten,
         'weekdays':zipped_data,
-        # 'dates':dates,
+        #'dates':dates,
         'holidays':holidays,
         'upcoming_holidays':upcoming_holidays,
         'weekend':weekend,

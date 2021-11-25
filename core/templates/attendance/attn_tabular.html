@@ -287,6 +287,19 @@
                                         </td>
                                         {% endif %}
 
+                                        {% if attn.is_present == 2 %}
+                                        <td>{{ attn.checkin_time }}</td>
+                                        <td>{{ attn.checkout_time }}</td>
+                                        <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                        <td>
+                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                <div class="RTC1 comp-bg">
+
+                                                </div>Comp Off
+                                            </span>
+                                        </td>
+                                        {% endif %}
+
                                         {% if attn.is_leave == 1 %}
                                         <td>-</td>
                                         <td>-</td>
