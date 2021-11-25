@@ -337,18 +337,16 @@ def add_asset(request):
    
 
 def leave_tracker(request):
-
+    doj = Employee.objects.get(employee_id = request.user.emp_id)
+    # print(doj.date_of_joining)
     leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
-    # print(leaves[0].leave_type.name)
+    # print(leaves)
 
     requested = LeaveRequest.objects.filter(to_date__gte=datetime.now(), employee_id=request.user.emp_id)
     # print(requested)
 
     all_requestes = LeaveRequest.objects.filter(leave_type__is_active = 1, employee_id=request.user.emp_id).order_by('-created_at')
     # print(all_requestes)
-
-
-
 
     obj = []
     ids = []
@@ -378,6 +376,7 @@ def leave_tracker(request):
         'leaves': leaves,
         'requested': requested,
         'all_requestes': all_requestes,
+        'doj':doj,
     }
 
     return render(request, "self_service/leave_tracker.html",  context )

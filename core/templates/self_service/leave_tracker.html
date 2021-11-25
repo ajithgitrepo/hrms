@@ -171,13 +171,16 @@ hr {
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
+            {% if doj.date_of_joining %}
              <a href="{% url 'apply_leave' %}" class="btn btn-sm btn-neutral">Apply Leave</a>
+             {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  {% if doj.date_of_joining %}
  <!-- Page content -->
  <div class="container-fluid mt--6">
       
@@ -231,10 +234,12 @@ hr {
       {% endfor %}
 
     </div>
-
-  
   </div>
 
+  {% endif %}
+
+
+  {% if doj.date_of_joining %}
   <div class="container-fluid">
     <!-- Table -->
     <div class="row">
@@ -244,9 +249,7 @@ hr {
           <!-- Card header -->
           <div class="card-header">
             <h3 class="mb-0">All Leave Requests</h3>
-            <!-- <p class="text-sm mb-0">
-              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
-            </p> --> 
+         
           </div>
           <div class="table-responsive py-4">
             <table class="table table-flush" id="example">
@@ -292,7 +295,24 @@ hr {
         </div>
       </div>
     </div>
+  </div>
+  {% else %}
+  <div class="container-fluid">
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          
+          <div class="card-body text-center">
+            <i class="far fa-calendar-alt fa-5x p-5"></i>
+            <p class="MB0">Update the <a href="{% url 'update_employee' request.user.emp_id %}">Date of Joining</a> for this employee to display their leave information and enable them to perform leave related actions.</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  {% endif %}
 
    
    
