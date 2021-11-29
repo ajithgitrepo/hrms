@@ -109,7 +109,7 @@ def index(request):
     # print(upcoming_holidays)
 
     leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
-    # print(leave_today[0].employee.department.name)
+    print(leave_today[0].employee.mobile_number)
 
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 

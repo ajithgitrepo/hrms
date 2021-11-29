@@ -479,7 +479,14 @@ px
                         <div class="zpC_body ">
                             <div class="zp_lst_wrpr">
                                 <div class="zplt_lbl ">Reporting Manager</div>
-                                <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">
+                                  {% if reporting %}
+                                    {{ reporting.first.reporting.first_name }} {{ reporting.first.reporting.last_name }} 
+                                 
+                                  {% else %}
+                                    -
+                                  {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

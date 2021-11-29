@@ -14,7 +14,7 @@ from app.models.leave_type_model import *
 class LeaveRequest(models.Model):  
    
     id = models.AutoField(primary_key=True)
-    employee = models.ForeignKey(Employee, blank=False, null=True, related_name='employee_id_leave_request', on_delete= models.SET_NULL)
+    employee_id = models.ForeignKey(Employee, blank=False, null=True, related_name='employee_id_leave_request', on_delete= models.SET_NULL)
     leave_type = models.ForeignKey(Leave_Type, blank=False, null=True, related_name='leave_type_id_request', on_delete= models.SET_NULL)
     from_date = models.DateField(blank = False, null = False)  
     to_date = models.DateField(blank = False, null = False)  
@@ -32,8 +32,7 @@ class LeaveRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now_add = True,blank = True, null = True)
     is_active = models.PositiveSmallIntegerField(default=1)
-    device = models.CharField(max_length=20, blank = True, null = True) 
-    document_url = models.FileField(max_length=500, blank = True, null = True) 
+    device = models.CharField(max_length=20, blank = True, null = True)  
 
       
     class Meta:  

@@ -14,6 +14,5 @@ class Apply_Leave_Form(forms.ModelForm):
    
     class Meta:  
         model = LeaveRequest  
-        fields =("leave_type","from_date","to_date",)
-        #"leave_type","from_date","to_date",) 
+        fields =("employee_id","leave_type","from_date","to_date",) 
 

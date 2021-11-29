@@ -7,6 +7,8 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
+{% load custom_tags %}
+
 <style>
 
   .table-responsive {
@@ -179,8 +181,9 @@
  
 {% block content %}
 
+{% role_name as role %}
+
   <!-- Page plugins -->
- 
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -198,8 +201,9 @@
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            <a href="{% url 'add_announcements' %}" class="btn btn-sm btn-neutral">Add</a> 
-            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+            {% if role == "Admin" %} 
+              <a href="{% url 'add_announcements' %}" class="btn btn-sm btn-neutral">Add</a> 
+            {% endif %}
           </div>
         </div>
       </div>
@@ -247,12 +251,13 @@
                         </div>
                     </div>
 
+                    {% if role == "Admin" %} 
                     <div class="card-body">
                         <a href="{% url 'delete_announcement' data.pk %}" class="btn btn-danger confirm-delete fas table-action-delete" data-toggle="tooltip" data-original-title="Delete Announcement">
                             Delete
                         </a>
                     </div>
-
+                    {% endif %}
                    
 
                 {% endfor %}

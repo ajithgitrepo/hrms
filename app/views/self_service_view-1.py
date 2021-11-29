@@ -16,6 +16,7 @@ from app.forms.Asset_DetailsForm import Asset_DetailForm
 from app.forms.ApplyLeaveForm import Apply_Leave_Form
 from django.conf import settings
 from app.models.holiday_details_model import Holiday_Detail
+from app.models.reporting_to_model import Reporting
 from app.models.weekend_model import Weekend
 from django.conf.urls import url
 from pprint import pprint
@@ -33,27 +34,32 @@ from django.utils import timezone
 from app.forms.EmployeeFilesForm import Employee_Files_Form
 from app.models.folder_model import Folder
 from app.models.leave_balance_model import Leave_Balance
+from app.forms.TarvelRequest_DetailsForm import TarvelRequest_DetailForm
+from app.forms.CompensatoryRequest_DetailsForm import CompensatoryRequest_DetailForm
+from app.models.travel_request_model import Travel_Request_Detail
 from django.views import generic
 from app.models.employee_files_model import Employee_Files
+from app.models.compensatory_request_model import Compoensatory_Request_Detail
 from app.models.leave_type_model import *
 from app.models.leave_request_model import *
 import os
 from django.db.models import Avg, Count, Min, Sum, Case, When, F
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-from app.models.compensatory_request_model import Compoensatory_Request_Detail
-from app.forms.CompensatoryRequest_DetailsForm import CompensatoryRequest_DetailForm
-from app.forms.TarvelRequest_DetailsForm import TarvelRequest_DetailForm
-from app.models.travel_request_model import Travel_Request_Detail
+
+from app.views.employee_view import employees
 
 
 @login_required(login_url="/login/")
 def profile(request):
 
-    employee = Employee.objects.select_related().get(
-        is_active='1', employee_id=request.user.emp_id)
+    employee = Employee.objects.select_related().get(is_active='1', employee_id=request.user.emp_id)
     # print(employee.department.name)
-    context = {'employee': employee}
+    reporting_to = Reporting.objects.filter(is_active=1, reporting_id__is_active = 1, employee_id=request.user.emp_id)
+    # print(reporting_to.reporting.first_name)
+
+    context = {
+        'employee': employee,
+        'reporting': reporting_to,
+    }
 
     return render(request, "self_service/profile.html", context)
 
@@ -208,6 +214,7 @@ def add_files(request):
 
     form = Employee_Files_Form()
 
+
     if request.method == 'POST':
         form = Employee_Files_Form(request.POST, request.FILES)
 
@@ -336,18 +343,16 @@ def add_asset(request):
    
 
 def leave_tracker(request):
-
+    doj = Employee.objects.get(employee_id = request.user.emp_id)
+    # print(doj.date_of_joining)
     leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
-    # print(leaves[0].leave_type.name)
+    # print(leaves)
 
     requested = LeaveRequest.objects.filter(to_date__gte=datetime.now(), employee_id=request.user.emp_id)
     # print(requested)
 
     all_requestes = LeaveRequest.objects.filter(leave_type__is_active = 1, employee_id=request.user.emp_id).order_by('-created_at')
     # print(all_requestes)
-
-
-
 
     obj = []
     ids = []
@@ -377,6 +382,7 @@ def leave_tracker(request):
         'leaves': leaves,
         'requested': requested,
         'all_requestes': all_requestes,
+        'doj':doj,
     }
 
     return render(request, "self_service/leave_tracker.html",  context )
@@ -384,167 +390,55 @@ def leave_tracker(request):
 
 def apply_leave(request):
     form = Apply_Leave_Form()
+    if request.method == 'POST':
+       
+        form = Apply_Leave_Form(request.POST)
+        if  form.is_valid():
+            emp_id = request.POST.get('employee_id')
+            leave = request.POST.get('leave_type')
+            from_date = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y')
+            to_date = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y')
+            reason = request.POST.get('reason')
+            created_at = timezone.now()
+            updated_at = timezone.now()
+
+            start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
+            end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
+            diff = abs((end_date-start_date).days)+1
+            # print(diff)
+
+            delta = end_date - start_date       # as timedelta
+
+            obj = LeaveRequest.objects.create( 
+                employee_id=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
+                leave_type=Leave_Type.objects.get(id = leave) if leave else None,
+                from_date=from_date.strftime('%Y-%m-%d'),
+                to_date=to_date.strftime('%Y-%m-%d'),
+                total_days = diff,
+                reason=reason,
+                created_at=created_at,
+                updated_at=updated_at, 
+                is_active=1,
+                added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
+                device = 'web',
+
+            ) 
+            obj.save()
+
+            for i in range(delta.days + 1):
+                day = start_date + timedelta(days=i)
+                # print(datetime.strftime(day, "%d-%m-%Y"))  
+                insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1 )
+
+            messages.success(request, 'Leave Requested Successfully ! ')
+            return redirect('leave_tracker') 
+
+
     employee = Employee.objects.get(is_active = 1, employee_id = request.user.emp_id)
     
     leaves = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 1).exclude(exception_dept = employee.department_id, exception_role = employee.role_id, exception_location = employee.location )
     
     leave_condition = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 0, gender = employee.gender, marital_status = employee.marital_status, department = employee.department_id, role = employee.role_id, location = employee.location, employment_type = employee.employee_type )
-   
-    if request.method == 'POST':
-       
-        form = Apply_Leave_Form(request.POST)
-        #return HttpResponse('ve')
-        if form.is_valid():
-           #return HttpResponse('ve')   
-           leave = request.POST.get('leave_type')
-           #return HttpResponse(leave)
-           for each in Leave_Type.objects.filter(is_active='1'):
-                leave_type = each.type
-                leave_name = each.name
-                leave_unit = each.unit
-                leave_id = each.id
-                for each_restrict in Leave_Restrictions.objects.filter(is_active='1', leave_type_id=leave):
-                    weekend_bw_leave = each_restrict.weekend_bw_leave
-                    weekend_bw_leave_days = each_restrict.weekend_bw_leave_days
-                    holydays_bw_leave = each_restrict.holydays_bw_leave
-                    holydays_bw_leave_days = each_restrict.holydays_bw_leave_days
-                    exceeds_leave_balance = each_restrict.exceeds_leave_balance
-                    duration = each_restrict.duration
-                    allow_users_to_view = each_restrict.allow_users_to_view
-                    balance_to_display = each_restrict.balance_to_display
-                    minimum_leave_apply = each_restrict.minimum_leave_apply #
-                    maximum_leave_apply = each_restrict.maximum_leave_apply #
-                    maximum_consecutive_leave_apply = each_restrict.maximum_consecutive_leave_apply #
-                    minimum_gap_apply = each_restrict.minimum_gap_apply #
-                    leave_cannot_taken_with = each_restrict.leave_cannot_taken_with #
-                    leave_only_on = each_restrict.leave_only_on
-                    leave_request_apply_check = each_restrict.leave_request_apply_check
-                    leave_request_apply_count = each_restrict.leave_request_apply_count
-                    leave_request_future_days = each_restrict.leave_request_future_days
-                    leave_request_next_check = each_restrict.leave_request_next_check
-                    leave_request_next_count = each_restrict.leave_request_next_count
-                    leave_request_past_days = each_restrict.leave_request_past_days
-                    maximum_application_period = each_restrict.maximum_application_period
-                    past_days_check = each_restrict.past_days_check
-                    past_days_count = each_restrict.past_days_count
-                    file_upload_after = each_restrict.file_upload_after
-
-                    emp_id = request.POST.get('employee_id')
-                    
-                    from_date = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y')
-                    to_date = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y')
-                    reason = request.POST.get('reason')
-                    created_at = timezone.now()
-                    updated_at = timezone.now()
-
-                    start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
-                    end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
-                    diff = abs((end_date-start_date).days)+1
-                    #total_days = diff
-
-                    delta = end_date - start_date
-                    total_days = delta.days + 1
-
-
-                    # return HttpResponse(total_days)
-                   
-                    message = "";
-                    if (str(total_days) < str(minimum_leave_apply))   and (minimum_leave_apply != None):
-                         # if total_days != 0:
-                           message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
-                          #return HttpResponse(message)
-                    elif (message == "") and (maximum_leave_apply != None):
-                         if(int(total_days) >  int(maximum_leave_apply)):
-                          message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
-                    elif (message == "") and (maximum_consecutive_leave_apply != None):
-                         if(int(total_days) > int(maximum_consecutive_leave_apply)):
-                          message = "Maximum " + maximum_consecutive_leave_apply  + "  number of consecutive days of Leave allowed";
-                    elif  minimum_gap_apply != None:
-                        applic = "ok"
-                           # return HttpResponse(minimum_gap_apply)
-                        
-                        last_applied =  LeaveRequest.objects.filter(employee_id=emp_id).order_by('from_date').reverse()
-                        # return HttpResponse(last_applied[0].from_date)
-                        last_leave_d = 0
-                        if last_applied != None and  len(last_applied) > 0:
-                            last_applied_leave_date = last_applied[0].from_date
-                            
-                            date_format = "%Y-%m-%d"
-                            last_leave_d = (str(last_applied_leave_date))
-                            #return HttpResponse(datetime_object)
-                        
-                            datetime_object = datetime.strptime(last_leave_d, '%Y-%m-%d').date()
-                            from_date1 = from_date.strftime('%Y-%m-%d')
-                            datetime_object1 = datetime.strptime(from_date1, '%Y-%m-%d').date()
-                            #return HttpResponse(datetime_object1)
-                            delta = datetime_object1 - datetime_object
-                            total_days1 = delta.days
-                            #return HttpResponse(total_days) 
-                        
-                            if(int(minimum_gap_apply) >= int(total_days1)):
-                                    applic = "ok" 
-                                    message = "Require minimum " + minimum_gap_apply + " days gap  between two applications ! "
-                                #return HttpResponse(message)
-                    if message == "":
-                    
-                        delta = end_date - start_date       # as timedelta
-
-                        Photo_name = ""
-                        
-                        if request.FILES:
-                            
-                            upload = request.FILES['document_url']
-                            #
-                            if upload != None: 
-                                logoRoot = os.path.join(settings.MEDIA_ROOT, 'leave_documents/')
-                            
-                                #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
-                                logoRoot=logoRoot.replace("\\","/")
-                                Photo_name = upload.name
-                            # return HttpResponse(upload.name) 
-                                fs = FileSystemStorage(location=logoRoot)
-                                file_name = fs.save(upload.name, upload)
-                                file_url = fs.url(file_name)   
-                                #return HttpResponse(file_url) 
-                        #return HttpResponse(Photo_name)
-                        obj = LeaveRequest.objects.create( 
-                        employee=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
-                        leave_type=Leave_Type.objects.get(id = leave) if leave else None,
-                        from_date=from_date.strftime('%Y-%m-%d'),
-                        to_date=to_date.strftime('%Y-%m-%d'),
-                        total_days = diff,
-                        reason=reason,
-                        created_at=created_at,
-                        updated_at=updated_at, 
-                        is_active=1,
-                        added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
-                        device = 'web',
-                        document_url=Photo_name
-
-                        ) 
-                        obj.save()
-
-                        for i in range(delta.days + 1):
-                         day = start_date + timedelta(days=i)
-                        # print(datetime.strftime(day, "%d-%m-%Y"))  
-                        insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1 )
-
-                        messages.success(request, 'Leave Requested Successfully ! ')
-                        return redirect('leave_tracker') 
-
-                    context = {
-                    'form' : form,
-                    'leaves' : leaves,
-                    'leave_condition':leave_condition,
-                    }
-                    messages.error(request, message)
-                    return render(request, "self_service/apply_leave.html",  context )
-
-                    # context.update({"form": form})
-                    # return render(request, "employee/add_employee.html", context)
-                    # html_template = loader.get_template('self_service/apply_leave.html')
-                  #  return HttpResponse(message) 
-    
     # print(leaves)
 
     context = {
@@ -554,7 +448,6 @@ def apply_leave(request):
     }
 
     return render(request, "self_service/apply_leave.html",  context )
-
 
 def leave(request,leave):
     path = request.path.split("/")
@@ -680,7 +573,6 @@ def add_self_travel_request(request):
     }
    
     return render(request, "self_service/add_self_travel_request.html", context )
-
 
 
 def delete_travel_request(request, pk):

@@ -2,6 +2,8 @@
 
 {% block title %} Datatables {% endblock %}
 
+{% load static %}
+
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
@@ -64,6 +66,7 @@
                   <th>Type</th>
                   <th>Form Date</th>
                   <th>To Date</th>
+                  <th>Doc</th>
                   <!-- <th>Total Days</th> -->
                   <!-- <th>Reason</th> -->
                   <th>Status</th>
@@ -75,10 +78,22 @@
                 {% for req in leave_request %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
-                  <td class="nr" data-queryid="{{ req.id }}">{{req.name}} {{req.employee.employee_id}} </td>
-                  <td>{{req.leave_type.name}}</td> 
-                  <td>{{req.from_date|date:"d-m-Y" }}</td>
+                  <td class="nr" style="color: blue;font-weight: 810;" data-queryid="{{ req.id }}">{{req.name}} - ({{req.employee.employee_id}}) </td>
+                  <td><span style="color: {{ req.leave_type.color}}">{{req.leave_type.name}}</span></td> 
+                  <td>{{req.from_date|date:"d-m-Y" }}</td> 
                   <td>{{req.to_date|date:"d-m-Y" }}</td>
+                  <td align="center">
+                        {% if req.document_url != "" and req.document_url != none %}
+                        <a class="float-right" onclick="show_documents('{{req.id}}')" data-toggle="tooltip" data-original-title="Download File">
+                              <i style="color: red;font-size: x-large;" class="fas fa-file"></i></i>&nbsp;&nbsp;
+                        </a>
+                        {% else %}
+                              Nil
+                          {% endif %}
+                        <!-- <a class="float-right" href="{% static '' %}leave_documents/{{ req.document_url }}" download data-toggle="tooltip" data-original-title="Download File">
+                              <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                        </a> -->
+                  </td>
                   <td>
 
                     <select class="form-control change_status" name="change_status" id="{{ req.id }}">
@@ -87,7 +102,8 @@
                         <option value="2" {% if req.is_approved == 2 %} selected{% endif %} >Reject</option>
                     </select>
 
-                  </td>
+                  </td> 
+                 
                     <td>
                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
                         &nbsp;&nbsp;
@@ -162,6 +178,59 @@
       </div>
   </div>
 
+
+  <div class="modal fade bd-example-modal-lg" id="DocumentModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Supporting Documents</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+    
+            <form>
+           
+              <div class="row" >
+                  <!-- <center>   -->
+                    <div id="documents" class="col-lg-12">
+
+
+                    </div>
+                  <!-- </center> -->
+                 <!--  <object data="/leavedocuments/Merchandising solution.pdf" type="application/pdf" width="300" height="200">
+                    <a href="/leavedocuments/Merchandising solution.pdf">test.pdf</a>
+                  </object> -->
+                 
+                  <!--   <div class="col-lg-6">
+                    <embed style="margin-bottom: 10px;" src="/leavedocuments/Merchandising solution.pdf" width="300" height="200" /><br>
+    
+                     <a style="font-size: 30px;" href="/leavedocuments/Merchandising solution.pdf" target="_blank"><i class="fa fa-download"></i></a>
+                   </div>
+    
+                   <div class="col-lg-6">
+                     <embed style="margin-bottom: 10px;" src="/leavedocuments/Webp.net-resizeimage.png" width="300" height="200" /><br>
+    
+                     <a style="font-size: 30px;" href="/leavedocuments/Webp.net-resizeimage.png" target="_blank"><i class="fa fa-download"></i></a>
+                  </div> -->
+    
+    
+    
+              </div>
+           
+    
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
@@ -200,12 +269,9 @@
                                 var time = d.getTime();
                                 var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
                                 var result = day + "-" + month + "-" + year + " " + time;
-                                
-                                
-
-
+                                var tot = parseInt(item.fields.total_days) + 1
                                 check = true;
-                                $('#total_days_other').html(item.fields.total_days);
+                                $('#total_days_other').html(tot);
                                 $('#team_mailid_other').html(item.fields.team_mailid);
                                 $('#reason_other').html(item.fields.reason);
                                 $('#request_date_other').html(result);
@@ -225,7 +291,7 @@
             $('#datatable').DataTable( {
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'copy', 'csv', 'excel', 'pdf'//, 'print'
                 ],
                 language: {
                 paginate: {
@@ -311,6 +377,48 @@
         })
 
     });
+
+
+    function show_documents(id){
+    //  alert(id);
+      var csrf = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+         
+          url: "/leave_request_more_info",  
+          data: {"csrfmiddlewaretoken": csrftoken,"id": id},
+          type: 'POST',
+         
+          success: function( data ) {
+           //  alert(data);
+
+             
+            var documents = "";  //data[0]['supportingdocument'];
+            
+            var array = ""; // documents.split(',');
+
+            var html = '';
+
+                $.each(data, function (key, val) {
+                   // alert(val);
+                    var val = (val.fields.document_url);
+
+                   html += ' <div class="col-lg-8">' ;
+                   html += ' <embed style="margin-bottom: 10px;" src="/static/leave_documents/'+val+' " width="400" height="300" />';
+                   html += ' <a style="font-size: 30px;" href="/static/leave_documents/'+val+'" target="_blank"><i class="fa fa-download"></i></a>';
+
+                   html += ' </div>';
+
+            });
+
+            $("#documents").html(html);
+
+            $('#DocumentModal').modal('show'); 
+
+          }       
+      })
+
+    }
+     
 
     </script>
 

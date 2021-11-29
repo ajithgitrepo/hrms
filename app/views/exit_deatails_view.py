@@ -42,6 +42,8 @@ from django.db.models import Max, Subquery, OuterRef
 from django.utils import timezone
 import os
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.models import Group, User
+
 
 
 
@@ -176,6 +178,10 @@ def add_exit_details(request):
                 ) 
                # return HttpResponse(employee)   
                 obj.save()
+
+                employee_name = Employee.objects.filter(employee_id=employee).update(is_active=0)
+                user = User.objects.filter(emp_id=employee).update(is_active=0)
+
                 messages.success(request, 'Employee exit details was added ! ')
                 return redirect('exit_details') 
             else: 

@@ -1310,8 +1310,6 @@ def update_employee(request, pk):
                         return redirect('profile')
 
 
-            
-
             role = role_name(request)
 
             messages.success(request, ' Employee was updated! ')
@@ -1324,8 +1322,8 @@ def update_employee(request, pk):
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
-    reporting_to = Reporting.objects.filter(is_active=1, employee_id=pk)
-    # print(reporting)
+    reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
+    # print(reporting_to[0].reporting_id)
     context_role = {
         'roles': role,
         'reporting': reporting,

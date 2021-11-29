@@ -142,22 +142,20 @@ input[type=number] {
                     <input type="hidden" class="form-control startdate" id="employee_id" name="employee_id" value="{{ request.user.emp_id }}"/>
 
                     <div class="col-lg-6">
-                      <div class="form-group">
-                          <label class="form-control-label" for="input-city">Leave Type</label>
-                          <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
-                              <option value="" selected >Select</option>
-                              {% for leave in leaves %}
-                                  <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}
-                                  {% if leave_type  == leave.leave_type.name %} selected{% endif %}
-                                  > {{ leave.leave_type.name }} </option>
-                              {% endfor %}
-                              {% for leave in leave_condition %}
-                                  <option value="{{ leave.leave_type.id }}" {% if form.data.leave_type == leave.leave_type.name %} selected {% endif %}> {{ leave.leave_type.name }} </option>
-                              {% endfor %}
-                          </select>
-                          {{ form.leave_type.errors }}
-                      </div>
-                  </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-city">Leave Type</label>
+                            <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
+                                <option value="" selected >Select</option>
+                                {% for leave in leaves %}
+                                    <option value="{{ leave.leave_type.id }}" {% if leave.leave_type.id|stringformat:"i" == form.data.leave_type %} selected {% endif %}> {{ leave.leave_type.name }} </option>
+                                {% endfor %} 
+                                {% for leave in leave_condition %}
+                                    <option value="{{ leave.leave_type.id }}" {% if leave.leave_type.id|stringformat:"i" == form.data.leave_type %} selected {% endif %}> {{ leave.leave_type.name }} </option>
+                                {% endfor %} 
+                            </select>
+                            {{ form.leave_type.errors }}
+                        </div>
+                    </div>
 
                     <div class="row dates">
                         <div class="col-lg-3">
@@ -179,10 +177,31 @@ input[type=number] {
 
                     </div>
 
+                    <div class="col-lg-6"> 
+                        <div class="form-group"> 
+                         
+                          <div class="card">
+                              
+                                <!-- Card body -->
+                                <div class="card-body">
+                                      <label class="form-control-label" for="input-employeeid">Documents</label>
+                                
+                                    <div class="custom-file">
+                                      <input type="file" accept="image/jpeg, image/png, application/pdf" value="{{ form.data.document_url }}" name="document_url" class="custom-file-input" id="customFileLansssg" lang="en"></input>
+                                      <label class="custom-file-label" for="customFileLang"></label>
+                                    </div>
+                                
+                                </div>
+                              </div>
+  
+                        </div>
+  
+                      </div>
+
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="form-control-label" for="input-city">Reason</label>
-                            <textarea class="form-control" id="reason" placeholder="Reason" name="reason" value="{{ form.data.reason }}"></textarea>
+                            <textarea class="form-control" id="reason" placeholder="Reason" name="reason" >{{ form.data.reason }}</textarea>
                             
                         </div>
                     </div>
@@ -195,7 +214,7 @@ input[type=number] {
 
                 <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
                
-                <a href="/files/"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button></a>
+                <a href="/leave_tracker/"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button></a>
 
             </div>
 

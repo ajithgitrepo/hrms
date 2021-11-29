@@ -171,16 +171,13 @@ hr {
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            {% if doj.date_of_joining %}
              <a href="{% url 'apply_leave' %}" class="btn btn-sm btn-neutral">Apply Leave</a>
-             {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  {% if doj.date_of_joining %}
  <!-- Page content -->
  <div class="container-fluid mt--6">
       
@@ -234,12 +231,10 @@ hr {
       {% endfor %}
 
     </div>
+
+  
   </div>
 
-  {% endif %}
-
-
-  {% if doj.date_of_joining %}
   <div class="container-fluid">
     <!-- Table -->
     <div class="row">
@@ -249,7 +244,9 @@ hr {
           <!-- Card header -->
           <div class="card-header">
             <h3 class="mb-0">All Leave Requests</h3>
-         
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
           </div>
           <div class="table-responsive py-4">
             <table class="table table-flush" id="example">
@@ -258,25 +255,37 @@ hr {
                   <th>#</th>
                   <th>From Date</th>
                   <th>To Date</th>
-                  <th>Total Days</th>
                   <th>Leave Type</th>
-                  <th>Description</th>
+                  <th>documents</th>
+                  <!-- <th>Description</th> -->
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               
               <tbody>
                 {% for requests in all_requestes %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
+                    <td class="nr" data-queryid="{{ requests.id }}">{{ forloop.counter }}</td>
                    
                     <td>{{ requests.from_date }}</td>
                     <td>{{ requests.to_date }}</td>
-                    <td>{{ requests.total_days }}</td>
-                    <td>{{ requests.leave_type.name }}</td>
-                    <td>{{ requests.reason }}</td>
+                    <td><span style="color: {{ requests.leave_type.color}}">{{ requests.leave_type.name }}</span></td>
+                    <td align="center">
+                        {% if requests.document_url != "" and requests.document_url != none %}
+                        <a class="" onclick="show_documents('{{requests.id}}')" data-toggle="tooltip" data-original-title="Download File">
+                              <i style="color: red;font-size: x-large;" class="fas fa-file"></i></i>&nbsp;&nbsp;
+                        </a>
+                        {% else %}
+                              Nil
+                          {% endif %}
+                        <!-- <a class="float-right" href="{% static '' %}leave_documents/{{ req.document_url }}" download data-toggle="tooltip" data-original-title="Download File">
+                              <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                        </a> -->
+                  </td>
+                    <!-- <td>{{ requests.reason }}</td> -->
                     {% if requests.is_approved == 1 %}
-                        <td style="color: rgb(42, 206, 42);">Approved</td>
+                        <td style="color: darkgreen;">Approved</td>
                     {% else %}
                         <td style="color:darkorange">Pending</td>
                     {% endif %}
@@ -284,7 +293,15 @@ hr {
                         <td style="color: darkred;">Rejected</td>
                     {% endif %}
 
-                    
+                    <td>
+                        <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
+                        &nbsp;&nbsp;
+                       
+                        &nbsp;&nbsp;
+                        <a href="{% url 'delete_leave_request' requests.id %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Request">
+                              <i class="fas fa-trash"></i>
+                            </a> 
+                    </td>
                    
                     
                  </tr>
@@ -295,24 +312,111 @@ hr {
         </div>
       </div>
     </div>
+    </div>
+
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Leave Request Other Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;">Total Days :</span></div> <div class="col-lg-3"><span style="font-weight: 700;" id="total_days_other"></span></div>
+                     <!-- <div class="col-lg-3"><span style="color: blue;">Reason : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="team_mailid_other"></span></div> -->
+                 </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Reason :</span></div> <div class="col-lg-9"> <span style="font-weight: 700;" id="reason_other"></span></div>
+                 
+              </div>
+              <hr class="my-3" />
+                 <div class="row">
+                 
+                  <div class="col-lg-3"><span style="color: blue;">Requested  Date : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="request_date_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <!-- <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Reporting To :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="department_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Source Of Hire : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="source_of_hire_other"></span></div>
+              </div>
+              
+              <hr class="my-3" /> -->
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
   </div>
-  {% else %}
-  <div class="container-fluid">
-    <!-- Table -->
-    <div class="row">
-      <div class="col">
-      
-        <div class="card">
+
+
+  <div class="modal fade bd-example-modal-lg" id="DocumentModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Supporting Documents</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+    
+            <form>
+           
+              <div class="row" >
+                  <!-- <center>   -->
+                    <div id="documents" class="col-lg-12">
+
+
+                    </div>
+                  <!-- </center> -->
+                 <!--  <object data="/leavedocuments/Merchandising solution.pdf" type="application/pdf" width="300" height="200">
+                    <a href="/leavedocuments/Merchandising solution.pdf">test.pdf</a>
+                  </object> -->
+                 
+                  <!--   <div class="col-lg-6">
+                    <embed style="margin-bottom: 10px;" src="/leavedocuments/Merchandising solution.pdf" width="300" height="200" /><br>
+    
+                     <a style="font-size: 30px;" href="/leavedocuments/Merchandising solution.pdf" target="_blank"><i class="fa fa-download"></i></a>
+                   </div>
+    
+                   <div class="col-lg-6">
+                     <embed style="margin-bottom: 10px;" src="/leavedocuments/Webp.net-resizeimage.png" width="300" height="200" /><br>
+    
+                     <a style="font-size: 30px;" href="/leavedocuments/Webp.net-resizeimage.png" target="_blank"><i class="fa fa-download"></i></a>
+                  </div> -->
+    
+    
+    
+              </div>
+           
+    
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           
-          <div class="card-body text-center">
-            <i class="far fa-calendar-alt fa-5x p-5"></i>
-            <p class="MB0">Update the <a href="{% url 'update_employee' request.user.emp_id %}">Date of Joining</a> for this employee to display their leave information and enable them to perform leave related actions.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  {% endif %}
 
    
    
@@ -350,6 +454,24 @@ hr {
 
     });
 
+     // using jQuery
+     function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
     $(document).ready(function() {
         $('#nav-mobile ul').hide();
         $('#nav-mobile a').click(function(e) {
@@ -360,14 +482,54 @@ hr {
         });
     });
 
-  
-
-     
-// var csrftoken = getCookie('csrftoken');
+    var csrftoken = getCookie('csrftoken');
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+
+    $(".use-address").click(function() {    
+            $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+         
+            var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                .find(".nr")     // Gets a descendent with class="nr"
+                .data("queryid"); //alert($id);
+            $.ajax({  
+                    type: "POST",  
+                    url: "/leave_request_more_info",  
+                    data: {"csrfmiddlewaretoken": csrftoken,"id": $id},
+                    success: function(data) {  //alert(JSON.stringify(data));
+                        var check = false;
+                        jQuery.each(data, function(index, item) {
+                            // alert(item.fields.employee_id);
+                            if(check == false)
+                            {
+
+                                var d =new Date(item.fields.created_at);
+                                var day = d.getDate();
+                                var month= d.getMonth()+1;
+                                var year = d.getFullYear();
+                                var time = d.getTime();
+                                var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+                                var result = day + "-" + month + "-" + year + " " + time;
+                                var tot = parseInt(item.fields.total_days) + 1
+                                check = true;
+                                $('#total_days_other').html(tot);
+                                $('#team_mailid_other').html(item.fields.reason);
+                                $('#reason_other').html(item.fields.reason);
+                                $('#request_date_other').html(result);
+                                    
+                                    
+                            }
+
+                        });
+                    
+                    }
+                    });
+
+        });
+
 
 
  
@@ -415,6 +577,47 @@ function csrfSafeMethod(method) {
     } );
     
 } );
+
+
+function show_documents(id){
+     // alert(id);
+      var csrf = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+         
+          url: "/leave_request_more_info",  
+          data: {"csrfmiddlewaretoken": csrftoken,"id": id},
+          type: 'POST',
+         
+          success: function( data ) {
+           //  alert(data);
+
+             
+            var documents = "";  //data[0]['supportingdocument'];
+            
+            var array = ""; // documents.split(',');
+
+            var html = '';
+
+                $.each(data, function (key, val) {
+                   // alert(val);
+                    var val = (val.fields.document_url);
+
+                   html += ' <div class="col-lg-8">' ;
+                   html += ' <embed style="margin-bottom: 10px;" src="/static/leave_documents/'+val+' " width="400" height="300" />';
+                   html += ' <a style="font-size: 30px;" href="/static/leave_documents/'+val+'" target="_blank"><i class="fa fa-download"></i></a>';
+
+                   html += ' </div>';
+
+            });
+
+            $("#documents").html(html);
+
+            $('#DocumentModal').modal('show'); 
+
+          }       
+      })
+
+    }
 
   </script>
 

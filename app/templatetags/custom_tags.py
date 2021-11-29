@@ -10,6 +10,7 @@ register = template.Library()
 def role_name(context):
     request = context['request']
     role = Employee.objects.filter(role__is_active ='1',  employee_id= request.user.emp_id)
+    # print(role[0].role.name)
     return role[0].role.name
 
 

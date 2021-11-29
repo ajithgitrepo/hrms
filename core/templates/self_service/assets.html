@@ -2,6 +2,10 @@
 
 {% block title %} Asset Details {% endblock %}
 
+
+{% load custom_tags %}
+
+
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <style>
@@ -50,6 +54,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 {% block content %}
 
+{% role_name as role %}
 
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -73,9 +78,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
+            {% if role == "Admin" %} 
              <a href="{% url 'add_asset' %}" class="btn btn-sm btn-neutral">Add</a>
-            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
-            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+            {% endif %}
           </div>
         </div>
       </div>
@@ -108,7 +113,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <th>Asset Details</th>
                   <th>Given Date</th>
                   <th>Return Date</th>
-                  <th>Action</th>
+                  {% if role == "Admin" %} 
+                    <th>Action</th>
+                  {% endif %}
                 </tr>
               </thead>
               
@@ -122,16 +129,17 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     
                     <td>{{ass.given_date |date:"d-m-Y" }}</td>
                     <td>{{ass.return_date |date:"d-m-Y" }}</td>
-                   
-                    <td> 
-                        <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> -->
-                        &nbsp; &nbsp;
-                       
-                        <a href="{% url 'delete_asset_details' ass.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
-                              <i class="fas fa-trash"></i>
-                            </a> 
-                      
-                    </td>
+                    {% if role == "Admin" %} 
+                      <td> 
+                          <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> -->
+                          &nbsp; &nbsp;
+                        
+                          <a href="{% url 'delete_asset_details' ass.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
+                                <i class="fas fa-trash"></i>
+                              </a> 
+                        
+                      </td>
+                    {% endif %}
                  </tr>
                 {% endfor %}
               </tbody>
@@ -144,42 +152,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
  
     
   </div>
-
-
-  {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'success'%}
-
-               
-                    <script type=text/javascript>
-                     toastr.options = {
-                  "closeButton": true,
-                  "debug": false,
-                  "newestOnTop": true,
-                  "progressBar": true,
-                  "positionClass": "toast-top-right",
-                  "preventDuplicates": true,
-                  "onclick": null,
-                  "showDuration": "300",
-                  "hideDuration": "1000",
-                  "timeOut": "5000",
-                  "extendedTimeOut": "1000",
-                  "showEasing": "swing",
-                  "hideEasing": "linear",
-                  "showMethod": "fadeIn",
-                  "hideMethod": "fadeOut"
-                }
-                    
-                    toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'info' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'warning' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'error' %}
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
 
 
 
@@ -436,7 +408,7 @@ $('td.query-main').live('click', function() { //alert();
    
    $(document).ready(function() {
     $('#example').DataTable( {
-        dom: 'Bfrtip',
+        //dom: 'Bfrtip',
         buttons: [
             // {
             //     extend: 'copyHtml5',

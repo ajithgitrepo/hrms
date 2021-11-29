@@ -112,86 +112,7 @@
       
       <div class="card-deck flex-column flex-xl-row">
 
-       
-        {% if role == "Admin" %}
-        <div class="card">
-          <div class="card-header bg-transparent">
-            <h2 class="h3 mb-0">Birthdays<h2> 
-          </div>
-
-          <div class="card-body">
-            <!-- Chart -->
-            <a href="birthdays/" style="color: #5a5858;">
-            <div class="chart overflow-dashboard">
-              
-                <div class="row">
-                    {% for data in birthdays %}
-                        <div class="col-lg-2">
-                            <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
-                        </div>
-                        <div class="col-lg-10" style="margin-bottom: 10px;">
-                            <span class="CP"><span>{{ data.employee_id}} &nbsp;-&nbsp;</span><b>{{ data.first_name}} {{ data.last_name}}</b> </span><br>
-                            <small>{{ data.department.name}}&nbsp;-&nbsp;{{ data.role.name}}</small> 
-                            <div class="usr_cl">
-                                <small><i class="fas fa-mobile"></i>&nbsp; {{ data.work_phone}}</small> 
-                            </div> 
-                            <hr style="margin-top: 1rem;margin-bottom: 1rem;">
-                        </div>
-                        <hr>
-                        {% empty %}
-                        <div style="margin: auto; text-align: center;margin-top: 70px;">
-                            <img src="{% static 'images/no_birthday.png' %}" width="100" > <br>
-                            <span>No Birthday buddies found.</span>
-                        </div>
-                    {% endfor %}
-                </div>
-              
-            </div>
-          </a>
-          </div>
-        </div>
-
-        {% endif %}
-
-        {% if role == "Admin" %}
-        <div class="card">
-          <div class="card-header bg-transparent">
-            <div class="row align-items-center">
-              <div class="col">
-                <h2 class="h3 mb-0">New Hires</h2>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <!-- Chart -->
-          <a href="new_hires/" style="color:#5a5858;">
-            <div class="chart overflow-dashboard">
-              <div class="row">
-                {% for new in new_hires %}
-                  <div class="col-lg-2">
-                      <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
-                  </div>
-                  <div class="col-lg-10" style="margin-bottom: 10px;">
-                      <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
-                      <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
-                      <div class="usr_cl">
-                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
-                      </div> 
-                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
-                  </div>
-                  {% empty %}
-                  <div style="margin: auto; text-align: center;margin-top: 100px;">
-                      <img src="{% static 'images/eyes_looking.png' %}" width="100"  > <br>
-                      <span>No New Joinees in past 15 days.</span>
-                  </div>
-                {% endfor %}
-            </div>
-            </div>
-          </a>
-          </div>
-        </div>
-        {% endif %}
-
+        
         <!-- Progress track -->
         <div class="card">
           <!-- Card header -->
@@ -328,6 +249,87 @@
 
           </div>
         </div>
+
+       
+        {% if role == "Admin" %}
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <h2 class="h3 mb-0">Birthdays<h2> 
+          </div>
+
+          <div class="card-body">
+            <!-- Chart -->
+            <a href="birthdays/" style="color: #5a5858;">
+            <div class="chart overflow-dashboard">
+              
+                <div class="row">
+                    {% for data in birthdays %}
+                        <div class="col-lg-2">
+                            <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                        </div>
+                        <div class="col-lg-10" style="margin-bottom: 10px;">
+                            <span class="CP"><span>{{ data.employee_id}} &nbsp;-&nbsp;</span><b>{{ data.first_name}} {{ data.last_name}}</b> </span><br>
+                            <small>{{ data.department.name}}&nbsp;-&nbsp;{{ data.role.name}}</small> 
+                            <div class="usr_cl">
+                                <small><i class="fas fa-mobile"></i>&nbsp; {{ data.work_phone}}</small> 
+                            </div> 
+                            <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                        </div>
+                        <hr>
+                        {% empty %}
+                        <div style="margin: auto; text-align: center;margin-top: 70px;">
+                            <img src="{% static 'images/no_birthday.png' %}" width="100" > <br>
+                            <span>No Birthday buddies found.</span>
+                        </div>
+                    {% endfor %}
+                </div>
+              
+            </div>
+          </a>
+          </div>
+        </div>
+
+        {% endif %}
+
+        {% if role == "Admin" %}
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">New Hires</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+          <a href="new_hires/" style="color:#5a5858;">
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for new in new_hires %}
+                  <div class="col-lg-2">
+                      <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                  </div>
+                  <div class="col-lg-10" style="margin-bottom: 10px;">
+                      <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
+                      <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
+                      <div class="usr_cl">
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
+                      </div> 
+                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                  </div>
+                  {% empty %}
+                  <div style="margin: auto; text-align: center;margin-top: 100px;">
+                      <img src="{% static 'images/eyes_looking.png' %}" width="100"  > <br>
+                      <span>No New Joinees in past 15 days.</span>
+                  </div>
+                {% endfor %}
+            </div>
+            </div>
+          </a>
+          </div>
+        </div>
+        {% endif %}
+
       </div>
 
       <div class="card-deck flex-column flex-xl-row">
@@ -507,7 +509,7 @@
                       <span class="CP"><span>{{ today.employee_id}} &nbsp;-&nbsp;</span><b>{{ today.employee.first_name}} {{ today.employee.last_name}}</b> </span><br>
                       <small>{{ today.employee.department.name}}&nbsp;-&nbsp;{{ today.employee.role.name}}</small> 
                       <div class="usr_cl">
-                          <small><i class="fas fa-mobile"></i>&nbsp; {{ today.employee.mobile_number}}</small> 
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ today.employee.mobile_number }}</small> 
                       </div> 
                       <hr style="margin-top: 1rem;margin-bottom: 1rem;">
                   </div>

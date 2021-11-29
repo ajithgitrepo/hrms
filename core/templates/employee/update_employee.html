@@ -1,6 +1,8 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Roles {% endblock %}
+{% block title %} Update Employee {% endblock %}
+
+{% load custom_tags %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
@@ -43,6 +45,8 @@ input[type=number] {
 {% endblock stylesheets %}
 
 {% block content %}
+
+{% role_name as role %}
 
     <!-- Page content -->
     <div class="container-fluid mt-6">
@@ -283,19 +287,29 @@ input[type=number] {
             <div class="col-md-4"> 
               <div class="form-group">
                 <label class="form-control-label" for="input-address">Reporting To</label>
-                
+                {% if role == "Admin" %} 
                 <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
                     <option value="" selected >Select</option>
                     {% for report in reporting %}
-                        {% if notes %}
+                        
                             {% for data in reporting_to %}
                                 <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
                             {% endfor %} 
-                        {% else %}
-                            <option value="{{ report.employee_id }}"> {{ report.first_name }} {{ report.last_name }}</option>
-                        {% endif %}
+                     
                     {% endfor %} 
                 </select>
+                {% else %}
+                <select class="form-control select2" data-toggle="select" disabled value="{{ form.data.reporting_to }}" name="reporting_to">
+                  <option value="" selected >Select</option>
+                  {% for report in reporting %}
+                     
+                          {% for data in reporting_to %}
+                              <option value="{{ report.employee_id }}" {% if report.employee_id == data.reporting_id %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                          {% endfor %} 
+                     
+                  {% endfor %} 
+              </select>
+                {% endif %}
                 
                 {{ form.reporting_to.errors }}
               </div>
