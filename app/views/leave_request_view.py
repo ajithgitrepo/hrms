@@ -141,59 +141,61 @@ def add_leave_request(request):
                
             #to_date = request.POST.get('to_date')
             if todate != None and  fromdate != None :
-                  date_format = "%Y-%m-%d"
-                  a = datetime.strptime(fromdate, date_format)
-                  b = datetime.strptime(todate, date_format)
-                  delta = b - a
-                  total_days = delta.days + 1
-                  #return HttpResponse(total_days)
-                  applic = "not_applic"
-                  
-                  message = "";
-                  if (str(total_days) < str(minimum_leave_apply))   and (minimum_leave_apply != None):
-                         # if total_days != 0:
-                           message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
-                          #return HttpResponse(message)
-                  elif (int(total_days) >  int(maximum_leave_apply)) and (maximum_leave_apply != None):
-                          message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
-                  elif (int(total_days) > int(maximum_consecutive_leave_apply)) and (maximum_consecutive_leave_apply != None):
-                          message = "Maximum " + maximum_consecutive_leave_apply  + "  number of consecutive days of Leave allowed";
-                  elif  minimum_gap_apply != None:
-                        applic = "ok"
+                date_format = "%Y-%m-%d"
+                a = datetime.strptime(fromdate, date_format)
+                b = datetime.strptime(todate, date_format)
+                delta = b - a
+                total_days = delta.days + 1
+                #return HttpResponse(total_days)
+                applic = "not_applic"
+                
+                message = ""
+                if (str(total_days) < str(minimum_leave_apply))   and (minimum_leave_apply != None):
+                        # if total_days != 0:
+                        message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
+                        #return HttpResponse(message)
+                elif (message == "") and (maximum_leave_apply != None):
+                        if(int(total_days) >  int(maximum_leave_apply)):
+                            message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
+                elif (message == "") and (maximum_consecutive_leave_apply != None):
+                        if(int(total_days) > int(maximum_consecutive_leave_apply)):
+                            message = "Maximum " + maximum_consecutive_leave_apply  + "  number of consecutive days of Leave allowed";
+                elif  minimum_gap_apply != None:
+                    applic = "ok"
                         #return HttpResponse(applic)
                        
-                        last_applied =  LeaveRequest.objects.filter(employee_id=employee_id).order_by('from_date').reverse()
-                        #return HttpResponse(last_applied)
-                        last_leave_d = 0;
-                        if last_applied != None and  len(last_applied) < 0:
-                              last_applied_leave_date = last_applied[0].from_date
-                              #return HttpResponse('it works')
-                              date_format = "%Y-%m-%d"
-                              last_leave_d = (str(last_applied_leave_date))
-                        
-                              #datetime.now().strftime("%Y-%m-%d")
-                        
-                              datetime_object = datetime.strptime(last_leave_d, '%Y-%m-%d').date()
-                        
-                              datetime_object1 = datetime.strptime(fromdate, '%Y-%m-%d').date()
-                              #return HttpResponse(datetime_object1)
-                              # datetime.strptime(last_leave_d, '%Y-%m-%d').date()
-                              
-                              delta = datetime_object1 - datetime_object
-                        
-                              total_days1 = delta.days
+                    last_applied =  LeaveRequest.objects.filter(employee_id=employee_id).order_by('from_date').reverse()
+                    #return HttpResponse(last_applied)
+                    last_leave_d = 0
+                    if last_applied != None and  len(last_applied) < 0:
+                            last_applied_leave_date = last_applied[0].from_date
+                            #return HttpResponse('it works')
+                            date_format = "%Y-%m-%d"
+                            last_leave_d = (str(last_applied_leave_date))
+                    
+                            #datetime.now().strftime("%Y-%m-%d")
+                    
+                            datetime_object = datetime.strptime(last_leave_d, '%Y-%m-%d').date()
+                    
+                            datetime_object1 = datetime.strptime(fromdate, '%Y-%m-%d').date()
+                            #return HttpResponse(datetime_object1)
+                            # datetime.strptime(last_leave_d, '%Y-%m-%d').date()
+                            
+                            delta = datetime_object1 - datetime_object
+                    
+                            total_days1 = delta.days
                        # return HttpResponse(total_days) 
                        
-                              if(int(minimum_gap_apply) >= int(total_days1)):
-                                    applic = "ok" 
-                                    message = "Require minimum " + minimum_gap_apply + " days gap  between two applications ! "
-                                    #return HttpResponse(applic)
+                            if(int(minimum_gap_apply) >= int(total_days1)):
+                                applic = "ok" 
+                                message = "Require minimum " + minimum_gap_apply + " days gap  between two applications ! "
+                                #return HttpResponse(applic)
                                     #messages.error(request, message)
                                     #return redirect('leave_request')
                                     #return HttpResponse(1)
                               
 
-                  if message != "":
+                    if message != "":
                         employee = Employee.objects.filter(is_active='1')
                         messages.error(request, message)
                         leave_type =  Leave_Type.objects.filter(is_active='1')
