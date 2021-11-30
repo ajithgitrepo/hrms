@@ -17,6 +17,14 @@
 
 
 <style>
+
+.datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+    top: 81.5px !important;
+    left: 545.333px;
+    z-index: 10;
+    display: block;
+}
+
 ul.errorlist {
       list-style-type: none; 
       font-size: 14px ;
@@ -161,7 +169,7 @@ input[type=number] {
                         <div class="col-lg-3">
                             <div class="form-group">
                             <label class="form-control-label" for="input-city">From Date</label>
-                            <input type="text" class="form-control startdate" id="from_date" placeholder="dd-mm-yyyy" name="from_date" value="{{ form.data.from_date }}"/>
+                            <input type="text" class="form-control startdate" id="from_date" autocomplete="off" placeholder="dd-mm-yyyy" name="from_date" value="{{ form.data.from_date }}"/>
                             {{ form.from_date.errors }}
                         </div>
                         </div>
@@ -170,7 +178,7 @@ input[type=number] {
                         <div class="col-lg-3">
                             <div class="form-group">
                             <label class="form-control-label" for="input-city">To Date</label>
-                            <input type="text" class="form-control startdate" id="to_date" placeholder="dd-mm-yyyy" name="to_date" value="{{ form.data.to_date }}"/>
+                            <input type="text" class="form-control startdate" id="to_date" autocomplete="off" placeholder="dd-mm-yyyy" name="to_date" value="{{ form.data.to_date }}"/>
                             {{ form.to_date.errors }}
                         </div>
                         </div>

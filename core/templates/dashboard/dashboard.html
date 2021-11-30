@@ -232,7 +232,7 @@
             
               <div class="d-flex justify-content-center align-items-center mt-10" style="margin-top: 16%;">
                 
-                <h1 class="d-flex justify-content-center align-items-center mt-10" >{{ check_in }} Hrs</h1><br>
+                <h1 class="d-flex justify-content-center align-items-center mt-10" id="working_hours" ></h1><br>
                 
               </div>
 
@@ -543,6 +543,38 @@
   <script>
 
     $(function(){
+        var login_time = "{{login_time}}";
+        // alert(a);
+        if(login_time){
+            //create date format  
+            str = login_time.replace(" a.m.", ":00");
+        
+            var timeStart = new Date("01/01/2021 " + str).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + today_time).getTime();
+
+            // alert(today_end);
+             
+            // var hourDiff = timeEnd - timeStart;    
+           
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            var duration = hours+":"+minutes+":"+seconds;
+
+            // console.log(duration)
+            $("#working_hours").html(duration +" Hrs")
+
+        } 
+        else{
+            $("#working_hours").html(check_in +" Hrs")
+        }
+
         $('#ZPAtt_dashboard_weekCont').hide();
     })
 
@@ -566,7 +598,39 @@
        
     }
 
-    
+    setInterval(function(){ 
+
+        var login_time = "{{login_time}}";
+        var session = "{{session}}";
+        // alert(a);
+        if(login_time && session){
+            //create date format  
+            str = login_time.replace(" a.m.", ":00");
+        
+            var timeStart = new Date("01/01/2021 " + str).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + today_time).getTime();
+
+            // alert(today_end);
+             
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            var duration = hours+":"+minutes+":"+seconds;
+
+            //console.log(duration)
+
+            $("#working_hours").html(duration +" Hrs")
+
+        }
+       
+
+    }, 5000);
 
     setInterval(function(){ 
 

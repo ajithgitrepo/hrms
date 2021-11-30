@@ -154,13 +154,13 @@ def add_leave_request(request):
                         # if total_days != 0:
                         message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
                         #return HttpResponse(message)
-                elif (message == "") and (maximum_leave_apply != None):
+                if (message == "") and (maximum_leave_apply != None):
                         if(int(total_days) >  int(maximum_leave_apply)):
                             message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
-                elif (message == "") and (maximum_consecutive_leave_apply != None):
+                if (message == "") and (maximum_consecutive_leave_apply != None):
                         if(int(total_days) > int(maximum_consecutive_leave_apply)):
                             message = "Maximum " + maximum_consecutive_leave_apply  + "  number of consecutive days of Leave allowed";
-                elif  minimum_gap_apply != None:
+                if  minimum_gap_apply != None:
                     applic = "ok"
                         #return HttpResponse(applic)
                        
@@ -168,7 +168,7 @@ def add_leave_request(request):
                     #return HttpResponse(last_applied)
                     last_leave_d = 0
                     if last_applied != None and  len(last_applied) < 0:
-                            last_applied_leave_date = last_applied[0].from_date
+                            last_applied_leave_date = last_applied[0].to_date
                             #return HttpResponse('it works')
                             date_format = "%Y-%m-%d"
                             last_leave_d = (str(last_applied_leave_date))
@@ -179,7 +179,7 @@ def add_leave_request(request):
                     
                             datetime_object1 = datetime.strptime(fromdate, '%Y-%m-%d').date()
                             #return HttpResponse(datetime_object1)
-                            # datetime.strptime(last_leave_d, '%Y-%m-%d').date()
+                            # datetime.strptime(last_leave_d, '%Y-%m-%d').date() http://167.71.228.176/
                             
                             delta = datetime_object1 - datetime_object
                     

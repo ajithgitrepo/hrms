@@ -109,7 +109,7 @@ def index(request):
     # print(upcoming_holidays)
 
     leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
-    print(leave_today[0].employee.mobile_number)
+    # print(leave_today[0].employee.mobile_number)
 
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -129,6 +129,16 @@ def index(request):
 
     zipped_data = zip(weekdays, date_no, dates)
     # print(dates)
+
+    if check_in_time[0].checkin_time:
+        login_time = check_in_time[0].checkin_time
+    else:
+        login_time = ""
+
+    if 'checkin_session' in request.session:
+        session = request.session['checkin_session']
+    else:
+        session = ""
   
     context = {
         'birthdays':query,
@@ -143,6 +153,8 @@ def index(request):
         'weekend':weekend,
         'leaves':leaves,
         'leave_today':leave_today,
+        'login_time':login_time,
+        'session': session,
 
     }
 

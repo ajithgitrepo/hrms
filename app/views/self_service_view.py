@@ -453,13 +453,13 @@ def apply_leave(request):
                          # if total_days != 0:
                            message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
                           #return HttpResponse(message)
-                    elif (message == "") and (maximum_leave_apply != None):
+                    if (message == "") and (maximum_leave_apply != None):
                          if(int(total_days) >  int(maximum_leave_apply)):
                           message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
-                    elif (message == "") and (maximum_consecutive_leave_apply != None):
+                    if (message == "") and (maximum_consecutive_leave_apply != None):
                          if(int(total_days) > int(maximum_consecutive_leave_apply)):
                           message = "Maximum " + maximum_consecutive_leave_apply  + "  number of consecutive days of Leave allowed";
-                    elif  minimum_gap_apply != None:
+                    if  minimum_gap_apply != None:
                         applic = "ok"
                            # return HttpResponse(minimum_gap_apply)
                         
@@ -467,7 +467,7 @@ def apply_leave(request):
                         # return HttpResponse(last_applied[0].from_date)
                         last_leave_d = 0
                         if last_applied != None and  len(last_applied) > 0:
-                            last_applied_leave_date = last_applied[0].from_date
+                            last_applied_leave_date = last_applied[0].to_date
                             
                             date_format = "%Y-%m-%d"
                             last_leave_d = (str(last_applied_leave_date))
