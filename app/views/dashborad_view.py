@@ -68,7 +68,7 @@ def index(request):
     
     tdelta = 0
     myDate = datetime.date.today()
-    check_in_time = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id)
+    check_in_time = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id, is_present = 1)
     # print(check_in_time[0].checkin_time) 
     # t1 = request.session['checkin_session']
     if check_in_time:
@@ -80,7 +80,7 @@ def index(request):
                 t2 = datetime.datetime.now().strftime('%H:%M:%S')
             else:
                 t2 = check_in_time[0].checkout_time.strftime('%H:%M:%S')
-        else:
+        else:   
             t2 = datetime.datetime.now().strftime('%H:%M:%S')
         FMT = '%H:%M:%S'
         tdelta = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1, FMT)
@@ -111,6 +111,9 @@ def index(request):
     leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
     # print(leave_today[0].employee.mobile_number)
 
+    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    # print(check_leave)
+    
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     now = datetime.datetime.now()
@@ -129,9 +132,11 @@ def index(request):
 
     zipped_data = zip(weekdays, date_no, dates)
     # print(dates)
-
-    if check_in_time[0].checkin_time:
-        login_time = check_in_time[0].checkin_time
+    if check_in_time:
+        if check_in_time[0].checkin_time:
+            login_time = check_in_time[0].checkin_time
+        else:
+            login_time = ""
     else:
         login_time = ""
 
@@ -155,6 +160,7 @@ def index(request):
         'leave_today':leave_today,
         'login_time':login_time,
         'session': session,
+        'check_leave':check_leave,
 
     }
 

@@ -68,6 +68,8 @@ def attendance(request):
     last_day = now.replace(day=calendar.monthrange(now.year, now.month)[1])
     # no_of_days = calendar.monthrange(current_year, current_month )
 
+    myDate = datetime.today()
+
     dates = []
     date_no = []
 
@@ -101,6 +103,9 @@ def attendance(request):
     weekend = Weekend.objects.filter(is_active=1)
     # print(weekend)
 
+    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    print(check_leave)
+
     num_days = len([1 for i in calendar.monthcalendar(
         datetime.now().year, datetime.now().month) if i[6] != 0])
 
@@ -117,6 +122,7 @@ def attendance(request):
         'emp_id': request.user.emp_id,
         'weekend': weekend,
         'weekend_count': num_days,
+        'check_leave':check_leave,
 
     }
 

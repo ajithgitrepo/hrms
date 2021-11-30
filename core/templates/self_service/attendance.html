@@ -222,6 +222,7 @@
                     <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
                     
                 </div>
+
               </div>
                  
               </form>
@@ -234,9 +235,20 @@
                  
                 </div>
 
-                <div class="col-lg-4">
-                    <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                <div class="col-lg-2" style="text-align: center;">
+                    <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
+                        <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
+                        <time class="DB"> [ 12AM - 12AM ] </time>
+                    </span>
                   
+                </div>
+
+                <div class="col-lg-2">
+                    {% if check_leave %}
+                        <button class="btn-sm btn-success float-right" disabled type="submit" name="submit" id="atte_absent" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                    {% else %}
+                        <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                    {% endif %}
                 </div>
               </div>
                  

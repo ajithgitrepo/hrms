@@ -160,8 +160,12 @@
                                             {% if week.is_present == 1 %}
                                                 <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
                                             {% endif %}
-                                            {% if week.is_leave == 1 %}
+                                            {% if week.is_leave == 1 and  week.is_leave_approved == 1 %}
                                                 <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
+                                            {% endif %}
+                                            {% if week.is_leave == 1 and  week.is_leave_approved == 0 %}
+                                                <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Leave Requested">Leave Requested</span></div>
+                                            
                                             {% endif %}
                                         {% endif %}
 
@@ -220,8 +224,12 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
-                  
+                    {% if check_leave %}
+                        <button class="btn-sm btn-success float-right" disabled type="submit" name="submit" id="atte_absent" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                    {% else %}
+                        <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                    {% endif %}
+
                 </div>
               </div>
                  
@@ -544,6 +552,7 @@
 
     $(function(){
         var login_time = "{{login_time}}";
+        var check_in = "{{check_in}}";
         // alert(a);
         if(login_time){
             //create date format  
