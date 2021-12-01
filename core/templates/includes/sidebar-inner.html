@@ -122,16 +122,21 @@
 
             {% if role == "Manager" %}   
 
+            <a href="{% url 'reporting' %}" class="nav-link {% if request.resolver_match.url_name == "reporting" %}active{% endif %}">
+                <i class="fas fa-user text-primary"></i>
+                <span class="sidenav-normal"> Employees </span>
+            </a>
+
                 <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %}" 
                 href="#navbar-leave_approve" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave_approve">
                 <i class="fas fa-calendar-alt text-primary"></i>
-                    <span class="nav-link-text">Leave Approve</span>
+                    <span class="nav-link-text">Leave Approval</span>
                 </a>
                 <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %}" id="navbar-leave_approve">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a href="/leave_request/" class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} ">
-                            <span class="sidenav-mini-icon"> C </span>
+                            <span class="sidenav-mini-icon"> LA </span>
                             <span class="sidenav-normal"> Leave Applications </span>
                             </a>
                         </li>
@@ -139,7 +144,11 @@
                     </ul>
                 </div>
 
+               
+
             {% endif %}
+
+            
                 
             {% if role == "Admin" %}    
                 <a class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}{% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}" 

@@ -1352,3 +1352,17 @@ def delete_employee(request, pk):
     data.save()
     messages.success(request, 'Employee was deleted! ')
     return redirect('employees')
+
+
+def reporting(request):
+    reporting_id=request.user.emp_id
+    # print(reporting_id)
+    reporting = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=reporting_id) )
+    # print(reporting)
+    # for report_employee in reporting:
+    #     subj = report_employee.employee.first_name
+    # # test=reporting.report_employee.first_name
+    # print(subj)
+    # reporting=Employee.objects.filter(is_active=1)
+    context = {'reporting': reporting }
+    return render(request, "employee/reporting.html", context)

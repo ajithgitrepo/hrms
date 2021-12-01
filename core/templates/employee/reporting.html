@@ -1,0 +1,409 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Employees {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Employees</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Employees</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <!-- <a href="{% url 'add_employee' %}" class="btn btn-sm btn-neutral">Add</a> -->
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Employees</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                </tr>
+              </thead>
+             
+              <tbody>
+                {% for emp in reporting %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    
+                    <td class="nr" data-queryid="{{ emp.employee_id }}">{{emp.employee_id}}</td>
+                    <td>{{emp.employee.first_name}}</td>
+                    <td>{{emp.employee.email_id}}</td>
+                    <td>{{emp.employee.mobile_number}}</td>
+
+                 
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Employee Other Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;">Employee ID :</span></div> <div class="col-lg-3"><span style="font-weight: 700;" id="employee_id_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Name : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="first_name_other"></span></div>
+                 </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Email ID :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="email_id_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Nick Name : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="nick_name_other"></span></div>
+                 </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Reporting To :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="department_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Source Of Hire : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="source_of_hire_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Seating Location :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="seating_location_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Location : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="location_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Title :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="title_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Date Of Joining : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="date_of_joining_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Employee Status :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="employee_status_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Employee Type : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="employee_type_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Work Phone :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="work_phone_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Code Name : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="code_name_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Extension :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="extension_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Role : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="role_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Total Experience :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="total_experience_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Experience : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="experience_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Address :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="address_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Birth_Date : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="birth_date_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <!-- <div class="row">
+                  <div class="col-lg-6"><span style="color: blue;">Total Experience :</span> <span style="font-weight: 700;" id="total_experience_other"></span></div>
+                  <div class="col-lg-6"><span style="color: blue;">Experience : </span> <span style="font-weight: 700;" id="Experience_other"></span></div>
+              </div> -->
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Marital Status :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="marital_status_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Mobile Phone : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="mobile_phone_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Other Email :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="other_email_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">About Me : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="about_me_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Date of Exit :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="date_of_exit_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Expertise : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="expertise_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Job Description :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="job_description_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Gender : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="gender_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Tags :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="tags_other"></span></div>
+                  <div class="col-lg-6"></div>
+
+                  <!-- <div class="col-lg-6"><span style="color: blue;">gender : </span> <span style="font-weight: 700;" id="gender_other"></span></div> -->
+              </div>
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this employee?');
+        }) 
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+//         $.ajaxSetup({
+//   headers: { "X-CSRFToken": '{{csrf_token}}' }
+// });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//         }
+//     }
+// });
+
+// $(window).load(function() {
+//       $('#myModal').modal('show');
+// });
+
+
+
+ $(".use-address").click(function() {
+    alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");
+      $.ajax({  
+            type: "POST",  
+            url: "/snippets",  
+            data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                       //  alert(item.fields.name);
+                        if(check == false)
+                        {
+                              check = true;
+                              var name = item.fields.first_name + " " + item.fields.last_name; 
+                              var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                              $('#employee_id_other').html(item.pk);
+                              $('#first_name_other').html(name);
+                              $('#email_id_other').html(item.fields.email_id);
+                              $('#nick_name_other').html(item.fields.nick_name);
+                              $('#department_other').html(item.fields.department);
+                              $('#reporting_to_other').html(item.fields.reporting_to);
+                              $('#source_of_hire_other').html(item.fields.source_of_hire);
+                              $('#seating_location_other').html(item.fields.seating_location);
+                              $('#location_other').html(item.fields.location);
+                              $('#title_other').html(item.fields.title);
+                              $('#date_of_joining_other').html(item.fields.date_of_joining);
+                              $('#employee_status_other').html(item.fields.employee_status);
+                              $('#employee_type_other').html(item.fields.employee_type);
+                              $('#work_phone_other').html(item.fields.work_phone);
+                              $('#code_name_other').html(item.fields.code_name);
+                              $('#extension_other').html(item.fields.extension);
+                              
+
+                              $('#total_experience_other').html(item.fields.total_experience);
+                              $('#address_other').html(item.fields.address);
+                              $('#experience_other').html(item.fields.experience);
+                              $('#birth_date_other').html(item.fields.birth_date);
+                              $('#marital_status_other').html(item.fields.marital_status);
+                              $('#mobile_phone_other').html(mobi);
+                              $('#other_email_other').html(item.fields.other_email);
+                              $('#about_me_other').html(item.fields.about_me);
+                              $('#date_of_exit_other').html(item.fields.date_of_exit);
+
+                              $('#expertise_other').html(item.fields.expertise);
+                              $('#job_description_other').html(item.fields.job_description);
+                              $('#gender_other').html(item.fields.gender);
+                              $('#tags_other').html(item.fields.tags);
+                        }
+                   //now you can access properties using dot notation
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+});
+
+        $('td.query-main').live('click', function() { //alert();
+  var queryid = $(this).data("queryid");
+  
+ 
+});
+
+
+
+    </script>
+
+  
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                },
+                filename: function(){
+                    var dt = new Date();
+                    dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+                    return 'employees-' + dt;
+                },
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
+                    columns: [1, 2, 3, 4, 5, 6],
+                },
+            },
+            //'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+

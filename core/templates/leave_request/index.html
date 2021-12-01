@@ -1,8 +1,10 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Datatables {% endblock %}
+{% block title %} Leave Applications {% endblock %}
 
 {% load static %}
+
+{% load custom_tags %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
@@ -15,8 +17,7 @@
 
 {% block content %}
 
-  <!-- Page plugins -->
- 
+{% role_name as role %}
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -35,7 +36,7 @@
           </div>
           <div class="col-lg-6 col-5 text-right">
             <a href="{% url 'add_leave_request' %}" class="btn btn-sm btn-neutral">Add</a> 
-            <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
       </div>
@@ -66,9 +67,8 @@
                   <th>Type</th>
                   <th>Form Date</th>
                   <th>To Date</th>
+                  <th>Total Days</th>
                   <th>Doc</th>
-                  <!-- <th>Total Days</th> -->
-                  <!-- <th>Reason</th> -->
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -82,6 +82,9 @@
                   <td><span style="color: {{ req.leave_type.color}}">{{req.leave_type.name}}</span></td> 
                   <td>{{req.from_date|date:"d-m-Y" }}</td> 
                   <td>{{req.to_date|date:"d-m-Y" }}</td>
+                  
+                  <td>{{req.total_days}}</td>
+
                   <td align="center">
                         {% if req.document_url != "" and req.document_url != none %}
                         <a class="float-right" onclick="show_documents('{{req.id}}')" data-toggle="tooltip" data-original-title="Download File">
@@ -94,8 +97,25 @@
                               <i class="fas fa-download"></i></i>&nbsp;&nbsp;
                         </a> -->
                   </td>
-                  <td>
 
+                  {% if role == "Admin" %}
+                  <td>
+                    {% if req.is_approved == 0 %}
+                      Pending
+                    {% endif %}
+                    {% if req.is_approved == 1 %}
+                      Approved
+                    {% endif %}
+                    {% if req.is_approved == 2 %}
+                      Rejected
+                    {% endif %}
+                  
+                  </td> 
+                  {% endif %}
+
+                  {% if role == "Manager" %}
+                  <td>
+                   
                     <select class="form-control change_status" name="change_status" id="{{ req.id }}">
                         <option value="0" {% if req.is_approved == 0 %} selected{% endif %} >Pending</option>
                         <option value="1" {% if req.is_approved == 1 %} selected{% endif %} >Approve</option>
@@ -103,6 +123,7 @@
                     </select>
 
                   </td> 
+                  {% endif %}
                  
                     <td>
                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
