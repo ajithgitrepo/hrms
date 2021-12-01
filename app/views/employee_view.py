@@ -903,7 +903,7 @@ def update_employee(request, pk):
             if len(request.FILES) != 0:
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time)
+                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
 
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]

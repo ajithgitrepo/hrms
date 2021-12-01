@@ -1,4 +1,3 @@
-
 {% extends "layouts/base.html" %}
 
 {% load static %}
@@ -553,10 +552,16 @@
     $(function(){
         var login_time = "{{login_time}}";
         var check_in = "{{check_in}}";
-        // alert(a);
+    	var session = "{{session}}";
+    	
+        // alert(session);
         if(login_time){
+        	// alert(1);
             //create date format  
-            str = login_time.replace(" a.m.", ":00");
+            // str = login_time.replace(" p.m.", ":00");
+        
+        	str = login_time.split(' ')[0];
+        	// alert(str);
         
             var timeStart = new Date("01/01/2021 " + str).getTime();
             var today_hour = new Date().getHours();
@@ -566,7 +571,7 @@
 
             var timeEnd = new Date("01/01/2021 " + today_time).getTime();
 
-            // alert(today_end);
+            //alert(timeEnd);
              
             // var hourDiff = timeEnd - timeStart;    
            
@@ -576,11 +581,13 @@
             var seconds = Math.floor((diff % 6e4) / 1000);
             var duration = hours+":"+minutes+":"+seconds;
 
-            // console.log(duration)
+           // alert(str)
+        
             $("#working_hours").html(duration +" Hrs")
 
         } 
         else{
+        	// alert(2);
             $("#working_hours").html(check_in +" Hrs")
         }
 
@@ -614,7 +621,8 @@
         // alert(a);
         if(login_time && session){
             //create date format  
-            str = login_time.replace(" a.m.", ":00");
+            // str = login_time.replace(" p.m.", ":00");
+            str = login_time.split(' ')[0];
         
             var timeStart = new Date("01/01/2021 " + str).getTime();
             var today_hour = new Date().getHours();
