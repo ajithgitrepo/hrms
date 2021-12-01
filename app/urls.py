@@ -98,11 +98,11 @@ urlpatterns = [
 
     #Employee Files
     path('employee_files/', admin_only(views.employee_files_view.IndexView.as_view()), name="employee_files"),
-    path('add_emp_files/', views.employee_files_view.add_emp_files, name="add_emp_files"),
-    path('delete_emp_file/<str:pk>/', views.employee_files_view.delete_emp_file, name="delete_emp_file"),
+    path('add_emp_files/', admin_only(views.employee_files_view.add_emp_files), name="add_emp_files"),
+    path('delete_emp_file/<str:pk>/', admin_only(views.employee_files_view.delete_emp_file), name="delete_emp_file"),
 
     #New Hires
-    path('new_hires/', views.new_hires_view.index, name="new_hires"),
+    path('new_hires/', admin_only(views.new_hires_view.index), name="new_hires"),
     path('birthdays/', views.new_hires_view.birthdays, name="birthdays"),
     path('get_birthday/', views.new_hires_view.get_birthday, name="get_birthday"),
 

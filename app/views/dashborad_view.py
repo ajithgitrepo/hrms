@@ -134,7 +134,7 @@ def index(request):
     # print(dates)
     if check_in_time:
         if check_in_time[0].checkin_time:
-            login_time = check_in_time[0].checkin_time
+            login_time = str(check_in_time[0].checkin_time)
         else:
             login_time = ""
     else:

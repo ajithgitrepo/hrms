@@ -243,10 +243,14 @@
                        
                         <div>
                             <strong class="ann_time"> Expiry: </strong><span class="ann_time"> {{ data.expiry_date }}</span> &nbsp;&nbsp;&nbsp;
-                            {% if data.department.name %}
-                            <strong class="ann_time"> Notify To: </strong><span class="ann_time"> {{ data.department.name }} Department </span> 
-                            {% else %}
-                            <strong class="ann_time"> Notify To: </strong><span class="ann_time"> All Departments </span> 
+                           
+                            {% if role == "Admin" %} 
+                              {% if data.department.name %}
+                              <strong class="ann_time"> Notify To: </strong><span class="ann_time"> {{ data.department.name }} Department </span> 
+                             
+                              {% else %}
+                              <strong class="ann_time"> Notify To: </strong><span class="ann_time"> All Departments </span> 
+                              {% endif %}
                             {% endif %}
                         </div>
                     </div>

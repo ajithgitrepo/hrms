@@ -122,20 +122,25 @@ def add_employee(request):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            if len(request.FILES) != 0:
+            # if len(request.FILES) != 0:
+            if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
                 handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
+            else:
+                file_name = None
+            
 
+            if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
                 s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
                 handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
-
             else:
-                file_name = None
-                S_file_name = None
+                s_file_name = None
+            
+         
 
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
@@ -900,30 +905,32 @@ def update_employee(request, pk):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            if len(request.FILES) != 0:
+            employee = Employee.objects.get(employee_id = request.user.emp_id)            
+
+            # if len(request.FILES) != 0:
+            if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
                 handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
-
-                s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
-                s_file_name = s_name+"-"+current_date_time+""+s_extesion
-
             else:
-                employee = Employee.objects.get(employee_id = request.user.emp_id)
-                # print(employee.profile)
                 if employee.profile == None:
                     file_name = None
                 else:
                     file_name = employee.profile
 
+            if request.FILES.get('signature', False):
+                s_name = os.path.splitext(str(request.FILES['signature']))[0]
+                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
+                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_file_name = s_name+"-"+current_date_time+""+s_extesion
+            else:
                 if employee.signature == None:
                     s_file_name = None
                 else:
                     s_file_name = employee.signature
 
+         
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
             seating_location = request.POST.get('seating_location')
@@ -1084,7 +1091,7 @@ def update_employee(request, pk):
                             leave_name = each.name
                             leave_unit = each.unit
                             leave_id = each.id
-                        # leave_no_of_days = each.effective_no_of_days  # Number Of Leaves
+                            # leave_no_of_days = each.effective_no_of_days  # Number Of Leaves
                             for each_effect in Leave_Effective.objects.filter(is_active='1', leave_type_id=leave_id):
 
                                 # return HttpResponse(each_effect.effective_after)
