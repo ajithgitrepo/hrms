@@ -1,7 +1,6 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
+from app.views.employee_view import employees
+from app.views.restriction_view import admin_only,role_name
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
@@ -24,7 +23,7 @@ from app.models.leave_balance_model import Leave_Balance
 from app.models.leave_request_model import LeaveRequest 
 from app.models.employee_model import Employee 
 # from app.models import Group 
-
+from app.models.reporting_to_model import Reporting 
 from django.contrib.auth.models import Group
 from django.db.models import Max, Subquery, OuterRef
 from app.models.leave_type_model import * 
@@ -37,10 +36,23 @@ from django.core.files.storage import FileSystemStorage
 
 
 def leave_request(request):
-   
-    leave_request = LeaveRequest.objects.filter(is_active='1').annotate(name=Subquery(Employee.objects.filter(employee_id =OuterRef('employee_id')).values('first_name'))).order_by('created_at').reverse()
-#     LeaveRequest.objects.filter(competition_id=_competition.id).filter(team_id__in=joined_team_ids).annotate(name=Subquery(Team.objects.filter(id=OuterRef('team_id')).values('name')))
-    # print(leave_request)
+
+    role = role_name(request)
+    # print(role)
+
+    if(role == "Admin"):
+        leave_request = LeaveRequest.objects.filter(is_active='1').annotate(name=Subquery(Employee.objects.filter(employee_id =OuterRef('employee_id')).values('first_name'))).order_by('created_at').reverse()
+        # print(leave_request)
+    if(role =="Manager"):
+        reporting_ids = Reporting.objects.filter(is_active = '1', reporting_id = request.user.emp_id)
+       
+        ids = []
+        for data in reporting_ids:
+            ids.append(data.employee_id)
+
+        leave_request = LeaveRequest.objects.filter(is_active='1', employee_id__in = ids).annotate(name=Subquery(Employee.objects.filter(employee_id =OuterRef('employee_id')).values('first_name'))).order_by('created_at').reverse()
+        # print(leave_request)
+
     context = {'leave_request':leave_request}
     return render(request, "leave_request/index.html", context)
 

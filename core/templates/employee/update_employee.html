@@ -292,9 +292,13 @@ input[type=number] {
                     <option value="" selected >Select</option>
                     {% for report in reporting %}
                         
+                          {% if reporting_to %}
                             {% for data in reporting_to %}
                                 <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
-                            {% endfor %} 
+                            {% endfor %}
+                          {% else %} 
+                            <option value="{{ report.employee_id }}"> {{ report.first_name }} {{ report.last_name }}</option>
+                          {% endif %}
                      
                     {% endfor %} 
                 </select>

@@ -21,7 +21,7 @@ class Leave_Balance(models.Model):
     is_active = models.PositiveSmallIntegerField(default=1)
     customize_reason = models.CharField(max_length=500, blank = True, null = True)
     device = models.CharField(max_length=20, blank = True, null = True)  
-    total_month = models.PositiveSmallIntegerField(default=0)
+    total_month = models.CharField(max_length=30,default=0)
 
     # casual_leave = models.CharField(max_length=30,blank = True, null = True)
     # sick_leave = models.CharField(max_length=30,blank = True, null = True)

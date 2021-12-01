@@ -404,7 +404,7 @@ def add_employee(request):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender1) | Q(gender=None) , is_active='1', leave_type_id=leave_id ):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id ):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -1330,7 +1330,7 @@ def update_employee(request, pk):
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
     reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
-    # print(reporting_to[0].reporting_id)
+    # print(reporting_to)
     context_role = {
         'roles': role,
         'reporting': reporting,
