@@ -104,7 +104,7 @@ def attendance(request):
     # print(weekend)
 
     check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
-    print(check_leave)
+    # print(check_leave)
 
     num_days = len([1 for i in calendar.monthcalendar(
         datetime.now().year, datetime.now().month) if i[6] != 0])
@@ -142,6 +142,7 @@ def filter_attendance(request, month):
     last_day = date.replace(day=calendar.monthrange(date.year, date.month)[1])
     # print(date.strftime("%Y"))
 
+    myDate = datetime.today()
     dates = []
     date_no = []
 
@@ -173,6 +174,9 @@ def filter_attendance(request, month):
     weekend = Weekend.objects.filter(is_active=1)
     # print(weekend)
 
+    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    # print(check_leave)
+
     num_days = len([1 for i in calendar.monthcalendar(
         datetime.now().year, datetime.now().month) if i[6] != 0])
 
@@ -190,6 +194,7 @@ def filter_attendance(request, month):
         'emp_id': request.user.emp_id,
         'weekend': weekend,
         'weekend_count': num_days,
+        'check_leave':check_leave,
     }
 
     return render(request, "self_service/attendance.html", context)

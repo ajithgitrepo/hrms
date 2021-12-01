@@ -245,9 +245,11 @@
 
                 <div class="col-lg-2">
                     {% if check_leave %}
-                        <button class="btn-sm btn-secondary float-right" disabled type="submit" name="submit" id="atte_absent" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                        <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></div>
+                      
                     {% else %}
                         <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                       
                     {% endif %}
                 </div>
               </div>
@@ -399,6 +401,10 @@
 
   
     <script type="text/javascript">
+
+    $("#atte_absent").click(function(){
+        alert("You won't able to check-in because you are in leave today..")
+    });
 
         var date_selected = ' {{ month_no }}-{{ year }} ';
 
