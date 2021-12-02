@@ -23,6 +23,9 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')
 
 AUTHENTICATION_BACKENDS = ('app.backend.EmailBackend',)
 
+AUTH_EXEMPT_ROUTES = ('register', 'login', 'forgot-password')
+AUTH_LOGIN_ROUTE = 'login'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
