@@ -322,7 +322,7 @@ def send_offer_letter(request):
     # print(details[0].first_name)
 
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name }
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name, 'currency': request.GET.get('currency') }
     template = get_template('mail_templates/appoinment.html')
     html  = template.render(context_dict)
     result = BytesIO()
@@ -382,7 +382,7 @@ def preview_offer_letter(request):
     details = Onboard_Employee.objects.filter(candidate_id=request.GET.get('can_id'))
     
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name }
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'mobile': details[0].mobile_number, 'joining_date': request.GET.get('can_joindate'), 'salary': request.GET.get('can_salary'), 'position': request.GET.get('can_position'), 'email': details[0].email_id, 'aadhar': details[0].emirate_id, 'hr_name': request.user.first_name, 'currency': request.GET.get('currency') }
     template = get_template('mail_templates/appoinment.html')
     html  = template.render(context_dict)
     result = BytesIO()

@@ -332,6 +332,18 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <div class="col-lg-3"><span style="color: blue;">Salary :</span> </div> 
                     <div class="col-lg-3"><input class="form-control" required type="number" placeholder="Enter Salary" id="TxtSalary"></input></div>
                     
+                    <div class="col-lg-3"><span style="color: blue;">Curreny :</span> </div> 
+                    <div class="col-lg-3">
+                      <select class="form-control" id="currency">
+                        <option value="">Select</option>
+                        <option value="AED">AED</option>
+                        <option value="INR">INR</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                      </select>
+                    </div>
+                    
+
                 </div>
             
               
@@ -340,7 +352,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
             </form>
                 
                 <div class="modal-footer">
-					<center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center>
+					        <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center>
                  	<center><button id="btn_offer_letter" type="button" class="btn btn-success">Send</button></center>
                    
                 </div>
@@ -416,6 +428,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             var can_joindate = $("#TxtJoinDate").val();
             // var can_acceptdate = $("#TxtAcceptDate").val();
             var can_salary = $("#TxtSalary").val();
+            var currency = $("#currency").val();
             var can_position = $("#TxtPosition").val();
             // var can_email = $("#TxtEmailID").val();
             // var can_aadhar = $("#TxtAadharNumber").val();
@@ -429,6 +442,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             $("#TxtJoinDate").css("border", "1px solid black");
             $("#TxtAcceptDate").css("border", "1px solid black");
             $("#TxtSalary").css("border", "1px solid black");
+            $("#currency").css("border", "1px solid black");
             $("#TxtPosition").css("border", "1px solid black");
             $("#TxtEmailID").css("border", "1px solid black");
             $("#TxtAadharNumber").css("border", "1px solid black");
@@ -461,6 +475,11 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                   $("#TxtSalary").focus();
                  
             }
+            if ($('#currency').val() == "") {
+                  $("#currency").css("border", "1px solid red");
+                  $("#currency").focus();
+                 
+            }
             if ($('#TxtPosition').val() == "") {
                   $("#TxtPosition").css("border", "1px solid red");
                   $("#TxtPosition").focus();
@@ -485,7 +504,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                 
             }
 
-            if (can_joindate && can_salary && can_position ) {
+            if (can_joindate && can_salary && can_position && currency) {
                 $("#just_wait").show();
                 swal({
                     title: 'Are you sure?',
@@ -502,7 +521,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                         $.ajax({  
                         type: "GET",  
                         url: "/send_offer_letter/",  
-                        data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position},
+                        data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position, currency : currency},
                         success: $.proxy(function(data) {
                             
                             console.log(JSON.stringify(data));
@@ -553,6 +572,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 		var can_joindate = $("#TxtJoinDate").val();
 		// var can_acceptdate = $("#TxtAcceptDate").val();
 		var can_salary = $("#TxtSalary").val();
+    var currency = $("#currency").val();
 		var can_position = $("#TxtPosition").val();
 		// var can_email = $("#TxtEmailID").val();
 		// var can_aadhar = $("#TxtAadharNumber").val();
@@ -566,6 +586,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 		$("#TxtJoinDate").css("border", "1px solid black");
 		$("#TxtAcceptDate").css("border", "1px solid black");
 		$("#TxtSalary").css("border", "1px solid black");
+    $("#currency").css("border", "1px solid black");
 		$("#TxtPosition").css("border", "1px solid black");
 		$("#TxtEmailID").css("border", "1px solid black");
 		$("#TxtAadharNumber").css("border", "1px solid black");
@@ -598,6 +619,11 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 			$("#TxtSalary").focus();
 			
 		}
+    if ($('#currency').val() == "") {
+			$("#currency").css("border", "1px solid red");
+			$("#currency").focus();
+			
+		}
 		if ($('#TxtPosition').val() == "") {
 			$("#TxtPosition").css("border", "1px solid red");
 			$("#TxtPosition").focus();
@@ -610,12 +636,12 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 			
 		}
 
-		if (can_joindate && can_salary && can_position ) {
+		if (can_joindate && can_salary && can_position && currency) {
 			$("#just_wait").show();
 			$.ajax({  
 			type: "GET",  
 			url: "/preview_offer_letter/",  
-			data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position},
+			data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position, currency : currency},
 			success: $.proxy(function(data) {
 				
 				console.log(JSON.stringify(data));
