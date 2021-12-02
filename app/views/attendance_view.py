@@ -391,7 +391,7 @@ def export_excel(request):
         sheet.write('C1', 'Date', bold)
         sheet.write('D1', 'Status', bold)
         sheet.write('E1', 'First Check-In', bold)
-        sheet.write('F1', 'First Check-Out', bold)
+        sheet.write('F1', 'Last Check-Out', bold)
         sheet.write('G1', 'Check-In Location', bold)
 
 
