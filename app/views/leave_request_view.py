@@ -41,7 +41,7 @@ def leave_request(request):
     # print(role)
 
     if(role == "Admin"):
-        leave_request = LeaveRequest.objects.filter(is_active='1').annotate(name=Subquery(Employee.objects.filter(employee_id =OuterRef('employee_id')).values('first_name'))).order_by('created_at').reverse()
+        leave_request = LeaveRequest.objects.filter(is_active='1', employee__is_active = 1).order_by('created_at').reverse()
         # print(leave_request)
     if(role =="Manager"):
         reporting_ids = Reporting.objects.filter(is_active = '1', reporting_id = request.user.emp_id)
@@ -50,7 +50,7 @@ def leave_request(request):
         for data in reporting_ids:
             ids.append(data.employee_id)
 
-        leave_request = LeaveRequest.objects.filter(is_active='1', employee_id__in = ids).annotate(name=Subquery(Employee.objects.filter(employee_id =OuterRef('employee_id')).values('first_name'))).order_by('created_at').reverse()
+        leave_request = LeaveRequest.objects.filter(is_active='1', employee_id__in = ids, employee__is_active = 1).order_by('created_at').reverse()
         # print(leave_request)
 
     context = {'leave_request':leave_request}

@@ -78,7 +78,7 @@
                 {% for req in leave_request %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
-                  <td class="nr" style="color: blue;font-weight: 810;" data-queryid="{{ req.id }}">{{req.name}} - ({{req.employee.employee_id}}) </td>
+                  <td class="nr" style="color: blue;font-weight: 810;" data-queryid="{{ req.id }}">{{req.employee.first_name}} {{req.employee.last_name}} - ({{req.employee.employee_id}}) </td>
                   <td><span style="color: {{ req.leave_type.color}}">{{req.leave_type.name}}</span></td> 
                   <td>{{req.from_date|date:"d-m-Y" }}</td> 
                   <td>{{req.to_date|date:"d-m-Y" }}</td>
