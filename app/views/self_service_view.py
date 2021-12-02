@@ -50,8 +50,7 @@ from app.models.travel_request_model import Travel_Request_Detail
 @login_required(login_url="/login/")
 def profile(request):
 
-    employee = Employee.objects.select_related().get(
-        is_active='1', employee_id=request.user.emp_id)
+    employee = Employee.objects.select_related().get(is_active='1', employee_id=request.user.emp_id)
     # print(employee.department.name)
     context = {'employee': employee}
 

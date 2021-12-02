@@ -337,7 +337,8 @@ function csrfSafeMethod(method) {
             type: "POST",  
             url: "/snippets",  
             data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
-            success: function(data) {  console.log(JSON.stringify(data));
+            success: function(data) {  
+                  console.log(data);
                   var check = false;
                   jQuery.each(data, function(index, item) {
                         $('#role_other').html(item.fields.name);

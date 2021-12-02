@@ -105,6 +105,21 @@ def employees(request):
     return render(request, "employee/index.html", context)
 
 
+def snippets(request):
+    roles = Group.objects.filter(is_active='1')
+    emp_id =    request.POST.get('emp_id')
+    csrf =    request.POST.get('csrfmiddlewaretoken')
+    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type')))
+    test = final_list.values_list('role', flat=True)
+    x = str(test)
+    y = int(x[11])
+    roles = Group.objects.filter(id = y)
+    final_list_arr = list(chain(final_list, roles))
+    #return HttpResponse(roles)
+    jsondata = serializers.serialize('json', final_list_arr)
+    return HttpResponse(jsondata, content_type='application/json')
+
+
 def add_employee(request):
 
     form = EmployeeForm()
