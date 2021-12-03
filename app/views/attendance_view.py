@@ -385,6 +385,7 @@ def export_excel(request):
         absent_color = book.add_format({'font_color': '#f0989a'})
         holiday_color = book.add_format({'font_color': '#0de2ff'})
         present_color = book.add_format({'font_color': '#3dce4c'})
+        comp_off_color = book.add_format({'font_color': '#3d81ce'})
 
         sheet.write('A1', 'Employee Id', bold)
         sheet.write('B1', 'Employee Name', bold)
@@ -419,6 +420,8 @@ def export_excel(request):
                     sheet.write('C'+str(row_num), (row_data.date).strftime("%d-%m-%Y"))
                     if row_data.is_present == 1:
                         sheet.write('D'+str(row_num), "Present", present_color)
+                    if row_data.is_present == 2:
+                        sheet.write('D'+str(row_num), "Comp Off", comp_off_color)
                     if row_data.is_leave == 1:
                         sheet.write('D'+str(row_num), "Absent", absent_color)
                     sheet.write('E'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
