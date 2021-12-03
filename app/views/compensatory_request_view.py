@@ -43,7 +43,7 @@ from django.utils import timezone
 @login_required(login_url="/login/")
 def compensatory_request_details(request):
     role = role_name(request)
-    
+
     if role == 'Admin':
         employee = Compoensatory_Request_Detail.objects.filter(is_active='1').order_by('-created_at')
         # print(employee)
@@ -76,11 +76,9 @@ def snippets_compensatory_details_employee_all_info(request):
 
 
 def add_compensatory_request_details(request):  
-    #return HttpResponse('working..') 
-   # return render(request, "exit_details/add_exit_details.html")
+
     form = CompensatoryRequest_DetailForm()
     
-   # """
     if request.method == 'POST':
         form = CompensatoryRequest_DetailForm(request.POST)
         if  form.is_valid(): 
@@ -144,8 +142,22 @@ def add_compensatory_request_details(request):
             obj.save()
             messages.success(request, 'Compensatory request details was added ! ')
             return redirect('compensatory_request_details') 
-           
-    employee = Employee.objects.all()
+    
+    role = role_name(request)
+    
+    if role == 'Admin':
+        employee = Employee.objects.filter(is_active = 1).exclude(employee_id = request.user.emp_id)
+
+    if role == 'Manager':
+        reporting_ids = Reporting.objects.filter(is_active = '1', reporting_id = request.user.emp_id)
+
+        ids = []
+        for data in reporting_ids:
+            ids.append(data.employee_id)
+
+        employee = Employee.objects.filter(is_active='1',employee_id__in = ids)
+        # print(employee)
+
     context_role = {
           'employees': employee,
        }

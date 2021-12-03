@@ -144,21 +144,15 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <td>{{emp.from_time}}</td>
                     <td>{{emp.to_time}}</td>
                     <td>
-                      {% if role == "Manager" %}
                       <select class="form-control change_status" id="{{ emp.id }}" name="change_status">
                         <option value="0" {% if emp.status == 0 %} selected{% endif %} >Pending</option>
                         <option value="1" {% if emp.status == 1 %} selected{% endif %} >Approve</option>
                         <option value="2" {% if emp.status == 2 %} selected{% endif %} >Reject</option>
                       </select>
-                      {% endif %}
-                      {% if role == "Admin" %}
-                        {% if emp.status == 0 %} Pending{% endif %}
-                        {% if emp.status == 1 %} Approved{% endif %}
-                        {% if emp.status == 2 %} Rejected{% endif %}
-                      {% endif %}
+                    
                     </td>
                     <td> 
-                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
+                        <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
                         &nbsp; &nbsp;
                        
                         <a href="{% url 'delete_compensatory_details' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
