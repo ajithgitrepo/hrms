@@ -7,7 +7,8 @@ urlpatterns = [
    
     #Home page
     path('', views.dashborad_view.index, name='home'),
-  
+    path('home/', views.dashborad_view.index, name='home'),
+    
     #Self Service
     path('profile/', views.self_service_view.profile, name="profile"),
     path('attendance/', views.self_service_view.attendance, name="attendance"),
@@ -97,7 +98,7 @@ urlpatterns = [
     path('delete_org_file/<str:pk>/', views.organization_files_view.delete_org_file, name="delete_org_file"),
     # Class based view
     path('organinzation_files/', admin_only(views.organization_files_view.IndexView.as_view()), name="organinzation_files"),
-
+  
     #Employee Files
     path('employee_files/', admin_only(views.employee_files_view.IndexView.as_view()), name="employee_files"),
     path('add_emp_files/', admin_only(views.employee_files_view.add_emp_files), name="add_emp_files"),
@@ -186,6 +187,5 @@ urlpatterns = [
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
-
 
 ]

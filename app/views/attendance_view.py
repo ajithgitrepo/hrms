@@ -115,6 +115,9 @@ def attn_listview(request):
     absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
+    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(comp_off)
+
     zipped_data = zip(dates, date_no)
     # print(date_no)
     employees = Employee.objects.filter(is_active = 1)
@@ -140,6 +143,7 @@ def attn_listview(request):
         'emp_id':request.user.emp_id,
         'weekend':weekend,
         'weekend_count':num_days,
+        'comp_off':comp_off,
 
     }
 
@@ -182,6 +186,9 @@ def search_listview(request,pk,month):
     absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
+    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = pk, date__range=[first_day, last_day]).count()
+    # print(comp_off)
+
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
  
     weekend = Weekend.objects.filter(is_active = 1)
@@ -204,6 +211,7 @@ def search_listview(request,pk,month):
         'emp_id':pk,
         'weekend':weekend,
         'weekend_count':num_days,
+        'comp_off':comp_off,
     }
     
 
@@ -238,6 +246,9 @@ def attn_tableview(request):
     absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
+    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(comp_off)
+
     zipped_data = zip(dates, date_no)
 #    print(zipped_data)
     employees = Employee.objects.filter(is_active = 1)
@@ -269,6 +280,7 @@ def attn_tableview(request):
         'emp_id':request.user.emp_id,
         'weekend':weekend,
         'weekend_count':num_days,
+        'comp_off':comp_off,
 
     }
 
@@ -318,6 +330,9 @@ def search_tableview(request,pk,month):
     absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
+    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = pk, date__range=[first_day, last_day]).count()
+    # print(comp_off)
+
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
  
     weekend = Weekend.objects.filter(is_active = 1)
@@ -341,6 +356,7 @@ def search_tableview(request,pk,month):
         'emp_id':pk,
         'weekend':weekend,
         'weekend_count':num_days,
+        'comp_off':comp_off,
     }
     
 

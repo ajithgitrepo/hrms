@@ -1,7 +1,11 @@
+from django.http.response import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import resolve, reverse
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from app import views 
+from app.views.restriction_view import admin_only,role_name
+
 
 class LoginRequiredMiddleware(MiddlewareMixin):
     """
@@ -13,10 +17,34 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         assert hasattr(request, 'user'), """
         The Login Required middleware needs to be after AuthenticationMiddleware.
         Also make sure to include the template context_processor:
-        'django.contrib.auth.context_processors.auth'."""
+        'django.contrib.auth.context_processors.auth'."""   
+
+        current_route_name = resolve(request.path_info).url_name
+        # print(current_route_name)
+        
+        # admin_urls = ['home','profile','attendance','filter_attendance','files','add_files','assets','add_asset',
+        #             'leave_tracker','apply_leave','leave','self_travel_request','add_self_travel_request','delete_travel_request',
+        #             'self_travel_expense','compensatory_request','add_compensatory_request','employees','add_employee','update_employee',
+        #             'delete_employee','snippets','reporting','roles','add_roles','update_role','delete_role'
+                    
+        #         ]
+
+        # if request.user.is_authenticated:
+        #     if not current_route_name in admin_urls:
+        #         return HttpResponse('not authorized..')
 
         if not request.user.is_authenticated:
-            current_route_name = resolve(request.path_info).url_name
-
+            
             if not current_route_name in settings.AUTH_EXEMPT_ROUTES:
                 return HttpResponseRedirect(reverse(settings.AUTH_LOGIN_ROUTE))
+
+    # def process_view(self, request, view_func, view_args, view_kwargs):
+    #     # Get the view name as a string
+    #     view_name = '.'.join((view_func.__module__, view_func.__name__))
+
+    #     current_route_name = resolve(request.path_info).url_name
+    #     # print(current_route_name)
+    #     # If the view name is in our exclusion list, exit early
+    #     exclusion_set = 'organinzation_files'
+    #     if current_route_name == 'organinzation_files':
+    #         return HttpResponse('not authorized..')

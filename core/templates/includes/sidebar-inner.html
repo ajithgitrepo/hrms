@@ -111,12 +111,12 @@
 
             {% if role == "Manager" %}   
 
-                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} " 
+                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} " 
                 href="#navbar-leave_approve" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave_approve">
                 <i class="fas fa-users text-primary"></i>
                     <span class="nav-link-text">Employees</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %}" id="navbar-leave_approve">
+                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} " id="navbar-leave_approve">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a href="/reporting/" class="nav-link {% if request.resolver_match.url_name == "reporting" %}active{% endif %} ">
@@ -124,17 +124,23 @@
                             <span class="sidenav-normal"> Employees </span>
                             </a>
                         </li>
-                   
-                    </ul>
-                    <ul class="nav nav-sm flex-column">
+
                         <li class="nav-item">
                             <a href="/leave_request/" class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} ">
                             <span class="sidenav-mini-icon"> LA </span>
                             <span class="sidenav-normal"> Leave Applications </span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="/compensatory_request_details/" class="nav-link {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} ">
+                            <span class="sidenav-mini-icon"> CR </span>
+                            <span class="sidenav-normal"> Compensatory Request </span>
+                            </a>
+                        </li>
                    
                     </ul>
+                   
                 </div>
 
             {% endif %}

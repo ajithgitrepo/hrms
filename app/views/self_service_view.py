@@ -92,6 +92,10 @@ def attendance(request):
         is_active=1, is_leave=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
+    comp_off = Attendance.objects.filter(
+    is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(absent_days)
+
     zipped_data = zip(dates, date_no)
     # print(date_no)
     employees = Employee.objects.filter(is_active=1)
@@ -122,6 +126,7 @@ def attendance(request):
         'weekend': weekend,
         'weekend_count': num_days,
         'check_leave':check_leave,
+        'comp_off':comp_off,
 
     }
 
@@ -163,6 +168,10 @@ def filter_attendance(request, month):
         is_active=1, is_present=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(present_days)
 
+    comp_off = Attendance.objects.filter(
+    is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(absent_days)
+
     absent_days = Attendance.objects.filter(
         is_active=1, is_leave=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
@@ -194,6 +203,7 @@ def filter_attendance(request, month):
         'weekend': weekend,
         'weekend_count': num_days,
         'check_leave':check_leave,
+        'comp_off':comp_off,
     }
 
     return render(request, "self_service/attendance.html", context)

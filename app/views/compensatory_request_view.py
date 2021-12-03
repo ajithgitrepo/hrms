@@ -27,6 +27,8 @@ from django.shortcuts import render
 # from django.template import RequestContext
 from django.db.models import Q
 from datetime import datetime
+
+from app.models.reporting_to_model import Reporting 
 # from django.contrib.auth.models import Group
 from django.core import serializers
 from django.http import JsonResponse
@@ -40,8 +42,22 @@ from django.utils import timezone
 
 @login_required(login_url="/login/")
 def compensatory_request_details(request):
-    employee = Compoensatory_Request_Detail.objects.filter(is_active='1').order_by('-created_at')
-    # print(employee)
+    role = role_name(request)
+    
+    if role == 'Admin':
+        employee = Compoensatory_Request_Detail.objects.filter(is_active='1').order_by('-created_at')
+        # print(employee)
+
+    if role == 'Manager':
+        reporting_ids = Reporting.objects.filter(is_active = '1', reporting_id = request.user.emp_id)
+
+        ids = []
+        for data in reporting_ids:
+            ids.append(data.employee_id)
+
+        employee = Compoensatory_Request_Detail.objects.filter(is_active='1',employee_id__in = ids, employee__is_active = 1).order_by('-created_at')
+        # print(employee)
+
     context = {'employees':employee}
     return render(request, "compensatory_request_details/index.html", context)
 

@@ -2,6 +2,8 @@
 
 {% block title %} Compensatory Details {% endblock %}
 
+{% load custom_tags %}
+
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <style>
@@ -58,6 +60,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 {% block content %}
 
+{% role_name as role %}
+
 <!-- Page plugins -->
 <link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
@@ -82,8 +86,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
           </div>
           <div class="col-lg-6 col-5 text-right">
              <a href="{% url 'add_compensatory_request_details' %}" class="btn btn-sm btn-neutral">Add Record</a>
-            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
-            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+           
           </div>
         </div>
       </div>
@@ -141,11 +144,18 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <td>{{emp.from_time}}</td>
                     <td>{{emp.to_time}}</td>
                     <td>
+                      {% if role == "Manager" %}
                       <select class="form-control change_status" id="{{ emp.id }}" name="change_status">
                         <option value="0" {% if emp.status == 0 %} selected{% endif %} >Pending</option>
                         <option value="1" {% if emp.status == 1 %} selected{% endif %} >Approve</option>
                         <option value="2" {% if emp.status == 2 %} selected{% endif %} >Reject</option>
                       </select>
+                      {% endif %}
+                      {% if role == "Admin" %}
+                        {% if emp.status == 0 %} Pending{% endif %}
+                        {% if emp.status == 1 %} Approved{% endif %}
+                        {% if emp.status == 2 %} Rejected{% endif %}
+                      {% endif %}
                     </td>
                     <td> 
                          <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
@@ -186,12 +196,12 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                 <div class="modal-body">
                   <div id="section-1" >
                       
-                 <div class="row">
+                 <!-- <div class="row">
                     
                      <div class="col-lg-3"><span style="color: blue;">Expiry Date : </span></div> 
                      <div class="col-lg-3"> <span style="font-weight: 700;" id="expiry_date_other"></span></div>
                      
-                  </div>
+                  </div> -->
                  <hr class="my-3" />
 
                  <div class="row">
@@ -261,7 +271,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 
 
         $(document).on('click', '.confirm-delete', function(){
-            return confirm('Are you sure you want to delete this employee exit details?');
+            return confirm('Are you sure you want to delete this request?');
         }) 
 
            $(document).ready(function()
@@ -353,7 +363,7 @@ function csrfSafeMethod(method) {
                             //  $('#employee_id_other').html(item.pk);
                             //  $('#first_name_other').html(name);
                               
-                              $('#expiry_date_other').html(item.fields.expiry_date);
+                              // $('#expiry_date_other').html(item.fields.expiry_date);
                               $('#reason_other').html(item.fields.reason);
                               
                              

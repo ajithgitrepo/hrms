@@ -45,7 +45,9 @@
     .comp-present {
         border-color: #3dce4cd9 !important;
     }
-
+    .comp-comp {
+        border-color: #3d81ced9 !important;
+    }
     .comp-absent {
         border-color: #f0989a !important;
     }
@@ -381,6 +383,14 @@
                             <div class="Avadat" id="ZPAtt_payDaysCount">{{ present_days }} Day(s)</div>
                         </div>
                     </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-comp">
+                            <span>Comp Off</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ comp_off }} Day(s)</div>
+                        </div>
+                    </div>
+
 
                     <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
                         <div class="Dtyps comp-absent">
