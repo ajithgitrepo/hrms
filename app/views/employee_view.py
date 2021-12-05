@@ -1367,9 +1367,9 @@ def delete_employee(request, pk):
     data.save()
 
     user = User.objects.get(emp_id=pk)
-    user.is_active = val
+    user.is_active = 0
     user.save()
-    
+
     messages.success(request, 'Employee was deleted! ')
     return redirect('employees')
 
