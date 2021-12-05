@@ -392,7 +392,7 @@ def export_excel(request):
         # print(dates)
 
         book = xlsxwriter.Workbook(output)
-        sheet = book.add_worksheet('test')
+        sheet = book.add_worksheet('attendance')
         sheet.set_column(0, 5, 25)
         
         # Set up some formats to use.

@@ -1,8 +1,10 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Leave Requests {% endblock %}
+{% block title %} Leave Applications {% endblock %}
 
 {% load static %}
+
+{% load custom_tags %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
@@ -11,17 +13,11 @@
 <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
 <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
 
-<!-- Page plugins -->
-<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
-<link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
-
 {% endblock stylesheets %}
 
 {% block content %}
 
-  <!-- Page plugins -->
- 
+{% role_name as role %}
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -40,7 +36,7 @@
           </div>
           <div class="col-lg-6 col-5 text-right">
             <a href="{% url 'add_leave_request' %}" class="btn btn-sm btn-neutral">Add</a> 
-            <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
       </div>
@@ -71,12 +67,9 @@
                   <th>Type</th>
                   <th>Form Date</th>
                   <th>To Date</th>
-                  <th style="display: none;"">Status</th>
+                  <th>Total Days</th>
                   <th>Doc</th>
-                 
-                  <!-- <th>Total Days</th> -->
-                  <!-- <th>Reason</th> -->
-                  <th  style="width: 92.094px !important;text-align: center;">Status</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -85,22 +78,13 @@
                 {% for req in leave_request %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
-                  <td class="nr" style="font-weight: 900; data-queryid="{{ req.id }}">{{req.employee.first_name}} {{req.employee.last_name}} - ({{req.employee.employee_id}}) </td>
-                  <td><span style="font-weight: 700;color: {{ req.leave_type.color}};">{{req.leave_type.name}}</span></td> 
+                  <td class="nr" data-queryid="{{ req.id }}">{{req.employee.first_name}} {{req.employee.last_name}} - ({{req.employee.employee_id}}) </td>
+                  <td><span style="color: {{ req.leave_type.color}}">{{req.leave_type.name}}</span></td> 
                   <td>{{req.from_date|date:"d-m-Y" }}</td> 
                   <td>{{req.to_date|date:"d-m-Y" }}</td>
-                  <td style="display: none;">
-                        {% if  req.is_rejected == 1  %}
-                           Rejected
-                        {% endif %}
-                        {% if  req.is_approved == 1  %}
-                            Rejected
-                        {% endif %}
-                        {% if req.is_approved == 0 and req.is_rejected == 0  %}
-                           Pending
-                        {% endif %}
                   
-                  </td>
+                  <td>{{req.total_days}}</td>
+
                   <td align="center">
                         {% if req.document_url != "" and req.document_url != none %}
                         <a class="float-right" onclick="show_documents('{{req.id}}')" data-toggle="tooltip" data-original-title="Download File">
@@ -109,51 +93,48 @@
                         {% else %}
                               Nil
                           {% endif %}
-                       
+                        <!-- <a class="float-right" href="{% static '' %}leave_documents/{{ req.document_url }}" download data-toggle="tooltip" data-original-title="Download File">
+                              <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                        </a> -->
                   </td>
-                  {% if req.is_approved == 0 and req.is_rejected == 0  %}
-                  <td align="center">
-                      
-                    <select class="form-control change_status" style="width: 101px" name="change_status" id="{{ req.id }}">
+
+                  {% if role == "Admin" %}
+                  <td>
+                    {% if req.is_approved == 0 %}
+                      Pending
+                    {% endif %}
+                    {% if req.is_approved == 1 %}
+                      Approved
+                    {% endif %}
+                    {% if req.is_approved == 2 %}
+                      Rejected
+                    {% endif %}
+                  
+                  </td> 
+                  {% endif %}
+
+                  {% if role == "Manager" %}
+                  <td>
+                   
+                    <select class="form-control change_status" name="change_status" id="{{ req.id }}">
                         <option value="0" {% if req.is_approved == 0 %} selected{% endif %} >Pending</option>
                         <option value="1" {% if req.is_approved == 1 %} selected{% endif %} >Approve</option>
-                        <option value="2" {% if req.is_rejected == 1 %} selected{% endif %} >Reject</option>
+                        <option value="2" {% if req.is_approved == 2 %} selected{% endif %} >Reject</option>
                     </select>
-                  </td>
-                    {% endif %}  
+
+                  </td> 
+                  {% endif %}
                  
-
-                  {% if  req.is_rejected == 1  %}
-                  <td align="center" >
-                      <a class="" style="color: red;font-weight: 700;text-align: center;" data-toggle="tooltip" data-original-title="Rejected">
-                        Rejected   
-                        </a>
-                  </td>
-                   {% endif %}
-
-                  {% if req.is_approved == 1   %}
-                  <td align="center" >
-                    <a class="" style="color: green;font-weight: 700;text-align: center;" data-toggle="tooltip" data-original-title="Approved">
-                       Approved
-                  </a>
-                  </td >
-                    {% endif %}
-                   
-                    <td >
+                    <td>
                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
                         &nbsp;&nbsp;
                         <!-- <a class="fas fa-edit" data-toggle="tooltip" data-original-title="Edit" title="Edit" href="{% url 'update_leave_request' req.id %}"></a> -->
                         &nbsp;&nbsp;
-                  {% if req.is_approved == 0 and req.is_rejected == 0  %}
-                   
                         <a href="{% url 'delete_leave_request' req.id %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Request">
                               <i class="fas fa-trash"></i>
                             </a> 
-                            
+                    </td>
                    
-                    {% endif %}
-                  </td>
-
                 </tr>
                 {% endfor %}
               </tbody>
@@ -276,31 +257,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> 
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"> 
-
     <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
-
-    <!-- <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>-->
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script> 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script> 
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
-
-     <!-- Optional JS -->
-  <!-- <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-  <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script> -->
   
     <script type="text/javascript">
         $(document).on('click', '.confirm-delete', function(){
@@ -333,13 +290,7 @@
                                 var time = d.getTime();
                                 var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
                                 var result = day + "-" + month + "-" + year + " " + time;
-                                var tot_days = parseInt(item.fields.total_days);
-                                if(tot_days == 0)
-                                var tot = 1;
-                                else
-                                var tot = parseInt(item.fields.total_days);
-                               
-                               // var tot = parseInt(item.fields.total_days) + 1
+                                var tot = parseInt(item.fields.total_days) + 1
                                 check = true;
                                 $('#total_days_other').html(tot);
                                 $('#team_mailid_other').html(item.fields.team_mailid);
@@ -357,133 +308,20 @@
         });
 
 
-      //  $(document).ready(function() {
-      //             var buttonCommon = {
-      // exportOptions: {
-      //       format: {
-      //       body: function(data, row, column, node) {
-      //       // Strip $ from salary column to make it numeric
-      //       return column === 3 ?
-      //             data.replace(/[$,]/g, '') :
-      //             data;
-      //       }
-      //       }
-      // }
-      // };
-
-//       $(document).ready(function() {
-//     $('#dataTable').DataTable({
-//       dom: 'Bfrtip',
-//       buttons: [
-//         'copy', {
-//           extend: 'csv',
-//           "download": "download"
-//         }, {
-//           extend: 'excel',
-//           "download": 'download'
-//         }, {
-//           extend: 'pdf',
-//           text: 'Export with two row headers',
-//           download: 'download',
-//           customize: function(pdfDocument) {
-//             pdfDocument.content[1].table.headerRows = 2;
-//             var firstHeaderRow = [];
-//             $('#dataTable').find("thead>tr:first-child>th").each(
-//               function(index, element) {
-//                 var colSpan = element.getAttribute("colSpan");
-//                 firstHeaderRow.push({
-//                   text: element.innerHTML,
-//                   style: "tableHeader",
-//                   colSpan: colSpan
-//                 });
-//                 for (var i = 0; i < colSpan - 1; i++) {
-//                   firstHeaderRow.push({});
-//                 }
-//               });
-//             pdfDocument.content[1].table.body.unshift(firstHeaderRow);
-
-//           }
-//         }, {
-//           extend: 'print',
-//           download: 'download'
-//         }
-//       ]
-//     });
-//   });
-// });
-
-     $(document).ready(function() {
-var oTable = $('#datatable').DataTable( {
-         "pageLength": 10,
-        dom: 'Blfrtip',
-        buttons: [
-        {
-           extend: 'copy',
-           footer: true,
-           exportOptions: {
-            columns: [1,2,3,4,5]
+        $(document).ready(function() {
+            $('#datatable').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf'//, 'print'
+                ],
+                language: {
+                paginate: {
+                    previous: "<i class='fas fa-angle-left'>",
+                    next: "<i class='fas fa-angle-right'>"
+                }
             }
-       },      
-       {
-           extend: 'pdf',
-           title: 'Leave_Requests', 
-           footer: false,
-           exportOptions: {
-                columns: [1,2,3,4,5]
-            }
-       },
-       {
-           extend: 'csv',
-           title: 'Leave_Requests', 
-           footer: true,
-           exportOptions: {
-            columns: [1,2,3,4,5]
-            }
-          
-       },
-       {
-           extend: 'excel',
-           title: 'Leave_Requests', 
-           footer: false,
-           exportOptions: {
-            columns: [1,2,3,4,5]
-            }
-       },  
-       {
-           extend: 'print',
-           title: 'Leave_Requests', 
-           footer: false,
-           exportOptions: {
-            columns: [1,2,3,4,5]
-            }
-       }         
-    ]  
-    } );
-
-} ); 
-
-// $(document).ready(function() {
-//         $('#datatable').DataTable({
-//             "pageLength": 50,
-//             dom: 'Bfrtip',
-//             buttons: ['copy','csv','excel','pdf','print']
-//         });
-//     });
-
-
-      //       $('#datatable').DataTable( {
-      //           dom: 'Bfrtip',
-      //           buttons: [
-      //               'copy', 'csv', 'excel', 'pdf'//, 'print'
-      //           ],
-      //           language: {
-      //           paginate: {
-      //               previous: "<i class='fas fa-angle-left'>",
-      //               next: "<i class='fas fa-angle-right'>"
-      //           }
-      //       }
-      //       } );
-      //   } );
+            } );
+        } );
 
     // using jQuery
     function getCookie(name) {

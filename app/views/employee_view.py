@@ -59,7 +59,7 @@ def roles(request):
 @login_required(login_url="/login/")
 def employees(request):
    # return HttpResponse("employee")
-    employee = Employee.objects.select_related().filter(is_active='1')
+    employee = Employee.objects.select_related().all()
     # print(employee)
 
     # test = Employee.objects.select_related().filter(is_active='1')
@@ -93,10 +93,10 @@ def employees(request):
             reporting_name = Employee.objects.get(
                 employee_id=reporting[0].reporting_id)
             # print(reporting_name.first_name)
-            obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'email': data.email_id, 'reportee': reporting_name.first_name +
+            obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'email': data.email_id, 'is_active': data.is_active, 'reportee': reporting_name.first_name +
                        ' '+reporting_name.last_name, 'role': data.role.name if data.role else None, 'dept': data.department.name if data.department else None})
         else:
-            obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'email': data.email_id,
+            obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'is_active': data.is_active, 'email': data.email_id,
                        'reportee': None,  'role': data.role.name if data.role else None, 'dept': data.department.name if data.department else None})
 
     # print(obj)
@@ -1365,7 +1365,25 @@ def delete_employee(request, pk):
     data = Employee.objects.get(employee_id=pk)
     data.is_active = 0
     data.save()
+
+    user = User.objects.get(emp_id=pk)
+    user.is_active = val
+    user.save()
+    
     messages.success(request, 'Employee was deleted! ')
+    return redirect('employees')
+
+def status_employee(request, pk, val):
+    # return HttpResponse(val)
+    data = Employee.objects.get(employee_id=pk)
+    data.is_active = val
+    data.save()
+
+    user = User.objects.get(emp_id=pk)
+    user.is_active = val
+    user.save()
+
+    messages.success(request, ' Employee status was changed! ')
     return redirect('employees')
 
 
