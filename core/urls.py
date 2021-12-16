@@ -14,7 +14,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [   
-    path('admin/', admin.site.urls),          # Django admin route
+    path('backend/', admin.site.urls),          # Django admin route
     path("", include("authentication.urls")), # Auth routes - login / register
     path("", include("app.urls")), 
 ]

@@ -537,6 +537,8 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                                     type: 'success',
                                     buttonsStyling: false,
                                     confirmButtonClass: 'btn btn-primary'
+                                }).then(function() {
+                                    location.href = '/onboard_employees/';
                                 });
                             }
                             else{
@@ -645,10 +647,12 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
 			success: $.proxy(function(data) {
 				
 				console.log(JSON.stringify(data));
+        var host = window.location.protocol + "//" + window.location.host;
+        // alert(host);
 
 				if(data !== 0){
                     $("#just_wait").hide();
-					window.open("http://127.0.0.1:8000/static/offer_letters/"+data);
+					window.open('/'+'/'+window.location.host+"/static/offer_letters/"+data);
 				}
 			
 	

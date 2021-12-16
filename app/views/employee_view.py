@@ -42,9 +42,7 @@ from app.models.leave_balance_model import Leave_Balance
 from dateutil import relativedelta
 import os
 from django.conf import settings
-from app.views.restriction_view import admin_only,role_name
-
-
+from app.views.restriction_view import admin_only, role_name
 
 
 @login_required(login_url="/login/")
@@ -107,15 +105,16 @@ def employees(request):
 
 def snippets(request):
     roles = Group.objects.filter(is_active='1')
-    emp_id =    request.POST.get('emp_id')
-    csrf =    request.POST.get('csrfmiddlewaretoken')
-    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type')))
+    emp_id = request.POST.get('emp_id')
+    csrf = request.POST.get('csrfmiddlewaretoken')
+    final_list = Employee.objects.filter(employee_id=emp_id).annotate(
+        test=Subquery(Group.objects.filter(id=OuterRef('role')).values('role_type')))
     test = final_list.values_list('role', flat=True)
     x = str(test)
     y = int(x[11])
-    roles = Group.objects.filter(id = y)
+    roles = Group.objects.filter(id=y)
     final_list_arr = list(chain(final_list, roles))
-    #return HttpResponse(roles)
+    # return HttpResponse(roles)
     jsondata = serializers.serialize('json', final_list_arr)
     return HttpResponse(jsondata, content_type='application/json')
 
@@ -141,21 +140,21 @@ def add_employee(request):
             if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                handle_uploaded_file(
+                    request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
             else:
                 file_name = None
-            
 
             if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_extesion = os.path.splitext(
+                    str(request.FILES['signature']))[1]
+                handle_uploaded_file(
+                    request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 s_file_name = None
-            
-         
 
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
@@ -256,8 +255,8 @@ def add_employee(request):
 
                                               job_description=job_description, expertise=expertise,
                                               about_me=about_me, date_of_exit=date_of_exit, gender=gender,
-                                              profile = file_name,
-                                              signature = s_file_name,
+                                              profile=file_name,
+                                              signature=s_file_name,
 
                                               )
                 # obj.save()
@@ -419,7 +418,7 @@ def add_employee(request):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id ):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None), is_active='1', leave_type_id=leave_id):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -735,33 +734,33 @@ def add_employee(request):
                                             # return HttpResponse(each_effect.accrual_period)
                                             if each_effect.accrual_period == "01":  # Yearly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * years)
+                                                    float(each_effect.effective_no_of_days) * years)
                                             elif each_effect.accrual_period == "00":  # One Time
                                                 leave_no_of_days = each_effect.effective_no_of_days
                                             # float(float(each_effect.effective_no_of_days) * years)
                                             elif each_effect.accrual_period == "11":  # monthly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * months)
+                                                    float(each_effect.effective_no_of_days) * months)
                                             #leave_no_of_days = 1
                                             elif each_effect.accrual_period == "16":  # half yearly
                                                 total_month = float(months / 2)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "14":  # Tri annualy
                                                 total_month = float(months / 4)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "13":  # Quaterly
                                                 total_month = float(months / 3)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "12":  # Bi Monthly
                                                 total_month = float(months / 2)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "315":  # Semi Monthly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * months)
+                                                    float(each_effect.effective_no_of_days) * months)
                                             # bi Weekly
                                             elif (each_effect.accrual_period == "22") or (each_effect.accrual_period == "21"):
                                                 leave_no_of_days = 1
@@ -769,7 +768,8 @@ def add_employee(request):
                                                     date1 - timedelta(days=date1.weekday()))
                                                 monday2 = (
                                                     date2 - timedelta(days=date2.weekday()))
-                                                week = (monday2 - monday1).days / 7
+                                                week = (
+                                                    monday2 - monday1).days / 7
                                                 leave_no_of_days = float(
                                                     float(each_effect.effective_no_of_days) * week)
                                             # return HttpResponse(leave_no_of_days)
@@ -815,25 +815,25 @@ def add_employee(request):
                                                 # return HttpResponse(Forward_leave_cont)
                                             elif each_effect.reset_period == "00":  # One Time
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * years)
+                                                    float(Forward_leave_cont) * years)
                                             elif each_effect.reset_period == "11":  # monthly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
+                                                    float(Forward_leave_cont) * months)
                                             elif each_effect.reset_period == "16":  # Halfly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 2)
+                                                    float(Forward_leave_cont) * months / 2)
                                             elif each_effect.reset_period == "14":  # Triannually
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 3)
+                                                    float(Forward_leave_cont) * months / 3)
                                             elif each_effect.reset_period == "13":  # Quarterly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 4)
+                                                    float(Forward_leave_cont) * months / 4)
                                             elif each_effect.reset_period == "12":  # Bi Monthly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
+                                                    float(Forward_leave_cont) * months)
                                             elif each_effect.reset_period == "315":  # Semi Monthly
                                                 monday1 = (
-                                                date1 - timedelta(days=date1.weekday()))
+                                                    date1 - timedelta(days=date1.weekday()))
                                             monday2 = (
                                                 date2 - timedelta(days=date2.weekday()))
                                             week = (monday2 - monday1).days / 7
@@ -856,7 +856,8 @@ def add_employee(request):
                                             )
                                             balance_leave.save()
 
-                    messages.success(request, first_name +' Employee was created! ')
+                    messages.success(request, first_name +
+                                     ' Employee was created! ')
                     html_template = loader.get_template('employee/index.html')
                     # return HttpResponse(html_template.render(request))
                     # return render(request, "employees")
@@ -901,7 +902,7 @@ def handle_uploaded_file(f, current_date_time, folder):
 
 
 def update_employee(request, pk):
-   
+
     employee = Employee.objects.get(employee_id=pk)
     form = EmployeeForm(instance=employee)
     # print(role)
@@ -920,13 +921,14 @@ def update_employee(request, pk):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            employee = Employee.objects.get(employee_id = request.user.emp_id)            
+            employee = Employee.objects.get(employee_id=request.user.emp_id)
 
             # if len(request.FILES) != 0:
             if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                handle_uploaded_file(
+                    request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
             else:
                 if employee.profile == None:
@@ -936,8 +938,10 @@ def update_employee(request, pk):
 
             if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_extesion = os.path.splitext(
+                    str(request.FILES['signature']))[1]
+                handle_uploaded_file(
+                    request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 if employee.signature == None:
@@ -945,7 +949,6 @@ def update_employee(request, pk):
                 else:
                     s_file_name = employee.signature
 
-         
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
             seating_location = request.POST.get('seating_location')
@@ -1080,7 +1083,7 @@ def update_employee(request, pk):
 
             if date_of_joining != None:
 
-                if not Leave_Balance.objects.filter(employee_id=employee_id, is_active = 1).exists():
+                if not Leave_Balance.objects.filter(employee_id=employee_id, is_active=1).exists():
 
                     for each in Employee.objects.filter(is_active='1', employee_id=employee_id):
 
@@ -1090,7 +1093,8 @@ def update_employee(request, pk):
                         gender = each.gender
                         # print(gender)
                         if not gender:
-                            messages.error(request,'Please Update your gender! ')
+                            messages.error(
+                                request, 'Please Update your gender! ')
                             return redirect('profile')
                         marital_status = each.marital_status
                         department = each.department
@@ -1136,7 +1140,7 @@ def update_employee(request, pk):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None), is_active='1', leave_type_id=leave_id):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -1325,17 +1329,17 @@ def update_employee(request, pk):
                                     )
                                     balance_leave.save()
 
-                    messages.success(request, first_name + ' Employee profile was updated! ')
+                    messages.success(request, first_name +
+                                     ' Employee profile was updated! ')
                     if role == 'Admin':
                         return redirect('employees')
                     else:
                         return redirect('profile')
 
-
             role = role_name(request)
 
             messages.success(request, ' Employee was updated! ')
-            
+
             if role == 'Admin':
                 return redirect('employees')
             else:
@@ -1344,7 +1348,8 @@ def update_employee(request, pk):
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
-    reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
+    reporting_to = Reporting.objects.filter(
+        is_active=1, employee_id=request.user.emp_id)
     # print(reporting_to)
     context_role = {
         'roles': role,
@@ -1373,6 +1378,7 @@ def delete_employee(request, pk):
     messages.success(request, 'Employee was deleted! ')
     return redirect('employees')
 
+
 def status_employee(request, pk, val):
     # return HttpResponse(val)
     data = Employee.objects.get(employee_id=pk)
@@ -1388,14 +1394,15 @@ def status_employee(request, pk, val):
 
 
 def reporting(request):
-    reporting_id=request.user.emp_id
+    reporting_id = request.user.emp_id
     # print(reporting_id)
-    reporting = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=reporting_id) )
+    reporting = Reporting.objects.select_related().filter(
+        Q(is_active=1) & Q(reporting_id=reporting_id))
     # print(reporting)
     # for report_employee in reporting:
     #     subj = report_employee.employee.first_name
     # # test=reporting.report_employee.first_name
     # print(subj)
     # reporting=Employee.objects.filter(is_active=1)
-    context = {'reporting': reporting }
+    context = {'reporting': reporting}
     return render(request, "employee/reporting.html", context)
