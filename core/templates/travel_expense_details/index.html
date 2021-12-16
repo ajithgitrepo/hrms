@@ -1,0 +1,427 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Travel Expense {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+
+
+.LockOn {
+    
+}
+.content {display:none;}
+.preload { width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;}
+
+    .modal-lg {
+    max-width: 95% !important;
+}
+
+
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Page plugins -->
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Oraganization</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Travel Expense</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_travel_expense_details' %}" class="btn btn-sm btn-neutral">Add Record</a>
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+      <!-- <img style="height: 350px;width: 350px;" src="/static/Spin-Preloader.gif"> -->
+      <!-- src="http://i.imgur.com/KUJoe.gif" -->
+  </div>
+  <div class="content"> 
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+   
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Travel Expense Details</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div  class="table-responsive py-4">
+            <table  class="table table-flush" id="datatable-basic">
+              <thead style="color: blue;" class="thead-light" >
+                <tr>
+                  <th>#</th>
+                  <!-- <th >Added Date</th> -->
+                  <th >Employee ID</th>
+                  <th >Travel ID</th>
+                
+                  <th>Expense</th>
+                 
+                  <th>Action</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for emp in employees %}
+                <tr> 
+                    <td>{{ forloop.counter }}</td>
+                    <td style="color: blue;" class="nr" data-queryid="{{ emp.id  }}">{{emp.employee.first_name}} {{emp.employee.last_name}} ({{emp.employee_id }}) </td>
+                    <td style="color: brown;">{{emp.travel_id}}</td>
+                    
+                    <td><a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> </td>
+                   
+                    <td> 
+                         
+                        &nbsp; &nbsp;
+                       
+                        <a href="{% url 'delete_expense_details' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
+                              <i class="fas fa-trash"></i>
+                            </a> 
+                      
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+    
+  </div>
+
+
+  {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Travel Expense More Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                      
+                 <div class="row" id="Travel_exp_more">
+                  
+                  
+
+                  </div>
+                 <hr class="my-3" />
+                
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+  <script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+
+  
+<script type="text/javascript">
+
+
+$(function() {
+    $(".preload").fadeOut(1500, function() {
+        $(".content").fadeIn(750);        
+    });
+});
+// $(window).on('load', function () {
+// // $("#coverScreen").hide();
+// });
+
+$('[data-type="adhaar-number"]').keyup(function() {
+  var value = $(this).val(); //alert(value);
+  value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
+  $(this).val(value);
+});
+
+$('[data-type="adhaar-number"]').on("change, blur", function() {
+  var value = $(this).val(); // alert(value);
+  var maxLength = $(this).attr("maxLength");
+  if (value.length != maxLength) {
+    $(this).addClass("highlight-error"); 
+  } else {
+    $(this).removeClass("highlight-error");
+  }
+});
+
+
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this travel expense details?');
+        }) 
+
+           $(document).ready(function()
+            {
+               $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+                  todayBtn: "linked",
+                  todayHighlight: true,
+                  });
+
+            });
+
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+$(".use-mail").click(function() { //alert('n');  
+           $('#my_email_Modal').modal('show');
+
+
+});
+
+//         $.ajaxSetup({
+//   headers: { "X-CSRFToken": '{{csrf_token}}' }
+// });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+ $(".use-address").click(function() { //alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+          var base_url = window.location.origin;
+        // "http://stackoverflow.com"
+
+           var host = window.location.host;
+        // stackoverflow.com
+
+      var pathArray = window.location.pathname.split( '/' );
+    //  alert(base_url);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");  //alert($id);
+      $.ajax({  
+            type: "POST",  
+            url: "/snippets_travel_details_travel_expense_more_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"trav_exp_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  var count = 1;
+                  var html = "";
+                    html += "<table class='table'>";
+                        html += "<th>#</th><th>Description</th><th>Date</th><th>Ticket</th><th>Lodging</th>";
+                        html += "<th>Boarding</th><th>Phone</th><th>Local Conveyance</th><th>Incidentals</th>";
+                        html += "<th>Others</th><th>Currency</th>";
+
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                        html += "<tr>";
+                           //   html += "<td>Description</td>";
+                                  html += "<td> " + count + " </td>"; 
+                                    html += "<td> " + item.fields.description + " </td>";
+                                    html += "<td> " + item.fields.date + " </td>";
+                                    html += "<td> " + item.fields.ticket + " </td>";
+                                    html += "<td> " + item.fields.lodging + " </td>";
+                                    html += "<td> " + item.fields.boarding + " </td>";
+                                    html += "<td> " + item.fields.phone + " </td>";
+                                    html += "<td> " + item.fields.local_conveyance + " </td>";
+                                    html += "<td> " + item.fields.incidentals + " </td>";
+                                    html += "<td> " + item.fields.others + " </td>";
+                                    html += "<td> " + item.fields.currency + " </td>";
+                                 //   html += "<td> " + item.fields.employee_id  + " </td>";
+                                  
+                                          html += "<tr>";
+ 
+                                    count ++;
+                   //now you can access properties using dot expected_duration_days
+                 });
+
+                 html += "</table>";
+                 // alert(data);
+                  $('#Travel_exp_more').html(html);
+            }
+            });
+
+});
+
+        $('td.query-main').live('click', function() { //alert();
+  var queryid = $(this).data("queryid");
+  
+ 
+});
+
+
+    </script>
+
+
+<script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  
+
+{% endblock javascripts %}
+
+

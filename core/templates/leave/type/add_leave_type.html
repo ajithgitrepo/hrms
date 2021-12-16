@@ -1,0 +1,1862 @@
+{% extends "layouts/base.html" %}
+<title>HRMS</title>
+{% block title %} New Leave Type {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Page plugins -->
+    <link rel="stylesheet" href="/static/assets/vendor/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="/static/assets/vendor/quill/dist/quill.core.css">
+ 
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.color_picker{
+    max-width: 30px;
+    background-color: white !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
+    height: 30px;
+}
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: space-around;
+
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+    
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+table, td, th {
+  border: 0px solid black;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  text-align: center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.half {
+   float: left;
+   width: 49%;
+   margin: 2px;
+}
+
+.tab-applicable {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: space-around;
+}
+
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+  .error input, .error select {
+    border: 2px red solid;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #F1F1F1;
+}
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+table, td, th {
+  border: 0px solid black;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td {
+  text-align: center;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.half {
+   float: left;
+   width: 49%;
+   margin: 2px;
+}
+input[type="radio"]:checked+label { font-weight: bold; }
+input[type="radio"] {
+  margin-right: 10px;
+}
+.checkboxes label {
+  display: inline-block;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+/* .card-header{
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+} */
+
+
+
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      
+      <span class="mask bg-gradient-default opacity-8"></span>
+    
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
+            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-lg-12 order-xl-2">
+           
+
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">New Leave Type </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <form method="POST" name="form" class="post-form" >
+                {% csrf_token %}  
+            <div class="card-body">
+           
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-4">
+                  <input type="text" name="name" value="{{ form.data.name }}"  class="form-control" placeholder="" >
+                    {{ form.name.errors }}
+                </div>
+                <div class="col-sm-1">
+                    <input class="color_picker" name="color" type="color" value = '#eb3434' />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Code</label>
+                <div class="col-sm-4">
+                  <input type="text" name="code" value="{{ form.data.code }}"  class="form-control" placeholder="" maxlength="3">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Type</label>
+                <div class="col-sm-4">
+                  <select class="form-control" name="type" id="exampleFormControlSelect1">
+                    <option value="paid" {% if  form.data.type == "paid" %} selected{% endif %} >Paid</option>
+                    <option value="unpaid" {% if  form.data.type == "unpaid" %} selected{% endif %} >Unpaid</option>
+                    <option value="onduty" {% if  form.data.type == "onduty" %} selected{% endif %} >On Duty</option>
+                    <option value="restricted_holiday" {% if  form.data.type == "restricted_holiday" %} selected{% endif %}>Restricted Holiday</option>
+                  </select>
+                    {{ form.type.errors }}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Unit</label>
+                <div class="col-sm-1">
+                    <div class="custom-control custom-radio mb-3">
+                      <input name="unit" class="custom-control-input" {% if form.data.unit == "day" %} checked {% endif %} value="day" id="customRadio5" type="radio">
+                      <label class="custom-control-label" for="customRadio5">Day</label>
+                    </div>
+                  
+                </div>
+                <div class="col-sm-1">
+                   
+                    <div class="custom-control custom-radio mb-3">
+                      <input name="unit" class="custom-control-input" {% if form.data.unit == "hours" %} checked {% endif %} value="hours" id="customRadio6" type="radio">
+                      <label class="custom-control-label" for="customRadio6">Hours</label>
+                    </div>
+                </div>
+                {{ form.unit.errors }}
+              </div>
+
+               <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-4">
+                  <textarea name="description" value="{{ form.data.description }}"  class="form-control" placeholder="">{{ form.data.description }}</textarea> 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Validity</label>
+                <div class="col-sm-2">
+                  <input name="from_date" value="{{ form.data.from_date }}" id="input-from-date" class="form-control startdate" placeholder="From"  type="text">
+                   
+                </div>
+                <div class="col-sm-2">
+                  <input name="to_date" value="{{ form.data.to_date }}" id="input-to-date" class="form-control startdate" placeholder="To"  type="text">
+                   
+                </div>
+              </div>
+
+                <hr class="my-4" />
+
+                    <div class="tab">
+                        <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'London')">Entitlement</button>
+                        <button class="tablinks" onclick="openCity(event, 'Paris')">Applicable</button>
+                        <button class="tablinks" onclick="openCity(event, 'Tokyo')">Restrictions</button>
+                    </div>
+                      
+                       <div id="London" class="tabcontent">
+                        <br>
+
+                        <table class="table-responsive">
+                              <tr>
+                                    <td ><label class="form-control-label" for="input-email">Effective After</label></td>
+                                    <td>&nbsp;</td>
+                                    <td><input style="width:50px;float: right;" {% if form.data.effective_after %} value="{{ form.data.effective_after }}" {% else %} value="0"  {% endif %}  type="number" name="effective_after" class="form-control half" placeholder="" >
+                                    </td>
+                                    <td><select class="form-control half" name="effective_period">
+                                          <option value="1" {% if  form.data.effective_period == "1" %} selected{% endif %}>Year(s)</option>
+                                          <option value="2" {% if  form.data.effective_period == "2" %} selected{% endif %}>Month(s)</option>
+                                          <!-- <option value="3" {% if  form.data.effective_period == "3" %} selected{% endif %}>Day(s)</option></select> -->
+                                    </td>
+                                    <td><label class="form-control-label" for="input-email" >From</label></td>
+                                    <td> <select class="form-control" name="effective_from">
+                                          <option value="date_of_joining" {% if  form.data.effective_from == "date_of_joining" %} selected{% endif %}>Date of Joining</option>
+                                          <!-- <option value="date_of_confirmation" {% if  form.data.effective_from == "date_of_confirmation" %} selected{% endif %}>Date of Confirmation</option> -->
+                                         </select>
+                                    </td>
+                              </tr>
+                              <tr>
+                                    <td>
+                                          <!-- <div class="custom-control custom-checkbox mb-3"> -->
+                                                <input class="custom-control-input accurcheck" name="accrual" {% if form.data.accrual == "1" %} checked {% endif %} checked style="float: right;" value="1" id="customCheck1" type="checkbox" onchange="valueChanged_accur(event);">
+                                                <label class="custom-control-label" style="float: right;margin-top: -12px;" for="customCheck1"></label> 
+                                              <!-- </div> -->
+                                    </td>
+                                    <td ><label class="form-control-label" for="input-email">Accural</label></td>
+                                    <!-- <td>&nbsp;</td> -->
+                                    <!-- <td><input style="width:50px;" type="number" name="effect_number" value="{{ form.data.name }}" class="form-control" placeholder="Name" ></td> -->
+                                    <td class="accur"><select id="ddl_accural_1st" name="accrual_period" class="form-control">
+                                          <option unit="0" value="01" {% if  form.data.accrual_period == "01" %} selected{% endif %}>Yearly</option>
+                                          <option unit="1" value="11" {% if  form.data.accrual_period == "11" %} selected{% endif %}>Monthly</option>
+                                          <!-- <option unit="0" value="00" {% if  form.data.accrual_period == "00" %} selected{% endif %}>One Time</option>
+                                          <option unit="1" value="16" {% if  form.data.accrual_period == "16" %} selected{% endif %}>Half Yearly</option>
+                                          <option unit="1" value="14" {% if  form.data.accrual_period == "14" %} selected{% endif %}>Triannually</option>
+                                          <option unit="1" value="13" {% if  form.data.accrual_period == "13" %} selected{% endif %}>Quarterly</option>
+                                          <option unit="1" value="12" {% if  form.data.accrual_period == "12" %} selected{% endif %}>Bi Monthly</option>
+                                          <option unit="3" value="315" {% if  form.data.accrual_period == "315" %} selected{% endif %}>Semi Monthly</option>
+                                          <option unit="2" value="22" {% if  form.data.accrual_period == "22" %} selected{% endif %}>Bi Weekly</option>
+                                          <option unit="2" value="21" {% if  form.data.accrual_period == "21" %} selected{% endif %}>Weekly</option>  -->
+                                        </select>
+                                    </td>
+                                    <td class="accur"><label class="form-control-label" for="input-email">on</label></td>
+                                    <td class="accur" id="accur_ddl_2nd_td"> <select class="form-control" name="effective_on" id="ddl_accural_2nd">
+                                          <option value="1" {% if  form.data.effective_on == "1" %} selected{% endif %}>1st</option>
+                                          <option value="2" {% if  form.data.effective_on == "2" %} selected{% endif %}>2nd</option>
+                                          <option value="3" {% if  form.data.effective_on == "3" %} selected{% endif %}>3rd</option>
+                                          <option value="4" {% if  form.data.effective_on == "4" %} selected{% endif %}>4th</option>
+                                          <option value="5" {% if  form.data.effective_on == "5" %} selected{% endif %}>5th</option>
+                                          <option value="6" {% if  form.data.effective_on == "6" %} selected{% endif %}>6th</option>
+                                          <option value="7" {% if  form.data.effective_on == "7" %} selected{% endif %}>7th</option>
+                                          <option value="8" {% if  form.data.effective_on == "8" %} selected{% endif %}>8th</option>
+                                          <option value="9" {% if  form.data.effective_on == "9" %} selected{% endif %}>9th</option>
+                                          <option value="10" {% if  form.data.effective_on == "10" %} selected{% endif %}>10th</option>
+                                          <option value="11" {% if  form.data.effective_on == "11" %} selected{% endif %}>11th</option>
+                                          <option value="12" {% if  form.data.effective_on == "12" %} selected{% endif %}>12th</option>
+                                          <option value="13" {% if  form.data.effective_on == "13" %} selected{% endif %}>13th</option>
+                                          <option value="14" {% if  form.data.effective_on == "14" %} selected{% endif %}>14th</option>
+                                          <option value="15" {% if  form.data.effective_on == "15" %} selected{% endif %}>15th</option>
+                                          <option value="16" {% if  form.data.effective_on == "16" %} selected{% endif %}>16th</option>
+                                          <option value="17" {% if  form.data.effective_on == "17" %} selected{% endif %}>17th</option>
+                                          <option value="18" {% if  form.data.effective_on == "18" %} selected{% endif %}>18th</option>
+                                          <option value="19" {% if  form.data.effective_on == "19" %} selected{% endif %}>19th</option>
+                                          <option value="20" {% if  form.data.effective_on == "20" %} selected{% endif %}>20th</option>
+                                          <option value="21" {% if  form.data.effective_on == "21" %} selected{% endif %}>21st</option>
+                                          <option value="22" {% if  form.data.effective_on == "22" %} selected{% endif %}>22nd</option>
+                                          <option value="23" {% if  form.data.effective_on == "23" %} selected{% endif %}>23rd</option>
+                                          <option value="24" {% if  form.data.effective_on == "24" %} selected{% endif %}>24th</option>
+                                          <option value="25" {% if  form.data.effective_on == "25" %} selected{% endif %}>25th</option>
+                                          <option value="26" {% if  form.data.effective_on == "26" %} selected{% endif %}>26th</option>
+                                          <option value="27" {% if  form.data.effective_on == "27" %} selected{% endif %}>27th</option>
+                                          <option value="28" {% if  form.data.effective_on == "28" %} selected{% endif %}>28th</option>
+                                          <option value="29" {% if  form.data.effective_on == "29" %} selected{% endif %}>29th</option>
+                                          <option value="30" {% if  form.data.effective_on == "30" %} selected{% endif %}>30th</option>
+                                          <option value="31" {% if  form.data.effective_on == "31" %} selected{% endif %}>31st</option>
+                                          <option value="32" {% if  form.data.effective_on == "32" %} selected{% endif %}>Last Day</option>
+                                          <!-- <option value="-1" {% if  form.data.effective_on == "-1" %} selected{% endif %}>Policy Date</option>
+                                          <option value="-2" {% if  form.data.effective_on == "-2" %} selected{% endif %}>Joining Date</option>
+                                          <option value="-3" {% if  form.data.effective_on == "-3" %} selected{% endif %}>Birth Date</option> -->
+                                         </select>
+                                    </td>
+                                    <td class="accur" id="accural_3rd_td"> <select class="form-control" id="ddl_accural_3rd" name="effective_month">
+                                          <option value="1" {% if  form.data.effective_month == "1" %} selected{% endif %}>Jan</option>
+                                          <option value="2" {% if  form.data.effective_month == "2" %} selected{% endif %}>Feb</option>
+                                          <option value="3" {% if  form.data.effective_month == "3" %} selected{% endif %}>Mar</option>
+                                           <option value="4" {% if  form.data.effective_month == "4" %} selected{% endif %}>Apr</option>
+                                           <option value="5" {% if  form.data.effective_month == "5" %} selected{% endif %}>May</option>
+                                          <option value="6" {% if  form.data.effective_month == "6" %} selected{% endif %}>Jun</option>
+                                          <option value="7" {% if  form.data.effective_month == "7" %} selected{% endif %}>Jul</option>
+                                          <option value="8" {% if  form.data.effective_month == "8" %} selected{% endif %}>Aug</option>
+                                          <option value="9" {% if  form.data.effective_month == "9" %} selected{% endif %}>Sep</option>
+                                          <option value="10" {% if  form.data.effective_month == "10" %} selected{% endif %}>Oct</option>
+                                          <option value="11" {% if  form.data.effective_month == "11" %} selected{% endif %}>Nov</option>
+                                          <option value="12" {% if  form.data.effective_month == "12" %} selected{% endif %}>Dec</option>
+                                          <!-- <option value="-1" {% if  form.data.effective_month == "-1" %} selected{% endif %}>Policy Month</option>
+                                          <option value="-2" {% if  form.data.effective_month == "-2" %} selected{% endif %}>Joining Month</option>
+                                          <option value="-3" {% if  form.data.effective_month == "-3" %} selected{% endif %}>Birth Month</option> -->
+                                         </select>
+                                    </td>
+                                    <td class="accur" id="num_of_days"><label class="form-control-label" for="input-email">No. of Days</label></td>
+                                    <td class="accur"><input style="width:50px;" type="number" name="effective_no_of_days" {% if form.data.effective_no_of_days %} value="{{ form.data.effective_no_of_days }}" {% else %} value="0"  {% endif %}  class="form-control" placeholder="" ></td>
+                                    <!-- <td class="accur" id="accur_in">
+                                        <label class="form-control-label" for="input-email">in</label>
+                                    </td>
+                                    <td class="accur" id="accur_ddl_4th"> <select class="form-control" name="effective_in" id="ddl_accural_4th">
+                                         <option value="Current Accural">Current Accural</option>
+                                          <option value="Next Accural">Next Accural</option>
+                                          </select>
+                                    </td> -->
+                              </tr>
+                              <tr>
+                                    <td>
+                                          <input class="custom-control-input resetcheck" name="reset" {% if form.data.reset == "1" %} checked {% endif %} checked  value="1" style="float: right;" id="customCheck11" type="checkbox" onchange="valueChanged_reset(event);">
+                                          <label class="custom-control-label" style="float: right;margin-top: -12px;" for="customCheck11"></label>
+                                    </td>
+
+                            <td><label class="form-control-label" for="input-email">Reset</label></td>
+                                    <!-- <td>&nbsp;</td> -->
+                                    <!-- <td><input style="width:50px;" type="number" name="effect_number" value="{{ form.data.name }}" class="form-control" placeholder="Name" ></td> -->
+                                    <td class="reset"><select name="reset_period" id="reset_ddl_1st"  class="form-control">
+                                          <option unit="0" value="01" {% if  form.data.reset_period == "01" %} selected{% endif %}>Yearly</option>
+                                          <option unit="1" value="11" {% if  form.data.reset_period == "11" %} selected{% endif %}>Monthly</option>
+                                          <!-- <option unit="0" value="00" {% if  form.data.reset_period == "00" %} selected{% endif %}>One Time</option>
+                                          
+                                          <option unit="1" value="16" {% if  form.data.reset_period == "16" %} selected{% endif %}>Half Yearly</option>
+                                          <option unit="1" value="14" {% if  form.data.reset_period == "14" %} selected{% endif %}>Triannually</option>
+                                          <option unit="1" value="13" {% if  form.data.reset_period == "13" %} selected{% endif %}>Quarterly</option>
+                                          <option unit="1" value="12" {% if  form.data.reset_period == "12" %} selected{% endif %}>Bi Monthly</option>
+                                          <option unit="3" value="315" {% if  form.data.reset_period == "315" %} selected{% endif %}>Semi Monthly</option>
+                                          <option unit="2" value="22" {% if  form.data.reset_period == "22" %} selected{% endif %}>Bi Weekly</option>
+                                          <option unit="2" value="21" {% if  form.data.reset_period == "21" %} selected{% endif %}>Weekly</option> -->
+                                        </select>
+                                    </td>
+                                    <td class="reset" ><label class="form-control-label" for="input-email">on</label></td>
+                                    <td class="reset" id="reset_ddl_1st_td"> 
+                                          <select class="form-control" name="reset_on"  id="reset_ddl_2nd" >
+                                            <option value="1" {% if  form.data.reset_on == "1" %} selected{% endif %}>1st</option>
+                                            <option value="2" {% if  form.data.reset_on == "2" %} selected{% endif %}>2nd</option>
+                                            <option value="3" {% if  form.data.reset_on == "3" %} selected{% endif %}>3rd</option>
+                                            <option value="4" {% if  form.data.reset_on == "4" %} selected{% endif %}>4th</option>
+                                            <option value="5" {% if  form.data.reset_on == "5" %} selected{% endif %}>5th</option>
+                                            <option value="6" {% if  form.data.reset_on == "6" %} selected{% endif %}>6th</option>
+                                            <option value="7" {% if  form.data.reset_on == "7" %} selected{% endif %}>7th</option>
+                                            <option value="8" {% if  form.data.reset_on == "8" %} selected{% endif %}>8th</option>
+                                            <option value="9" {% if  form.data.reset_on == "9" %} selected{% endif %}>9th</option>
+                                            <option value="10" {% if  form.data.reset_on == "10" %} selected{% endif %}>10th</option>
+                                            <option value="11" {% if  form.data.reset_on == "11" %} selected{% endif %}>11th</option>
+                                            <option value="12" {% if  form.data.reset_on == "12" %} selected{% endif %}>12th</option>
+                                            <option value="13" {% if  form.data.reset_on == "13" %} selected{% endif %}>13th</option>
+                                            <option value="14" {% if  form.data.reset_on == "14" %} selected{% endif %}>14th</option>
+                                            <option value="15" {% if  form.data.reset_on == "15" %} selected{% endif %}>15th</option>
+                                            <option value="16" {% if  form.data.reset_on == "16" %} selected{% endif %}>16th</option>
+                                            <option value="17" {% if  form.data.reset_on == "17" %} selected{% endif %}>17th</option>
+                                            <option value="18" {% if  form.data.reset_on == "18" %} selected{% endif %}>18th</option>
+                                            <option value="19" {% if  form.data.reset_on == "19" %} selected{% endif %}>19th</option>
+                                            <option value="20" {% if  form.data.reset_on == "20" %} selected{% endif %}>20th</option>
+                                            <option value="21" {% if  form.data.reset_on == "21" %} selected{% endif %}>21st</option>
+                                            <option value="22" {% if  form.data.reset_on == "22" %} selected{% endif %}>22nd</option>
+                                            <option value="23" {% if  form.data.reset_on == "23" %} selected{% endif %}>23rd</option>
+                                            <option value="24" {% if  form.data.reset_on == "24" %} selected{% endif %}>24th</option>
+                                            <option value="25" {% if  form.data.reset_on == "25" %} selected{% endif %}>25th</option>
+                                            <option value="26" {% if  form.data.reset_on == "26" %} selected{% endif %}>26th</option>
+                                            <option value="27" {% if  form.data.reset_on == "27" %} selected{% endif %}>27th</option>
+                                            <option value="28" {% if  form.data.reset_on == "28" %} selected{% endif %}>28th</option>
+                                            <option value="29" {% if  form.data.reset_on == "29" %} selected{% endif %}>29th</option>
+                                            <option value="30" {% if  form.data.reset_on == "30" %} selected{% endif %}>30th</option>
+                                            <option value="31" {% if  form.data.reset_on == "31" %} selected{% endif %}>31st</option>
+                                            <option value="32" {% if  form.data.reset_on == "32" %} selected{% endif %}>Last Day</option>
+                                            <!-- <option value="-1" {% if  form.data.reset_on == "-1" %} selected{% endif %}>Policy Date</option>
+                                            <option value="-2" {% if  form.data.reset_on == "-2" %} selected{% endif %}>Joining Date</option>
+                                            <option value="-3" {% if  form.data.reset_on == "-3" %} selected{% endif %}>Birth Date</option> -->
+                                           
+                                         </select>
+                                    </td>
+                                    <td class="reset" id="reset_ddl_2nd_td"> 
+                                          <select class="form-control" name="reset_month" id="reset_ddl_3rd">
+                                            <option value="1" {% if  form.data.reset_month == "1" %} selected{% endif %}>Jan</option>
+                                          <option value="2" {% if  form.data.reset_month == "2" %} selected{% endif %}>Feb</option>
+                                          <option value="3" {% if  form.data.reset_month == "3" %} selected{% endif %}>Mar</option>
+                                           <option value="4" {% if  form.data.reset_month == "4" %} selected{% endif %}>Apr</option>
+                                           <option value="5" {% if  form.data.reset_month == "5" %} selected{% endif %}>May</option>
+                                          <option value="6" {% if  form.data.reset_month == "6" %} selected{% endif %}>Jun</option>
+                                          <option value="7" {% if  form.data.reset_month == "7" %} selected{% endif %}>Jul</option>
+                                          <option value="8" {% if  form.data.reset_month == "8" %} selected{% endif %}>Aug</option>
+                                          <option value="9" {% if  form.data.reset_month == "9" %} selected{% endif %}>Sep</option>
+                                          <option value="10" {% if  form.data.reset_month == "10" %} selected{% endif %}>Oct</option>
+                                          <option value="11" {% if  form.data.reset_month == "11" %} selected{% endif %}>Nov</option>
+                                          <option value="12" {% if  form.data.reset_month == "12" %} selected{% endif %}>Dec</option>
+                                          <!-- <option value="-1" {% if  form.data.reset_month == "-1" %} selected{% endif %}>Policy Month</option>
+                                          <option value="-2" {% if  form.data.reset_month == "-2" %} selected{% endif %}>Joining Month</option>
+                                          <option value="-3" {% if  form.data.reset_month == "-3" %} selected{% endif %}>Birth Month</option> -->
+                                         </select>
+                                    </td>
+                              </tr>
+                              <tr class="reset">
+                                    <td><label class="form-control-label" for="input-email"></label></td>
+                                    <td>&nbsp;</td>
+                                    <td><select class="form-control" name="reset_carry_forward" id="reset_ddl_carry_1st">
+                                       
+                                        <option value="1" {% if  form.data.reset_carry_forward == "1" %} selected{% endif %} >Carry Forward</option>
+                                        <!-- <option value="2" {% if  form.data.reset_carry_forward == "2" %} selected{% endif %} >Carry Forward With Expiry</option>
+                                        <option value="3" {% if  form.data.reset_carry_forward == "3" %} selected{% endif %} >Carry Forward With Overall Limit</option> -->
+
+                                        </select>
+                                    </td>
+                                    <td ><input style="width:50px;" type="number" name="reset_carry_count" {% if form.data.reset_carry_count %} value="{{ form.data.reset_carry_count }}" {% else %} value="0"  {% endif %} class="form-control" placeholder="" ></td>
+                                    <td><label class="form-control-label" for="input-email">on</label></td>
+                                    <td> <select class="form-control" name="reset_carry_method" id="reset_ddl_carry_units_1st">
+                                      
+                                          <option value="0" {% if  form.data.reset_carry_method == "0" %} selected{% endif %} >Unit(s)</option>
+                                          <option value="1" {% if  form.data.reset_carry_method == "1" %} selected{% endif %} >Percentage</option>
+                                         </select> 
+                                    </td>
+                                    <td id="reset_ddl_carry_1st_td"><label class="form-control-label" for="input-email">Overall Limit</label></td>
+                                    <td id="reset_ddl_carry_2nd_td"><input style="width:50px;" type="number" name="reset_carry_forward_overall_limit" value="0" class="form-control" placeholder="" ></td>
+                                   <td id="reset_ddl_carry_3rd_td"><label class="form-control-label" for="input-email">Max Limit</label></td>
+                                    <td id="reset_ddl_carry_4th_td"><input style="width:50px;" type="number" name="reset_carry_forward_max" {% if form.data.reset_carry_forward_max %} value="{{ form.data.reset_carry_forward_max }}" {% else %} value="0"  {% endif %}  class="form-control" placeholder="" ></td>
+                                    <td id="reset_ddl_carry_5th_td"><label class="form-control-label" style="margin-top: 1px;">Expires in</label></td>
+                                    <td id="reset_ddl_carry_6th_td" style="width: 50px;"> 
+                                         <input style="width:50px;" type="number" name="reset_carry_forward_expiry_in" value="0" class="form-control" placeholder="" >
+                                    </td>
+                                    <td id="reset_ddl_carry_7th_td"> 
+                                          <select class="form-control selectBox select2-offscreen" name="reset_carry_forward_expiry_month" tabindex="-1"><option value="1">Month(s)</option>
+                                            <option value="2">Day(s)</option></select>
+                                    </td>
+                              </tr>
+                              <!-- <tr class="reset">
+                                    <td><label class="form-control-label" for="input-email"></label></td>
+                                    <td>&nbsp;</td>
+                                    <td><label class="form-control-label" for="input-email">Encashment</label>
+                                    </td>
+                                    <td><input style="width:50px;" type="number" name="reset_carry_enc_count" value="0" class="form-control" placeholder="" ></td>
+                                    <td><label class="form-control-label" for="input-email">on</label></td>
+                                    <td> <select name="reset_carry_enc_method" id="reset_ddl_carry_last" class="form-control">
+                                          <option value="0">Unit(s)</option>
+                                          <option value="1" selected="selected">Percentage</option>
+                                          </select>
+                                    </td>
+                                    <td id="reset_ddl_carry_last0_td"><label class="form-control-label" for="input-email">Max Limit</label></td>
+                                    <td id="reset_ddl_carry_last1_td"><input style="width:50px;" type="number" name="reset_encashment_forward_max" value="0" class="form-control" placeholder="" ></td>
+                              </tr> -->
+                              <tr>
+                                    <!-- <td>
+                                          <input class="custom-control-input openbalcheck" name="opening_check"  id="customCheck13" type="checkbox" onchange="valueChanged_openbal(event);">
+                                          <label style="float: right;margin-top: -12px;" class="custom-control-label" style="float: right;margin-top: -12px;" for="customCheck13"></label>
+                                    </td > -->
+                                    <!-- <td  colspan="2"><label class="form-control-label" style="margin-right: 75px;" for="input-email">Opening Balance</label></td>
+                                    <td class="openbal" >
+                                          <input style="width:50px;float: none;" type="number" name="opening_balance" value="0" class="form-control half" placeholder="">  
+                                    </td> -->
+                              </tr>
+                              <tr>
+                                    <!-- <td>
+                                          <input class="custom-control-input maxibalcheck" name="maximum_check"  id="customCheck12" type="checkbox" onchange="valueChanged_maxibal(event);">
+                                          <label style="float: right;margin-top: -12px;" class="custom-control-label" style="float: right;margin-top: -12px;" for="customCheck12"></label>
+                                    </td>
+                                    <td  colspan="2"><label class="form-control-label" style="margin-right: 75px;" for="input-email">Maximum Balance</label></td>
+                                    <td class="maxibal">
+                                          <input style="width:50px;float: none;" type="number" name="maximum_balance" value="0" class="form-control half" placeholder="">  
+                                    </td> -->
+                              </tr>
+                        </table>
+
+                             
+                             
+                      </div>
+                     
+                      
+                  <div id="Paris" class="tabcontents">
+                        <div class="zpTabs_innerFields zpTabs_innerFieldsnw policy_row" >
+                        <br>
+
+                        <div class="tab tab-applicable">
+                            <button id="defaultApplicable" class="tablinks_applicable" onclick="openApplicable(event, 'applicable')">Applicable</button>
+                            <button class="tablinks_applicable" onclick="openApplicable(event, 'exceptions')">Exceptions</button>
+                        </div>
+
+                        <div id="applicable" class="tabcontent">
+
+                         <div class="form-group row">
+                            <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Gender</label>
+                            <div class="col-sm-1">
+                               
+                                <div class="custom-control custom-checkbox mb-2 mt-2">
+                                  <input name="gender" value="Male" {% if 'Male' in  form.data.gender %} checked {% endif %} class="custom-control-input samefields" id="customCheck" type="checkbox">
+                                  <label class="custom-control-label" for="customCheck">Male</label>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-1">
+                               
+                                    <div class="custom-control custom-checkbox mb-2 mt-2">
+                                      <input name="gender" value="Female" {% if 'Female' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck2" type="checkbox" >
+                                      <label class="custom-control-label" for="customCheck2">Female</label>
+                                    </div>
+                               
+                            </div>
+                            <div class="col-sm-1">
+                               
+                                    <div class="custom-control custom-checkbox mb-2 mt-2">
+                                      <input name="gender" value="Others" {% if 'Others' in form.data.gender %} checked {% endif %}  class="custom-control-input samefields" id="customCheck3" type="checkbox">
+                                      <label class="custom-control-label" for="customCheck3">Others</label>
+                                    </div>
+                               
+                            </div>
+                          </div>
+
+                        <div class="form-group row">
+                            <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Marital Status</label>
+                            <div class="col-sm-1">
+                               
+                                <div class="custom-control custom-checkbox mb-2 mt-2">
+                                  <input name="marital_status" value="1" {% if 'Single' in form.data.marital_status %} checked {% endif %} class="custom-control-input samefields" id="customCheck4" type="checkbox">
+                                  <label class="custom-control-label" for="customCheck4">Single</label>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="custom-control custom-checkbox mb-2 mt-2">
+                                  <input name="marital_status" value="2" {% if 'Married' in form.data.marital_status %} checked {% endif %}  class="custom-control-input samefields" id="customCheck5" type="checkbox" >
+                                  <label class="custom-control-label" for="customCheck5">Married</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Department</label>
+                                <div class="col-sm-4">
+                                  <select name="department" id="appli_department" class="form-control samefields" data-toggle="select" multiple="">
+                                    {% for dep in dept %}
+                                        <option value="{{ dep.id }}" {% if dep.id in form.data.department %} selected{% endif %}>  {{ dep.name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Designation</label>
+                                <div class="col-sm-4">
+                                  <select name="designation" id="appli_designation" class="form-control samefields" data-toggle="select" multiple="">
+                                    <option value="1" {% if form.data.designation == "1" %} selected{% endif %} >Head Of Department</option>
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Location</label>
+                                <div class="col-sm-4">
+                                  <select name="location" id="appli_location" class="form-control" data-toggle="select" multiple="">
+                                    <option value="Dubai" {% if form.data.location == "Dubai" %} selected{% endif %} >Dubai</option>
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Role</label>
+                                <div class="col-sm-4">
+                                  <select name="role" id="appli_role" class="form-control samefields" data-toggle="select" multiple="">
+                                    {% for role in roles %}
+                                        <option value="{{ role.id }}" {% if form.data.role == "{{ role.id }}" %} selected{% endif %}>  {{ role.name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Employment Type</label>
+                                <div class="col-sm-4">
+                                  <select name="employment_type" id="appli_employee_type" class="form-control samefields" data-toggle="select" multiple="">
+                                     <option value="1" {% if form.data.employment_type == "1" %} selected{% endif %} >Permenant</option>
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label"></label>
+                                <div class="col-sm-4">
+                                  <h3>(OR)</h3>
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Employees</label>
+                                <div class="col-sm-4">
+                                  <select name="all_employees" id="all_employees" class="form-control" data-toggle="select" multiple="">
+                                    <option value="1" selected="">All Employees</option>
+                                  </select>
+                                </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="exceptions" class="tabcontent">
+                        
+                         <div class="form-group row" id="exc_department">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Department</label>
+                                <div class="col-sm-4">
+                                  <select name="exception_dept" class="form-control" data-toggle="select" multiple="">
+                                    {% for dep in dept %}
+                                        <option value="{{ dep.id }}" {% if form.data.exception_dept == "{{ dep.id }}" %} selected{% endif %}>  {{ dep.name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row" id="exc_designation">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Designation</label>
+                                <div class="col-sm-4">
+                                  <select name="exception_desgn" class="form-control" data-toggle="select" multiple="">
+                                    <option value="1">Head Of Department</option>
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row" id="exe_location">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Location</label>
+                                <div class="col-sm-4">
+                                  <select name="exception_location" class="form-control" data-toggle="select" multiple="">
+                                    <option value="Dubai">Dubai</option>
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row" id="exe_role">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Role</label>
+                                <div class="col-sm-4">
+                                  <select name="exception_role" class="form-control" data-toggle="select" multiple="">
+                                    {% for role in roles %}
+                                        <option value="{{ role.id }}" {% if form.data.role == "{{ role.id }}" %} selected{% endif %}>  {{ role.name }}</option>
+                                    {% endfor %} 
+                                  </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group row" id="exc_employee">
+                            <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Employment Type</label>
+                                <div class="col-sm-4">
+                                  <select name="exce_employment_type" class="form-control" data-toggle="select" multiple="">
+                                    <option value="1">Permenant</option>
+                                    
+                                  </select>
+                                </div>
+                        </div>
+
+                    </div>
+
+                      </div>
+                  </div>
+                  
+                  <div id="Tokyo" class="tabcontent">
+                    
+
+                    <div class="card">
+            <div class="card-header">
+                  <div class="row align-items-center">  
+                        <div class="card-body">           
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">Weekends Between Leave Period :</label><br>
+                                    <div style="margin-left: 25px;">
+                                         <input id="rad1" type="radio" value="1" name="weekend_bw_leave"/><label for="rad1">Count as leave: Count after
+                                          &nbsp;<input style="width:50px;float: none;" type="number" name="weekend_bw_leave_days" placeholder="">   &nbsp; days</label> &nbsp;<label class="form-control-label"  for="input-email">  
+                                          </label><br>
+                                          <input id="rad1" value="0" type="radio" name="weekend_bw_leave"/><label for="rad1">Don't count as leave </label> 
+                                    </div>    
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">Holidays Between Leave Period :</label><br>
+                                    <div style="margin-left: 25px;">
+                                         <input id="rad1" type="radio" name="holydays_bw_leave" name="rad" value="1" /><label for="rad1">Count as leave: Count after
+                                          &nbsp;<input style="width:50px;float: none;" name="holydays_bw_leave_days" type="number" name="effect_number"  placeholder="">   &nbsp; days</label> &nbsp;<label class="form-control-label"  for="input-email">  
+                                          </label><br>
+                                          <input id="rad1" value="0" name="holydays_bw_leave"  type="radio" name="rad"/><label for="rad1">Don't count as leave </label> 
+                                    </div>    
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">While Applying Leave, Exceed Leave Balance :</label><br>
+                                    <div style="margin-left: 25px;">
+                                         <input id="rad1" type="radio" value="allow"  name="exceeds_leave_balance"/><label for="rad1">Allow
+                                          </label> &nbsp;&nbsp;
+                                          <input id="rad1"  type="radio"  value="dont_allow" name="exceeds_leave_balance"/><label for="rad1">Don't Allow </label> 
+                                    </div>   
+                                    <div style="margin-left: 25px;">
+                                          <input id="rad1" type="radio" name="exceeds_leave_balance" value="Without_limit"/><label for="rad1">Without limit
+                                           </label>&nbsp;&nbsp;
+                                           <input id="rad1"  type="radio" name="exceeds_leave_balance" value="until_year_end_allow"/><label for="rad1">Until year end limit </label> 
+                                           &nbsp;&nbsp;
+                                           <input id="rad1"  type="radio" name="exceeds_leave_balance" value="without_limit_and_mark_as_LOP"/><label for="rad1">Without limit and mark as LOP </label> 
+                                     </div>    
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">Duration(s) Allowed :</label><br>
+                                    <div style="margin-left: 25px;">
+                                          <div class="checkboxes">
+                                                <label><input name="duration" type="checkbox" value="full_day"> <span>Full Day</span></label>
+                                                <label><input name="duration" type="checkbox" value="half_day"> <span>Half Day</span></label>
+                                                <label><input name="duration" type="checkbox" value="quarter_day"> <span>Quarter Day</span></label>
+                                                <label><input name="duration" type="checkbox" value="hourly"> <span>Hourly</span></label>
+                                              </div>
+                                     </div>    
+                              </div>
+                        </div>
+                        <!-- <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">Report Configuration :</label><br>
+                                    <div style="margin-left: 25px;">
+                                          <label class="form-control-label" style="margin-right: 75px;" for="input-email">Allow users to view</label>
+                                          <select class="selectBox B0I DIB VM select2-offscreen" name="allow_users_to_view" tabindex="-1">
+                                                <option value="1">Leave Taken Alone</option><option value="3">Simple Leave Summary</option>
+                                                <option value="2" selected="selected">Complete Leave Summary</option></select>
+                                     </div>  <br>
+                                     <div style="margin-left: 25px;">
+                                          <label class="form-control-label" style="margin-right: 38px;" for="input-email">Balance to be displayed</label>
+                                          <select class="selectBox B0I DIB VM select2-offscreen" name="balance_to_display" tabindex="-1">
+                                                <option value="1" selected="selected">Start date of leave request</option>
+                                                <option value="2">Accrual Period Balance</option><option value="2">Current Date</option>
+                                          </select>
+                                     </div>    
+                              </div>
+                        </div> -->
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <label class="form-control-label"  for="input-email">Allow Requests For :</label><br>
+                                    <div style="margin-left: 25px;">
+                                          <div class="checkboxes">
+                                                <label><input type="checkbox" name="past_dates_check" class="past_chkbox"> <span>Past dates</span></label>
+                                          </div>
+                                     </div>  
+                                     <div style="margin-left: 55px;" id="past_div">
+                                          <div class="checkboxes">
+                                                <label><input type="checkbox" name="past_check"> <span>Past &nbsp; <input style="width:40px;height: 20px;float: none;" type="number" name="past_days_count" value="0" placeholder=""> &nbsp;days</span></label>
+                                          </div>
+                                     </div>  
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <!-- <label class="form-control-label"  for="input-email">Allow Requests For :</label><br> -->
+                                    <div style="margin-left: 25px;">
+                                          <div class="checkboxes" >
+                                                <label><input type="checkbox" name="future_dates_check" class="future_chkbox"> <span>Future  dates</span></label>
+                                          </div>
+                                     </div>  
+                                     <div style="margin-left: 55px;" class="future_div">
+                                          <div class="checkboxes">
+                                                <label><input type="checkbox" name="future_check"> <span>Next &nbsp; <input style="width:40px;height: 20px;float: none;" type="number" name="future_days_count" value="0" placeholder=""> &nbsp;days</span></label>
+                                          </div>
+                                     </div>  
+                                     <div style="margin-left: 55px;" class="future_div">
+                                          <div class="checkboxes">
+                                                <label><input type="checkbox" name="future_apply_check"> <span>To be applied &nbsp; <input style="width:40px;height: 20px;float: none;" type="number" name="future_advance_count" value="0" placeholder=""> &nbsp;days in advance</span></label>
+                                          </div>
+                                     </div>  
+                              </div>
+                        </div>
+
+                            <div class="form-group row">
+                              <div class="col-lg-12">
+                                    <!-- <label class="form-control-label"  for="input-email">Allow Requests For :</label><br> -->
+                                    <div style="margin-left: 5px;">
+                                          <div class="checkboxes">
+                                                <label><input class="chkinput" type="checkbox"> <span>Minimum leave that can be availed per application</span></label>
+                                                 <input class="chkinput1" style="width:40px;height: 20px;float: none;" type="number" name="minimum_leave_apply"  placeholder="">
+                                          </div>
+                                     </div> 
+                                     <div style="margin-left: 5px;">
+                                          <div class="checkboxes">
+                                                <label><input class="chkinput" type="checkbox"> <span>Maximum leave that can be availed per application</span></label>
+                                                 <input class="chkinput1" style="width:40px;height: 20px;float: none;" type="number" name="maximum_leave_apply"  placeholder="">
+                                          </div>
+                                     </div> 
+                                     <div style="margin-left: 5px;">
+                                          <div class="checkboxes">
+                                                <label><input class="chkinput" type="checkbox"> <span>Maximum number of consecutive days of Leave allowed</span></label>
+                                                 <input class="chkinput1" style="width:40px;height: 20px;float: none;" type="number" name="maximum_consecutive_leave_apply"  placeholder="">
+                                          </div>
+                                     </div> 
+                                     <div style="margin-left: 5px;">
+                                          <div class="checkboxes">
+                                                <label><input class="chkinput" type="checkbox"> <span>Minimum gap (in days) between two applications </span></label>
+                                                 <input class="chkinput1" style="width:40px;height: 20px;float: none;" type="number" name="minimum_gap_apply"  placeholder="">
+                                          </div>
+                                     </div> 
+                                     <!-- <div style="margin-left: 5px;">
+                                          <div class="checkboxes">
+                                                <label><input class="chkinput" type="checkbox" name="file_check"> <span>Enable file upload option if the applied leave period exceeds</span></label>
+                                                 <input class="chkinput1" style="width:40px;height: 20px;float: none;" type="number" name="file_upload_after"  placeholder="">
+                                          </div>
+                                     </div>  -->
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <div class="col-lg-6">
+                                    <div style="margin-left: 5px;">
+                                                <span>Maximum number of applications allowed within the specified period</span>
+                                     </div> 
+                        </div>
+                        <div class="col-lg-6">
+                              <div id="theDiv" style="width: 219px;height: 40px;display: inline-block;border: solid black 1px;text-align: center;padding-top: 5px;" >
+                              <input style="width:40px;height: 25px;float: none;" type="number" name="maximum_application" value="1" placeholder="">
+                                         /
+                                                 <select class="selectBox B0I DIB VM select2-offscreen" name="maximum_application_period" tabindex="-1">
+                                                       <option value="1">Week</option>
+                                                       <option value="2">Month</option>
+                                                       <option value="3">Year</option>
+                                                       <option value="4">Accrual Period</option>
+                                                       <option value="5">Job Tenure</option>
+                                                      </select>
+                                                </div>
+                              <!-- <div style="margin-left: 5px;">
+                                    <div class="checkboxes">
+                                          <span>This leave can be applied only on</span>
+                                           <input style="margin-right:10px;width:100px;height: 20px;float: none;" type="number" name="effect_number" value="0" placeholder="">
+                                          </div>
+                               </div>  -->
+                        </div>
+                  </div>
+
+                  <!-- <div class="form-group row">
+                        <div class="col-lg-6">
+                              <div style="margin-left: 5px;">
+                                    <span>This leave can be applied only on</span>
+                              </div> 
+                                  </div>
+                                  <div class="col-lg-6">
+                                     
+                                    <select class="selectBox select2-offscreen" name="apply_only_on" multiple="multiple"><optgroup label="Holidays" name="holiday">
+                                        <option value="1">Restricted Holidays</option>
+                                    </optgroup>
+                                        <optgroup label="Employee" name="employee">
+                                            <option value="2">Date of Joining</option>
+                                            <option value="3">Date of Birth</option>
+                                            <option value="4">Date of Exit</option>
+                                        </optgroup>
+                                    </select>
+
+                                  </div>
+                            </div> -->
+                            
+                            <div class="form-group row">
+                                <div class="col-lg-6">
+                                    <div style="margin-left: 5px;">
+                                          <span>This leave cannot be taken together with</span>
+                                    </div> 
+                                </div>
+                                <div class="col-lg-6">
+                                      
+                                       <select style="margin-right:10px;width:187px;height: 30px;float: none;" name="leaves_together" id="leaves_together"  multiple="">
+                                         <option value="1" {% if form.data.leaves_together == "1" %} selected{% endif %} >Casual Leave</option>
+                                      </select>
+
+                                </div>
+                      </div>
+                                  </div>
+                            </div> 
+                      </div>
+                </div>
+
+
+
+                  </div>
+
+               
+            </div>
+
+             <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+             </div>
+
+             </form>
+
+             
+            </div>
+
+
+            </div>
+             
+          </div>
+
+        </div>
+
+  
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+<script>
+
+  $(function () {
+    var dateToday = new Date();
+         // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+         $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+      todayBtn: "linked",
+      todayHighlight: true,});
+       
+});
+
+function openCity(evt, cityName) {
+    evt.preventDefault();
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tabcontents = document.getElementsByClassName("tabcontents");
+    for (i = 0; i < tabcontents.length; i++) {
+      tabcontents[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+  if(cityName =="Paris")
+      document.getElementById("defaultApplicable").click();
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+//document.getElementById("defaultApplicable").click();
+
+function openApplicable(evt, applicable) {
+  //alert(applicable);
+  evt.preventDefault();
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks_applicable");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(applicable).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+
+$( document ).ready(function() {
+        $('.maxibal').hide();
+        $('.openbal').hide();
+    });
+function valueChanged_accur(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();
+      if($('.accurcheck').is(":checked"))   
+          $(".accur").show();
+      else
+          $(".accur").hide();
+          return false;
+  }
+function valueChanged_reset(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();  
+      if($('.resetcheck').is(":checked"))   
+          $(".reset").show();
+      else
+          $(".reset").hide();
+          return false;
+  }
+function valueChanged_openbal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.openbalcheck').is(":checked"))   
+          $(".openbal").show();
+      else
+          $(".openbal").hide();
+          return false;
+  }
+  function valueChanged_maxibal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.maxibalcheck').is(":checked"))   
+          $(".maxibal").show();
+      else
+          $(".maxibal").hide();
+          return false;
+  }
+
+  $('.samefields').change(function(){
+
+     // $("#all_employees option:first").attr("selected", true);
+     // $("#all_employees").text($("#all_employees option:first").val()); 
+
+     $("#all_employees").prop("selectedIndex", 0);
+     
+  });
+
+
+  $(document).on("change", ".chkinput", function () {
+ // alert();
+       var id = ($(this).attr('id'));
+       var arr = id.split('_');
+          var inputid = "#myinputid_" + arr[1];
+          $(inputid).attr('disabled','disabled');
+     // alert(inputid);
+      if($(this).is(":checked")) {
+         $(inputid).removeAttr('disabled');
+      }
+  });
+  $(document).on("change", ".past_chkbox", function () {
+         $('#past_div').hide();
+      if($(this).is(":checked"))
+         $('#past_div').show();
+    });
+    $(document).on("change", ".future_chkbox", function () {
+        $('.future_div').hide();
+     if($(this).is(":checked"))
+        $('.future_div').show();
+    });
+    $( document ).ready(function() {
+        $('.maxibal').hide();
+        $('.openbal').hide();
+        $('#accur_in').show();
+      $('#accur_ddl_4th').show();
+       // $('#reset_ddl_carry_3rd_td').show();
+       // $('#reset_ddl_carry_4th_td').show();
+        $('#accur_ddl_2nd_td').show();
+                $('.chkinput').each(function(i) {
+          $(this).attr('id', 'mychkid_' + i);
+          });
+          $('.chkinput1').each(function(i) {
+          $(this).attr('id', 'myinputid_' + i);
+          $(this).attr('disabled','disabled');
+          });
+          $('#past_div').hide();
+          $('.future_div').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+    });
+    $('#ddl_accural_1st').on('change', function() {
+      // $('#ddl_accural_2nd').find('option:selected').remove();
+      var val = this.value;
+      $('#ddl_accural_2nd').removeAttr('selected');
+      $('#ddl_accural_3rd').removeAttr('selected');
+      $('#accur_ddl_2nd_td').show();
+      $('#accur_in').show();
+      $('#accur_ddl_4th').show();
+      $("#ddl_accural_3rd").find('option').each(function() {
+          $(this).remove();
+      });
+    $("#ddl_accural_3rd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+             });
+             $("#ddl_accural_2nd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+            // alert( $(this).val());
+                if($(this).val() == 1 && val == "00")
+                {
+                      $(this).remove();
+                      $('#ddl_accural_2nd').append($('<option>', { 
+                            value: '1',
+                            text : '1st' 
+                      }));
+                      $('#ddl_accural_2nd').append( $("#ddl_accural_2nd option[value='-1']").attr("selected","selected"));
+                }
+                else
+                {
+                      //$(this).remove();
+                      $('#ddl_accural_2nd option[value="1"]').remove();
+                      $('#ddl_accural_2nd').append($('<option>', { 
+                            value: '1',
+                            text : '1st' 
+                      }));
+                      $('#ddl_accural_2nd').append( $("#ddl_accural_2nd option[value='1']").attr("selected","selected"));
+                }
+             });
+       // alert( this.value );
+       var $id = "#ddl_accural_3rd";
+     if(val == "00")  // one time
+     {  
+          bind_yearly($id);
+         $('#ddl_accural_2nd').removeAttr('selected');
+      $("#ddl_accural_2nd option[value='-1']").attr("selected","selected");
+      $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accur_in').hide();
+      $('#accur_ddl_4th').hide();
+     }
+    // $('').show();
+  else if(val == "01")  //year
+     {  // alert('y');
+           bind_yearly($id);
+           $('#ddl_accural_3rd').removeAttr('selected');
+          $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+          $("#ddl_accural_3rd option[value='1']").attr("selected","selected");
+          $('#accur_in').show();
+          $('#accur_ddl_4th').show();
+     }
+  else if(val == "11") //month
+  {
+    bind_yearly($id);
+      $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accural_3rd_td').hide();
+      $('#accur_ddl_4th').show();
+  }
+  else if(val == "16") //half
+   {
+      $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accural_3rd_td').show();
+      $('#accur_ddl_4th').show();
+    bind_monthly($id); 
+   }
+  else if(val == "14") //trianually
+     {
+          bind_triannually($id);
+     }
+  else if(val == "13") //quaterly
+     {
+          bind_quarterly($id);
+     } 
+  else if(val == "12") //bimonthly
+     {
+          bind_bimonthly($id);
+     }
+  else if(val == "315") //semi monthly
+     {
+          bind_semi_monthly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+  else if(val == "22") // bi weekly
+     {
+          bind_bi_weekly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+  else if(val == "21") //  weekly
+     {
+          bind_bi_weekly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+});
+$('#reset_ddl_1st').on('change', function() {  //alert();
+      // $('#ddl_accural_2nd').find('option:selected').remove();
+      $('#reset_ddl_2nd').removeAttr('selected');
+      $('#reset_ddl_3rd').removeAttr('selected');
+      $("#reset_ddl_2nd").removeProp("selected");
+      $("#reset_ddl_3rd").removeProp("selected");
+      $("#reset_ddl_2nd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+             });
+     // $('#accur_ddl_2nd_td').show();
+     $('#reset_ddl_2nd_td').show();
+     $('#reset_ddl_1st_td').show();
+      $("#reset_ddl_3rd").find('option').each(function() {
+       $(this).remove();
+    });
+       // alert( this.value );
+       var $id = "#reset_ddl_3rd";
+     var val = this.value;
+     if(val == "00")  // one time
+     {
+         bind_yearly($id);
+         $('#reset_ddl_2nd').removeAttr('selected');
+      $("#reset_ddl_2nd option[value='-1']").attr("selected","selected");
+      $("#reset_ddl_3rd option[value='-1']").attr("selected","selected");
+     // $('#accur_in').hide();
+     // $('#accur_ddl_4th').hide();
+     }
+    // $('').show();
+  else if(val == "01")  //year
+     {  // alert('y');
+           bind_yearly($id);
+           $('#reset_ddl_3rd').removeAttr('selected');
+           $('#reset_ddl_2nd').removeAttr('selected');
+          $("#ddl_accural_2nd option[value='32']").attr("selected","selected");
+       //   $("#reset_ddl_3rd option[value='1']").attr("selected","selected");
+         // $('#accur_in').show();
+         // $('#accur_ddl_4th').show();
+     }
+  else if(val == "11") //month
+  {
+    bind_yearly($id);
+    $('#reset_ddl_2nd').removeAttr('selected');
+      $("#reset_ddl_2nd option[value='32']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#reset_ddl_2nd_td').hide();
+     // $('#accur_ddl_4th').show();
+  }
+  else if(val == "16") //half
+   {
+    $('#reset_ddl_2nd').removeAttr('selected');
+    $("#reset_ddl_2nd option[value='32']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+    //  $('#accural_3rd_td').show();
+    //  $('#accur_ddl_4th').show();
+      bind_monthly($id); 
+   }
+  else if(val == "14") //trianually
+     {
+          bind_triannually($id);
+     }
+  else if(val == "13") //quaterly
+     {
+          bind_quarterly($id);
+     } 
+  else if(val == "12") //bimonthly
+     {
+          bind_bimonthly($id);
+     }
+  else if(val == "315") //semi monthly
+     {
+          bind_semi_monthly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='15']").attr("selected","selected");
+     }
+  else if(val == "22") // bi weekly
+     {
+          bind_bi_weekly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='6']").attr("selected","selected");
+     }
+  else if(val == "21") //  weekly
+     {
+          bind_bi_weekly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='6']").attr("selected","selected");
+     }
+});
+
+  $('#reset_ddl_carry_1st').on('change', function() {  //alert();
+    $('#reset_ddl_carry_1st_td').show();
+    $('#reset_ddl_carry_2nd_td').show();
+    $('#reset_ddl_carry_3rd_td').hide();
+    $('#reset_ddl_carry_4th_td').hide();
+    $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+    var $id = "#reset_ddl_3rd";
+     var val = this.value;
+     if(val == "1")  // one time
+     {
+          $('#reset_ddl_carry_1st_td').hide();
+    $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_3rd_td').show();
+           $('#reset_ddl_carry_4th_td').show();
+     } 
+     if(val == "2")  // one time 
+     {
+          $('#reset_ddl_carry_1st_td').hide();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_3rd_td').show();
+          $('#reset_ddl_carry_4th_td').show();
+          $('#reset_ddl_carry_5th_td').show();
+          $('#reset_ddl_carry_6th_td').show();
+          $('#reset_ddl_carry_7th_td').show();
+     } 
+     if(val == "3")  // one time 
+     {
+          $('#reset_ddl_carry_1st_td').show();
+          $('#reset_ddl_carry_2nd_td').show();
+          $('#reset_ddl_carry_3rd_td').hide();
+          $('#reset_ddl_carry_4th_td').hide();
+          $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+     } 
+    // $('').show(); reset_ddl_carry_1st
+ }); 
+
+ $('#reset_ddl_carry_units_1st').on('change', function() {  //alert();
+     $('#reset_ddl_carry_1st_td').show();
+     $('#reset_ddl_carry_2nd_td').show();
+     $('#reset_ddl_carry_3rd_td').hide();
+     $('#reset_ddl_carry_4th_td').hide();
+      //  alert(this.value)
+      var $id = "#reset_ddl_3rd";
+      var val = this.value;
+      if(val == "1")  // one time
+      {
+          $('#reset_ddl_carry_3rd_td').show();
+          $('#reset_ddl_carry_4th_td').show();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+      }
+      if(val == "0")  // one time
+      {
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+          var carry = $('#reset_ddl_carry_1st').val();
+          if(carry == 2)
+          {
+                $('#reset_ddl_carry_1st_td').hide();
+                $('#reset_ddl_carry_2nd_td').hide();
+          }
+      }
+     // $('').show();
+  });
+
+   $('#reset_ddl_carry_last').on('change', function() {  //alert();
+     $('#reset_ddl_carry_last0_td').hide();
+     $('#reset_ddl_carry_last1_td').hide();
+     var $id = "#reset_ddl_3rd";
+      var val = this.value;
+      if(val == "1")  // one time
+      {
+           $('#reset_ddl_carry_last0_td').show();
+            $('#reset_ddl_carry_last1_td').show();
+      // $('#accur_in').hide();
+      // $('#accur_ddl_4th').hide();
+      }
+     // $('').show();
+  });
+
+
+function bind_yearly(id)
+{
+  var select = $(id);
+      var newOptions = {
+                  'Jan' : '1',
+                  'Feb' : '2',
+                  'Mar' : '3',
+                  'Apr' : '4',
+                  'May' : '5',
+                  'Jun' : '6',
+                  'Jul' : '7',
+                  'Aug' : '8',
+                  'Sep' : '9',
+                  'Oct' : '10',
+                  'Nov' : '11',
+                  'Dec' : '12',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+}
+function bind_one_time(id)
+{
+  var select = $(id);
+      var newOptions = {
+                  '1st' : '1',
+                  '2nd' : '2',
+                  '3rd' : '3',
+                  '4th' : '4',
+                  '5th' : '5',
+                  '6th' : '6',
+                  '7th' : '7',
+                  '8th' : '8',
+                  '9th' : '9',
+                  '10th' : '10',
+                  '11th' : '11',
+                  '12th' : '12',
+                  '13th' : '13',
+                  '14th' : '14',
+                  '15th' : '15',
+                  '16th' : '16',
+                  '17th' : '17',
+                  '18th' : '18',
+                  '19th' : '19',
+                  '20th' : '20',
+                  '21th' : '21',
+                  '22th' : '22',
+                  '23th' : '23',
+                  '24th' : '24',
+                  '25th' : '25',
+                  '26th' : '26',
+                  '27th' : '27',
+                  '28th' : '28',
+                  '29th' : '29',
+                  '30th' : '30',
+                  '31st' : '31',
+                  'Last Day' : '32',
+                  'Policy Date' : '-1',
+                  'Joining Date' : '-2',
+                  'Birth Date' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+}
+function bind_monthly(id)
+{
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Jul' : '1',
+                  'Feb & Aug' : '2',
+                  'Mar & Sep' : '3',
+                  'Apr & Oct' : '4',
+                  'May & Nov' : '5',
+                  'Jun & Dec' : '6',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_triannually(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & May & Sep' : '1',
+                  'Feb & Jun & Oct' : '2',
+                  'Mar & Jul & Nov' : '3',
+                  'Apr & Aug & Dec' : '4',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_quarterly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Apr & Jul & Oct' : '1',
+                  'Feb & May & Aug & Nov' : '2',
+                  'Mar & Jun & Sep & Dec' : '3',
+                   'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_bimonthly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Mar & May & Jul & Sep & Nov' : '1',
+                  'Feb & Apr & Jun & Aug & Oct & Dec' : '2',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_semi_monthly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  '1 & 16' : '1',
+                  '2 & 17' : '2',
+                  '3 & 18' : '3',
+                  '4 & 19' : '4',
+                  '5 & 20' : '5',
+                  '6 & 21' : '6',
+                  '7 & 22' : '7',
+                  '8 & 23' : '8',
+                  '9 & 24' : '9',
+                  '10 & 25' : '10',
+                  '11 & 26' : '11',
+                  '12 & 27' : '12',
+                  '13 & 28' : '13',
+                  '14 & 29' : '14',
+                  '15 & 30' : '15'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+
+
+  function bind_bi_weekly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Sun' : '0',
+                  'Mon' : '1',
+                  'Tue' : '2',
+                  'Wed' : '3',
+                  'Thu' : '4',
+                  'Fri' : '5',
+                  'Sat' : '6',
+                 };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+function valueChanged_accur(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();
+      if($('.accurcheck').is(":checked"))   
+          $(".accur").show();
+      else
+          $(".accur").hide();
+          return false;
+  }
+function valueChanged_reset(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();  //alert('v');
+      if($('.resetcheck').is(":checked"))   
+          $(".reset").show();
+      else
+          $(".reset").hide();
+          return false;
+  }
+function valueChanged_openbal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.openbalcheck').is(":checked"))   
+          $(".openbal").show();
+      else
+          $(".openbal").hide();
+          return false;
+  }
+  function valueChanged_maxibal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.maxibalcheck').is(":checked"))   
+          $(".maxibal").show();
+      else
+          $(".maxibal").hide();
+          return false;
+  }
+
+
+  $('#appli_department').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_department').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_department').show();
+      }
+
+  });
+
+  $('#appli_designation').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_designation').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_designation').show();
+      }
+
+  });
+
+
+   $('#appli_location').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exe_location').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exe_location').show();
+      }
+
+  });
+
+  $('#appli_role').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exe_role').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exe_role').show();
+      }
+
+  });
+
+   $('#appli_employee_type').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_employee').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_employee').show();
+      }
+
+  });
+
+
+</script>
+
+{% endblock javascripts %}
+ 

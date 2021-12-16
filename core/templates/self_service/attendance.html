@@ -1,0 +1,486 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Attendance {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+    
+<style>
+
+    .tab-content>.active {
+        display: contents !important;
+    }
+
+    .Dtyps {
+        border-left: 4px solid;
+        max-width: 150px;
+        height: 40px;
+        margin-right: 20px;
+        float: left;
+        padding-left: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .Dtyps span {
+        width: 100%;
+        float: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding-bottom: 0px;
+        line-height: 14px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .Dtyps .Avadat, .Dtyps .digit-type {
+        margin-top: 2px;
+        line-height: 14px;
+    }
+
+    .comp-present {
+        border-color: #3dce4cd9 !important;
+    }
+    .comp-comp {
+        border-color: #3d81ced9 !important;
+    }
+    .comp-absent {
+        border-color: #f0989a !important;
+    }
+
+    .comp-holyday {
+        border-color: #0de2ffd9 !important;
+    }
+
+    .comp-weekend {
+        border-color: #ff8700 !important;
+    }
+
+    .showLeft{
+                    /* background-color: #0d77b6 !important;
+                    border:1px solid #0d77b6 !important; */
+                    text-shadow: none !important;
+                    color:#fff !important;
+                    padding:10px;
+                    transform: rotate(90deg);
+                }
+
+                .icons li {
+                    background: none repeat scroll 0 0 #a09d9d;;
+                    height: 7px;
+                    width: 7px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    right: 0.4em;
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 0.24em;
+                }
+
+                .dropbtn {
+                    /* background-color: #4CAF50; */
+                    position: absolute;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+               
+                .drop{
+                    width: 100%;
+                    /* background-color: #0d77b6 !important; */
+                    height: 60px;
+                }
+
+                .dropdown-dot {
+                    position: absolute !important;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: relative;
+                    margin-top: 60px;
+                    background-color: #f9f9f9;
+                    min-width: 160px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                .dropdown-dot a:hover {background-color: #f1f1f1}
+
+                .show {display:block;}
+
+                .lingr span{
+                    color: #fff;
+                }
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Self-service</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-calendar-check"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Attendance</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a>  -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row justify-content-center" >
+               
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
+                      
+                  </div>
+                </div>
+
+            </div>  
+           
+          </div>
+
+          <div class="attn_div" style="padding:10px;">
+          {% if request.session.checkin_session %}
+              <form method="POST" class="post-form" action="/check_out_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-2" style="text-align: center;">
+                    <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
+                        <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
+                        <time class="DB"> [ 12AM - 12AM ] </time>
+                    </span>
+                  
+                </div>
+
+                <div class="col-lg-2">
+                    <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
+                    
+                </div>
+
+              </div>
+                 
+              </form>
+              {% else %}
+              <form method="POST" class="post-form" action="/check_in_attn/">  
+                {% csrf_token %}  
+                <div class="row">
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-2" style="text-align: center;">
+                    <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
+                        <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
+                        <time class="DB"> [ 12AM - 12AM ] </time>
+                    </span>
+                  
+                </div>
+
+                <div class="col-lg-2">
+                    {% if check_leave %}
+                        <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></div>
+                      
+                    {% else %}
+                        <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                       
+                    {% endif %}
+                </div>
+              </div>
+                 
+              </form>
+
+              {% endif %}
+
+            </div>
+
+          <div class="table-responsive py-4">
+            <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                <tr>
+                    <th></th>
+                    <th>First Check-in</th>
+                    <th></th>
+                    <th>Last Check-out</th>
+                    <th>Total Hours</th>
+                   
+                </tr>
+                <tbody>
+
+                    {% for date,date_no in zipped_data %}
+
+                        <tr>
+                            <td width="75" class="">{{ date|date:'l'|slice:"0:3"  }}, <span> {{ date_no }} </span></td>
+
+                            {% for attn in month_atten %}
+
+                                {% if attn.date|date:"d" == date_no %}
+
+                                    {% if attn.is_present == 1 %}
+                                        <td width="145">{{ attn.checkin_time }}</td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr present-bg"><span>Present</span></div>
+                                        </td>
+                                        <td width="145">{{ attn.checkout_time }}</td>
+                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                    {% endif %}
+
+                                    {% if attn.is_present == 2 %}
+                                        <td width="145">{{ attn.checkin_time }}</td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr comp-bg"><span>Comp Off</span></div>
+                                        </td>
+                                        <td width="145">{{ attn.checkout_time }}</td>
+                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                    {% endif %}
+
+                                    {% if attn.is_leave == 1 %}
+                                        <td width="145"></td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr absent-bg"><span>Absent</span></div>
+                                        </td>
+                                        <td width="145"></td>
+                                    {% endif %}
+
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+                            {% for holi in holidays %}
+                                {% if holi.date|date:"d" == date_no %}
+
+                                    <td width="145"></td>
+                                    <td colspan="1" class="text-center">
+                                        <div class="lingr holyday-bg"><span>{{ holi.holiday_name }}</span></div>
+                                    </td>
+                                    <td width="145"></td>
+
+                                {% endif %}
+                            
+                            {% endfor %}
+
+                            {% for week in weekend %}
+                               
+                                {% if date|date:'l'|lower in week.week_off %}
+                                   
+                                    <td width="145"></td>
+                                    <td colspan="1" class="text-center">
+                                        <div class="lingr weekend-bg"><span>Weekend</span></div>
+                                    </td>
+                                    <td width="145"></td>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                        </tr>
+
+                    {% endfor %}
+
+                   
+                   
+                 </tbody>
+              </table>
+          </div>
+
+            <div class="card-footer">
+                <div class="tab-content PL100">
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-present">
+                            <span>Present Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ present_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-comp">
+                            <span>Comp Off</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ comp_off }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-absent">
+                            <span>Absent Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ absent_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-holyday">
+                            <span>Holidays</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ holidays.count }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-weekend">
+                            <span>Weekend</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ weekend_count }} Day(s)</div>
+                        </div>
+                    </div>
+         
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+
+  
+    <script type="text/javascript">
+
+    $("#atte_absent").click(function(){
+        alert("You won't able to check-in because you are in leave today..")
+    });
+
+        var date_selected = ' {{ month_no }}-{{ year }} ';
+
+        setInterval(function(){ 
+
+            // var start = new Date;
+            // var dt = new Date();
+            // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+            // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
+
+            var dt = new Date();
+            var h =  dt.getHours(), m = dt.getMinutes();
+            var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+
+            $('.Timer').text(time); 
+
+        }, 1000);
+
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                'setDate': date_selected
+                // todayHighlight: true,
+                // defaultDate: new Date(dateToday.getMonth()+1,year)
+            });
+                
+        });
+
+      
+        $('#month_year').on('change', function () {
+            var month = $(this).val(); 
+            if (month) {
+                window.location = "/filter_attendance/"+month+"/"; // redirect
+            }
+            return false;
+        });
+
+      
+        
+    </script>
+
+{% endblock javascripts %}
+
+

@@ -1,0 +1,1032 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Onboarding {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+.custom-toggle-success input:checked + .custom-toggle-slider:before {
+    background: #2dce89;
+    /* width: 0px; */
+    position: absolute;
+    left: 25px;
+}
+
+.custom-toggle-success input:checked + .custom-toggle-slider {
+    border-color: #2dce89;
+    width: 80px;
+}
+
+.custom-toggle-slider:after {
+    font-family: inherit;
+    font-size: .90rem !important;
+    font-weight: 600;
+    line-height: 24px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    overflow: hidden;
+    min-width: 1.66667rem;
+    margin: 0 0.21667rem;
+    content: attr(data-label-off);
+    transition: all .15s ease;
+    text-align: center;
+    color: #2dce89 !important;
+}
+.custom-toggle-slider1:before {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    content: '';
+    transition: all .15s cubic-bezier(.68, -.55, .265, 1.55);
+    border-radius: 50% !important;
+    background-color: #f5365c !important;
+   
+}
+.custom-toggle-slider1:after {
+    font-family: inherit;
+    font-size: .80rem !important;
+    font-weight: 600;
+    line-height: 24px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    overflow: hidden;
+    min-width: 1.66667rem;
+    margin: 0 0.21667rem;
+    content: attr(data-label-off);
+    transition: all .15s ease;
+    text-align: center;
+    color: #f5365c !important;
+}
+span.confirm-change.custom-toggle-slider1.rounded-circle {
+      border-color: #f5365c !important;
+} 
+
+.custom-toggle-success input:checked + .custom-toggle-slider1:after {
+    color: #2dce89 !important;
+}
+.custom-toggle-slider1:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: -5px;
+    cursor: pointer;
+    border: 1px solid #ced4da;
+    border-radius: 34px !important;
+    background-color: transparent;
+    width: 85px !important;
+    border-color: #f5365c !important;
+}
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Onboarding</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Employees Onboarding</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_onboard_employee' %}" class="btn btn-sm btn-neutral">Add</a>
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row" >
+                 
+                  <div class="col-lg-4" style="float:right;">
+                     
+                        <h3 class="mb-0">Onboarding</h3><br>
+                  </div> 
+                  <div class="col-lg-4"><label ></label></div>
+                  <div class="col-lg-1" style="margin-top: 10px;"><label >Filter_by:</label></div>
+                  <div class="col-lg-3">
+                        <select class="form-control"  style="border: 1px solid;"  name="employee" id="employee_status_change" >
+                              <option value="all">All</option>
+                              <option value="select">Selected</option>
+                              <option value="revert">Reverted</option>
+                             
+                          </select>
+                  </div>
+                  
+           
+          </div>
+            <!-- <h3 class="mb-0">Onboarding</h3> -->
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Candidate ID</th>
+                  <th>Name</th>
+                  <!-- <th>Description</th> -->
+                  <th>Email ID</th>
+                  <th>Send</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <!-- <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Office</th>
+                  <th>Age</th>
+                  <th>Start date</th>
+                  <th>Salary</th>
+                </tr>
+              </tfoot> -->
+              <tbody>
+                {% for emp in employees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="nr" data-queryid="{{ emp.candidate_id  }}">{{emp.candidate_id }}</td>
+                    <td>{{emp.first_name}}</td>
+                    <!-- <td>{{emp.description}}</td> -->
+                    <td>{{emp.email_id}}</td>
+
+                    <td> 
+                       
+                        {% if emp.offer_letter_url %}
+                            <a href= "{% static 'offer_letters/'%}{{ emp.offer_letter_url }}" target="_blank" class="fas fa-eye" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View Offer Letter"></a>
+                        {% else %}
+                            <a class="fas fa-envelope use-mail" style="color: #5e72e4;" data-id="{{ emp.pk }}" data-toggle="tooltip" data-original-title="send" title="Send Offer Letter"></a>
+
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {% if emp.is_active == 1 %}
+                                   
+                                    <label class="custom-toggle custom-toggle-success">
+                                        <a title="Edit" href="{% url 'status_onboard_employees' emp.pk 2 %}" value="1">
+                                            <input value="1" name="status" type="checkbox" title="Change" checked>
+                                            <span class="confirm-change custom-toggle-slider rounded-circle" title="Change" data-label-off="No" data-label-on="Select"></span>
+                                        </a>
+                                    </label> 
+                                   
+                                    {% else %}
+                                   
+                                    <label class="custom-toggle custom-toggle-success">
+                                        <a title="Edit" href="{% url 'status_onboard_employees' emp.pk 1 %}" value="1">
+                                            <input value="0" name="status" type="checkbox" title="Change">
+                                            <span class="confirm-change custom-toggle-slider1 rounded-circle" title="Change" data-label-off="Revert" data-label-on="Revert"></span>
+                                        </a>
+                                    </label> 
+    
+                                    {% endif %}
+    
+                                  </td>
+                    
+                    <td> 
+
+                 
+                        <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a>
+                        &nbsp; &nbsp;
+
+                        {% if emp.offer_letter_url %}
+                        <a href="{% url 'convert_to_emp' emp.pk %}" class="convert-emp fas  table-action-delete" data-toggle="tooltip" data-original-title="Convert To Employee">
+                            <i class="fas fa-user"></i>
+                        </a> &nbsp; &nbsp;
+                        {% endif %}
+                        
+                        <a href="{% url 'delete_onboard_employee' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Candidate">
+                            <i class="fas fa-trash"></i>
+                        </a> 
+                      
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    
+  </div>
+
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Employee Other Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                        <div class="row">
+                              <div class="col-lg-12"><span style="color: blue;">Photo :</span>
+                                   
+                              <img class="rounded-circle" id="Img_photo" style="width: 100px;" src=" {% static 'profile_images/'%}win_faviorate_desk.png "></img>
+                              </div> 
+                              <!-- <div class="col-lg-3"><span style="font-weight: 700;" id="candidate_id_other"></span></div> -->
+                             
+                          </div>
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;" id="candidate_id_val">Candidate ID :</span></div> 
+                     <div class="col-lg-3"><span style="font-weight: 700;" id="candidate_id_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Name : </span></div> 
+                     <div class="col-lg-3"><span style="font-weight: 700;" id="first_name_other"></span></div>
+                 </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Email ID :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="email_id_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Mobile Number : </span></div>
+                   <div class="col-lg-3"> <span style="font-weight: 700;" id="mobile_number_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Emirate ID :</span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="emirate_id_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Official Email Id : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="official_email_id_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Address :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="address_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">State : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="state_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">City :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="city_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Pin Code : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="pin_code_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Employee Status :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="employee_status_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Employee Type : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="employee_type_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Country :</span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="country_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Experience : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="experience_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                   <div class="col-lg-3"><span style="color: blue;">Source of hire :</span> </div> 
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="source_of_hire_other"></span></div>
+                   <div class="col-lg-3"><span style="color: blue;">Skill Set : </span> </div>
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="skill_set_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Highest Qualify :</span> </div>
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="highest_qualify_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Additional Info : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="additional_info_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Current Salery :</span> </div>
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="current_sal_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Joining Date : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="tentative_joining_date_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <!-- <div class="row">
+                  <div class="col-lg-6"><span style="color: blue;">Total Experience :</span> <span style="font-weight: 700;" id="total_experience_other"></span></div>
+                  <div class="col-lg-6"><span style="color: blue;">Experience : </span> <span style="font-weight: 700;" id="Experience_other"></span></div>
+              </div> -->
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Location :</span> </div>
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="location_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Title : </span> </div>
+                   <div class="col-lg-3"><span style="font-weight: 700;" id="title_other"></span></div>
+              </div>
+              
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+  
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="my_email_Modal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Offer Letter Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                <form id="offer_letter">
+                  <div id="section-1" >
+
+                <input type="hidden" id="candidate_id">
+                       
+                <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
+                    <div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
+                    
+                    <div class="col-lg-3"><span style="color: blue;">Joining Date : </span></div>
+                    <div class="col-lg-3"> <input  required class="form-control startdate" type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate"></input></div>
+
+                </div>
+               
+              <hr class="my-3" />
+              
+                <div class="row">
+                 
+                    <div class="col-lg-3"><span style="color: blue;">Salary :</span> </div> 
+                    <div class="col-lg-3"><input class="form-control" required type="number" placeholder="Enter Salary" id="TxtSalary"></input></div>
+                    
+                    <div class="col-lg-3"><span style="color: blue;">Curreny :</span> </div> 
+                    <div class="col-lg-3">
+                      <select class="form-control" id="currency">
+                        <option value="">Select</option>
+                        <option value="AED">AED</option>
+                        <option value="INR">INR</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                      </select>
+                    </div>
+                    
+
+                </div>
+            
+              
+              <hr class="my-3" />
+                </div>
+            </form>
+                
+                <div class="modal-footer">
+					        <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center>
+                 	<center><button id="btn_offer_letter" type="button" class="btn btn-success">Send</button></center>
+                   
+                </div>
+                <span style="float: right;color: red;" id="just_wait">Just wait..</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+<script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+  
+<script type="text/javascript">
+
+$("#just_wait").hide();
+
+
+$('[data-type="adhaar-number"]').keyup(function() {
+  var value = $(this).val(); //alert(value);
+  value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
+  $(this).val(value);
+});
+
+$('[data-type="adhaar-number"]').on("change, blur", function() {
+  var value = $(this).val(); // alert(value);
+  var maxLength = $(this).attr("maxLength");
+  if (value.length != maxLength) {
+    $(this).addClass("highlight-error");
+  } else {
+    $(this).removeClass("highlight-error");
+  }
+});
+
+
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Are you sure you want to delete this candidate?');
+    }) 
+
+    $(document).on('click', '.convert-emp', function(){
+        return confirm('Are you sure you want to convert this candidate as employee?');
+    }) 
+
+           $(document).ready(function()
+            {
+               $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+                  todayBtn: "linked",
+                  todayHighlight: true,
+                  });
+
+            });
+
+      $(document).on('click', '#btn_offer_letter', function(){
+
+            var csrftoken = getCookie('csrftoken');
+            // var can_name = $("#TxtName").val();
+            // var can_nation = $("#TxtNation").val();
+            // var can_mobile = $("#TxtMobileNumber").val();
+            var can_joindate = $("#TxtJoinDate").val();
+            // var can_acceptdate = $("#TxtAcceptDate").val();
+            var can_salary = $("#TxtSalary").val();
+            var currency = $("#currency").val();
+            var can_position = $("#TxtPosition").val();
+            // var can_email = $("#TxtEmailID").val();
+            // var can_aadhar = $("#TxtAadharNumber").val();
+            var can_id = $("#candidate_id").val();
+
+           // alert(can_aadhar);
+
+            $("#TxtName").css("border", "1px solid black");
+            $("#TxtNation").css("border", "1px solid black");
+            $("#TxtMobileNumber").css("border", "1px solid black");
+            $("#TxtJoinDate").css("border", "1px solid black");
+            $("#TxtAcceptDate").css("border", "1px solid black");
+            $("#TxtSalary").css("border", "1px solid black");
+            $("#currency").css("border", "1px solid black");
+            $("#TxtPosition").css("border", "1px solid black");
+            $("#TxtEmailID").css("border", "1px solid black");
+            $("#TxtAadharNumber").css("border", "1px solid black");
+
+            // if ($('#TxtName').val() == "") {
+            //       $("#TxtName").css("border", "1px solid red");
+            //       $("#TxtName").focus()
+            // }
+            if ($('#TxtNation').val() == "") {
+                  $("#TxtNation").css("border", "1px solid red");
+                  $("#TxtNation").focus();
+            }
+            if ($('#TxtMobileNumber').val() == "") {
+                  $("#TxtMobileNumber").css("border", "1px solid red");
+                  $("#TxtMobileNumber").focus();
+                  
+            }
+            if ($('#TxtJoinDate').val() == "") {
+                  $("#TxtJoinDate").css("border", "1px solid red");
+                 // $("#TxtJoinDate").focu s();
+                
+            }
+            if ($('#TxtAcceptDate').val() == "") {
+                  $("#TxtAcceptDate").css("border", "1px solid red");
+                //  $("#TxtAcceptDate").focus();
+               
+            }
+            if ($('#TxtSalary').val() == "") {
+                  $("#TxtSalary").css("border", "1px solid red");
+                  $("#TxtSalary").focus();
+                 
+            }
+            if ($('#currency').val() == "") {
+                  $("#currency").css("border", "1px solid red");
+                  $("#currency").focus();
+                 
+            }
+            if ($('#TxtPosition').val() == "") {
+                  $("#TxtPosition").css("border", "1px solid red");
+                  $("#TxtPosition").focus();
+                  
+            }
+            // var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;  
+            // if(!emailReg.test($("#TxtEmailID").val())) { 
+            //       $("#TxtEmailID").css("border", "1px solid red");
+            //       $("#TxtEmailID").focus(); 
+            //       alert("Please enter valid email id");
+                 
+            //   }  
+            // if ($('#TxtEmailID').val() == "") {
+
+            //       $("#TxtEmailID").css("border", "1px solid red");
+            //       $("#TxtEmailID").focus();
+                
+            // }
+            if ($('#TxtAadharNumber').val() == "") {
+                  $("#TxtAadharNumber").css("border", "1px solid red");
+                  $("#TxtAadharNumber").focus();
+                
+            }
+
+            if (can_joindate && can_salary && can_position && currency) {
+                $("#just_wait").show();
+                swal({
+                    title: 'Are you sure?',
+                    text: "You want to send offer letter!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonClass: 'btn btn-danger',
+                    confirmButtonText: 'Yes, send it!',
+                    cancelButtonClass: 'btn btn-secondary'
+                }).then((result) => {
+                    if (result.value) {
+                        // Show confirmation
+                        $.ajax({  
+                        type: "GET",  
+                        url: "/send_offer_letter/",  
+                        data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position, currency : currency},
+                        success: $.proxy(function(data) {
+                            
+                            console.log(JSON.stringify(data));
+
+                            if(data == 1){
+                                $('#offer_letter')[0].reset();
+                                $("#just_wait").hide();
+                                $('#my_email_Modal').modal('hide');
+                                
+                                swal({
+                                    title: 'Sended!',
+                                    text: 'Offer letter has been sent.',
+                                    type: 'success',
+                                    buttonsStyling: false,
+                                    confirmButtonClass: 'btn btn-primary'
+                                }).then(function() {
+                                    location.href = '/onboard_employees/';
+                                });
+                            }
+                            else{
+                                swal({
+                                    title: 'Error!',
+                                    text: 'Something went wrong.',
+                                    type: 'error',
+                                    buttonsStyling: false,
+                                    confirmButtonClass: 'btn btn-danger'
+                                });
+                            }
+                
+                        })
+                        });
+
+                    }
+                })
+
+            }
+
+      });
+
+
+	  
+  $(document).on('click', '#btn_preview_offer', function(){
+
+
+
+		var csrftoken = getCookie('csrftoken');
+		// var can_name = $("#TxtName").val();
+		// var can_nation = $("#TxtNation").val();
+		// var can_mobile = $("#TxtMobileNumber").val();
+		var can_joindate = $("#TxtJoinDate").val();
+		// var can_acceptdate = $("#TxtAcceptDate").val();
+		var can_salary = $("#TxtSalary").val();
+    var currency = $("#currency").val();
+		var can_position = $("#TxtPosition").val();
+		// var can_email = $("#TxtEmailID").val();
+		// var can_aadhar = $("#TxtAadharNumber").val();
+		var can_id = $("#candidate_id").val();
+
+        // alert(can_joindate)
+
+		$("#TxtName").css("border", "1px solid black");
+		$("#TxtNation").css("border", "1px solid black");
+		$("#TxtMobileNumber").css("border", "1px solid black");
+		$("#TxtJoinDate").css("border", "1px solid black");
+		$("#TxtAcceptDate").css("border", "1px solid black");
+		$("#TxtSalary").css("border", "1px solid black");
+    $("#currency").css("border", "1px solid black");
+		$("#TxtPosition").css("border", "1px solid black");
+		$("#TxtEmailID").css("border", "1px solid black");
+		$("#TxtAadharNumber").css("border", "1px solid black");
+
+		// if ($('#TxtName').val() == "") {
+		//       $("#TxtName").css("border", "1px solid red");
+		//       $("#TxtName").focus()
+		// }
+		if ($('#TxtNation').val() == "") {
+			$("#TxtNation").css("border", "1px solid red");
+			$("#TxtNation").focus();
+		}
+		if ($('#TxtMobileNumber').val() == "") {
+			$("#TxtMobileNumber").css("border", "1px solid red");
+			$("#TxtMobileNumber").focus();
+			
+		}
+		if ($('#TxtJoinDate').val() == "") {
+			$("#TxtJoinDate").css("border", "1px solid red");
+			// $("#TxtJoinDate").focu s();
+			
+		}
+		if ($('#TxtAcceptDate').val() == "") {
+			$("#TxtAcceptDate").css("border", "1px solid red");
+			//  $("#TxtAcceptDate").focus();
+		
+		}
+		if ($('#TxtSalary').val() == "") {
+			$("#TxtSalary").css("border", "1px solid red");
+			$("#TxtSalary").focus();
+			
+		}
+    if ($('#currency').val() == "") {
+			$("#currency").css("border", "1px solid red");
+			$("#currency").focus();
+			
+		}
+		if ($('#TxtPosition').val() == "") {
+			$("#TxtPosition").css("border", "1px solid red");
+			$("#TxtPosition").focus();
+			
+		}
+		
+		if ($('#TxtAadharNumber').val() == "") {
+			$("#TxtAadharNumber").css("border", "1px solid red");
+			$("#TxtAadharNumber").focus();
+			
+		}
+
+		if (can_joindate && can_salary && can_position && currency) {
+			$("#just_wait").show();
+			$.ajax({  
+			type: "GET",  
+			url: "/preview_offer_letter/",  
+			data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position, currency : currency},
+			success: $.proxy(function(data) {
+				
+				console.log(JSON.stringify(data));
+           		var host = window.location.protocol + "//" + window.location.host;
+        		// alert(host);
+
+				if(data !== 0){
+                    $("#just_wait").hide();
+					window.open('/'+'/'+window.location.host+"/static/offer_letters/"+data);
+				}
+			
+	
+			})
+			});
+
+			
+
+		}
+
+		});
+
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+$(".use-mail").click(function() { 
+    var id = $(this).data('id');
+    $("#candidate_id").val(id);
+    $('#my_email_Modal').modal('show');
+
+
+});
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//         }
+//     }
+// });
+
+// $(window).load(function() {
+//       $('#myModal').modal('show');
+// });
+
+
+
+    $(".use-address").click(function() { //alert('n');  
+        $('#myModal').modal('show');
+        var csrftoken = getCookie('csrftoken');
+       
+        var base_url = window.location.origin;
+       
+        var host = window.location.host;
+      
+        var pathArray = window.location.pathname.split( '/' );
+   
+        var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");
+        $.ajax({  
+            type: "POST",  
+            url: "/snippets_candidate_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                        // alert(item.fields.first_name);
+                        if(check == false)
+                        {
+                              check = true;
+                              var name = item.fields.first_name + " " + item.fields.last_name;   
+                              var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                              $('#candidate_id_val').html(item.fields.candidate_id);
+                              $('#employee_id_other').html(item.pk);
+                              $('#first_name_other').html(name);
+                              $('#email_id_other').html(item.fields.email_id);
+                              $('#mobile_number_other').html(item.fields.mobile_number);
+                              $('#emirate_id_other').html(item.fields.emirate_id);
+                              $('#official_email_id_other').html(item.fields.official_email_id);
+                              $('#address_other').html(item.fields.address);
+                              $('#state_other').html(item.fields.state);
+                              $('#city_other').html(item.fields.city);
+                              $('#pin_code_other').html(item.fields.pin_code);
+                              $('#country_other').html(item.fields.country);
+                              $('#experience_other').html(item.fields.experience);
+                              $('#source_of_hire_other').html(item.fields.source_of_hire);
+                              $('#skill_set_other').html(item.fields.skill_set);
+                              $('#highest_qualify_other').html(item.fields.highest_qualify);
+                              $('#additional_info_other').html(item.fields.additional_info);
+                              
+
+                              $('#current_sal_other').html(item.fields.current_sal);
+                              $('#tentative_joining_date_other').html(item.fields.tentative_joining_date);
+                              $('#location_other').html(item.fields.location);
+                              $('#title_other').html(item.fields.title	);
+
+                              $('#Img_photo').attr('src', "{% static 'profile_images/'%}"+item.fields.photo_url);
+                              
+
+                              // $('#marital_status_other').html(item.fields.marital_status);
+                              // $('#mobile_phone_other').html(mobi);
+                              // $('#other_email_other').html(item.fields.other_email);
+                              // $('#about_me_other').html(item.fields.about_me);
+                              // $('#date_of_exit_other').html(item.fields.date_of_exit);
+
+                              // $('#expertise_other').html(item.fields.expertise);
+                              // $('#job_description_other').html(item.fields.job_description);
+                              // $('#gender_other').html(item.fields.gender);
+                              // $('#tags_other').html(item.fields.tags);
+                        }
+                   //now you can access properties using dot notation
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+        });
+
+    });
+
+        $('td.query-main').live('click', function() { //alert();
+  var queryid = $(this).data("queryid");
+  
+ 
+});
+
+
+        // $(document).ready(function() {
+        //     $('#datatable').DataTable( {
+        //         dom: 'Bfrtip',
+        //         buttons: [
+        //             'copy', 'csv', 'excel', 'pdf', 'print'
+        //         ],
+        //         language: {
+        //         paginate: {
+        //             previous: "<i class='fas fa-angle-left'>",
+        //             next: "<i class='fas fa-angle-right'>"
+        //         }
+        //     }
+        //     } );
+        // } );
+
+
+     
+
+    </script>
+
+     <!-- Optional JS -->
+  <!-- <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script> -->
+  <!-- <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script> -->
+
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+
+
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        //dom: 'Bfrtip',
+        buttons: [
+            // {
+            //     extend: 'copyHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, ':visible' ]
+            //     }
+          //  },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            // {
+            //     extend: 'pdfHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, 1 ]
+            //     }
+           // },
+            //'colvis'
+        ]
+    } );
+    
+} );
+
+$(document).ready(function()
+ {
+
+        var base_url = window.location.origin;
+       
+        var host = window.location.host;  
+      
+        var pathArray = window.location.pathname.split( '/' );
+
+        if(pathArray[2] != "") 
+
+        $('#employee_status_change').val(pathArray[2]);
+
+ });
+
+ $('#employee_status_change').on('change', function () {  
+            var sat = $(this).val();
+            window.location = "/filter_onboard_employees/"+sat+"/"; // redirect
+      });
+
+
+  </script>
+
+{% endblock javascripts %}
+
+

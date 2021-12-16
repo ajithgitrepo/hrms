@@ -1,0 +1,374 @@
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+{% block title %} Apply Leave {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+
+.datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+    top: 81.5px !important;
+    left: 545.333px;
+    z-index: 10;
+    display: block;
+}
+
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+.dates{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      
+      <span class="mask bg-gradient-default opacity-8"></span>
+    
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
+            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+       
+        <div class="col-xl-12 order-xl-1">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Apply Leave </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                {% csrf_token %}  
+              
+                    <!-- <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-city">Employee</label>
+                            <select class="form-control select2" data-toggle="select" value="{{ form.data.employee_id }}" name="employee_id" id="employee_id">
+                                <option value="" selected >Select</option>
+                                {% for folder in folders %}
+                                    <option value="{{ folder.name }}" {% if form.data.folder == "{{ folder.name }}" %} selected {% endif %}> {{ folder.name }} </option>
+                                {% endfor %} 
+                            </select>
+                            {{ form.employee_id.errors }}
+                        </div>
+                    </div> -->
+
+                    <input type="hidden" class="form-control startdate" id="employee_id" name="employee_id" value="{{ request.user.emp_id }}"/>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-city">Leave Type</label>
+                            <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
+                                <option value="" selected >Select</option>
+                                {% for leave in leaves %}
+                                    <option value="{{ leave.leave_type.id }}" {% if leave.leave_type.id|stringformat:"i" == form.data.leave_type %} selected {% endif %}> {{ leave.leave_type.name }} </option>
+                                {% endfor %} 
+                                {% for leave in leave_condition %}
+                                    <option value="{{ leave.leave_type.id }}" {% if leave.leave_type.id|stringformat:"i" == form.data.leave_type %} selected {% endif %}> {{ leave.leave_type.name }} </option>
+                                {% endfor %} 
+                            </select>
+                            {{ form.leave_type.errors }}
+                        </div>
+                    </div>
+
+                    <div class="row dates">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                            <label class="form-control-label" for="input-city">From Date</label>
+                            <input type="text" class="form-control startdate" id="from_date" autocomplete="off" placeholder="dd-mm-yyyy" name="from_date" value="{{ form.data.from_date }}"/>
+                            {{ form.from_date.errors }}
+                        </div>
+                        </div>
+
+                        
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                            <label class="form-control-label" for="input-city">To Date</label>
+                            <input type="text" class="form-control startdate" id="to_date" autocomplete="off" placeholder="dd-mm-yyyy" name="to_date" value="{{ form.data.to_date }}"/>
+                            {{ form.to_date.errors }}
+                        </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6"> 
+                        <div class="form-group"> 
+                         
+                          <div class="card">
+                              
+                                <!-- Card body -->
+                                <div class="card-body">
+                                      <label class="form-control-label" for="input-employeeid">Documents</label>
+                                
+                                    <div class="custom-file">
+                                      <input type="file" accept="image/jpeg, image/png, application/pdf" value="{{ form.data.document_url }}" name="document_url" class="custom-file-input" id="customFileLansssg" lang="en"></input>
+                                      <label class="custom-file-label" for="customFileLang"></label>
+                                    </div>
+                                
+                                </div>
+                              </div>
+  
+                        </div>
+  
+                      </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-city">Reason</label>
+                            <textarea class="form-control" id="reason" placeholder="Reason" name="reason" >{{ form.data.reason }}</textarea>
+                            
+                        </div>
+                    </div>
+
+                  
+                </div>
+            </div>
+
+            <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <a href="/leave_tracker/"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button></a>
+
+            </div>
+
+            <hr class="my-4" />
+
+              </div>
+              
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+        <div class="modal-dialog modal-md modal- modal-dialog-centered modal-" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h6 class="modal-title" id="modal-title-default">Add Folder</h6>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="section-1" >
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Folder Name </label>
+                          <input type="text" name="folder_name" id="folder_name"  class="form-control" >
+                          
+                        </div>
+                    </div>
+                </div>
+           
+                <div class="modal-footer">
+                <button type="submit" id="submit_add_folder" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+
+$(function () {
+    var dateToday = new Date();
+    $(".startdate").datepicker({
+        format: 'dd-mm-yyyy', 
+        autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+    });
+         
+});
+
+ 
+$(document).ready(function() {
+
+    $('.select2').select2();  
+    // initialise Datetimepicker and Sliders
+    md.initFormExtendedDatetimepickers();
+
+    
+});
+
+$("#file_select").change(function () {
+    var file = $('#file_select')[0].files[0]
+    if (file){
+        $("#file_name").val(file.name.split('.').shift());
+    }
+})
+
+
+$(".add-folder").click(function() { 
+           
+    $('#myModal').modal('show');
+
+});
+
+
+$('#submit_add_folder').on("click",function() {
+    var folder_name = $("#folder_name").val();
+    if(folder_name == ""){
+        $("#folder_name").css("border", "1px solid red");
+		$("#folder_name").focus();
+    }
+    else{
+        $.ajax({  
+			type: "GET",  
+			url: "/add_folder/",  
+			data: {folder_name : folder_name},
+			success: $.proxy(function(data) {
+				
+				console.log(JSON.stringify(data));
+
+				if(data == 1){
+                    toastr.success('Folder added successfully!')
+                    $('#myModal').modal('hide');
+
+                    $('#folder').append($("<option selected></option>").attr("value", folder_name).text(folder_name)); 
+				}
+                else{
+                    toastr.warning('Folder already exist!')
+                }
+			
+	
+			})
+		});
+    }
+    
+})
+
+
+
+
+
+</script>
+
+{% endblock javascripts %}
+ 

@@ -1,0 +1,249 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Attendance-Calendar View {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- <link rel="stylesheet" href="/static/assets/vendor/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+
+  <style>
+      .fc-time {
+        display: none !important;
+    }
+
+    .fc-header-toolbar {
+        display: block !important;
+    }
+
+    .fc-right{
+        display: none !important;
+    }
+    
+    .fc-toolbar .fc-center {
+        display: block !important;
+        margin-left: 10px;
+    }
+
+    .fc-toolbar .fc-left {
+        float: right !important;
+    }
+
+    button.fc-prev-button.fc-button.fc-state-default.fc-corner-left {
+        background: turquoise;
+        
+        margin-right: 10px !important;
+    }
+
+    button.fc-next-button.fc-button.fc-state-default.fc-corner-right {
+        /* color: blue; */
+        background: turquoise;
+        margin-right: 10px !important;
+    }
+
+    button.fc-today-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+        color: beige;
+        background: rgb(6, 36, 167);
+        margin-right: 10px !important;
+    }
+
+    
+    
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+
+  
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Header -->
+  <div class="header header-dark bg-primary pb-6 content__title content__title--calendar">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6">
+            <h6 class="fullcalendar-title h2 text-white d-inline-block mb-0">Attendance </h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-calendar-alt"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">Calendar View</a></li>
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+                </ol>
+              </nav>
+          </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <div class="row">
+      <div class="col">
+        <!-- Fullcalendar -->
+        <div class="card card-calendar">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row" style="justify-content: center;">
+                <div class="col-lg-5">
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                        <option value="general" selected disabled>Select employee</option>
+                        {% for emp in employees %}
+                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                        {% endfor %} 
+                    </select>
+                </div> 
+
+
+
+            </div>  
+          </div>
+          <!-- Card body -->
+          <div class="card-body p-0">
+            <div id="calendar"></div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+
+  <script>
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+    var data = function () {
+        var tmp = null;
+        $.ajax({
+            'async': false,
+            type: "GET",
+            url: '/show_cal_view',
+            data: {"csrfmiddlewaretoken": csrftoken},
+            dataType: "json",
+            'success': function (data) {
+                tmp = data;
+            }
+        });
+        return tmp;
+    }();
+
+    // alert(data)
+
+    var calendar = $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month'
+        },       
+        events: data,
+        selectable: true,
+        selectHelper: true,
+        editable: false,
+        eventLimit: true,
+        
+
+        eventRender: function(event, element) {
+            if(event.title == "Present")
+            {
+                $(element).tooltip({title: 'Check - In : '+event.checkin + ' / Check - Out : ' +event.checkout});    
+            }
+                        
+        },
+
+        viewRender: function(view, element) {
+            var month = $('#calendar').fullCalendar('getDate');
+            var date = month.format('L');
+            var emp_id = $('#employee_change').val();
+            $('#calendar').fullCalendar('removeEventSources');
+            $.ajax({
+                type: "GET",
+                url: '/search_attn_date',
+                data: {'date': date, 'emp_id': emp_id, "csrfmiddlewaretoken": csrftoken},
+                dataType: "json",
+                success: function (data) {
+                    $('#calendar').fullCalendar('removeEventSource');
+                    $('#calendar').fullCalendar('addEventSource', data);
+                    $('#calendar').fullCalendar('refetchEvents');
+                   
+                },
+                error: function (data) {
+                    alert('There is a problem!!!');
+                }
+            });
+
+        },
+
+    });
+
+    $('#employee_change').on('change', function () {
+        var emp = $(this).val();
+        var month = $('#calendar').fullCalendar('getDate');
+        var date = month.format('L');
+        // alert(date)
+        $('#calendar').fullCalendar('removeEventSources');
+        var events = null;
+        $.ajax({
+            'async': false,
+            type: "GET",
+            url: '/search_attn_time',
+            data: {"csrfmiddlewaretoken": csrftoken, "emp_id": emp, 'date': date},
+            dataType: "json",
+            'success': function (data) {
+               
+                $('#calendar').fullCalendar('removeEventSource');
+                $('#calendar').fullCalendar('addEventSource', data);
+                $('#calendar').fullCalendar('refetchEvents');
+            },
+           
+        });
+            
+        //alert(events)
+
+
+    });
+
+   
+
+  </script>
+
+
+{% endblock javascripts %}
