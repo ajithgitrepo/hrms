@@ -560,8 +560,8 @@
         var check_in = "{{check_in}}";
     	  var session = "{{session}}";
     	
-        // alert(session);
-        if(login_time){
+        //alert(login_time);
+        if(login_time && session){
         	// alert(1);
             //create date format  
             // str = login_time.replace(" p.m.", ":00");
@@ -599,6 +599,7 @@
 
         $('#ZPAtt_dashboard_weekCont').hide();
     })
+
 
     function Attendance_today(val)
     {
