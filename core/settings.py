@@ -154,3 +154,7 @@ EMAIL_HOST_USER = 'hrmsttf@gmail.com'
 EMAIL_HOST_PASSWORD = 'GmailPassword7'
 
 DATE_INPUT_FORMATS = ('%d/%m/%Y','%d-%m-%Y','%Y-%m-%d')
+
+CRONJOBS = [
+    ('*/1 * * * *', 'app.my_cron_job')
+]

@@ -47,6 +47,9 @@ from django.core.exceptions import PermissionDenied
 from app.models.holiday_details_model import Holiday_Detail 
 from app.models.leave_balance_model import Leave_Balance
 
+# import schedule
+# import time
+
 #from app.models import QuillModel
 
 @login_required
@@ -167,3 +170,12 @@ def index(request):
     return render(request, "dashboard/dashboard.html", context)
 
     
+# def job():
+#     print("I'm working...")
+
+
+# schedule.every(1).minutes.do(job)
+
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)

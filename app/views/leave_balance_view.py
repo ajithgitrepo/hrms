@@ -65,6 +65,7 @@ import os
 from django.core.mail import get_connection, send_mail
 from django.core.mail.message import EmailMessage
 
+
 #from app.models import QuillModel
 
 @login_required(login_url="/login/")
@@ -171,9 +172,9 @@ def customize_leave_balance(request, pk):
         return redirect('leave_balance') 
 
 
-    balance = Leave_Balance.objects.filter(is_active='1', employee_id=pk, leave_type__is_active = '1')
+    balance = Leave_Balance.objects.filter(is_active='1', employee_id=pk, employee__is_active = 1, leave_type__is_active = '1')
 
-    # print(balance[0].leave_type.name)
+    # print(balance[0].employee.first_name)
 
     context = {
         'balance': balance,
@@ -220,4 +221,3 @@ def date_change(request):
 
     return HttpResponse( json.dumps(dict) )
 
-    

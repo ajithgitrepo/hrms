@@ -16,7 +16,7 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">Customize Balance</h6>
+            <h6 class="h2 text-white d-inline-block mb-0">Leave Balance</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <!-- <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                 <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
@@ -26,8 +26,8 @@
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a> 
-            <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+            <a href="{% url 'leave_balance' %}" class="btn btn-sm btn-neutral">Back</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
       </div>
@@ -54,11 +54,12 @@
               <thead class="thead-light">
                 <tr>
                   <th>#</th>
+                  <th>Employee</th>
                   <th>Leave Type</th>
-                  <th>Date</th>
-                  <th>Existing Balance	</th>
+                  <th>Balance</th>
+                  <!-- <th>Existing Balance	</th>
                   <th>New Balance</th>
-                  <th>Reason</th>
+                  <th>Reason</th> -->
 
                       
                 </tr>
@@ -78,14 +79,18 @@
                     </td>
 
                     <td>
+                      {{ bal.employee.first_name }} {{ bal.employee.last_name }} ({{ bal.employee.employee_id }})
+                    </td>
+
+                    <td>
                       {{ bal.leave_type.name }}
                     </td>
 
                     <td>
-                        <input name="date" type="text" value="{% now "d-m-Y" %}" class="form-control startdate" id="input-from-date" autocomplete="off">
+                      {{ bal.balance }}
                     </td>
 
-                    <td>
+                    <!-- <td>
                         <input name="existing_balance" existing_balance="{{ bal.balance }}" default_balance="{{ bal.balance }}" style="background-color: #fff;" type="text" value="{{ bal.balance }}" class="form-control existing_balance" id="existing_balance{{ bal.id }}" autocomplete="off" disabled>
                     </td>
 
@@ -102,7 +107,7 @@
                     </td>
                     <td hidden>
                         <input name="leave_type_id" value="{{ bal.leave_type.id }}" type="text" class="form-control" hidden id="type_id" autocomplete="off">
-                    </td>
+                    </td> -->
 
                   </tr>
                 
@@ -112,13 +117,13 @@
             </table>
           </div>
 
-          <div class="card-footer">
+          <!-- <div class="card-footer">
 
             <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
            
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        </div>
+        </div> -->
 
         </form>
         </div>
