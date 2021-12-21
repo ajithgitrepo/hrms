@@ -309,6 +309,14 @@
                                         <td width="145"></td>
                                     {% endif %}
 
+                                    {% if attn.is_wfh_approved == 0 %}
+                                        <td width="145"></td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr absent-bg"><span>WFH Requested</span></div>
+                                        </td>
+                                        <td width="145"></td>
+                                    {% endif %}
+
 
                                 {% endif %}
 

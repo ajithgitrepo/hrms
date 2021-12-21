@@ -80,7 +80,7 @@ def attendance(request):
         dates.append((first_day + timedelta(days=i)))
         date_no.append((first_day + timedelta(days=i)).strftime("%d"))
 
-    # print(dates)
+    # print(date_no)
 
     month_atten = Attendance.objects.filter(
         is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])

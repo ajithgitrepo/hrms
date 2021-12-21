@@ -183,8 +183,6 @@
 
 {% role_name as role %}
 
-  <!-- Page plugins -->
-
   <!-- Header -->
   <div class="header bg-primary pb-6">
     <div class="container-fluid">
@@ -201,9 +199,8 @@
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            {% if role == "Admin" %} 
-              <a href="{% url 'add_announcements' %}" class="btn btn-sm btn-neutral">Add</a> 
-            {% endif %}
+            <a href="{% url 'add_announcements' %}" class="btn btn-sm btn-neutral">Add</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
       </div>
@@ -236,12 +233,12 @@
 
                         <div style="margin-bottom: 10px;">
                             <h1>{{ data.title }}</h1>
-                            <p>{{ data.subject }}</p>
+                            <p>{{ data.subject|safe }}</p>
                             <a href="{% static '' %}announcements/{{data.attachment}}" target="_blank">{{data.attachment}}</a>
     
                         </div>
                        
-                        <div>
+                       <div>
                             <strong class="ann_time"> Expiry: </strong><span class="ann_time"> {{ data.expiry_date }}</span> &nbsp;&nbsp;&nbsp;
                            
                             {% if role == "Admin" %} 
@@ -262,6 +259,7 @@
                         </a>
                     </div>
                     {% endif %}
+
                    
 
                 {% endfor %}
