@@ -55,6 +55,9 @@ from app.models.leave_balance_model import Leave_Balance
 @login_required
 def index(request):
 
+    # run schedule monthly first day
+    # 1 0 1 1-12 *
+
     # print(request.session['checkin_session'])
 
     query = Employee.objects.filter(role__is_active ='1', department__is_active ='1', birth_date= datetime.date.today() )

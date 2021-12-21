@@ -11,6 +11,7 @@ urlpatterns = [
     
     #Self Service
     path('profile/', views.self_service_view.profile, name="profile"),
+    path('change_password/', views.self_service_view.change_password, name='change_password'),
     path('attendance/', views.self_service_view.attendance, name="attendance"),
     path('filter_attendance/<str:month>/', views.self_service_view.filter_attendance, name="filter_attendance"),
     path('files/', views.self_service_view.files, name="files"),

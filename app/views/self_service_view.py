@@ -45,6 +45,8 @@ from app.models.compensatory_request_model import Compoensatory_Request_Detail
 from app.forms.CompensatoryRequest_DetailsForm import CompensatoryRequest_DetailForm
 from app.forms.TarvelRequest_DetailsForm import TarvelRequest_DetailForm
 from app.models.travel_request_model import Travel_Request_Detail
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 @login_required(login_url="/login/")
@@ -781,3 +783,21 @@ def add_compensatory_request(request):
     }
 
     return render(request, "self_service/add_compensatory_request.html", context)
+
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'self_service/change_password.html', {
+        'form': form
+    })
