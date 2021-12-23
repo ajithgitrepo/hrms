@@ -1,0 +1,275 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Assets {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    /*margin-bottom: 30px;*/
+    background-color: #ffffff;
+}
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+.datepicker{
+    z-index: 10000 !important;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+        
+        </div>
+        <div class="col-xl-12 order-xl-1">
+        
+
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Add Asset Details </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                {% csrf_token %}  
+                   
+                    <input type="hidden" name="employee" value="{{ request.user.emp_id }}"  class="form-control">
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-email">Type of asset</label>
+                          <select     name="type_of_asset" value="{{ form.data.type_of_asset }}" class="form-control" placeholder="" >
+                              <option value="">select</option>
+                              <option value="Computer" {% if form.data.type_of_asset == "Computer" %} selected{% endif %}>Computer</option>
+                          <option value="Laptop" {% if form.data.type_of_asset == "Laptop" %} selected{% endif %}>Laptop</option>
+                          <option value="Books" {% if form.data.type_of_asset == "Books" %} selected{% endif %}>Books</option>
+                          <option value="Mobile" {% if form.data.type_of_asset == "Mobile" %} selected{% endif %}>Mobile</option>
+                          <!-- <option value=""></option> -->
+                          </select>
+                          {{ form.errors.type_of_asset }}
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-4"> 
+                      <div class="form-group"> 
+                        <label class="form-control-label" for="input-email">Given date</label>
+                        <input type="text" name="given_date" value="{{ form.data.given_date }}"  class="form-control startdate" placeholder="" >
+                        {{ form.errors.given_date }}
+                      </div>
+                    </div>
+                
+                    <div class="col-lg-4"> 
+                        <div class="form-group"> 
+                            <label class="form-control-label" for="input-email">Return date</label>
+                            <input type="text"   name="return_date" value="{{ form.data.return_date }}"  class="form-control startdate" placeholder="" >
+                            <!-- {{ form.errors.return_date }} -->
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                            <label class="form-control-label" for="input-country">Asset details</label>
+                            <textarea cols="3" rows="3" name="asset_details" value="{{ form.data.asset_details }}" class="form-control" ></textarea>
+                           
+                            </div>
+                        </div>
+
+                    </div>
+
+            <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <a  href="{% url 'assets' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+            </div>
+
+            <hr class="my-4" />
+
+              </div>
+              
+              
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+$(function () {
+      var dateToday = new Date();
+           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+           $(".startdate").datepicker({
+                format: 'dd-mm-yyyy',  
+                autoclose: true,
+                todayBtn: "linked",
+                todayHighlight: true,
+            });
+         
+});
+
+  
+
+</script>
+
+{% endblock javascripts %}
+ 

@@ -1,0 +1,374 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Work From Home {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">WFH Requests</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">All Work From Home Requests</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_workhome_request' %}" class="btn btn-sm btn-neutral">Request</a>
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Work From Home</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reason</th>
+                  <th>Status </th>
+                 
+                  <th>Action</th>
+                </tr>
+              </thead>
+             
+              <tbody>
+                {% for wfh in workhome_requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{wfh.start_date}}</td>
+                    <td>{{wfh.end_date}}</td>
+                    <td>{{wfh.reason}}</td>
+                    {% if wfh.is_approved == '1' %}
+                        <td style="color: darkgreen;">Approved</td>
+                    {% elif wfh.is_approved == '0'  %}
+                        <td style="color:darkorange">Pending</td>
+                    {% else %}
+                        <td style="color: darkred;">Rejected</td>
+                    {% endif %}
+
+                    <td> 
+                        <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info" onclick="view_more('{{client.id }}')"></a> -->
+                        &nbsp; &nbsp;
+
+                        &nbsp; &nbsp;
+                        <a href="{% url 'delete_workhome' wfh.id %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete WFH request">
+                              <i class="fas fa-trash"></i>
+                            </a> 
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="mylargemodellabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-">
+          
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">More Information</h4>
+          
+                  <button type="button"  class="close"  data-dismiss="modal">&times;</button>
+                </div>
+                    
+          
+                <div class="modal-body">
+
+                  <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Industry</span></div> 
+                    <div class="col-lg-3"><span style="font-weight: 700;" id="industry"></span></div>
+                    <div class="col-lg-3"><span style="color: blue;">Company Size</span></div> 
+                    <div class="col-lg-3"> <span style="font-weight: 700;" id="company"></span></div>
+                  </div>
+                  <hr class="my-3" />
+
+                  <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Description</span></div> 
+                    <div class="col-lg-3"><span style="font-weight: 700;" id="description"></span></div>
+                    <div class="col-lg-3"><span style="color: blue;">Address</span></div> 
+                    <div class="col-lg-3"> <span style="font-weight: 700;" id="address"></span></div>
+                  </div>
+                  <hr class="my-3" />
+
+                  <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">City</span></div> 
+                    <div class="col-lg-3"><span style="font-weight: 700;" id="city"></span></div>
+                    <div class="col-lg-3"><span style="color: blue;">State</span></div> 
+                    <div class="col-lg-3"> <span style="font-weight: 700;" id="state"></span></div>
+                  </div>
+                  <hr class="my-3" />
+
+                  <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Country</span></div> 
+                    <div class="col-lg-3"><span style="font-weight: 700;" id="country"></span></div>
+                    <div class="col-lg-3"><span style="color: blue;">Pincode</span></div> 
+                    <div class="col-lg-3"> <span style="font-weight: 700;" id="pincode"></span></div>
+                  </div>
+                  <hr class="my-3" />
+
+                  <div class="row">
+                    <div class="col-lg-3"><span style="color: blue;">Phone</span></div> 
+                    <div class="col-lg-3"><span style="font-weight: 700;" id="phone"></span></div>
+                    <div class="col-lg-3"><span style="color: blue;">Fax</span></div> 
+                    <div class="col-lg-3"> <span style="font-weight: 700;" id="fax"></span></div>
+                  </div>
+            
+                  
+                <div class="modal-footer">
+                  <button type="button" class='btn btn-link' data-dismiss="modal">Close</button>
+                </div>
+              
+          
+            </div>
+          </div>
+          </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var csrftoken = '{{ csrf_token }}';
+  // alert(csrftoken);
+</script>
+
+<script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this project?');
+        }) 
+ 
+        function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+// $(".use-address").click(function()
+// {
+//   // alert('dh');
+  
+//             var csrftoken = getCookie('csrftoken');
+//             // var csrf = $('meta[name="csrf-token"]').attr('content');
+//             // alert(csrf);
+//             // var csrftoken = getCookie('csrftoken');
+//           //  alert(csrftoken);
+//     //         // alert('vkj');
+//     // var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+//     //             .find(".nr")     // Gets a descendent with class="nr"
+//     //             .data("queryid");
+//     //             alert($id);
+//       var id=$(this).val()
+//       alert(id);
+
+//  $.ajax({
+//           url: '/info',
+//           type: 'GET',
+//           data: $(this).serialize(),
+//           dataType: 'json',
+//           success: function( data )
+//            {
+//        alert(data);
+        
+
+//                 $("#industry").html(': '+data[0]['industry']);
+//                 $('#myModal').modal('show');
+//             }
+//         });
+
+
+// });
+
+// $(document).ready(function(){
+
+// $('#myModal').on('shown.bs.modal', function (event) { 
+//   $target = $('#section-3');
+//   $('.modal-body').animate({
+//     scrollTop: $target.offset().top + 'px'
+//   }, 'fast');
+  
+// });
+// });
+
+
+
+function view_more(id)
+{
+      // var csrf = $('meta[name="csrf-token"]').attr('content');
+      // alert(csrf);
+      // alert(id);
+
+      $.ajax({
+          url: '/info',
+          type: 'POST',
+          data: {id : id, 'csrfmiddlewaretoken': csrftoken},
+          dataType: 'json',
+          success: function( data )
+           {
+            // data = JSON.parse(data);
+      //  alert(data);
+
+       jQuery.each(data, function(index, item) {
+        $("#industry").html(': '+item.fields.industry); 
+        $("#company").html(': '+item.fields.company_size);
+        $("#description").html(': '+item.fields.description);
+        $("#address").html(': '+item.fields.address);
+        $("#city").html(': '+item.fields.city);
+        $("#state").html(': '+item.fields.state);
+        $("#country").html(': '+item.fields.country);
+        $("#pincode").html(': '+item.fields.pincode);
+        $("#phone").html(': '+item.fields.phone);
+        $("#fax").html(': '+item.fields.fax);
+
+
+       });
+           
+ 
+
+            // alert(industry);
+            $('#myModal').modal('show');
+          }
+      })
+    }
+
+
+ </script>
+
+  
+
+ <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        // dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                },
+                filename: function(){
+                    var dt = new Date();
+                    dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+                    return 'employees-' + dt;
+                },
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
+                    columns: [1, 2, 3, 4, 5, 6],
+                },
+            },
+            //'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+

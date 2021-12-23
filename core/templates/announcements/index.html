@@ -1,0 +1,311 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Announcements {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+
+  .table-responsive {
+      overflow-x: auto;
+      min-height: 0.01%;
+  }
+  
+  .list_cont {
+      padding-left: 0 !important;
+  }
+  
+  .ZP-announcetable ul, .ZP-announcetable ol, .ZPFwig ul, .ZPFwig ol {
+      list-style: inherit;
+      padding-left: 25px;
+  }
+  
+  .list_cont .list_item:first-child {
+      border-top: 0;
+  }
+  
+  .list_cont .list_item {
+      background-color: #FFFFFF;
+      box-sizing: border-box;
+      cursor: pointer;
+      width: 100%;
+      padding: 13px 40px;
+      transition: all .3s ease;
+      margin: 0;
+      border-top: 1px solid #F9FCFD;
+  }
+  
+  .zp_flex {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .list_cont .list_content {
+      box-sizing: border-box;
+      width: 75%;
+      padding-right: 25px;
+  }
+  
+  .zp_flex .zp_flexItem {
+      display: flex;
+      align-items: center;
+  }
+  .list_cont .list_img .zp-uimg {
+      border: 0;
+      margin-right: 20px;
+      position: relative;
+      width: 42px;
+      height: 42px;
+  }
+  .zp-uimg {
+      width: 40px;
+      height: 40px;
+      -webkit-border-radius: 50px;
+      -moz-border-radius: 50px;
+      border-radius: 50px;
+      border: 1px solid #bfc0c0;
+  }
+  
+  .list_cont .list_detail {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+  }
+  .list_cont .list_detail .meta_primary {
+      font-size: 15px;
+      color: #000000;
+      line-height: 23px;
+      cursor: pointer;
+  }
+  .list_cont .list_detail .meta_secondary {
+      line-height: 14px;
+      margin: 0;
+      font-size: 12px;
+  }
+  .ZP-announcetable ul, .ZP-announcetable ol, .ZPFwig ul, .ZPFwig ol {
+      list-style: inherit;
+  }
+  .ann_category {
+      position: relative;
+      list-style-type: none;
+      padding-left: 0;
+      padding-left: 0 !important;
+      line-height: 14px;
+      margin-top: 4px;
+  }
+  .list_cont .list_detail {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+  }
+  .reviewIconInfo {
+      width: 170px;
+      text-align: right;
+  }
+  .list_cont .reviewIconInfo {
+      padding-right: 2px;
+  }
+  .list_cont .reviewIconInfo label {
+      padding-left: 16px;
+  }
+  .reviewIconInfo label {
+      margin: 0 0 0 10px;
+      font-size: 16px;
+  }
+  .list_cont .reviewIconInfo label span {
+      color: #111111 !important;
+      margin-right: 3px;
+  }
+  .reviewIconInfo label span {
+      display: inline-block;
+      text-align: right;
+      color: #999 !important;
+      font-size: 14px;
+      min-width: 24px;
+  }
+  .list_cont .reviewIconInfo .IC-like {
+      color: #6D6D6D;
+  }
+
+  .modal.fade.modal-right .modal-dialog {
+  transform: translate(125%, 0px);
+}
+
+.modal.show.modal-right .modal-dialog {
+  transform: none;
+}
+
+.modal-dialog {
+    position: fixed !important;
+    margin: auto;
+    width: 1500px !important;
+    height: 100%;
+    right: 0px;
+}
+  
+  
+    </style>
+  
+
+{% endblock stylesheets %}
+
+ 
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Announcements</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-bullhorn"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">All Announcements</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_announcements' %}" class="btn btn-sm btn-neutral">Add</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <!-- <h3 class="mb-0">Announcements</h3> -->
+            
+          </div>
+                
+            <div id="zp_announcement_list_div">
+                <div id="anno-list" class="table-responsive">
+                    <ul class="list_cont" id="zp_announcement_list">
+                    
+                    {% for data in announcements %}
+                   
+                        <li class="list_item zp_flex " rel="ann_navig" id="zp_ann_row_57753000000234097">
+                           
+                                <div class="list_content zp_flexItem">
+                                    <div class="list_img">
+                                        <img class="zp-uimg" src="{% static 'images/admin.png' %}">
+                                    </div>
+                                    <div class="list_detail" >
+                                        <a id="zpann_subject" class="meta_primary">{{ data.title }}</a>
+                                        <p class="meta_secondary"><a>{{ data.added_by.first_name }} {{ data.added_by.last_name }}</a>
+                                        <span class="ann_time"> | {{ data.created_at }}</span>
+                                        </p>
+                                        <ul class="ann_category"></ul>
+                                    </div>  
+                                </div>
+
+                                <a href="{% url 'announcement_view' data.pk %}">View</a>
+
+                                {% if data.is_active == 1 %}
+                               
+                                <label class="custom-toggle custom-toggle-success">
+                                    <a title="Edit" href="{% url 'status_announcement' data.pk 0 %}" value="1">
+                                        <input value="1" name="status" type="checkbox" title="Change" checked>
+                                        <span class="confirm-change custom-toggle-slider rounded-circle" title="Change" data-label-off="No" data-label-on="Active"></span>
+                                    </a>
+                                </label> 
+                               
+                                {% else %}
+                               
+                                <label class="custom-toggle">
+                                    <a title="Edit" href="{% url 'status_announcement' data.pk 1 %}" value="1">
+                                        <input value="0" name="status" type="checkbox" title="Change">
+                                        <span class="confirm-change custom-toggle-slider rounded-circle" title="Change" data-label-off="No" data-label-on="Active"></span>
+                                    </a>
+                                </label> 
+
+                                {% endif %}
+                               
+                           
+                                <a href="{% url 'delete_announcement' data.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete File">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                           
+                        </li>
+                   
+                        {% empty %}
+                        <div style="margin: auto; text-align: center;margin-top: 30px;margin-bottom: 30px;">
+                            <img src="{% static 'images/announcement.png' %}" width="100"  class="Usrimg"> <br>
+                            <span>No Announcement in last 30 days.</span>
+                        </div>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="announcement_Modal" class="modal fade modal-right"  tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">Announcement</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+                <div class="modal-body">
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this announcement?');
+        })
+
+        $(document).on('click', '.confirm-change', function(){
+            return confirm('Are you sure you want to change the status?');
+        })
+
+    </script>
+
+{% endblock javascripts %}
+
+

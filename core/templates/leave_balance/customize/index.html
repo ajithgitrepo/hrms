@@ -1,0 +1,455 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Customize Balance {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Leave Balance</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <!-- <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">All Roles</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Datatables</li> 
+              </ol> -->
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'leave_balance' %}" class="btn btn-sm btn-neutral">Back</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <!-- <h3 class="mb-0">Customize Balance</h3> -->
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="datatable">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee</th>
+                  <th>Leave Type</th>
+                  <th>Balance</th>
+                  <!-- <th>Existing Balance	</th>
+                  <th>New Balance</th>
+                  <th>Reason</th> -->
+
+                      
+                </tr>
+              </thead>
+          
+              <form method="POST" name="form" class="post-form" >
+              {% csrf_token %}  
+              <tbody>
+              
+                {% for bal in balance %}
+
+               
+                  <tr>
+                   
+                    <td>
+                      {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                      {{ bal.employee.first_name }} {{ bal.employee.last_name }} ({{ bal.employee.employee_id }})
+                    </td>
+
+                    <td>
+                      {{ bal.leave_type.name }}
+                    </td>
+
+                    <td>
+                      {{ bal.balance }}
+                    </td>
+
+                    <!-- <td>
+                        <input name="existing_balance" existing_balance="{{ bal.balance }}" default_balance="{{ bal.balance }}" style="background-color: #fff;" type="text" value="{{ bal.balance }}" class="form-control existing_balance" id="existing_balance{{ bal.id }}" autocomplete="off" disabled>
+                    </td>
+
+                    <td>
+                        <input name="new_balance" type="text" class="form-control" id="new_balance" autocomplete="off">
+                    </td>
+
+                    <td>
+                        <textarea name="reason" class="form-control" rows="1" cols="100" value="Manual Correction" placeholder="Manual Correction"></textarea>
+                    </td>
+
+                    <td hidden>
+                        <input name="leave_balance_id" value="{{ bal.id }}" type="text" class="form-control" hidden id="balance_id" autocomplete="off">
+                    </td>
+                    <td hidden>
+                        <input name="leave_type_id" value="{{ bal.leave_type.id }}" type="text" class="form-control" hidden id="type_id" autocomplete="off">
+                    </td> -->
+
+                  </tr>
+                
+                {% endfor %} 
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- <div class="card-footer">
+
+            <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+           
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        </div> -->
+
+        </form>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script> 
+  
+    <script type="text/javascript">
+
+        $(function () {
+            var dateToday = new Date();
+                // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+            $(".startdate").datepicker({
+                format: 'dd-mm-yyyy', 
+                autoclose: true,
+                todayBtn: "linked",
+                setDate: new Date(),
+                todayHighlight: true,
+            });
+            
+        });
+
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this role?');
+        })
+
+
+        $(document).ready(function() {
+            $('#datatable').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                language: {
+                paginate: {
+                    previous: "<i class='fas fa-angle-left'>",
+                    next: "<i class='fas fa-angle-right'>"
+                }
+            }
+            } );
+        } );
+
+
+        $( ".startdate" ).change(function() {
+
+            var $t = $(this);
+            var default_balance = $(this).closest('td').next('td').find('input').attr("default_balance");
+            // alert(default_balance);
+            var db_balance = $(this).closest('td').next('td').find('input').attr("existing_balance");
+           
+            var selected_date = this.value;
+            var type_id = $(this).closest('tr').find('#type_id').val();
+
+            var balance_id = $(this).closest('tr').find('#balance_id').val();
+
+            var existing_balance = $(this).closest('td').next('td').find('.existing_balance').val();
+
+            var existing_id = $(this).closest('td').next('td').find('input').attr("id");
+           
+            var currentURL =  document.location.href.split('/');
+            
+            var emp_id = currentURL[4]
+            
+           
+            $.ajax({
+              url: '/date_change/',
+              type: 'GET',
+              data: {date: this.value, type_id:type_id, balance_id:balance_id,emp_id:emp_id},
+              dataType: 'json',
+
+              success: $.proxy(function(data) {
+                
+                //alert(JSON.stringify(data['less_balance'][0]['fields']));
+                //alert(JSON.stringify(data['type'][0]['fields']['effective_no_of_days']));
+                //alert(JSON.stringify(data['employee'][0]['fields']['date_of_joining']));
+
+                var chk;
+
+                if(typeof(data['customize_balance'][0])  != "undefined")
+                {
+                  new_balance = data['customize_balance'][0]['fields']['balance'];
+                  $('#'+existing_id).val( (parseFloat(new_balance)).toFixed(2) );
+                  $('#'+existing_id).attr( 'default_balance',parseFloat(new_balance).toFixed(2));
+                  default_balance = new_balance;
+                  return false;
+                }
+                if(typeof(data['less_balance'][0])  != "undefined")
+                {
+                    default_balance = data['less_balance'][0]['fields']['balance'];
+                }
+                else
+                {
+                  default_balance = db_balance;
+                }
+
+                //alert(default_balance);
+                
+                var emp_joinining_date = new Date(data['employee'][0]['fields']['date_of_joining']);
+                //alert(emp_joinining_date);
+                var effective_period = data['type'][0]['fields']['effective_period'];
+                //alert(effective_period)
+                var effective_no_of_days = data['type'][0]['fields']['effective_no_of_days'];
+                var effective_after = data['type'][0]['fields']['effective_after'];
+                var accrual = data['type'][0]['fields']['accrual'];
+                var accrual_period = data['type'][0]['fields']['accrual_period'];
+                var accrual_month = data['type'][0]['fields']['effective_month'];
+                var accrual_on = data['type'][0]['fields']['effective_on'];
+                var reset = data['type'][0]['fields']['reset'];
+                var reset_period = data['type'][0]['fields']['reset_period'];
+                var reset_month = data['type'][0]['fields']['reset_month'];
+                var reset_on = data['type'][0]['fields']['reset_on']; 
+
+                var reset_carry_forward = data['type'][0]['fields']['reset_carry_forward']; 
+                var reset_carry_count = data['type'][0]['fields']['reset_carry_count'];
+                var reset_carry_method = data['type'][0]['fields']['reset_carry_method'];
+                var reset_carry_forward_max = data['type'][0]['fields']['reset_carry_forward_max'];
+
+                var date = new Date();
+                current_month = date.getMonth()+1;
+                current_year = date.getFullYear();
+
+                var month_no = selected_date.split('-')[1];
+                var year = selected_date.split('-')[2];
+                var select_date = selected_date.split('-')[0];
+                var year_formet = new Date(year+'-'+month_no+'-'+select_date);
+                //alert(month_no)
+
+                var d = new Date();
+                var month = d.getMonth()+1;
+                var day = d.getDate();
+                
+
+                var current_date = date.getFullYear() + '-' +
+                    ((''+month).length<2 ? '0' : '') + month + '-' +
+                    ((''+day).length<2 ? '0' : '') + day;
+
+                var diff = new Date(date - emp_joinining_date);
+                var days = (diff/1000/60/60/24).toFixed(2);
+                //alert(days);
+
+               
+                var months;
+                months = (date.getFullYear() - emp_joinining_date.getFullYear()) * 12;
+                months -= emp_joinining_date.getMonth();
+                months += date.getMonth();
+                months = months <= 0 ? 0 : months;
+                //alert(months)
+
+                years_count = days / 365; 
+                //alert(years_count)
+
+                if(effective_period == 2)
+                {
+                    if(months > effective_after){
+
+                        if(reset ==1)
+                        {
+                            if(year > current_year)
+                            {
+                                if(reset_period == 01){
+                                  
+                                    if(month_no >= reset_month ){
+                                        if(select_date >= reset_on){
+                                          
+                                           if(reset_carry_forward == 1)
+                                           {
+                                                if(reset_carry_method == 1)
+                                                {
+                                                    if(reset_carry_count >=1)
+                                                    {
+                                                        if(reset_carry_forward_max <=0)
+                                                        {
+                                                            if(accrual_period == 11)
+                                                            {
+                                                                year_diff = year - current_year;
+                                                                //alert(year_diff);
+                                                                
+
+                                                                // diff =  year_formet.getMonth() - date.getMonth() + (12 * (year_formet.getFullYear() - date.getFullYear())) - 1;
+                                                                // alert(diff)
+
+                                                               
+                                                                diff = 12 - current_month;
+                                                                multiply = diff * parseFloat(effective_no_of_days);
+                                                                new_existing_balance = (parseFloat(default_balance) + multiply);
+                                                                carry_count =  new_existing_balance * reset_carry_count / 100 * year_diff ;
+                                                                next_year_month = month_no * effective_no_of_days;
+
+                                                                $('#'+existing_id).val( ( parseFloat(carry_count) + parseFloat(next_year_month) ).toFixed(2) );
+                                                                                   
+                                                            }
+
+                                                            if(accrual_period == 01)
+                                                            {
+                                                                carry_count =  default_balance * reset_carry_count / 100;
+
+                                                                $('#'+existing_id).val( ( parseFloat(carry_count) + parseFloat(effective_no_of_days) ).toFixed(2) );
+                                                                
+                                                            }
+
+                                                        }
+
+                                                        if(reset_carry_forward_max >0)
+                                                        {
+                                                            
+                                                            $('#'+existing_id).val( ( parseFloat(reset_carry_forward_max) + parseFloat(effective_no_of_days ).toFixed(2) ));
+
+                                                        }
+
+                                                        
+                                                    }
+
+                                                }
+                                           }
+                                            
+                                        }
+
+                                    }
+
+                                }
+                                
+                            }
+                        }
+                        
+                        if(accrual == 1){
+
+                            if(accrual_period == 11)
+                            {
+                                if(year == current_year)
+                                {
+                                  //alert(default_balance);
+                                    if(month_no > current_month)
+                                    {  
+                                            diff = month_no - current_month;
+                                            multiply = diff * parseFloat(effective_no_of_days);
+
+                                            $('#'+existing_id).val( (parseFloat(default_balance) + multiply).toFixed(2) );
+
+                                        
+                                    }
+
+                                    if(month_no < current_month)
+                                    {   
+                                        diff = current_month - month_no;
+                                        multiply = diff * parseFloat(effective_no_of_days)
+                                       
+                                        if(parseFloat(default_balance) - multiply < 0){
+                                          $('#'+existing_id).val((0).toFixed(2));
+                                        }
+                                        else{
+                                          $('#'+existing_id).val( (parseFloat(default_balance) - multiply).toFixed(2) );
+                                        }
+                                        
+                                
+                                    }
+
+                                    if(month_no == current_month)
+                                    {   
+                                        //alert(default_balance);
+                                        diff = current_month - month_no;
+                                        multiply = diff * parseFloat(effective_no_of_days)
+                                        //alert(multiply)
+
+                                        $('#'+existing_id).val( (parseFloat(default_balance) + multiply).toFixed(2) );
+                                
+                                    }
+                                }
+
+                            }
+
+                            if(accrual_period == 01){
+                               
+                                if(year > current_year)
+                                {
+                                    if(month_no >= accrual_month)
+                                    {
+                                        if(select_date >= accrual_on)
+                                        {
+                                            $('#'+existing_id).val( (parseFloat(effective_no_of_days).toFixed(2)) );
+                                        }
+                                        
+                                    }
+                                    
+                                }
+
+                            }
+
+                        }
+                        
+                    }
+                }
+                
+              
+                // $('#'+existing_id).val( (parseFloat(existing_balance) + parseFloat(data[0]['fields']['effective_no_of_days'])).toFixed(2) );
+                
+              })      
+
+            });
+
+        });
+       
+
+
+    </script>
+
+{% endblock javascripts %}
+
+

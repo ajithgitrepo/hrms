@@ -1,0 +1,813 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% block title %} Profile {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+.self-cards{
+    height: auto !important
+}
+
+.zpC_body {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: inherit;
+}
+.zp_l2c:first-child {
+    border-top: none;
+    margin-top: 10px;
+}
+
+.zp_l2c {
+    display: inline-block;
+    padding: 0 15px;
+    position: relative;
+    width: 100%;
+    border-top: 1pxsolid #EFF2F7;
+    width: 100%;
+    margin-bottom: 0;
+    padding-left: 35px;
+}
+
+.zp_l2c {
+    display: inline-block;
+    padding: 0 15px;
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+}
+.zp_l2c ul:first-child {
+    border-top: none;
+}
+.zp_l2c ul {
+    border-top: 1px solid #EFF2F7;
+    width: 100%;
+    float: left;
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+.zp_l2c ul.zp_LIRT {
+    width: 100%;
+    display: inline-block;
+    position: relative;
+}
+.zp_l2c ul {
+    border-top: 1px solid #EFF2F7;
+    width: 100%;
+    float: left;
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+.zp_l2c ul li {
+    width: 50%;
+    float: left;
+    min-height: 30px;
+    line-height: 24px;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 40px;
+    padding-bottom: 0;
+    margin-bottom: 25px;
+}
+.zp_l2c ul li > i {
+    position: absolute;
+    left: 3px;
+    font-size: 22px;
+    top: 4px;
+    cursor: default;
+}
+
+.zp_l2c ul li > span {
+    display: inline-block;
+    max-width: 100%;
+    padding-right: 35px;
+    min-height: 30px;
+    position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: text-top;
+}
+
+.zp_lst_wrpr {
+    clear: both;
+    border-bottom: 1px solid #EFF2F7;
+    line-height: 30px;
+    /* margin-top: 15
+px
+; */
+    margin-left: 15px;
+    margin-right: 15px;
+    position: relative;
+}
+
+.zplt_lbl {
+    color: #666666;
+    width: -webkit-calc(50% + 20px);
+    width: -moz-calc(50% + 20px);
+    width: calc(50% + 20px);
+    float: left;
+    padding-top: 0 !important;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    text-indent: 15px;
+    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.zprt_lbl {
+    float: left;
+    width: -webkit-calc(50% - 20px);
+    width: -moz-calc(50% - 20px);
+    width: calc(50% - 20px);
+    margin-bottom: 5px;
+    padding-top: 0;
+    padding-bottom: 5px;
+    position: relative;
+    padding-right: 20px;
+}
+
+.zpProf_con .zp_lst_wrpr::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.avatar-upload {
+  position: relative;
+  max-width: 205px;
+  margin: 0px auto;
+}
+.avatar-upload .avatar-edit {
+  position: absolute;
+  right: 12px;
+  z-index: 1;
+  top: 10px;
+}
+.avatar-upload .avatar-edit input {
+  display: none;
+}
+.avatar-upload .avatar-edit input + label {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 0;
+  border-radius: 100%;
+  background: #FFFFFF;
+  border: 1px solid transparent;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font-weight: normal;
+  transition: all 0.2s ease-in-out;
+}
+.avatar-upload .avatar-edit input + label:hover {
+  background: #f1f1f1;
+  border-color: #d6d6d6;
+}
+.avatar-upload .avatar-edit input + label:after {
+  content: "\f040";
+  font-family: 'FontAwesome';
+  color: #757575;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+}
+.avatar-upload .avatar-preview {
+  width: 192px;
+  height: 192px;
+  position: relative;
+  border-radius: 100%;
+  border: 3px solid #d4d4d4;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+.avatar-upload .avatar-preview > div {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+ .ZPuserinfo {
+    width: 100%;
+    min-height: 45px;
+    padding: 20px 0 10px;
+    position: relative;
+    z-index: 5;
+    font-family: "LatoWeb";
+}
+
+.ZPuserinfo ul {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.ZPuserinfo ul li:first-child {
+    margin-left: 0;
+}
+
+.ZPuserinfo ul li {
+    color: #1b1b1b;
+    display: inline-block;
+    font-family: "LatoWeb";
+    margin: 0 21.5px;
+    vertical-align: middle;
+    cursor: default;
+}
+
+.username>span {
+    font-size: 12px;
+    color: #1b1b1b;
+    border-radius: 5px;
+    height: 20px;
+    line-height: 21px;
+    min-width: 40px;
+    padding: 0 8px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 13px;
+    vertical-align: baseline;
+}
+
+.ZPuserinfo ul li a {
+    color: #1b1b1b !important;
+}
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Self-service</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="far fa-id-card"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Profile </a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <!-- <a href="{% url 'add_org_files' %}" class="btn btn-sm btn-neutral">Add</a> -->
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <!-- <div class="card-header">
+            <a href="{% url 'update_employee' employee.employee_id %}" class="float-right"><h3 class="mb-0">Edit</h3></a>
+          </div> -->
+
+          <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card">
+
+                    <div class="card-body" style="background-image: url({% static '' %}profile_images/alice_blue.jpg) ">
+                        <div class="avatar-upload">
+                            <!-- <div class="avatar-edit">
+                                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                <label for="imageUpload"></label>
+                            </div> -->
+                            <div class="avatar-preview">
+                              {% if employee.profile %}
+                                <div id="imagePreview" style="background-image: url({% static '' %}profile_images/{{employee.profile}}) "></div>
+                              {% else %}
+                                <div id="imagePreview" style="background-image: url({% static '' %}profile_images/dummy_profile.png) "></div>
+                              {% endif %}
+                              </div>
+                        </div>
+                        <nav class="ZPuserinfo">
+                            <ul>
+                                <li class="username"><span class="in DNI" id="zp_ss_uava"></span>{{ employee.employee_id }} - {{ employee.first_name }} {{ employee.last_name }}</li>
+                                <li labelname="Department"><a href="#">{{ employee.role.name }}</a></li>
+                                <li><a href="#">{{ employee.email_id }}</a></li><li id="zp_ss_eloc"></li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <a href="{% url 'update_employee' employee.employee_id %}" style="text-align: end;padding: 10px;" class="float-right"><h3 class="mb-0">Edit</h3></a>
+                   
+                    
+                  </div>
+            </div>
+
+          <div class="col-lg-6">
+            
+            <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">About Me</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_l2c">
+                            <ul>
+                                <li><i class="CR-depart"><i class="fas fa-sitemap"></i></i><span label="Department">{{ employee.department.name }}<i class="IC-pen"></i></span></li>
+                                <li><i class="CR-cshift"><i class="fas fa-calendar-alt"></i></i><span>General</span></li>
+                                <li><i class="CR-cclock"><i class="fas fa-clock"></i></i><span label="USER_TIMEZONE"> (GMT+05:30)<i class="IC-pen"></i></span></li>
+                            </ul>
+                           
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">Skill Set</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_l2c">
+                            <ul class="justify-content-center">
+                                <li><i class="CR-depart"><i class="fas fa-times"></i></i><span label="Department">No records found<i class="IC-pen"></i></span></li>
+                               
+                            </ul>
+                            
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">Basic information</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Employee ID</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_id }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">First Name</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.first_name }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Last Name</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.last_name }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Nick Name</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.nick_name }}</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Email Address</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.email_id }}</div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                        <h3 class="h3 mb-0">Hierarchy Information</h3>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="card-body">
+                    <div class="chart self-cards">
+                        <div class="zpC_body ">
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Reporting Manager</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">
+                                  {% if reporting %}
+                                    {{ reporting.first.reporting.first_name }} {{ reporting.first.reporting.last_name }} 
+                                 
+                                  {% else %}
+                                    -
+                                  {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            
+          <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">Personal Details</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Date of Birth</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.birth_date }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Age</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">26</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Gender</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.gender }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Marital Status</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.marital_status }}</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">About Me</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Ask me about/Expertise</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            
+          <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">Contact Details</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Work Phone Number</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.work_phone }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Extension</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Seating Location</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.seating_location }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Personal Mobile Number</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.mobile_number }}</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Personal Email Address</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Address</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.address }}</div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          {% now "d" as todays_date %}
+            
+          <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h3 class="h3 mb-0">Work Information</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart self-cards">
+                    <div class="zpC_body ">
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Department</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.department.name }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Location</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.location }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Designation</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.role.name }}</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Employment Type</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_type }}</div>
+                        </div>
+
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Employee Status</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_status }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Source of Hire</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.source_of_hire }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Date of Joining</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Current Experience</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince }}</div>
+                        </div>
+                        <div class="zp_lst_wrpr">
+                            <div class="zplt_lbl ">Total Experience</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince }}</div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                        <h3 class="h3 mb-0">Identity Information</h3>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="card-body">
+                    <div class="chart self-cards">
+                        <div class="zpC_body ">
+                           
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Emirate ID / Aadhaar No.</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">{{ employee.emirate_id }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                        <h3 class="h3 mb-0">System Fields</h3>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="card-body">
+                    <div class="chart self-cards">
+                        <div class="zpC_body ">
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Added By</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">Admin</div>
+                            </div>
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Added Time</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">{{ employee.created_at }}
+                                </div>
+                            </div>
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Modified By</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">Admin
+                                </div>
+                            </div>
+                            <div class="zp_lst_wrpr">
+                                <div class="zplt_lbl ">Modified Time</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">{{ employee.updated_at }}
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+        </div>
+      </div>
+    </div>
+
+ 
+    
+  </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+<script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+  
+<script type="text/javascript">
+
+
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Are you sure you want to delete this file?');
+    }) 
+
+  
+
+    $(document).ready(function()
+    {
+        $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+            todayBtn: "linked",
+            todayHighlight: true,
+            });
+
+    });
+
+     
+//var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+
+
+
+     
+
+    </script>
+
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        //dom: 'Bfrtip',
+        buttons: [
+          
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+           
+            'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+
