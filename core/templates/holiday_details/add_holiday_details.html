@@ -402,13 +402,11 @@ input[type=number] {
                   <div class="col-lg-4">
                         <div class="form-group">
                           <label class="form-control-label" for="input-email">Applicable Locations </label>
-                          <select     name="applicable_location" value="{{ form.data.applicable_location }}" class="form-control" placeholder="" >
-                              <option value="Dubai,Sharjah,Abu Dhabi,Vellore">All</option>
-                         <option value="Dubai">Dubai</option>
-                          <option value="Sharjah">Sharjah</option>
-                          <option value="Abu Dhabi">Abu Dhabi</option>
-                          <option value="Vellore">Vellore</option>
-                          <!-- <option value=""></option> -->
+                          <select name="applicable_location" value="{{ form.data.applicable_location }}" class="form-control" placeholder="" >
+                                 <option value="All" selected>All Locations</option>
+                        {% for loc in locations %}
+                          <option value="{{ loc.id }}">  {{ loc.location }}</option>
+                        {% endfor %} 
                           </select>
                          
                         </div>

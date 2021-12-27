@@ -160,6 +160,7 @@ urlpatterns = [
     path('holiday_details/', views.holiday_details_view.holiday_details, name="holiday_details"),
     path('add_holiday_details', views.holiday_details_view.add_holiday_details, name="add_holiday_details"),
     path('delete_holiday_details/<str:pk>/', views.holiday_details_view.delete_holiday_details, name="delete_holiday_details"),
+    path('filter_holiday/', views.holiday_details_view.filter_holiday, name="filter_holiday"),
     
     # Exit Details
     path('exit_details/', views.exit_deatails_view.exit_details, name="exit_details"),
@@ -201,6 +202,6 @@ urlpatterns = [
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
-    
+
 
 ]

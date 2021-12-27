@@ -4,6 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from app.models import exit_details_model
+from app.models.location_model import Location
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
 from app.models.asset_model import Asset_Detail 
 from app.models.holiday_details_model import Holiday_Detail 
@@ -38,43 +39,12 @@ from django.utils import timezone
 
 
 @login_required(login_url="/login/")
-def index(request):
-    
-    context = {}
-    context['segment'] = 'index' 
-
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
-
-
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
-        
-        load_template      = request.path.split('/')[-1]
-        context['segment'] = load_template
-        
-        html_template = loader.get_template( load_template )
-        return HttpResponse(html_template.render(context, request))
-        
-    except template.TemplateDoesNotExist:
-
-        html_template = loader.get_template( 'page-404.html' )
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-    
-        html_template = loader.get_template( 'page-500.html' )
-        return HttpResponse(html_template.render(context, request))
-
 def holiday_details(request):
    
-    employee = Holiday_Detail.objects.filter(is_active='1')
-#     Asset_Detail.objects.select_related('employee').get(is_active='1')
-    print(employee)
-    context = {'employees':employee}
+    holidays = Holiday_Detail.objects.filter(is_active='1', applicable_location_id__is_active = 1 )
+    locations = Location.objects.filter(is_active = 1)
+    # print(holidays)
+    context = {'employees':holidays, 'locations': locations}
     return render(request, "holiday_details/index.html", context)
 
 
@@ -87,16 +57,14 @@ def add_holiday_details(request):
         form = Holiday_DetailsForm(request.POST)
         #return HttpResponse('date')   
         if  form.is_valid():
-            #return HttpResponse('date')   
             holiday_name = request.POST.get('holiday_name')
             
-            applicable_location = request.POST.get('applicable_location')
+            applicable_location_id = request.POST.get('applicable_location')
             
             description = request.POST.get('description')
             
             date = request.POST.get('date')
             if date != "":
-                  #return HttpResponse(date)   
                   d = datetime.datetime.strptime(date, '%d-%m-%Y')
                   date = d.strftime('%Y-%m-%d')
             else:
@@ -105,43 +73,23 @@ def add_holiday_details(request):
             created_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
             updated_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
             is_active = '1'
-            # if not Asset_Detail.objects.filter( Q(employee=employee)).exists():
             obj = Holiday_Detail.objects.create( 
             
                   holiday_name=holiday_name,
-                  applicable_location=applicable_location,
+                  applicable_location_id=applicable_location_id,
                   description=description,
                   date=date,
 
             created_at=created_at, updated_at=updated_at, is_active=is_active,
 
             ) 
-            # return HttpResponse(employee)   
             obj.save()
             messages.success(request, 'holiday was added ! ')
-            return redirect('holiday_details') 
-            # else: 
-            #     employee = Employee.objects.all()
-            #     context_role = {
-            #             'employees': employee,
-                     
-            #             }
-          
-            #     context_role.update({"form":form})  
-            #     messages.error(request, ' Asset Details Already Exists! ', context_role)
-            #     context = {'form':form}
-            #     return render(request, "asset_details/add_asset_details.html", context)
-                
-#     employee = Employee.objects.all()
-      #   context_role = {
-      #         "form":form,
-      #       }
-      
-#     #
-#    # tes = Group.objects.all()
-   #  context_role.update({"form":form})
-#     print(context_role)
-    context = {'form':form}
+            return redirect('holiday_details')
+
+    locations = Location.objects.filter(is_active = 1) 
+        
+    context = {'form':form, 'locations': locations}
     return render(request, "holiday_details/add_holiday_details.html", context )
    
 def delete_holiday_details(request, pk):
@@ -151,3 +99,19 @@ def delete_holiday_details(request, pk):
     data.save()
     messages.error(request, 'holiday was deleted! ')
     return redirect('holiday_details')
+
+
+def filter_holiday(request):
+
+    # return HttpResponse(request.POST.get('location'))
+
+    locations = Location.objects.filter(is_active = 1, )
+
+    if request.POST.get('location') =="All":
+        holidays = Holiday_Detail.objects.filter(is_active='1', applicable_location_id__is_active = 1 )
+    else:
+        holidays = Holiday_Detail.objects.filter(is_active='1', applicable_location_id = request.POST.get('location'), applicable_location_id__is_active = 1 )
+
+    # print(holidays[0].applicable_location.location)
+    context = {'employees':holidays, 'locations': locations}
+    return render(request, "holiday_details/index.html", context)

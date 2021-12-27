@@ -39,11 +39,23 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     border-radius: .375rem;
 }
 
-
-
-.LockOn {
-    
+.modal.fade.modal-right .modal-dialog {
+  transform: translate(125%, 0px);
 }
+
+.modal.show.modal-right .modal-dialog {
+  transform: none;
+}
+
+.modal-dialog {
+    position: fixed !important;
+    margin: auto;
+    width: 50% !important;
+    height: 100%;
+    right: 0px;
+
+}
+
 </style>
 
 {% endblock stylesheets %}
@@ -73,7 +85,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
             <h6 class="h2 text-white d-inline-block mb-0">Leave</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"><i class="far fa-calendar-alt"></i></a></li>
                 <li class="breadcrumb-item"><a href="#"> Holidays</a></li>
                 <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
               </ol>
@@ -81,8 +93,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
           </div>
           <div class="col-lg-6 col-5 text-right">
              <a href="{% url 'add_holiday_details' %}" class="btn btn-sm btn-neutral">Add</a>
-            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
-            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+             <a class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#newPage">Filter</a>
           </div>
         </div>
       </div>
@@ -147,8 +158,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <th>#</th>
                   <th>Name</th>
                   <th> Date</th>
-                  <th>Applicable For</th>
-                  <!-- <th>Asset Details</th> -->
+                  <th>Applicable Location</th>
                   <th>Description</th>
                   <th>Action</th>
                 </tr>
@@ -161,10 +171,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <td class="nr" data-queryid="{{ emp.id   }}"> {{emp.holiday_name }} </td>
                    
                     <td>{{emp.date |date:"d-m-Y" }}</td>
-                    {% if emp.applicable_location == "" %}
-                        <td>{{emp.applicable_location}}</td>
+                    {% if emp.applicable_location.applicable_location_id != "" %}
+                        <td>{{emp.applicable_location.location}}</td>
                     {% else %}
-                        <td>All Employees</td>
+                        <td>All Locations</td>
                     {% endif %}
                     <td>{{emp.description}}</td>
                     
@@ -187,10 +197,44 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
       </div>
     </div>
 
- 
-    
   </div>
 
+  <div class="modal fade modal-right" id="newPage" tabindex="-1" role="dialog" aria-labelledby="newPage" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Holidays Filter</h4>
+        </div>
+        <form method="POST" action={% url 'filter_holiday' %} class="post-form" >  
+        <div class="modal-body">
+         
+            {% csrf_token %}  
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Location </label>
+                    <select name="location" value="{{ form.data.location }}" class="form-control select2" placeholder="" required>
+                      <option value="All" selected>All Locations</option>
+                        {% for loc in locations %}
+                          <option value="{{ loc.id }}">  {{ loc.location }}</option>
+                        {% endfor %} 
+                    </select>
+                   
+                  </div>
+                </div> 
+              </div>
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" >Filter</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -214,9 +258,11 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   
 <script type="text/javascript">
 
-// $(window).on('load', function () {
-// // $("#coverScreen").hide();
-// });
+$(document).ready(function() {
+
+  $('.select2').select2();  
+
+}); 
 
 $('[data-type="adhaar-number"]').keyup(function() {
   var value = $(this).val(); //alert(value);
@@ -256,58 +302,7 @@ $('#myModal').on('shown.bs.modal', function (event) {
 
 
 
-        // $(document).ready(function() {
-        //     $('#datatable').DataTable( {
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'copy', 'csv', 'excel', 'pdf', 'print'
-        //         ],
-        //         language: {
-        //         paginate: {
-        //             previous: "<i class='fas fa-angle-left'>",
-        //             next: "<i class='fas fa-angle-right'>"
-        //         }
-        //     }
-        //     } );
-        // } );
-
-
-     
-
     </script>
-
-
-  <script>
-  /* 
-   $(document).ready(function() {
-    $('#example').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            // {
-            //     extend: 'copyHtml5',
-            //     exportOptions: {
-            //         columns: [ 0, ':visible' ]
-            //     }
-          //  },
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            // {
-            //     extend: 'pdfHtml5',
-            //     exportOptions: {
-            //         columns: [ 0, 1 ]
-            //     }
-           // },
-            'colvis'
-        ]
-    } );
-    
-} );  */
-
-  </script>
 
 {% endblock javascripts %}
 

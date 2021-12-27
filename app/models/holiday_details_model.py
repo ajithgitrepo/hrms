@@ -7,6 +7,7 @@ from django.db import models
 from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group
 from app.models.employee_model import Employee 
+from app.models.location_model import Location
 
 import random
 
@@ -18,11 +19,9 @@ class Holiday_Detail(models.Model):
 
     id = models.AutoField(primary_key=True)  
     holiday_name = models.CharField(max_length=50, blank = True, null = True)  
-   # employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
     date = models.DateField(max_length=30 , blank = False, null = False)
-    applicable_location = models.CharField(max_length=450, blank = True, null = True)  
     description = models.TextField( blank = True, null = True)  
-
+    applicable_location = models.ForeignKey(Location, blank=True, null=True, related_name='holiday_location', on_delete= models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
