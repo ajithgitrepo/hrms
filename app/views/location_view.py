@@ -42,7 +42,7 @@ def add_location(request):
             device = "web"
             # print(form.errors)
             # print(role_name)
-            g1 = Location.objects.create(location='chennai', description='description', device='web')
+            g1 = Location.objects.create(location=location, description=description, device=device)
             messages.success(request, location +' Department was created! ')
             return redirect('locations')
     # print(form.errors)

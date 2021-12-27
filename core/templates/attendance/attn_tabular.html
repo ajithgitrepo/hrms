@@ -123,7 +123,7 @@
                     position: relative;
                     margin-top: 60px;
                     background-color: #f9f9f9;
-                    min-width: 160px;
+                    min-width: 230px;
                     overflow: auto;
                     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
                     z-index: 1;
@@ -243,7 +243,8 @@
                         {% csrf_token %}  
                         <input type="hidden" value="{{ emp_id }}" name="employee_id">
                         <input type="hidden" value="{{ month_no }}-{{ year }}" name="month">
-                        
+                        <input type="hidden" id="type" value="" name="type">
+
                         <button type="submit" hidden></button>
                     </form>
 
@@ -256,9 +257,8 @@
                         </ul>
                         <!-- menu -->
                         <div id="myDropdown" class="dropdown-content">
-                            <a href="#export" id="export_attn">Export</a>
-                            <!-- <a href="#about">About</a>
-                            <a href="#contact">Contact</a> -->
+                            <a href="#export"  class="export" value="All">Export All Employees</a>
+                            <a href="#export"  class="export" value="Selected">Export Selected Employee</a>
                         </div>
                     </div>
                 </div>
@@ -604,14 +604,17 @@
             return false;
         });
 
-        $('#export_attn').on('click', function () {
+        $('.export').on('click', function () {
 
             month = $("#month_year").val();
             employee = $("#employee_change").val();
 
+            $("#type").val($(this).attr('value'))
+
             $("#submit_export_form").submit();
-          
+
         });
+
 
 
   $(".use-address").click(function() { //alert('n');  

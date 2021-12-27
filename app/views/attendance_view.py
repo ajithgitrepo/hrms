@@ -62,6 +62,8 @@ def check_in_attn(request):
             messages.success(request,' Checked in successfully ')
             # return redirect('home')
             return redirect(request.META.get('HTTP_REFERER'))
+
+            
         else:
 
             if Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_wfh_approved = 1, is_active = 1, checkin_time__isnull=True)).exists():    
@@ -417,44 +419,55 @@ def search_tableview(request,pk,month):
 
 def export_excel(request):
         
-        # create a workbook in memory
-        output = BytesIO()
+    # create a workbook in memory
+    output = BytesIO()
 
-        # now = datetime.now()
-        # current_year = datetime.now().strftime("%Y")
-        # current_month = datetime.now().strftime("%m")
-        # month_year = current_month+'-'+current_year
-        # first_day = now.replace(day = 1)
-        # last_day = now.replace(day = calendar.monthrange(now.year, now.month)[1])
+    date = datetime.strptime(request.POST.get('month'), "%m-%Y")
+    first_day = date.replace(day = 1)
+    last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
 
-        # month_number = datetime.datetime.strptime(request.POST.get('month'), "%b")
+    dates = []
+    date_no = []
+
+    delta = last_day - first_day
+
+    for i in range(delta.days + 1):
+        dates.append( (first_day + timedelta(days=i)) )
+        date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+
+    # print(date_no)
+
+    book = xlsxwriter.Workbook(output)
         
-        date = datetime.strptime(request.POST.get('month'), "%m-%Y")
-        first_day = date.replace(day = 1)
-        last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
+    # Set up some formats to use.
+    bold = book.add_format({'bold': True})
+    weekend_color = book.add_format({'font_color': '#ff8700'})
+    absent_color = book.add_format({'font_color': '#f0989a'})
+    holiday_color = book.add_format({'font_color': '#0de2ff'})
+    present_color = book.add_format({'font_color': '#3dce4c'})
+    comp_off_color = book.add_format({'font_color': '#3d81ce'})
 
-        dates = []
-        date_no = []
+    print(request.POST.get('type'))
 
-        delta = last_day - first_day
+    if request.POST.get('type') == "All":
+        employees = Employee.objects.filter(is_active = 1)
+        
+    if request.POST.get('type') == "Selected":
+        employees = Employee.objects.filter(is_active = 1, employee_id = request.POST.get('employee_id'))
+        
 
-        for i in range(delta.days + 1):
-            dates.append( (first_day + timedelta(days=i)) )
-            date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+    holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
 
-        # print(dates)
+    weekend = Weekend.objects.filter(is_active = 1)
+    # print(employees)
 
-        book = xlsxwriter.Workbook(output)
-        sheet = book.add_worksheet('test')
+    row_num = 2
+
+    for emp in employees:
+        # print(emp.employee_id)
+
+        sheet = book.add_worksheet(emp.first_name +" "+emp.last_name)
         sheet.set_column(0, 5, 25)
-        
-        # Set up some formats to use.
-        bold = book.add_format({'bold': True})
-        weekend_color = book.add_format({'font_color': '#ff8700'})
-        absent_color = book.add_format({'font_color': '#f0989a'})
-        holiday_color = book.add_format({'font_color': '#0de2ff'})
-        present_color = book.add_format({'font_color': '#3dce4c'})
-        comp_off_color = book.add_format({'font_color': '#3d81ce'})
 
         sheet.write('A1', 'Employee Id', bold)
         sheet.write('B1', 'Employee Name', bold)
@@ -464,29 +477,22 @@ def export_excel(request):
         sheet.write('F1', 'Last Check-Out', bold)
         sheet.write('G1', 'Check-In Location', bold)
 
-
-        month_atten = Attendance.objects.filter(is_active = 1,  employee_id = request.POST.get('employee_id'), employee__is_active = 1, date__range=[first_day, last_day])
+        month_atten = Attendance.objects.filter(is_active = 1,  employee_id = emp.employee_id, employee__is_active = 1, date__range=[first_day, last_day])
         # print(month_atten)
-
-        holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
-
-        weekend = Weekend.objects.filter(is_active = 1)
-        # print(holidays)
-
-      
-        row_num = 2
-        
+    
         for date in dates:
             for row_data in month_atten.iterator():
                 
                 date_time_attn = datetime.strptime(str(row_data.date), '%Y-%m-%d')
-                
-                if date_time_attn == date:
-                    # print(dates[0])
+                # print(date_time_attn)
 
-                    sheet.write('A'+str(row_num), row_data.employee.employee_id)
-                    sheet.write('B'+str(row_num), row_data.employee.first_name +" "+row_data.employee.last_name)
-                    sheet.write('C'+str(row_num), (row_data.date).strftime("%d-%m-%Y"))
+                sheet.write('A'+str(row_num), row_data.employee.employee_id)
+                sheet.write('B'+str(row_num), row_data.employee.first_name +" "+row_data.employee.last_name)
+                sheet.write('C'+str(row_num), (date).strftime("%d-%m-%Y"))
+            
+                if date_time_attn == date:
+                    
+                    
                     if row_data.is_present == 1:
                         sheet.write('D'+str(row_num), "Present", present_color)
                     if row_data.is_present == 2:
@@ -529,21 +535,28 @@ def export_excel(request):
 
             row_num += 1
 
-        book.close()
+        row_num = 2
 
-        output.seek(0)
+    book.close()
 
-        # Set up the Http response.
-        filename = month_atten[0].employee.first_name+'-'+str(request.POST.get('month'))+'.xlsx'
-        response = HttpResponse(
-            output,
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    output.seek(0)
 
-        return response
+    # Set up the Http response.
+    if request.POST.get('type') == "All":
+        filename = "attendance-"+str(request.POST.get('month'))+'.xlsx'
+    if request.POST.get('type') == "Selected":
+        filename = emp.first_name+"_"+emp.last_name+"-"+str(request.POST.get('month'))+'.xlsx'
 
-        # return HttpResponse('ok')
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
+
+    # return HttpResponse('ok')
+
 
 def attn_calendarview(request):
 

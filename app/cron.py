@@ -4,6 +4,7 @@ from app.models.employee_model import Employee
 from app.models.leave_type_model import Leave_Effective, Leave_Applicable, Leave_Restrictions
 from app.models.leave_balance_model import Leave_Balance
 from datetime import date, time, datetime, timedelta
+from dateutil import relativedelta
 from django.utils import timezone
 import os
 from django.db.models import Avg, Count, Min, Sum, Case, When, F
@@ -184,7 +185,7 @@ def my_scheduled_job(request):
                                 )
                             else:
                                 tot = Leave_Balance.objects.filter(
-                                    employee_id=each.employee_id, is_active=1)
+                                    employee_id=each.employee_id, leave_type_id = leave_id, is_active=1)
                                 tot_month = tot[0].total_month
                                 # return HttpResponse(months)
                                 if(tot_month < months):
