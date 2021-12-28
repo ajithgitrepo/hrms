@@ -447,7 +447,7 @@ def export_excel(request):
     present_color = book.add_format({'font_color': '#3dce4c'})
     comp_off_color = book.add_format({'font_color': '#3d81ce'})
 
-    print(request.POST.get('type'))
+    # print(request.POST.get('type'))
 
     if request.POST.get('type') == "All":
         employees = Employee.objects.filter(is_active = 1)
@@ -467,7 +467,7 @@ def export_excel(request):
         # print(emp.employee_id)
 
         sheet = book.add_worksheet(emp.first_name +" "+emp.last_name)
-        sheet.set_column(0, 5, 25)
+        sheet.set_column(0, 6, 25)
 
         sheet.write('A1', 'Employee Id', bold)
         sheet.write('B1', 'Employee Name', bold)
@@ -501,6 +501,7 @@ def export_excel(request):
                         sheet.write('D'+str(row_num), "Absent", absent_color)
                     sheet.write('E'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
                     sheet.write('F'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
+                    sheet.write('G'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
                 
             for holi in holidays:
                 date_time_holi = datetime.strptime(str(holi.date), '%Y-%m-%d')
@@ -512,6 +513,7 @@ def export_excel(request):
                     sheet.write('D'+str(row_num), holi.holiday_name	+ '(Holiday)', holiday_color)
                     sheet.write('E'+str(row_num), '-')
                     sheet.write('F'+str(row_num), '-')
+                    sheet.write('G'+str(row_num), '-')
 
             for week in weekend:
                 remove_single_quotes = week.week_off.replace("'", "")
@@ -531,6 +533,7 @@ def export_excel(request):
                         sheet.write('D'+str(row_num), 'Weekend', weekend_color)
                         sheet.write('E'+str(row_num), '-')
                         sheet.write('F'+str(row_num), '-')
+                        sheet.write('G'+str(row_num), '-')
             
 
             row_num += 1

@@ -171,7 +171,9 @@ hr {
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-             <a href="{% url 'apply_leave' %}" class="btn btn-sm btn-neutral">Apply Leave</a>
+            {% if employee.date_of_joining != None %}
+              <a href="{% url 'apply_leave' %}" class="btn btn-sm btn-neutral">Apply Leave</a>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -182,6 +184,7 @@ hr {
  <div class="container-fluid mt--6">
       
     <div class="card-deck flex-column flex-xl-row">
+      {% if employee.date_of_joining != None %}
 
       {% for leave in leaves %}
       <div class="card col-lg-3">
@@ -228,7 +231,10 @@ hr {
           </div>
         </div>
       </div>
+      
       {% endfor %}
+
+      {% endif %}
 
     </div>
 
@@ -243,11 +249,14 @@ hr {
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <h3 class="mb-0">All Leave Requests</h3>
-            <!-- <p class="text-sm mb-0">
-              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
-            </p> --> 
+            {% if employee.date_of_joining != None %}
+              <h3 class="mb-0">All Leave Requests</h3>
+            {% endif %}
+          
           </div>
+
+          {% if employee.date_of_joining != None %}
+
           <div class="table-responsive py-4">
             <table class="table table-flush" id="example">
               <thead class="thead-light">
@@ -309,6 +318,11 @@ hr {
               </tbody>
             </table>
           </div>
+          {% else%}
+          <div class="card-body text-center">
+            <p>Please update your <a href="{% url 'update_employee' request.user.emp_id %}"> date of joining </a> </p>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
