@@ -1,5 +1,4 @@
 
-
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
@@ -44,9 +43,6 @@ import os
 from django.conf import settings
 from app.views.restriction_view import admin_only,role_name
 from app.models.location_model import Location
-
-
-
 
 
 @login_required(login_url="/login/")
@@ -120,14 +116,17 @@ def snippets(request):
     x = str(test)
     y = int(x[11]) 
     x1 = str(loc_id)
-    y1 = int(x1[11]) 
-    #int_loc = (loc_id)
+    if(x1 == "None" or x1 == None or x1 == "<QuerySet [None]>" ):
+     x1 = '53'
+     y1 = int(x1)
+    else:
+     y1 = int(x1[11]) 
     roles = Group.objects.filter(id = y)
     locs = Location.objects.filter(id = y1)
     final_list_arr = list(chain(final_list, roles, locs))
     
     jsondata = serializers.serialize('json', final_list_arr)
-    #return HttpResponse(y1)
+   # return HttpResponse(y1)
     return HttpResponse(jsondata, content_type='application/json')
 
 
@@ -411,7 +410,7 @@ def add_employee(request):
                         marital_status = each.marital_status
                         department = each.department
                         # designation = each.designation
-                        location = each.location
+                        location = each.location_id
                         role = each.role
                         res = ""
                         string_res = ""
@@ -671,7 +670,7 @@ def add_employee(request):
                             marital_status = each.marital_status
                             department = each.department
                             # designation = each.designation
-                            location = each.location
+                            location = each.location_id
                             role = each.role
                             res = ""
                             string_res = ""
@@ -1078,7 +1077,7 @@ def update_employee(request, pk):
                 # reporting_to=reporting_to,
                 source_of_hire=source_of_hire,
                 seating_location=seating_location,
-                location=location,
+                location_id=location,
                 title=title,
                 date_of_joining=date_of_joining,
                 employee_status=employee_status,
@@ -1105,9 +1104,13 @@ def update_employee(request, pk):
                 signature=s_file_name,
                 passport_num = passport_num,
                 passport_exp_date = passport_expir_date,
-                psssport_url = passport_file_name,
+                
 
             )
+            if passport_file_name is not None and passport_file_name != "None" and passport_file_name != "":
+                  obj = Employee.objects.filter(employee_id=pk).update(
+                  psssport_url = passport_file_name,
+             )
 
             check_reporting = Reporting.objects.filter(
                 employee_id=pk, is_active=1)
@@ -1153,7 +1156,7 @@ def update_employee(request, pk):
                         marital_status = each.marital_status
                         department = each.department
                         # designation = each.designation
-                        location = each.location
+                        location = each.location_id
                         role = each.role
                         res = ""
                         string_res = ""

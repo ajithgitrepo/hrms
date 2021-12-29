@@ -28,9 +28,7 @@ import xlsxwriter
 #from geopy.geocoders import Nominatim
 #from django.contrib.gis.utils import GeoIP
 import socket
-import geocoder
-
-
+#import geocoder
 
 #from app.models import QuillModel
 
@@ -51,8 +49,8 @@ def check_in_attn(request):
         
       #  user_ip = getNetworkIp() 
       
-        response =  geocoder.ip('me')
-        address = response.address
+       # response =  geocoder.ip('me')
+       # address = response.address
         #lat,lng = g.lat_lon(user_ip)
         #location = geolocator.reverse("48.8588443, 2.2943506")
 

@@ -74,7 +74,7 @@ input[type=number] {
                 {% csrf_token %}  
                    
 
-            <h6 class="heading-small text-muted mb-4">Basic Info</h6>
+            <h6 class="heading-small text-blue mb-4">Basic Info</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-4">
@@ -131,7 +131,7 @@ input[type=number] {
             </div>
             <hr class="my-4" />
           
-            <h6 class="heading-small text-muted mb-4">Work</h6>
+            <h6 class="heading-small text-blue mb-4">Work</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-4">
@@ -288,7 +288,7 @@ input[type=number] {
 
         <hr class="my-4" />
 
-        <h6 class="heading-small text-muted mb-4">Hierarchy Information</h6>
+        <h6 class="heading-small text-blue mb-4">Hierarchy Information</h6>
         <div class="pl-lg-4">
           <div class="row">
             <div class="col-md-4"> 
@@ -332,7 +332,7 @@ input[type=number] {
        
             <select style="display: none;" id="address-country"></select>
             
-            <h6 class="heading-small text-muted mb-4">Personal</h6>
+            <h6 class="heading-small text-blue mb-4">Personal</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-4">
@@ -416,36 +416,47 @@ input[type=number] {
              
               </div>
 
-              <div class="col-lg-4">
-                  <div class="form-group">
-                      <label class="form-control-label" for="input-email">Passport Number</label>
-                      <input name="passport_num" value="{{ employee.passport_num }}" class="form-control" placeholder="Enter Passport Number"  type="text">
-                     
-                  </div>
-             
-              </div>
-
-              <div class="col-lg-4">
-                  <div class="form-group">
-                      <label class="form-control-label" for="input-email">Passport Expiry Date</label>
-                      <input name="passport_exp_date" value="{{ employee.passport_exp_date|date:'d-m-Y' }}" class="form-control startdate" placeholder="dd-mm-yyyy"  type="text">
-                      
-                  </div>
-             
-              </div>
-
-              <div class="col-lg-4">
-                  <div class="form-group">
-                      <label class="form-control-label" for="input-email">Passport Copy</label>
-                      <input type="file" name="psssport_url" value="{{ employee.psssport_url }}" accept="image/*,application/pdf" class="form-control" >
-                  </div>
-             
-              </div>
 
               </div> 
+
+              <h6 class="heading-small text-blue mb-4">Passport Details</h6>
+  <div class="pl-lg-4">
+    <div class="row">
+
+      <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-control-label" for="input-email">Passport Number</label>
+                <input name="passport_num" value="{{ employee.passport_num }}" class="form-control" placeholder="Enter Passport Number"  type="text">
+               
+            </div>
+       
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-control-label" for="input-email">Passport Expiry Date</label>
+                <input name="passport_exp_date" value="{{ employee.passport_exp_date|date:'d-m-Y' }}" class="form-control startdate" placeholder="dd-mm-yyyy"  type="text">
+                
+            </div>
+       
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-control-label" for="input-email">Passport Copy</label>
+                <input type="file" id="passport_upload" name="psssport_url" value="{{ employee.psssport_url }}" accept="image/*,application/pdf" class="form-control" >
+                <a target="_blank" id="view_link1" href="/static/passport_images/{{ employee.psssport_url }}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="click to view document">
+                  view
+                 </a> 
+            </div>
+           
+        </div>
+
+    </div>
+  </div>
             
           
-  <h6 class="heading-small text-muted mb-4">Summary</h6>
+  <h6 class="heading-small text-blue mb-4">Summary</h6>
   <div class="pl-lg-4">
     <div class="row">
       <div class="col-lg-4">
@@ -650,6 +661,27 @@ $(function() {
   changeMonth: true,
   changeYear: true
 });
+});
+
+
+$("#passport_upload").change(function() { // bCheck is a input type button
+
+var files = this.files;
+$('#view_link1').hide();
+$(files).each(function(index, file) { 
+// Still don't know why you want this...
+$('#view_link1').show();
+var fakepath = 'C:\\fakepath\\';
+var ul =  URL.createObjectURL(file);
+$('#view_link1').attr('href',ul);
+$('body').append('<div>' +
+// build  a fake path string for each File
+'<p class="path">'+ fakepath + file.name + '</p>' +
+// all that is really needed to display the image
+'<img  style="dislay:none;height:10px;width:11px;" src="'+URL.createObjectURL(file)+'">' +
+'</div>');
+});
+
 });
 
 </script>

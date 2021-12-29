@@ -388,7 +388,7 @@ $('[data-type="adhaar-number"]').keyup(function() {
   var value = $(this).val(); //alert(value);
   value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
   $(this).val(value);
-});
+}); 
 
 $('[data-type="adhaar-number"]').on("change, blur", function() {
   var value = $(this).val(); // alert(value);

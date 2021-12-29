@@ -28,6 +28,12 @@ from .task_view import *
 from .weekend_view import *
 from .self_service_view import *
 
+from .customer_policy_view import *
+
+from .vaccination_details_view import *
+
+
+
 
 
 

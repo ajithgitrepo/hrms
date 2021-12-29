@@ -12,7 +12,7 @@ class Leave_Balance(models.Model):
     id = models.AutoField(primary_key=True)
     leave_type = models.ForeignKey(Leave_Type, blank=True, null=True, related_name='leave_type_id_balance', on_delete= models.SET_NULL)
     employee = models.ForeignKey(Employee, blank=True, null=True, related_name='employee_id_balance', on_delete= models.SET_NULL)
-    balance = models.CharField(max_length=30,blank = True, null = True)
+    balance = models.FloatField(blank = True, null = True, default=0.0)
     created_at = models.DateTimeField(auto_now_add = True,blank=True, null=True,)
     updated_at = models.DateTimeField(auto_now_add = True,blank = True, null = True)
     modified_by = models.ForeignKey(Employee, blank=True, null=True, related_name='modified_balance', on_delete= models.SET_NULL)

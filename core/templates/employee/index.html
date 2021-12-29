@@ -507,7 +507,8 @@ function csrfSafeMethod(method) {
             url: "/snippets",  
             data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
             success: function(data) {  
-               //   console.log(JSON.stringify(data)); alert(JSON.stringify(data));
+                  console.log(JSON.stringify(data));
+                  // alert(JSON.stringify(data));
                   var check = false;
                   jQuery.each(data, function(index, item) { //alert(data)
                         $('#role_other').html(item.fields.name);
@@ -640,12 +641,7 @@ $(function () {
 
   </script>
 
-<script>
-      
 
-
- 
- </script>
 
 {% endblock javascripts %}
 

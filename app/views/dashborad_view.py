@@ -55,6 +55,8 @@ def index(request):
 
     # print(request.session['checkin_session'])
 
+    # del request.session['checkin_session']
+
     query = Employee.objects.filter(role__is_active ='1', department__is_active ='1', birth_date= datetime.date.today() )
 
     role = role_name(request)
@@ -106,7 +108,13 @@ def index(request):
     weekend = Weekend.objects.filter(is_active = 1)
     # print(weekend)
 
-    upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1, date__gt= datetime.datetime.now())[:5]
+    # upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1, date__gt= datetime.datetime.now())[:5]
+    # print(upcoming_holidays)
+
+    location_employee=Employee.objects.filter(is_active='1',employee_id=request.user.emp_id).get()
+    location_id=location_employee.location
+
+    upcoming_holidays = Holiday_Detail.objects.filter(is_active = 1,applicable_location=location_id, date__gt= datetime.datetime.now())
     # print(upcoming_holidays)
 
     leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
@@ -157,7 +165,7 @@ def index(request):
           delta = current_emp_passport_date - date.today()
              
           expire = 0
-          if delta.days < 0:
+          if delta.days < 180:
                   expire = 1
           #return HttpResponse(expire) 
 

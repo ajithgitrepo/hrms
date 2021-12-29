@@ -74,6 +74,13 @@
             overflow-y: auto;
             padding: 0px 0px 0px 0px;
         }
+    
+    	 hr {
+          margin-top: 0.5em !important;
+          margin-bottom: 0.5em !important;
+          border: 0;
+          border-top: 1px solid rgba(0, 0, 0, .1);
+        }
 
     </style>
 
@@ -223,8 +230,8 @@
               {% else %}
               <form method="POST" class="post-form" action="check_in_attn/">  
                 {% csrf_token %} 
-                <input type="hidden" name="checkin_lat" id="Hid_checkinlat"></input>
-                <input type="hidden" name="checkin_lang" id="Hid_checkinlang"></input>
+                <input type="hidden" name="checkin_lat" id="Hid_checkinlat" value="00.0000000"></input>
+                <input type="hidden" name="checkin_lang" id="Hid_checkinlang" value="00.0000000"></input>
                <input type="hidden" name="checkin_location" id="Hid_inlocation"></input>
              
                 <div class="row">
@@ -454,6 +461,7 @@
                         <div class="hdname MT8">{{ data.holiday_name }}</div>
                         <div class="hdate">{{ data.date|date:'d' }} - {{ data.date|date:'M' }} <h6>{{ data.date|date:'l' }}</h6></div>
                     </li>
+                	<hr>
                     {% empty %}
                     <div style="margin: auto; text-align: center;margin-top: 70px;">
                         <i class="far fa-calendar fa-6x" style="color: #010101a6;"></i> <br>
@@ -575,7 +583,7 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
 
   $("#atte_absent").click(function(){
     alert("You won't able to check-in because you are in leave today..")
-  });
+  }); 
 
     $(function(){
         var login_time = "{{login_time}}";
@@ -723,7 +731,7 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
 
  /*****  LOCATION ******/
 
- $(document).ready(function() { 
+ $(document).ready(function() {  //alert('s');
      // window.localStorage.removeItem('user_idd');
     var pas_acc = 0;  
     var pas_acc_val =  localStorage.getItem('pass_ok'); //alert(pas_acc);
@@ -732,55 +740,109 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
      else
       pas_acc = 1;
    var exp = '{{expiry}}';   
-   var usr = localStorage.getItem('user_idd'); // alert(exp); alert(usr);
+   var usr = localStorage.getItem('user_idd'); //alert(exp); // alert(usr);
    var user_id = '{{request.user.id}}'; //alert(user_id);
     
-  // alert(user_id); alert(usr);
+  //alert(user_id); alert(usr);
    if(user_id != usr)
-   {
-     // alert(user_id); alert(usr);
+   {   
+     // alert(user_id); alert(usr);   
       window.localStorage.removeItem('pass_ok');
       localStorage.removeItem('pass_ok');
        localStorage.setItem('pass_ok', 0); 
        pas_acc = localStorage.getItem('pass_ok');
    }
-  // alert(exp);   
+   //alert(exp);   
   //alert(pas_acc);
     if(exp == 1 && pas_acc == 0 ) 
     { //alert('s2');
-                  swal({
+        localStorage.setItem('pass_ok', 1);
+        localStorage.setItem('user_idd', '{{request.user.id}}' );
+        swal({
             title: 'Your passport is going to expiry soon !!!',
             html: $('<div>')
             .addClass('some-class')
             .text('Renew it ASAP.'),
             animation: false,
             customClass: 'animated tada'
-            })
+        })
     }
-     
+ 
 
+$(document).ready(function() { 
       var currgeocoder;
- 
+ //alert('po');
       //Set geo location  of lat and long
- 
+      
       navigator.geolocation.getCurrentPosition(function(position, html5Error) {
- 
+ //alert('v');
           geo_loc = processGeolocationResult(position);
           currLatLong = geo_loc.split(",");
-          //alert(currLatLong);
+          // alert(currLatLong);
           initializeCurrent(currLatLong[0], currLatLong[1]);
  
      });
- 
+
+}); 
+
+/*
+var apiGeolocationSuccess = function(position) {
+   // alert("API geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+   initializeCurrent(position.coords.latitude, position.coords.longitude);
+};
+
+var tryAPIGeolocation = function() {
+    jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCUNTZl1vh8BheJzaGuBOGhV8FtNr7vlik", function(success) {
+        apiGeolocationSuccess({coords: {latitude: success.location.lat, longitude: success.location.lng}});
+  })
+  .fail(function(err) {
+  //  alert("API Geolocation error! \n\n"+err);
+  });
+};
+
+
+
+var browserGeolocationSuccess = function(position) {
+      initializeCurrent(position.coords.latitude, position.coords.longitude);
+    //alert("Browser geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+};
+
+var browserGeolocationFail = function(error) {
+  switch (error.code) {
+    case error.TIMEOUT:
+    //  alert("Browser geolocation error !\n\nTimeout.");
+      break;
+    case error.PERMISSION_DENIED:
+      if(error.message.indexOf("Only secure origins are allowed") == 0) {
+        tryAPIGeolocation();
+      }
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Browser geolocation error !\n\nPosition unavailable.");
+      break;
+  }
+};
+
+var tryGeolocation = function() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        browserGeolocationSuccess,
+      browserGeolocationFail,
+      {maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
+  }
+};
+
+tryGeolocation();
+ */
      //Get geo location result
  
-    function processGeolocationResult(position) {
+  function processGeolocationResult(position) {
           html5Lat = position.coords.latitude; //Get latitude
           html5Lon = position.coords.longitude; //Get longitude
           html5TimeStamp = position.timestamp; //Get timestamp
           html5Accuracy = position.coords.accuracy; //Get accuracy in meters
           return (html5Lat).toFixed(8) + ", " + (html5Lon).toFixed(8);
-    }
+    } 
  
      //Check value is present or not & call google api function
  
@@ -812,7 +874,7 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
                  console.log(results[0]);
                  var res = [results[0]];
                  res.forEach(function(e) {
-                 // alert(e.formatted_address);
+               //   alert(e.formatted_address);
                   $('#Hid_inlocation').val(e.formatted_address);
                   $('#Hid_outinlocation').val(e.formatted_address);
                   });
@@ -847,12 +909,9 @@ $('.swal2-confirm').bind("click",function(e){
 function explode(){
     localStorage.setItem('user_idd', null );
 }
-setTimeout(explode, 98000);
+setTimeout(explode, 980000);
 
 // you can use the above or the one shown below
-
-
-
 
 })
 

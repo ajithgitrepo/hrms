@@ -61,6 +61,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.conf import settings as django_settings
 import os
+from pprint import pprint
 
 from django.core.mail import get_connection, send_mail
 from django.core.mail.message import EmailMessage

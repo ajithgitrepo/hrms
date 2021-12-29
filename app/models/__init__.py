@@ -27,3 +27,6 @@ from .travel_expense_model import *
 from .location_model import *
 from .task_model import *
 from .weekend_model import *
+
+from .customized_leave_effective_model import *
+from .vaccination_model import *

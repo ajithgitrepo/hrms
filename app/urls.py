@@ -80,7 +80,8 @@ urlpatterns = [
     path('convert_to_emp/<str:pk>/', views.onboard_employee_view.convert_to_emp, name="convert_to_emp"),
     path('status_onboard_employees/<str:pk>/<str:val>/', views.onboard_employee_view.status_onboard_employees, name="status_onboard_employees"),
     path('filter_onboard_employees/<str:status>/', views.onboard_employee_view.filter_onboard_employees, name="filter_onboard_employees"),
-    #Attendance 
+ 
+  #Attendance 
     path('check_in_attn/', views.attendance_view.check_in_attn, name="check_in_attn"),
     path('check_out_attn/', views.attendance_view.check_out_attn, name="check_out_attn"),
     path('attn_listview/', views.attendance_view.attn_listview, name="attn_listview"),
@@ -190,6 +191,19 @@ urlpatterns = [
     path('delete_weekend/<str:pk>/', views.weekend_view.delete_weekend, name="delete_weekend"),
 
 
+     # customer_policy 
+      path('customer_policy/', views.customer_policy_view.customer_policy, name="customer_policy"),
+      path('get_custom_leave_type', views.customer_policy_view.get_custom_leave_type, name="get_custom_leave_type"),
+      path('add_custom_leave_type', views.customer_policy_view.add_custom_leave_type, name="add_custom_leave_type"),
+      path('get_custom_leave_type_bychange', views.customer_policy_view.get_custom_leave_type_bychange, name="get_custom_leave_type_bychange"),
+      
+      # Vaccination Details 
+    path('vaccination_details/', views.vaccination_details_view.vaccination_details, name="vaccination_details"),
+    path('add_vaccination_details', views.vaccination_details_view.add_vaccination_details, name="add_vaccination_details"),
+    path('delete_vaccine_details/<str:pk>/', views.vaccination_details_view.delete_vaccine_details, name="delete_vaccine_details"),
+    path('snippets_vaccinae_employee_all_info', views.vaccination_details_view.snippets_vaccinae_employee_all_info, name="snippets_vaccinae_employee_all_info"),
+    path('filter_vacciate_employees/<str:status>/', views.vaccination_details_view.filter_vacciate_employees, name="filter_vacciate_employees"),
+    path('update_vaccination_details/<str:pk>/', views.vaccination_details_view.update_vaccination_details, name="update_vaccination_details"),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
