@@ -46,9 +46,6 @@ from app.views.restriction_view import admin_only,role_name
 from app.models.location_model import Location
 
 
-
-
-
 @login_required(login_url="/login/")
 def roles(request):
     roles = Group.objects.filter(is_active='1')

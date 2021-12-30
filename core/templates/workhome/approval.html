@@ -1,5 +1,7 @@
 {% extends "layouts/base.html" %}
 
+{% load custom_tags %}
+
 {% block title %} Work From Home {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -49,7 +51,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 {% block content %}
 
-
+{% role_name as role %}
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -105,26 +107,45 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
               </thead>
              
               <tbody>
-                {% for approve in workhome_approves %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{approve.employee.first_name}}({{approve.employee_id}})</td>
-                    <td>{{approve.start_date}}</td>
-                    <!-- |date:"d-m-Y"  -->
-                    <td>{{approve.end_date}}</td>
-                    <td>{{approve.reason}}</td>
-                    <td>
-                        <select class="form-control wfh_status" name="wfh_status" id="{{ approve.id }}">
-                           
-                            <option value="0" {% if approve.is_approved == '0' %} selected{% endif %} >Pending</option>
-                            <option value="1" {% if approve.is_approved == '1' %} selected{% endif %} >Approve</option>
-                            <option value="2" {% if approve.is_approved == '2' %} selected{% endif %} >Reject</option>
-                        </select>
-                    </td>
+                {% if role == "Admin" %}
+                  {% for approve in workhome_approves %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{approve.employee.first_name}}({{approve.employee_id}})</td>
+                      <td>{{approve.start_date}}</td>
+                      <!-- |date:"d-m-Y"  -->
+                      <td>{{approve.end_date}}</td>
+                      <td>{{approve.reason}}</td>
+                      {% if approve.is_approved == '1' %}
+                      <td style="color: darkgreen;">Approved</td>
+                      {% elif approve.is_approved == '0'  %}
+                      <td style="color:darkorange">Pending</td>
+                      {% else %}
+                      <td style="color: darkred;">Rejected</td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                {% endif %}
 
-                    
-                 </tr>
-                {% endfor %}
+                {% if role == "Manager" %}
+                  {% for approve in workhome_approves %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{approve.employee.first_name}}({{approve.employee_id}})</td>
+                      <td>{{approve.start_date}}</td>
+                      <!-- |date:"d-m-Y"  -->
+                      <td>{{approve.end_date}}</td>
+                      <td>{{approve.reason}}</td>
+                      <td>
+                          <select class="form-control wfh_status" name="wfh_status" id="{{ approve.id }}">
+                              <option value="0" {% if approve.is_approved == '0' %} selected{% endif %} >Pending</option>
+                              <option value="1" {% if approve.is_approved == '1' %} selected{% endif %} >Approve</option>
+                              <option value="2" {% if approve.is_approved == '2' %} selected{% endif %} >Reject</option>
+                          </select>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                {% endif %}
               </tbody>
             </table>
           </div>

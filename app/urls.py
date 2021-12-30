@@ -200,6 +200,30 @@ urlpatterns = [
     path('workhome_approves/', views.workhome_approve_view.workhome_approves, name="workhome_approves"),
     path('change_wfh_status/', views.workhome_approve_view.change_wfh_status, name="change_wfh_status"),
 
+    # client
+    path('clients/', views.client_view.clients, name="clients"),
+    path('add_client/', views.client_view.add_client, name="add_client"),
+    path('delete_client/<str:pk>/', views.client_view.delete_client, name="delete_client"),
+    path('info', views.client_view.info, name="info"),
+    path('update_client/<str:pk>/', views.client_view.update_client, name="update_client"),
+
+    # Project
+    path('projects/', views.project_view.projects, name="projects"),
+    path('add_project/', views.project_view.add_project, name="add_project"),
+    path('delete_project/<str:pk>/', views.project_view.delete_project, name="delete_project"),
+    path('update_project/<str:pk>/', views.project_view.update_project, name="update_project"),
+
+    #Timelogs
+    path('timelogs/', views.timelogs_view.timelogs, name="timelogs"),
+    path('timelog_checkin/', views.timelogs_view.timelog_checkin, name="timelog_checkin"),
+    path('timelog_checkout/', views.timelogs_view.timelog_checkout, name="timelog_checkout"),
+    path('filter_timelog/<str:month>/', views.timelogs_view.filter_timelog, name="filter_timelog"),
+    path('click_timelog_dahsboard/', views.timelogs_view.click_timelog_dahsboard, name="click_timelog_dahsboard"),
+
+    path('time_logs/', views.timelogs_view.time_logs, name="time_logs"),
+    path('time_logs/', views.timelogs_view.time_logs, name="time_logs"),
+    path('search_timelog/<str:pk>/<str:month>/', views.timelogs_view.search_timelog, name="search_timelog"),
+
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 

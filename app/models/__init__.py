@@ -29,3 +29,7 @@ from .task_model import *
 from .weekend_model import *
 
 from .workhome_model import *
+
+from .client_model import *
+from .project_model import *
+from .timelogs import *

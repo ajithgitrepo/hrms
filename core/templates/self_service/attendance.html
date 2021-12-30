@@ -494,7 +494,6 @@
         $(function () {
             var dateToday = new Date();
             var year = dateToday.getFullYear();
-            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
 
             $(".startdate").datepicker({
                 autoclose: true,
@@ -502,8 +501,6 @@
                 startView: "months", 
                 minViewMode: "months",
                 'setDate': date_selected
-                // todayHighlight: true,
-                // defaultDate: new Date(dateToday.getMonth()+1,year)
             });
                 
         });

@@ -1,0 +1,292 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Project {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+  <!-- <link rel="stylesheet" href="/static/build/css/demo.css"> -->
+ 
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+        
+
+          
+        </div>
+        <div class="col-xl-12 order-xl-1">
+        
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Update Project Details </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                  <form method="POST" class="post-form" action="">  
+                    {% csrf_token %}  
+                   
+
+            <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label  class="form-control-label" >Project Name</label>
+                      <input type="text" name="project_name" value="{{ project.project_name }}"   class="form-control" placeholder="project_name" >
+                      {{ form.errors.project_name }}
+                    </div>
+                  </div>
+                  
+                  <div class="col-lg-4"> 
+                    <div class="form-group"> 
+                      <label class="form-control-label">Client Name</label>
+                      <select class="form-control"  name="project_client">
+                        <option value="" selected >Select</option>
+                        {% for client in clients %}
+                            <option value="{{ client.id }}" {% if project.project_client_id == client.id  %} selected {% endif %}> {{ client.client_name }}({{ client.id }})</option>
+                            {% endfor %} 
+
+                      </select>
+                      {{ form.project_client.errors }}
+                      
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-username">Project Manager</label>
+                      <select class="form-control select2" data-toggle="select" value="{{ form.data.project_manager }}" name="project_manager">
+                        <option value="" selected >Select</option>
+                        {% for manager in managers %}
+                             <option value="{{ manager.employee_id }}" {% if project.project_manager_id == manager.employee_id %} selected {% endif %}> {{ manager.first_name }}({{ manager.employee_id }})</option>
+                        {% endfor %} 
+                      </select>
+                    {{ form.project_manager.errors }}
+                      
+                    </div>
+                  </div>
+               
+                </div>
+                <div class="row">
+                 
+                  <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" >Project Users</label>
+                        <select class="form-control select2" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
+                            <option value="" selected >Select</option>
+                            {% for employee in employees %}
+                                <option value="{{ employee.employee_id }}" {% if project.project_users_id == employee.employee_id %} selected {% endif %}> {{ employee.first_name }}({{ employee.employee_id }})</option>
+                            {% endfor %} 
+                          </select>
+                          {{ form.project_users.errors }}
+                      </div>
+                    </div>
+
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-city">Project Cost</label>
+                              <input type="text" name="project_cost" value="{{ project.project_cost }}" class="form-control" placeholder="project_cost" >
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-city">Project Description</label>
+                              <textarea name="project_description" value="{{ form.data.project_description }}" class="form-control" placeholder="Project Description">{{ project.project_description }} {{ form.data.project_description }}</textarea>
+                             
+                            </div>
+                          </div>
+                   
+
+              </div>
+            
+               <div class="pl-lg-4">
+               
+                      <div class="card-footer">
+                                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+                          
+                              <a href="{% url 'projects' %}" class="btn btn-default">Back</a>
+                              
+                      </div>
+          </div>
+          
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.js" data-modules="effect effect-bounce effect-blind effect-bounce effect-clip effect-drop effect-fold effect-slide"></script> -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+<script>
+
+//function get_country()
+{
+      // get the country data from the plugin
+var countryData = window.intlTelInputGlobals.getCountryData(),
+  input = document.querySelector("#mobile_phone"), 
+  addressDropdown = document.querySelector("#address-country");
+  
+// init plugin
+var iti = window.intlTelInput(input, {
+  utilsScript: "../../build/js/utils.js?1613236686837", // just for formatting/placeholders etc
+   // allowDropdown: false,
+     // autoHideDialCode: false,
+     autoPlaceholder: "off",
+      dropdownContainer: document.body,
+    //  excludeCountries: ["us"],
+     // formatOnDisplay: false,
+      geoIpLookup: function(callback) {
+        $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+          var countryCode = (resp && resp.country) ? resp.country : "";
+        //  alert(countryCode);
+        var c_code = $('#Hid_code_name').val();   // $('#mobile_phone').val('rr');
+          callback(c_code);
+        });
+      },
+      hiddenInput: "full_number",
+      initialCountry: "auto",
+      localizedCountries: { 'de': 'Deutschland' },
+     // nationalMode: false,
+     // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+      placeholderNumberType: "MOBILE",
+     // preferredCountries: ['cn', 'jp'],
+      separateDialCode: true,
+      utilsScript: "build/js/utils.js",
+});
+
+setTimeout(function () {
+      var mobi_num =  $('#Hid_mobi').val();
+      $('#mobile_phone').val(mobi_num);
+   }, 1000);
+
+// populate the country dropdown
+for (var i = 0; i < countryData.length; i++) {
+  var country = countryData[i];
+  var optionNode = document.createElement("option");
+  optionNode.value = country.iso2;
+  var textNode = document.createTextNode(country.name);
+  optionNode.appendChild(textNode);
+  addressDropdown.appendChild(optionNode);
+}
+// set it's initial value
+addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// listen to the telephone input for changes
+input.addEventListener('countrychange', function(e) {
+  addressDropdown.value = iti.getSelectedCountryData().iso2;
+  $('#Hid_code_name').val(iti.getSelectedCountryData().iso2);
+ //// alert(iti.getSelectedCountryData().iso2);
+  var titleStr    = $('.iti__selected-flag').attr("title");
+             var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+             $('#Hid_code_num').val(titleStr);
+          ///  alert(titleStr);
+});
+
+// listen to the address dropdown for changes
+addressDropdown.addEventListener('change', function() {
+  iti.setCountry(this.value);
+});
+$(window).bind("load", function() {
+ // code here
+//  $('#mobile_phone').val('rr');
+});
+window.addEventListener("DOMContentLoaded", function(){
+     // $('#mobile_phone').val('rr');
+});
+//       $('.iti iti--container').on('click','li', function(event){
+//             alert("sr");
+//     event.preventDefault();
+//     console.log(event.currentTarget);
+// });
+ 
+
+// $(".iti iti--allow-dropdown iti--separate-dial-code").click( function() {  
+//       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+           
+//     // this will fire when you click edit
+//     // hide the view button here and upon submit, show it again
+//     // like $("#viewclick").hide() or $("#viewclick").fadeOut()
+//   });
+
+      // $('#phone').change(function(e) {  
+      //       var titleStr    = $('.iti__selected-flag').attr("title");
+      //       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+      //       alert(titleStr);
+      //        });
+// $('#phone').on('input',function(e){
+//  alert('Changed!')
+// });
+}
+
+$(function() {
+
+      $( ".startdate" ).datepicker({
+  dateFormat: 'dd-mm-yy',//check change
+  changeMonth: true,
+  changeYear: true
+});
+});
+
+</script>
+
+{% endblock javascripts %}
+ 

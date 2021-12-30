@@ -1,3 +1,4 @@
+from app.models import timelogs
 from app.views.restriction_view import admin_only,role_name
 from app.views.employee_view import employees
 from django.contrib.auth.decorators import login_required
@@ -45,7 +46,8 @@ from app.models.weekend_model import Weekend
 from django.core.exceptions import PermissionDenied
 from app.models.holiday_details_model import Holiday_Detail 
 from app.models.leave_balance_model import Leave_Balance
-
+from app.models.project_model import Project
+from app.models.timelogs import TimeLogs
 from django.conf import settings
 
 #from app.models import QuillModel
@@ -122,6 +124,9 @@ def index(request):
 
     check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
     # print(check_leave)
+
+    timelogs = TimeLogs.objects.filter(is_active = 1, date__range=[start_week, end_week], employee_id = request.user.emp_id, project__is_active = 1)
+    # print(timelogs)
     
     weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -140,7 +145,8 @@ def index(request):
         # date_no.append( (now_day_1 + datetime.timedelta(days=d+n_week*7)).strftime("%d") for d in range(7) )
 
     zipped_data = zip(weekdays, date_no, dates)
-    # print(dates)
+    days_and_no = zip(date_no, weekdays, dates )
+    # print(weekdays)
     if check_in_time:
         if check_in_time[0].checkin_time:
             login_time = str(check_in_time[0].checkin_time)
@@ -178,7 +184,7 @@ def index(request):
         'announcements':announcements,
         'week_atten':week_atten,
         'weekdays':zipped_data,
-        #'dates':dates,
+        'days_and_no':days_and_no,
         'holidays':holidays,
         'upcoming_holidays':upcoming_holidays,
         'weekend':weekend,
@@ -189,6 +195,7 @@ def index(request):
         'check_leave':check_leave,
         'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
         'expiry': expire,
+        'timelogs':timelogs,
 
     }
 

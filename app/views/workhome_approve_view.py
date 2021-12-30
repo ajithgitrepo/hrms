@@ -12,7 +12,7 @@ from django import template
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 #from app.forms import UserGroupForm
-
+from app.views.restriction_view import admin_only,role_name
 from django.contrib.auth.models import User
 # from app.models import Group
 
@@ -36,7 +36,7 @@ from datetime import datetime, timedelta
 
 from app.models.workhome_model import Workhome
 from app.models.attendance_model import Attendance
-
+from app.models.reporting_to_model import Reporting
 
 
 from dateutil import relativedelta
@@ -48,10 +48,18 @@ import os
 from django.conf import settings
 
 
-
 def workhome_approves(request):
-   # return HttpResponse("employee")
-    workhome = Workhome.objects.filter(is_active='1')
+
+    role = role_name(request)
+    # print(role)
+    if role == "Admin":
+        workhome = Workhome.objects.filter(is_active=1)
+    if role == "Manager":
+        reporting_id=request.user.emp_id
+        # print(reporting_id)
+        reporting = Reporting.objects.filter(is_active=1 ,reporting_id=reporting_id).values('employee_id')
+        # print(reporting)
+        workhome = Workhome.objects.filter(is_active=1,employee_id__in=reporting)
 
     context = {'workhome_approves': workhome}
     return render(request, "workhome/approval.html", context)

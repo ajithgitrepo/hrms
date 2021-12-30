@@ -30,7 +30,9 @@ from .self_service_view import *
 
 from .workhome_approve_view import *
 from .workhome_view import *
-
+from .client_view import *
+from .project_view import *
+from .timelogs_view import *
 
 
 

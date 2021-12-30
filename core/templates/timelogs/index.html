@@ -1,0 +1,543 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Timelogs {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+    
+<style>
+
+    .tab-content>.active {
+        display: contents !important;
+    }
+
+    .Dtyps {
+        border-left: 4px solid;
+        max-width: 150px;
+        height: 40px;
+        margin-right: 20px;
+        float: left;
+        padding-left: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .Dtyps span {
+        width: 100%;
+        float: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding-bottom: 0px;
+        line-height: 14px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .Dtyps .Avadat, .Dtyps .digit-type {
+        margin-top: 2px;
+        line-height: 14px;
+    }
+
+    .comp-present {
+        border-color: #3dce4cd9 !important;
+    }
+    .comp-comp {
+        border-color: #3d81ced9 !important;
+    }
+    .comp-absent {
+        border-color: #f0989a !important;
+    }
+
+    .comp-holyday {
+        border-color: #0de2ffd9 !important;
+    }
+
+    .comp-weekend {
+        border-color: #ff8700 !important;
+    }
+
+    .wfh-bg {
+        border-color: #0e8c5b !important;
+    }
+
+    .showLeft{
+                    /* background-color: #0d77b6 !important;
+                    border:1px solid #0d77b6 !important; */
+                    text-shadow: none !important;
+                    color:#fff !important;
+                    padding:10px;
+                    transform: rotate(90deg);
+                }
+
+                .icons li {
+                    background: none repeat scroll 0 0 #a09d9d;;
+                    height: 7px;
+                    width: 7px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    right: 0.4em;
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 0.24em;
+                }
+
+                .dropbtn {
+                    /* background-color: #4CAF50; */
+                    position: absolute;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+               
+                .drop{
+                    width: 100%;
+                    /* background-color: #0d77b6 !important; */
+                    height: 60px;
+                }
+
+                .dropdown-dot {
+                    position: absolute !important;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: relative;
+                    margin-top: 60px;
+                    background-color: #f9f9f9;
+                    min-width: 160px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                .dropdown-dot a:hover {background-color: #f1f1f1}
+
+                .show {display:block;}
+
+                .lingr span{
+                    color: #fff;
+                }
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Self-service</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-calendar-check"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Timelogs</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a>  -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row justify-content-center" >
+               
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
+                      
+                  </div>
+                </div>
+
+            </div>  
+           
+          </div>
+
+          <div class="attn_div" style="padding:10px;">
+          {% if request.session.timelogin_session %}
+              <form method="POST" class="post-form" action="/timelog_checkout/">  
+                {% csrf_token %}  
+                
+                <div class="row">
+                    <div class="col-lg-3">
+                        <select class="form-control select2" disabled>
+                            <option>Select Project</option>
+                            {% for project in projects %}
+                                <option value="{{ project.id }}">{{ project.project_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <input class="form-control" type="text" name="working_on" id="working_on" placeholder="What are you working on?" disabled>
+                    
+                    </div>
+
+                    <div class="col-lg-4">
+                        <textarea class="form-control" rows="1" name="decription" id="decription" placeholder="Description" required disabled></textarea>
+                    
+                    </div>
+                   
+
+                    <div class="col-lg-2">
+                        <button class="btn btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i>&nbsp;<small class="Timer"></small></button>
+                        
+                    </div>
+
+                </div>
+                 
+              </form>
+              {% else %}
+              <form method="POST" class="post-form" action="/timelog_checkin/">  
+                {% csrf_token %}  
+
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <select class="form-control select2" name="project_id" required>
+                            <option value="" disabled selected> Select Project</option>
+                            {% for project in projects %}
+                                <option value="{{ project.id }}">{{ project.project_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <input class="form-control" type="text" name="working_on" id="working_on" placeholder="What are you working on?" required>
+                    
+                    </div>
+
+                    <div class="col-lg-4">
+                        <textarea class="form-control" rows="1" name="decription" id="decription" placeholder="Description" required></textarea>
+                    
+                    </div>
+
+
+                <div class="col-lg-2">
+                    {% if check_leave %}
+                        <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <br><small class="Timer"></small></div>
+                      
+                    {% else %}
+                        <button class="btn btn-success float-right" type="submit" name="submit" id="time_submit" style="border-style: solid;" ><i class="far fa-clock"></i>&nbsp;<small class="Timer"></small></button>
+                       
+                    {% endif %}
+                </div>
+              </div>
+                 
+              </form>
+
+              {% endif %}
+
+            </div>
+
+          <div class="table-responsive py-4">
+            <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                <tr>
+                    <th>Date</th>
+                    <th>Project</th>
+                    <th>What Did?</th>
+                    <th>Total Hours</th>
+                   
+                </tr>
+                <tbody>
+
+                    {% for time in timelogs %}
+
+                        <tr>
+                            <td>{{ time.date|date:"d-m-Y" }} </td>
+                            <td>{{ time.project.project_name }}</td>
+                            <td>{{ time.working_on }}</td>
+                            <td><span data-toggle="tooltip" data-original-title="{{ time.start_time }} - {{ time.end_time }}">{{ time.updated_at|timeuntil:time.created_at }}</span></td>
+                          
+                        </tr>
+
+                    {% empty %}
+                    <tr class="text-right">   
+                        <td></td>
+                       <td> <h3>No Timelogs Found..</h3></td>
+                    </tr>
+
+                    {% endfor %}
+
+                   
+                   
+                 </tbody>
+              </table>
+          </div>
+
+            <div class="card-footer">
+              
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script async defer src="https://maps.google.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    $('.select2').select2(); 
+
+
+});
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                'setDate': date_selected
+            });
+                
+        });
+
+    var api_key = '{{GOOGLE_MAPS_API_KEY}}';
+
+    $("#atte_absent").click(function(){
+        alert("You won't able to check-in because you are in leave today..")
+    });
+
+        var date_selected = ' {{ month_no }}-{{ year }} ';
+
+        setInterval(function(){ 
+
+            // var start = new Date;
+            // var dt = new Date();
+            // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+            // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
+
+            var dt = new Date();
+            var h =  dt.getHours(), m = dt.getMinutes();
+            var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+
+            $('.Timer').text(time); 
+
+        }, 1000);
+
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                'setDate': date_selected
+                // todayHighlight: true,
+                // defaultDate: new Date(dateToday.getMonth()+1,year)
+            });
+                
+        });
+
+      
+        $('#month_year').on('change', function () {
+            var month = $(this).val(); 
+            if (month) {
+                window.location = "/filter_timelog/"+month+"/"; // redirect
+            }
+            return false;
+        });
+
+
+// var apiGeolocationSuccess = function(position) {
+//    // alert("API geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+//    initializeCurrent(position.coords.latitude, position.coords.longitude);
+// };
+
+// var tryAPIGeolocation = function() {
+//     jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCUNTZl1vh8BheJzaGuBOGhV8FtNr7vlik", function(success) {
+//         apiGeolocationSuccess({coords: {latitude: success.location.lat, longitude: success.location.lng}});
+//   })
+//   .fail(function(err) {
+//     alert("API Geolocation error! \n\n"+err);
+//   });
+// };
+
+// var browserGeolocationSuccess = function(position) {
+//     //alert("Browser geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+//     initializeCurrent(position.coords.latitude, position.coords.longitude);
+// };
+
+// var browserGeolocationFail = function(error) {
+//   switch (error.code) {
+//     case error.TIMEOUT:
+//       alert("Browser geolocation error !\n\nTimeout.");
+//       break;
+//     case error.PERMISSION_DENIED:
+//       if(error.message.indexOf("Only secure origins are allowed") == 0) {
+//         tryAPIGeolocation();
+//       }
+//       break;
+//     case error.POSITION_UNAVAILABLE:
+//       alert("Browser geolocation error !\n\nPosition unavailable.");
+//       break;
+//   }
+// };
+
+// var tryGeolocation = function() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//         browserGeolocationSuccess,
+//       browserGeolocationFail,
+//       {maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
+//   }
+// };
+
+// tryGeolocation();
+
+// function initializeCurrent(latcurr, longcurr) {
+         
+//          //alert(currgeocoder);
+//         // alert(latcurr + "-- ######## --" + longcurr);
+//          $('#Hid_checkinlat').val(latcurr);
+//          $('#Hid_checkinlang').val(longcurr);
+//          $('#Hid_checkoutlat').val(latcurr);
+//          $('#Hid_checkoutlang').val(longcurr);
+//          currgeocoder = new google.maps.Geocoder();
+//        //  alert(JSON.stringify(currgeocoder));
+//          if (latcurr != '' && longcurr != '') {
+//              var myLatlng = new google.maps.LatLng(latcurr, longcurr);
+//              return getCurrentAddress(myLatlng);
+//          }
+//    }
+
+//    $(document).ready(function() { 
+//       var currgeocoder;
+//     //alert('po');
+//       //Set geo location  of lat and long
+      
+//       navigator.geolocation.getCurrentPosition(function(position, html5Error) {
+//     //alert('v');
+//           geo_loc = processGeolocationResult(position);
+//           currLatLong = geo_loc.split(",");
+//           //alert(currLatLong);
+//           initializeCurrent(currLatLong[0], currLatLong[1]);
+ 
+//      });
+
+// }); 
+
+// function processGeolocationResult(position) {
+//           html5Lat = position.coords.latitude; //Get latitude
+//           html5Lon = position.coords.longitude; //Get longitude
+//           html5TimeStamp = position.timestamp; //Get timestamp
+//           html5Accuracy = position.coords.accuracy; //Get accuracy in meters
+//           return (html5Lat).toFixed(8) + ", " + (html5Lon).toFixed(8);
+//   } 
+
+//    function getCurrentAddress(location) {
+//            currgeocoder.geocode({
+//                'location': location
+ 
+//          }, function(results, status) {
+ 
+//              if (status == google.maps.GeocoderStatus.OK) {
+//                  console.log(results[0]);
+//                  var res = [results[0]];
+//                  res.forEach(function(e) {
+//                //   alert(e.formatted_address);
+//                   $('#Hid_inlocation').val(e.formatted_address);
+//                   $('#Hid_outinlocation').val(e.formatted_address);
+//                   });
+//                  $("#address").html(results[0].formatted_address);
+//              } else {
+//                  alert('Geocode was not successful for the following reason: ' + status);
+//              }
+//          });
+//       }
+      
+        
+    </script>
+
+{% endblock javascripts %}
+
+

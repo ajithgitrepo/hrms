@@ -82,6 +82,7 @@
           border-top: 1px solid rgba(0, 0, 0, .1);
         }
 
+      
     </style>
 
 {% endblock stylesheets %}
@@ -488,24 +489,42 @@
           </div>
           <!-- Card body -->
           <div class="card-body">
-            <div class="chart text-center">
+            <!-- <div class="chart text-center">
               <span class="">Under Development</span>
-            </div>
+            </div> -->
             <div id="TIMELOGS" class="dash-body ">
-              <!-- <div id="dashboardTimelogsNavBar">
+              <div id="dashboardTimelogsNavBar">
                     <ul class="Dnav" id="date_my_timelogs">
+                      {% for date_no,days,dates in days_and_no %}
+
+                        {% if todays_date == date_no %}
+                          <li value="{{ dates|date:"d" }}" class="sel time-log-click"><b>{{ date_no }}</b> {{ days }}</li>
+                        {% else %}
+                          <li value="{{ dates|date:"d" }}" class="time-log-click" ><b>{{ date_no }}</b> {{ days }}</li>
+                        {% endif %}
+
+                      {% endfor %}
                     </ul>
-                </div> -->
-                <!-- <div id="dashboardTimelogs" class="tlogscrl">
+                </div>
+                 <div id="dashboardTimelogs" class="tlogscrl">
                     <table class="table table-hover">
-                        <tbody>
-                            <tr id="dashTimelog57753000000234023">
-                                <td class="CP" onclick="">test<span><span class="timelg-dot">.</span>test</span></td>
-                                <td width="100"><bclass="zp_font">00:00</bclass="zp_font"></td><td width="75"><i class="IC-player grn S18" tid="57753000000234023" onclick=""></i></td>
+                        <tbody id="tbody_id">
+                          {% for time in timelogs %}
+                            <tr class="time-logs {{ time.date|date:"d" }}" style="border-bottom: 1px solid #d5d5d5;">
+                                <td class="CP" onclick=""></span>{{ time.project.project_name }}</span></td>
+                                <td width="100"><bclass="zp_font" data-toggle="tooltip" data-original-title="{{ time.start_time }} - {{ time.end_time }}">{{ time.updated_at|timeuntil:time.created_at }}</bclass="zp_font"></td><td width="75"><i class="IC-player grn S18" tid="57753000000234023"></i></td>
                             </tr>
+                          {% empty %}
+                            <tr class="text-center no-time-logs {{ time.date|date:"d" }}">
+                              <td> No Timelogs Found..</td>
+                            </tr>
+                          {% endfor %}
+                          <tr class="no-log">
+                            <td class="text-center"> No Timelogs Found..</td>
+                          </tr>
                         </tbody>
                     </table>
-                </div> -->
+                </div> 
             </div>
           </div>
         </div>
@@ -585,9 +604,17 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
   });
 
     $(function(){
+
+        $(".time-logs").hide();
+        $(".no-log").hide();
+        const d = new Date();
+        // alert(d.getDate())
+        $("."+d.getDate()).show();
+        
+
         var login_time = "{{login_time}}";
         var check_in = "{{check_in}}";
-    	  var session = "{{session}}";
+    	var session = "{{session}}";
     	
         // alert(session);
         if(login_time && session){
@@ -725,8 +752,8 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
        
     }
 
-    $("#date_my_timelogs").empty();
-    $("#date_my_timelogs").html(html);
+    // $("#date_my_timelogs").empty();
+    // $("#date_my_timelogs").html(html);
 
  /*****  LOCATION ******/
 
@@ -767,6 +794,7 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
  
 
 $(document).ready(function() { 
+    
       var currgeocoder;
       //alert('po');
       //Set geo location  of lat and long
@@ -781,6 +809,53 @@ $(document).ready(function() {
      });
 
 }); 
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    timelog = "";
+    not_found = "";
+
+    $(".time-log-click").click(function(){
+
+        // alert($(this).attr('value'));
+
+        $(".time-logs").hide()
+
+        if ($("."+$(this).attr('value'))[0]){
+            
+            $(".no-log").hide();
+            $("."+$(this).attr('value')).show();
+            $(".time-log-click").removeClass("sel");
+            $(this).addClass('sel');
+
+        }
+        else{
+
+            $(".time-log-click").removeClass("sel");
+            $(this).addClass('sel');  
+            $(".no-log").show(); 
+            $(".no-time-logs").hide();
+
+
+        }
+
+
+    });
 
 
 // var apiGeolocationSuccess = function(position) {

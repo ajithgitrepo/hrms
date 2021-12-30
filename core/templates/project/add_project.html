@@ -1,0 +1,646 @@
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+{% block title %} Project {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    /*margin-bottom: 30px;*/
+    background-color: #ffffff;
+}
+
+#mobile_phone{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_phone:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+        </div>
+        <div class="col-xl-12 order-xl-1">
+         
+
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Add Project </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" name="form" class="post-form"  enctype="multipart/form-data">  
+                {% csrf_token %}  
+                   
+
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label  class="form-control-label" >Project Name</label>
+                        <input type="text" name="project_name" value="{{ form.data.project_name }}"   class="form-control" placeholder="Project Name" >
+                        {{ form.errors.project_name }}
+                      </div>
+                    </div>
+                    <div class="col-lg-4"> 
+                      <div class="form-group"> 
+                        <label class="form-control-label" for="input-email">Client Name</label>
+                        <select class="form-control select2" data-toggle="select" value="{{ form.data.project_client }}" name="project_client">
+                            <option value="" selected >Select</option>
+                            {% for client in clients %}
+                                <option value="{{ client.id }}" {% if form.data.id == client.id  %} selected {% endif %}> {{ client.client_name }}</option>
+                            {% endfor %} 
+                          </select>                        
+                          {{ form.project_client.errors }}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Project Manager</label>
+                        <select class="form-control select2" data-toggle="select" value="{{ form.data.project_manager }}" name="project_manager">
+                            <option value="" selected >Select</option>
+                            {% for manager in managers %}
+                                 <option value="{{ manager.employee_id }}" {% if form.data.project_manager == manager.employee_id %} selected {% endif %}> {{ manager.first_name }}({{ manager.employee_id }})</option>
+                            {% endfor %} 
+                          </select>
+                        {{ form.project_manager.errors }}
+                      </div>
+                    </div>
+                   
+                  </div>
+                  <div class="row">
+                   
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" >Project Users</label>
+                          <select class="form-control select2" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
+                            <option value="" selected >Select</option>
+                            {% for employee in employees %}
+                                <option value="{{ employee.employee_id }}" {% if form.data.project_users == employee.employee_id %} selected {% endif %}> {{ employee.first_name }}({{ employee.employee_id }})</option>
+                            {% endfor %} 
+                          </select>
+                          {{ form.project_users.errors }}
+                        </div>
+                      </div>
+                    
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-city">Project Cost</label>
+                              <input type="text" name="project_cost" value="{{ form.data.project_cost }}" class="form-control" placeholder="Project Cost" >
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-city">Project Description</label>
+                              <textarea name="project_description" value="{{ form.data.project_description }}" class="form-control" placeholder="Project Description">{{ form.data.project_description }}</textarea>
+                             
+                              {{ form.phone.project_description }}
+                            </div>
+                          </div>
+                      
+
+                    </div>
+
+                </div>
+              
+            <div class="pl-lg-4">
+                
+                        <div class="card-footer">
+                                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+                            
+                                <a href="{% url 'projects' %}" class="btn btn-default">Back</a>
+                                
+                        </div>
+            </div>
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+
+$(function () {
+      var dateToday = new Date();
+           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+           $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,});
+         
+});
+
+      // get the country data from the plugin
+var countryData = window.intlTelInputGlobals.getCountryData(),
+  input = document.querySelector("#mobile_phone"),
+  addressDropdown = document.querySelector("#address-country");
+
+// init plugin
+var iti = window.intlTelInput(input, {
+  utilsScript: "../../build/js/utils.js?1613236686837", // just for formatting/placeholders etc
+   // allowDropdown: false,
+     // autoHideDialCode: false,
+     autoPlaceholder: "off",
+      dropdownContainer: document.body,
+    //  excludeCountries: ["us"],
+     // formatOnDisplay: false,
+      geoIpLookup: function(callback) {
+        $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+          var countryCode = (resp && resp.country) ? resp.country : "";
+        //  alert(countryCode);
+          callback(countryCode);
+        });
+      },
+      hiddenInput: "full_number",
+      initialCountry: "auto",
+      localizedCountries: { 'de': 'Deutschland' },
+     // nationalMode: false,
+     // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+      placeholderNumberType: "MOBILE",
+     // preferredCountries: ['cn', 'jp'],
+      separateDialCode: true,
+      utilsScript: "build/js/utils.js",
+});
+
+// populate the country dropdown
+for (var i = 0; i < countryData.length; i++) {
+  var country = countryData[i];
+  var optionNode = document.createElement("option");
+  optionNode.value = country.iso2;
+  var textNode = document.createTextNode(country.name);
+  optionNode.appendChild(textNode);
+  addressDropdown.appendChild(optionNode);
+}
+// set it's initial value
+addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// listen to the telephone input for changes
+input.addEventListener('countrychange', function(e) {
+  addressDropdown.value = iti.getSelectedCountryData().iso2;
+  $('#Hid_code_name').val(iti.getSelectedCountryData().iso2);
+ //// alert(iti.getSelectedCountryData().iso2);
+  var titleStr    = $('.iti__selected-flag').attr("title");
+             var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+             $('#Hid_code_num').val(titleStr);
+          ///  alert(titleStr);
+});
+
+// listen to the address dropdown for changes
+addressDropdown.addEventListener('change', function() {
+  iti.setCountry(this.value);
+});
+//       $('.iti iti--container').on('click','li', function(event){
+//             alert("sr");
+//     event.preventDefault();
+//     console.log(event.currentTarget);
+// });
+ 
+
+// $(".iti iti--allow-dropdown iti--separate-dial-code").click( function() {  
+//       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+           
+//     // this will fire when you click edit
+//     // hide the view button here and upon submit, show it again
+//     // like $("#viewclick").hide() or $("#viewclick").fadeOut()
+//   });
+
+      // $('#phone').change(function(e) {  
+      //       var titleStr    = $('.iti__selected-flag').attr("title");
+      //       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+      //       alert(titleStr);
+      //        });
+// $('#phone').on('input',function(e){
+//  alert('Changed!')
+// });
+
+
+
+
+//});
+
+// $(function() {
+
+//       $( ".startdate" ).datepicker({
+//   dateFormat: 'dd-mm-yy',//check change
+//   changeMonth: true,
+//   changeYear: true
+// });
+      // $('#date_of_joining1').datetimepicker({
+      //   icons: {
+      //       dateFormat: 'DD-MM-YYYY',
+      //      useCurrent: false
+      // //    time: "fa fa-clock",
+      // //     date: "fa fa-calendar-day",
+      // //     up: "fa fa-chevron-up",
+      // //     down: "fa fa-chevron-down",
+      // //     previous: 'fa fa-chevron-left',
+      // //     next: 'fa fa-chevron-right',
+      // //     today: 'fa fa-screenshot',
+      // //     clear: 'fa fa-trash',
+      // //     close: 'fa fa-remove'
+      //   }
+      // });
+   // });
+
+//     // get the country data from the plugin
+// var countryData = window.intlTelInputGlobals.getCountryData(),
+//   input = document.querySelector("#mobile_phone"),
+//   addressDropdown = document.querySelector("#address-country");
+
+// // init plugin
+// var iti = window.intlTelInput(input, {
+//   utilsScript: "../../build/js/utils.js?1613236686837" // just for formatting/placeholders etc
+// });
+
+// // populate the country dropdown
+// for (var i = 0; i < countryData.length; i++) {
+//   var country = countryData[i];
+//   var optionNode = document.createElement("option");
+//   optionNode.value = country.iso2;
+//   var textNode = document.createTextNode(country.name);
+//   optionNode.appendChild(textNode);
+//   addressDropdown.appendChild(optionNode);
+// }
+// // set it's initial value
+// addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// // listen to the telephone input for changes
+// input.addEventListener('countrychange', function(e) {
+//   addressDropdown.value = iti.getSelectedCountryData().iso2;
+ 
+// });
+
+// // listen to the address dropdown for changes
+// addressDropdown.addEventListener('change', function() {
+//       alert(this.value);
+//   iti.setCountry(this.value);
+// });
+
+//     var input = document.querySelector("#phone");
+//     window.intlTelInput(input, {
+//      // allowDropdown: false,
+//      // autoHideDialCode: false,
+//       autoPlaceholder: "off",
+//       dropdownContainer: document.body,
+//     //  excludeCountries: ["us"],
+//      // formatOnDisplay: false,
+//       geoIpLookup: function(callback) {
+//         $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+//           var countryCode = (resp && resp.country) ? resp.country : "";
+//         //  alert(countryCode);
+//           callback(countryCode);
+//         });
+//       },
+//       hiddenInput: "full_number",
+//       initialCountry: "auto",
+//       localizedCountries: { 'de': 'Deutschland' },
+//      // nationalMode: false,
+//      // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+//       placeholderNumberType: "MOBILE",
+//      // preferredCountries: ['cn', 'jp'],
+//       separateDialCode: true,
+//       utilsScript: "build/js/utils.js",
+//     });
+
+    $(document).ready(function() {
+      // initialise Datetimepicker and Sliders
+      md.initFormExtendedDatetimepickers();
+});
+
+var html = '';
+    var html2 = '';
+    var html3 = '';
+
+    html +='<div class="row closest_row">';
+    html +='<div class="col-md-2">';
+      html +='<div class="form-group">';
+        html +='<input name="previous_company_name" id="input-address" class="form-control" placeholder=""  type="text">';
+      html +='</div>';
+    html +='</div>';
+     
+    html +='<div class="col-md-2">';
+        html +='<div class="form-group">';
+          html +='<input name="job_title" id="input-address" class="form-control" placeholder=""  type="text">';
+        html +='</div>';
+      html +='</div>';
+
+      html +='<div class="col-md-2">';
+        html +='<div class="form-group">';
+          html +='<input name="from_date" id="input-address" class="form-control startdate" placeholder=""  type="text">';
+        html +='</div>';
+      html +='</div>';
+
+       html +='<div class="col-lg-2">';
+      html +='<div class="form-group">';
+        html +='<input name="to_date" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+    html +='<div class="col-lg-2">';
+      html +='<div class="form-group">';
+        html +='<textarea name="job_description" rows="1" id="input-country" class="form-control" placeholder="" value=""></textarea>';
+      html +='</div>';
+    html +='</div>';
+     html +='<div class="col-lg-2">';
+      html +='<div class="form-group">';
+         html +='<p class="delete"><i class="fas fa-times-circle"></i></p>';
+      html +='</div>';
+    html +='</div>';
+    // html +='<div class="col-lg-2">';
+    //   html +='<div class="form-group">';
+    //     html +='<input name="relevance" type="text" id="input-postal-code" class="form-control" placeholder="">';
+    //   html +='</div>';
+    // html +='</div>';
+    html +='</div>';
+
+
+    html2 +='<div class="row closest_row">';
+                 
+        html2 +='<div class="col-md-2">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="school_name" id="input-address" class="form-control" placeholder=""  type="text">';
+          html2 +='</div>';
+        html2 +='</div>';
+         
+        html2 +='<div class="col-md-2">';
+            html2 +='<div class="form-group">';
+              html2 +='<input name="degree" id="input-address" class="form-control" placeholder=""  type="text">';
+            html2 +='</div>';
+          html2 +='</div>';
+
+          html2 +='<div class="col-md-2">';
+            html2 +='<div class="form-group">';
+              html2 +='<input name="field" id="input-address" class="form-control" placeholder=""  type="text">';
+            html2 +='</div>';
+          html2 +='</div>';
+
+           html2 +='<div class="col-lg-2">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="date_of_completion" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html2 +='</div>';
+        html2 +='</div>';
+      
+         html2 +='<div class="col-lg-2">';
+          html2 +='<div class="form-group">';
+            html2 +='<textarea name="interests" rows="1" id="input-country" class="form-control" placeholder="" value=""></textarea>';
+
+          html2 +='</div>';
+        html2 +='</div>';
+        html2 +='<div class="col-lg-2">';
+            html2 +='<div class="form-group">';
+                html2 +='<p class="delete"><i class="fas fa-times-circle"></i></p>';
+            html2 +='</div>';
+        html2 +='</div>';
+       
+      html2 +='</div>';
+
+      html3 +='<div class="row closest_row">';
+                 
+        html3 +='<div class="col-md-3">';
+          html3 +='<div class="form-group">';
+            html3 +='<input name="dependent_name" id="input-address" class="form-control" placeholder=""  type="text">';
+          html3 +='</div>';
+        html3 +='</div>';
+         
+        html3 +='<div class="col-md-3">';
+            html3 +='<div class="form-group">';
+             html3 +=' <input name="relationship" id="input-address" class="form-control" placeholder=""  type="text">';
+            html3 +='</div>';
+          html3 +='</div>';
+
+
+           html3 +='<div class="col-lg-3">';
+          html3 +='<div class="form-group">';
+            html3 +='<input name="date_of_birth" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html3 +='</div>';
+        html3 +='</div>';
+     
+        html3 +='<div class="col-lg-2">';
+          html3 +='<div class="form-group">';
+                html3 +='<p class="delete"><i class="fas fa-times-circle"></i></p>';
+            html3 +='</div>';
+       html3 +=' </div>';
+
+      html3 +='</div>';
+
+$('.add-one').click(function(){
+
+     
+
+// $(this).closest('td').find('.dynamin_work_exp_form').append(html);
+$('.dynamin_work_exp_form').append(html);
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+attach_delete(); 
+
+});
+
+$('.add-two').click(function(){
+
+      
+
+// $(this).closest('td').find('.dynamin_education_form').append(html);
+$('.dynamin_education_form').append(html2);
+
+attach_delete();
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+});
+
+$('.add-three').click(function(){
+
+      
+
+// $(this).closest('td').find('.dynamin_education_form').append(html);
+$('.dynamin_dependent_form').append(html3);
+
+attach_delete();
+
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+});
+
+function attach_delete(){
+  $('.delete').off();
+   $('.delete').click(function(){
+    //alert("click");
+    $(this).closest('.closest_row').remove();
+   
+});
+
+}
+
+// $(function() {
+
+// $( ".startdate" ).datepicker({
+// dateFormat: 'dd-mm-yy',//check change
+// changeMonth: true,
+// changeYear: true
+// });
+// });
+
+
+
+</script>
+
+{% endblock javascripts %}
+ 
