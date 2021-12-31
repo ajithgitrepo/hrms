@@ -4,7 +4,7 @@ from app.views.restriction_view import admin_only,role_name
 
 urlpatterns = [
    
-    #Home page
+    #Home pages
     path('', views.dashborad_view.index, name='home'),
 	path('home/', views.dashborad_view.index, name='home'),
   
