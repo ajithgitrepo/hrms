@@ -421,7 +421,7 @@ def apply_leave(request):
            #return HttpResponse('ve')   
            leave = request.POST.get('leave_type')
            #return HttpResponse(leave)
-           for each in Leave_Type.objects.filter(is_active='1'):
+           for each in Leave_Type.objects.filter(is_active='1', id = leave):
                 leave_type = each.type
                 leave_name = each.name
                 leave_unit = each.unit
@@ -472,6 +472,8 @@ def apply_leave(request):
                     # return HttpResponse(total_days)
                    
                     message = "";
+                    if (leave_name.strip() == "Sick Leave") and (total_days > 3):
+                        message = "More than three days documents should be upload for sick leave";
                     if (str(total_days) < str(minimum_leave_apply))   and (minimum_leave_apply != None):
                          # if total_days != 0:
                            message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
@@ -524,25 +526,34 @@ def apply_leave(request):
                                 #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
                                 logoRoot=logoRoot.replace("\\","/")
                                 Photo_name = upload.name
+                                realVar = Photo_name.replace(" ", '')
+                                Photo_name = realVar
                             # return HttpResponse(upload.name) 
                                 fs = FileSystemStorage(location=logoRoot)
-                                file_name = fs.save(upload.name, upload)
+                                file_name = fs.save(Photo_name, upload)
                                 file_url = fs.url(file_name)   
                                 #return HttpResponse(file_url) 
                         #return HttpResponse(Photo_name)
+
+                        if  LeaveRequest.objects.filter( Q(employee_id=Employee.objects.get(employee_id = emp_id)),Q(is_active='1'),Q(from_date__lte=start_date, to_date__gte=start_date) | Q(from_date__lte=end_date, to_date__gte=end_date)| Q(from_date__gte=start_date, to_date__gte=start_date) | Q(from_date__gte=end_date, to_date__gte=end_date)).exists():
+                            # print('hdbn')
+                            messages.error(request,'For this Date Leave had been  requested Already! ')
+                            context = {'form': form}
+                            return render(request, "self_service/apply_leave.html", context)
+
                         obj = LeaveRequest.objects.create( 
-                        employee=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
-                        leave_type=Leave_Type.objects.get(id = leave) if leave else None,
-                        from_date=from_date.strftime('%Y-%m-%d'),
-                        to_date=to_date.strftime('%Y-%m-%d'),
-                        total_days = diff,
-                        reason=reason,
-                        created_at=created_at,
-                        updated_at=updated_at, 
-                        is_active=1,
-                        added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
-                        device = 'web',
-                        document_url=Photo_name
+                            employee=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
+                            leave_type=Leave_Type.objects.get(id = leave) if leave else None,
+                            from_date=from_date.strftime('%Y-%m-%d'),
+                            to_date=to_date.strftime('%Y-%m-%d'),
+                            total_days = diff,
+                            reason=reason,
+                            created_at=created_at,
+                            updated_at=updated_at, 
+                            is_active=1,
+                            added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
+                            device = 'web',
+                            document_url=Photo_name
 
                         ) 
                         obj.save()
@@ -600,6 +611,13 @@ def leave(request,leave):
             diff = abs((end_date-start_date).days)+1
             # print(diff)
             delta = end_date - start_date       # as timedelta
+
+            if  LeaveRequest.objects.filter( Q(employee_id=Employee.objects.get(employee_id = emp_id)),Q(is_active='1'),Q(from_date__lte=start_date, to_date__gte=start_date) | Q(from_date__lte=end_date, to_date__gte=end_date)| Q(from_date__gte=start_date, to_date__gte=start_date) | Q(from_date__gte=end_date, to_date__gte=end_date)).exists():
+                # print('hdbn')
+                messages.error(request,'For this Date Leave had been requested Already! ')
+                context = {'form': form}
+                return render(request, "self_service/apply_leave.html", context)
+
             obj = LeaveRequest.objects.create(
                 employee_id=Employee.objects.get(employee_id = emp_id) if emp_id else None,
                 leave_type=Leave_Type.objects.get(id = leave) if leave else None,

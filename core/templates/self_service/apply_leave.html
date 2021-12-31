@@ -131,7 +131,7 @@ input[type=number] {
               </div>
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                <form method="POST" enctype="multipart/form-data" name="form" id="form" class="post-form" >  
                 {% csrf_token %}  
               
                     <!-- <div class="col-lg-6">
@@ -369,7 +369,17 @@ $('#submit_add_folder').on("click",function() {
 })
 
 
-
+$("#form").on("submit", function(){
+    var startDate = document.getElementById("from_date").value;
+    var endDate = document.getElementById("to_date").value;
+    // alert(startDate)
+    // alert(endDate)
+      if (startDate > endDate)
+      {
+          alert("To date should be greater than From date");
+          return false;
+      }
+})
 
 
 </script>
