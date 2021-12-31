@@ -36,6 +36,7 @@ from django.views import generic
 from app.models.employee_files_model import Employee_Files
 from app.models.leave_type_model import *
 from app.models.leave_request_model import *
+from app.models.travel_expense_model import *
 import os
 from django.db.models import Avg, Count, Min, Sum, Case, When, F
 from django.conf import settings
@@ -733,12 +734,12 @@ def delete_travel_request(request, pk):
     messages.error(request, 'Travel request was deleted! ')
     return redirect('self_travel_request')
 
-
 def self_travel_expense(request):
-    requests = Travel_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
-    context = {'requests':requests}
-    return render(request, "self_service/self_travel_request.html", context)
-
+   # return HttpResponse("employee")
+    employee = Travel_Expense_Detail.objects.filter(is_active='1',employee_id=request.user.emp_id)
+    # print(employee)
+    context = {'employees':employee}
+    return render(request, "self_service/self_travel_expense.html", context)
 
 def compensatory_request(request):
     data = Compoensatory_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')

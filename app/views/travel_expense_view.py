@@ -50,43 +50,9 @@ from app.views.travel_request_view import travel_request_details
 
 
 @login_required(login_url="/login/")
-def index(request):
-    
-    context = {}
-    context['segment'] = 'index' 
-
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
-
-
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
-        
-        load_template      = request.path.split('/')[-1]
-        context['segment'] = load_template
-        
-        html_template = loader.get_template( load_template )
-        return HttpResponse(html_template.render(context, request))
-        
-    except template.TemplateDoesNotExist:
-
-        html_template = loader.get_template( 'page-404.html' )
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-    
-        html_template = loader.get_template( 'page-500.html' )
-        return HttpResponse(html_template.render(context, request))
-
 def travel_expense_details(request):
-   # return HttpResponse("employee")
+    
     employee = Travel_Expense_Detail.objects.filter(is_active='1').order_by('-created_at')
-#     Asset_Detail.objects.select_related('employee').get(is_active='1')
-   # return HttpResponse(employee)
-    print(employee)
     context = {'employees':employee}
     return render(request, "travel_expense_details/index.html", context)
 
@@ -158,7 +124,7 @@ def add_travel_expense_details(request):
                         edu = Travel_Expense_More_Detail.objects.create(description=description[i], ticket=ticket[i], date= d.strftime('%Y-%m-%d'), lodging=lodging[i], boarding=boarding[i], phone= phone[i], local_conveyance= local_conveyance[i], incidentals= incidentals[i], others= others[i], currency= currency[i], employee_id  = employee, travel_exp_id = latest_id )
 
             messages.success(request, 'travel expense details was added ! ')
-            return redirect('travel_expense_details') 
+            return redirect(request.META.get('HTTP_REFERER'))
             # else: 
             #     employee = Employee.objects.all()
             #     context_role = {
@@ -173,11 +139,13 @@ def add_travel_expense_details(request):
              
     employee = Employee.objects.all()
     travel = Travel_Request_Detail.objects.all()
-    print( travel)
+    travel_emp = Travel_Request_Detail.objects.filter(employee_id=request.user.emp_id)
+    # print( travel)
    # print( employee)
     context_role = {
-          'employees': employee,
+           'employees': employee,
            'travels': travel,
+           'travel_emp':travel_emp,
        }
    
     #
@@ -185,6 +153,7 @@ def add_travel_expense_details(request):
     context_role.update({"form":form})
    # print(context_role)
     return render(request, "travel_expense_details/add_travel_expense.html",  context_role )
+   
    
 def delete_expense_details(request, pk):
    # return HttpResponse('working..')
@@ -204,3 +173,21 @@ def snippets_travel_details_expense_all_info(request):
     jsondata = serializers.serialize('json', final_list)
  
     return HttpResponse(jsondata, content_type='application/json')
+
+def travel_expense_approve(request):
+
+    id = request.POST.get('id')
+    value = request.POST.get('value')
+    # print(value)
+
+    data = Travel_Expense_Detail.objects.get(id = id)
+
+    update = Travel_Expense_Detail.objects.filter(id=id).update(
+        is_approved=value, 
+        updated_by= request.user.emp_id,
+        updated_at=timezone.now()
+    )    
+
+    return HttpResponse(1)
+
+

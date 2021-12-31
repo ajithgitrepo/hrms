@@ -18,13 +18,15 @@ class Travel_Expense_Detail(models.Model):
     # Separation
 
     id = models.AutoField(primary_key=True)   
-    employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
+    employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL, related_name="travel_expence_employee")
     travel = models.ForeignKey(Travel_Request_Detail,  to_field="travel_id", db_column="travel_id", blank=True, null=True, on_delete= models.SET_NULL)
 
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
-  
+    is_approved = models.PositiveSmallIntegerField(default=0)
+    updated_by = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL, related_name="travel_expence_updated")
+
     class Meta:  
         db_table = "travel_expense_details"  
 

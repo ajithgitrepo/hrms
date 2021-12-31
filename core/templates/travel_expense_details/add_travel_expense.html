@@ -1,5 +1,8 @@
 {% extends "layouts/base.html" %}
 <title>asdsd</title>
+
+{% load custom_tags %}
+
 {% block title %} Travel Expense {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -127,6 +130,7 @@ i.fas.fa-times-circle {
 {% endblock stylesheets %}
 
 {% block content %}
+{% role_name as role %}
 
     <!-- Header -->
     <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
@@ -220,8 +224,32 @@ i.fas.fa-times-circle {
                         {{ form.employee_id.errors }}
                       </div>
                     </div>-->
-                    
-          
+                    {% if role == 'Associate' %}
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Employee ID</label>
+                        <input  class="form-control"  type="text" name="employee" readonly value="{{ request.user.emp_id}}"  >
+
+                        
+                      {{ form.errors.employee  }}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Travel ID</label>
+                        <select  class="form-control" id="ddl_travel_id" value="{{ form.data.travel  }}" name="travel">
+                            <option value="">select</option>
+                            {% for tvl in travel_emp %}
+                                <option value="{{ tvl.travel_id }}" {% if tvl.travel_id == form.data.travel %} selected{% endif %}>  {{ tvl.travel_id }}</option>
+                            {% endfor %}
+                      </select>
+                      {{ form.errors.travel  }}
+                      </div>
+                    </div>
+
+                    {% endif %}
+                    {% if role == 'Admin' %}
                     <div class="col-lg-6">
                         <div class="form-group">
                           <label class="form-control-label" for="input-username">Employee ID</label>
@@ -234,7 +262,6 @@ i.fas.fa-times-circle {
                         {{ form.errors.employee  }}
                         </div>
                       </div>
-
                       <div class="col-lg-6">
                         <div class="form-group">
                           <label class="form-control-label" for="input-username">Travel ID</label>
@@ -242,36 +269,29 @@ i.fas.fa-times-circle {
                               <option value="">select</option>
                               {% for tvl in travels %}
                                   <option value="{{ tvl.travel_id }}" {% if tvl.travel_id == form.data.travel %} selected{% endif %}>  {{ tvl.travel_id }}</option>
-                              {% endfor %} 
+                              {% endfor %}
                         </select>
                         {{ form.errors.travel  }}
                         </div>
                       </div>
-                    
-                  </div>
-                  <div class="row">
-                     
+
                         <div class="col-md-6">
                               <div class="form-group">
-                                   
                                     <label class="form-control-label" for="input-address">Place of visit</label>
-                                    <input type="text" readonly id="place_of_visit" class="form-control" placeholder="" >
-
-                                 
+                                    <input type="text" id="place_of_visit" class="form-control" placeholder="" >
                                 <!-- {{ form.mobile_phone.errors }} -->
                              </div>
                             </div>
-
                             <div class="col-lg-6">
                               <div class="form-group">
                                 <label class="form-control-label" for="input-username">Purpose of visit</label>
-                                <input type="text"  readonly id="purpose_of_visit"  class="form-control" placeholder="" >
+                                <input type="text" id="purpose_of_visit"  class="form-control" placeholder="" >
                                 <!-- {{ form.email_id.errors }} -->
                               </div>
                             </div>
-
-                  </div>
-
+                 
+                      {% endif %}
+                     
                 </div>
 
                 <!-- <div class="row">

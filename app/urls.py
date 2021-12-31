@@ -136,7 +136,8 @@ urlpatterns = [
     path('add_travel_expense_details/', views.travel_expense_view.add_travel_expense_details, name="add_travel_expense_details"),
     path('snippets_travel_details_travel_expense_more_all_info', views.travel_expense_view.snippets_travel_details_travel_expense_more_all_info, name="snippets_travel_details_travel_expense_more_all_info"),
     path('delete_expense_details/<str:pk>/', views.travel_expense_view.delete_expense_details, name="delete_expense_details"),
-   
+    path('travel_expense_approve/', views.travel_expense_view.travel_expense_approve, name="travel_expense_approve"),
+
     # Travel Request
     path('travel_request_details/', views.travel_request_view.travel_request_details, name="travel_request_details"),
     path('add_travel_request_details', views.travel_request_view.add_travel_request_details, name="add_travel_request_details"),
