@@ -37,6 +37,7 @@ from app.models.employee_files_model import Employee_Files
 from app.models.leave_type_model import *
 from app.models.leave_request_model import *
 from app.models.travel_expense_model import *
+from app.models.reporting_to_model import *
 import os
 from django.db.models import Avg, Count, Min, Sum, Case, When, F
 from django.conf import settings
@@ -54,7 +55,10 @@ def profile(request):
 
     employee = Employee.objects.select_related().get(is_active='1', employee_id=request.user.emp_id)
     # print(employee.department.name)
-    context = {'employee': employee}
+
+    reporting = Reporting.objects.filter(is_active = 1, employee_id = request.user.emp_id, reporting_id__is_active = 1)
+    # print(reporting[0].reporting.first_name)
+    context = {'employee': employee, 'reporting':reporting}
 
     return render(request, "self_service/profile.html", context)
 
@@ -111,6 +115,12 @@ def attendance(request):
     check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
     # print(check_leave)
 
+    try:
+        today_attn = Attendance.objects.get(is_active = 1, date = myDate, employee_id = request.user.emp_id)
+        # print(today_attn.checkout_time)
+    except Attendance.DoesNotExist:
+        today_attn = None
+
     num_days = len([1 for i in calendar.monthcalendar(
         datetime.now().year, datetime.now().month) if i[6] != 0])
 
@@ -130,6 +140,7 @@ def attendance(request):
         'check_leave':check_leave,
         'comp_off':comp_off,
         'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
+        'today_attn':today_attn,
 
     }
 

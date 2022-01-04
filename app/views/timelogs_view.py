@@ -64,14 +64,40 @@ def timelogs(request):
     timelogs = TimeLogs.objects.filter(is_active='1', employee_id = request.user.emp_id, project__is_active = 1, date__range=[first_day, last_day])
     # print(timelogs)
 
-
     projects = Project.objects.filter(is_active = 1, project_users__contains=request.user.emp_id)
+
+    total_seconds = 0
+
+    for time in timelogs:
+        start = time.created_at
+        end = time.updated_at
+        # datetime.strptime(time.start_time) - datetime.strptime(time.end_time)
+        timediff = (end - start).total_seconds()/60
+        total_seconds += timediff
+        # time_string = "{}:{}".format(*divmod(timediff, 60))
+        
+        seconds = timediff % (24 * 3600)
+        hour = seconds // 3600
+        seconds %= 3600
+        minutes = seconds // 60
+        seconds %= 60
+
+        # print("%02d:%02d" % (minutes, seconds))
+
+    seconds = total_seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+
+    # print("%02d:%02d" % (minutes, seconds))
     
     context = {
         'timelogs': timelogs,
         'projects': projects,
         'month_no': now.strftime("%m"),
         'year': now.strftime("%Y"),
+        'hours': "%02d:%02d" % (minutes, seconds),
     }
 
     return render(request, "timelogs/index.html", context)
@@ -79,7 +105,7 @@ def timelogs(request):
 
 def timelog_checkin(request):
     if request.method == 'POST':
-        print(request.POST.get('project_id'))
+        # print(request.POST.get('project_id'))
         myDate = datetime.now()
         if not TimeLogs.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, project_id = request.POST.get('project_id'),  is_active = 1)).exists():
             insert = TimeLogs.objects.create(
@@ -194,6 +220,32 @@ def time_logs(request):
         reporting = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
         # print(reporting)
 
+    total_seconds = 0
+
+    for time in timelogs:
+        start = time.created_at
+        end = time.updated_at
+        # datetime.strptime(time.start_time) - datetime.strptime(time.end_time)
+        timediff = (end - start).total_seconds()/60
+        total_seconds += timediff
+        # time_string = "{}:{}".format(*divmod(timediff, 60))
+        
+        seconds = timediff % (24 * 3600)
+        hour = seconds // 3600
+        seconds %= 3600
+        minutes = seconds // 60
+        seconds %= 60
+
+        # print("%02d:%02d" % (minutes, seconds))
+
+    seconds = total_seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+
+    print("%02d:%02d" % (minutes, seconds))
+
 
     context = {
         'timelogs': timelogs,
@@ -201,6 +253,7 @@ def time_logs(request):
         'month_no': now.strftime("%m"),
         'year': now.strftime("%Y"),
         'employees':reporting,
+        'hours': "%02d:%02d" % (minutes, seconds),
     }
 
     return render(request, "timelogs/admin/index.html", context)
@@ -241,6 +294,33 @@ def search_timelog(request,pk,month):
         reporting = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
         # print(reporting)
 
+    
+    total_seconds = 0
+
+    for time in timelogs:
+        start = time.created_at
+        end = time.updated_at
+        # datetime.strptime(time.start_time) - datetime.strptime(time.end_time)
+        timediff = (end - start).total_seconds()/60
+        total_seconds += timediff
+        # time_string = "{}:{}".format(*divmod(timediff, 60))
+        
+        seconds = timediff % (24 * 3600)
+        hour = seconds // 3600
+        seconds %= 3600
+        minutes = seconds // 60
+        seconds %= 60
+
+        # print("%02d:%02d" % (minutes, seconds))
+
+    seconds = total_seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+
+    # print("%02d:%02d" % (minutes, seconds))
+
     context = {
         'timelogs': timelogs,
         'projects': projects,
@@ -248,6 +328,7 @@ def search_timelog(request,pk,month):
         'year': date.strftime("%Y"),
         'employees':reporting,
         'emp_id':pk,
+        'hours': "%02d:%02d" % (minutes, seconds),
     }
 
     return render(request, "timelogs/admin/index.html", context)

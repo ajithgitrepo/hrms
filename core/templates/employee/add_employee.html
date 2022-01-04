@@ -114,7 +114,7 @@ input[type=number] {
               </div>
             </div>
             <div class="card-body">
-              <form method="POST" name="form" class="post-form"  enctype="multipart/form-data">
+              <form method="POST" name="form" class="post-form" id="add_form"  enctype="multipart/form-data">
                 {% csrf_token %}  
                    
 
@@ -134,14 +134,14 @@ input[type=number] {
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
                         <label class="form-control-label" for="input-email">First Name</label>
-                        <input type="text" name="first_name" value="{{ form.data.first_name }}"  class="form-control" placeholder="Enter First Name" >
+                        <input type="text" name="first_name" value="{{ form.data.first_name }}"  id="first_name" class="form-control" placeholder="Enter First Name" >
                         {{ form.first_name.errors }}
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Last Name</label>
-                        <input type="text" name="last_name" value="{{ form.data.last_name }}" class="form-control" placeholder="Enter Last Name" >
+                        <input type="text" name="last_name" value="{{ form.data.last_name }}" id="last_name" class="form-control" placeholder="Enter Last Name" >
                         {{ form.last_name.errors }}
                       </div>
                     </div>
@@ -159,7 +159,7 @@ input[type=number] {
                     <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Nick Name</label>
-                        <input type="text" name="nick_name" value="{{ form.data.nick_name }}" class="form-control" placeholder="Enter Nick Name" >
+                        <input type="text" name="nick_name" value="{{ form.data.nick_name }}" id="nick_name" class="form-control" placeholder="Enter Nick Name" >
                         <!-- {{ form.nick_name.errors }} -->
                       </div>
                     </div>
@@ -718,9 +718,8 @@ input[type=number] {
 
 
 $(function () {
-      var dateToday = new Date();
-           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
-           $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        var dateToday = new Date();
+        $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
         todayBtn: "linked",
         todayHighlight: true,});
          
@@ -1076,6 +1075,32 @@ function attach_delete(){
 });
 
 }
+
+
+
+$("#add_form").submit(function(e) {
+
+  // e.preventDefault(); // avoid to execute the actual submit of the form.
+
+  f_name = $("#first_name").val();
+  l_name = $("#last_name").val();
+  n_name = $("#nick_name").val();
+
+  if (!/^[a-zA-Z\s]+$/g.test(f_name)) {
+    alert("First Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(l_name)) {
+    alert("Last Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(n_name)) {
+    alert("Nick Name should be only alphabatics..");
+    return false;
+  }
+
+
+});
 
 
 

@@ -513,7 +513,7 @@ px
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Age</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">26</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Gender</div>
@@ -563,7 +563,7 @@ px
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Extension</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.extension }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Seating Location</div>
@@ -576,7 +576,7 @@ px
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Personal Email Address</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">-</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.other_email }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
@@ -610,11 +610,11 @@ px
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Location</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.location }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.location.location }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Designation</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.role.name }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.title }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">

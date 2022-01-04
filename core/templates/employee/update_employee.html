@@ -40,6 +40,19 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+#mobile_phone{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
 </style>
 
 {% endblock stylesheets %}
@@ -70,8 +83,14 @@ input[type=number] {
               </div>
             </div>
             <div class="card-body">
-              <form method="POST" class="post-form" action="" enctype="multipart/form-data">  
-                {% csrf_token %}  
+
+              {% if role == "Admin" %} 
+                <form method="POST" class="post-form" action="" id="update_form" enctype="multipart/form-data"> 
+              {% else %} 
+                <form method="POST" class="post-form" action="{% url 'update_employee_emp' request.user.emp_id %}" id="update_form" enctype="multipart/form-data"> 
+              {% endif %}
+               
+              {% csrf_token %}  
                    
 
             <h6 class="heading-small text-muted mb-4">Basic Info</h6>
@@ -81,23 +100,29 @@ input[type=number] {
                   <div class="form-group">
                         <span>{{ request.message }}</span>
                        <!-- {{ form.data }} -->
+                    {% if role == "Admin" %} 
                     <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
                     <input type="text" name="employee_id" value="{{ employee.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
                     <!-- {{ form.employee_id }} -->
+                    {% else %}
+                      <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                      <input type="text" name="employee_id" readonly value="{{ employee.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
                     {{ form.employee_id.errors }}
+
+                    {% endif %}
                   </div>
                 </div>
                 <div class="col-lg-4"> 
                   <div class="form-group"> 
                     <label class="form-control-label" for="input-email">First Name</label>
-                    <input type="text" name="first_name" value="{{ employee.first_name }}"  class="form-control" placeholder="Enter First Name" >
+                    <input type="text" name="first_name" value="{{ employee.first_name }}" id="first_name"  class="form-control" placeholder="Enter First Name" >
                     {{ form.first_name.errors }}
                   </div>
                 </div>
                 <div class="col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-email">Last Name</label>
-                    <input type="text" name="last_name" value="{{ employee.last_name }}" class="form-control" placeholder="Enter Last Name" >
+                    <input type="text" name="last_name" value="{{ employee.last_name }}" id="last_name" class="form-control" placeholder="Enter Last Name" >
                     {{ form.last_name.errors }}
                   </div>
                 </div>
@@ -115,7 +140,7 @@ input[type=number] {
                 <div class="col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-email">Nick Name</label>
-                    <input type="text" name="nick_name" value="{{ employee.nick_name }}" class="form-control" placeholder="Enter Nick Name" >
+                    <input type="text" name="nick_name" value="{{ employee.nick_name }}" id="nick_name" class="form-control" placeholder="Enter Nick Name" >
                     <!-- {{ form.nick_name.errors }} -->
                   </div>
                 </div>
@@ -129,8 +154,10 @@ input[type=number] {
               </div>
 
             </div>
+            
+            {% if role == "Admin" %} 
             <hr class="my-4" />
-          
+            
             <h6 class="heading-small text-muted mb-4">Work</h6>
             <div class="pl-lg-4">
               <div class="row">
@@ -218,7 +245,7 @@ input[type=number] {
                   <label class="form-control-label" for="input-city">Date of joining</label>
                   <!-- <input type="text" name="input-city" value="{{ form.data.date_of_joining }}" class="form-control" placeholder="Enter Date of joining" > -->
                   <!-- <input class="form-control datepicker" id="date_of_joining1" name="date_of_joining" placeholder="Select date" type="text" value="{{ form.data.date_of_joining }}"> -->
-                  <input type="text" class="form-control startdate" id="date_of_joining1" placeholder="dd-mm-yyyy" name="date_of_joining" size="25" value="{{ employee.date_of_joining|date:'d-m-Y' }}"/>
+                  <input type="text" class="form-control startdate" id="date_of_joining1" placeholder="dd-mm-yyyy" autocomplete name="date_of_joining" size="25" autocomplete="" value="{{ employee.date_of_joining|date:'d-m-Y' }}"/>
                   {{ form.date_of_joining.errors }}
               </div>
               </div>
@@ -283,11 +310,17 @@ input[type=number] {
                   <input type="number" name="experience" value="{{ employee.experience }}" class="form-control" placeholder="Enter Experience" >
                 </div>
               </div>
+
+             
+            </div>
+
             </div>
         </div>
+        {% endif %}
 
+        {% if role == "Admin" %} 
         <hr class="my-4" />
-
+        
         <h6 class="heading-small text-muted mb-4">Hierarchy Information</h6>
         <div class="pl-lg-4">
           <div class="row">
@@ -327,6 +360,7 @@ input[type=number] {
             </div>
           </div>
         </div>
+        {% endif %}
 
         <hr class="my-4" />
        
@@ -335,19 +369,19 @@ input[type=number] {
             <h6 class="heading-small text-muted mb-4">Personal</h6>
             <div class="pl-lg-4">
               <div class="row">
+                
                 <div class="col-md-4">
                   <div class="form-group">
+                       
                         <label class="form-control-label" for="input-address">Mobile Phone</label>
                         <input type="hidden"  id="Hid_mobi"  value="{{ employee.mobile_phone }}" name =""  >
 
                         <input type="hidden"  id="Hid_code_name"  value="{{ employee.code_name }}" name ="code_name"  >
                         <input id="mobile_phone" name="mobile_phone"  placeholder="Enter Mobile Phone" type="tel">
                         <input type="hidden" id="Hid_code_num" name="code_num"  value="{{ employee.code_num }}" ></input>
-                        <!-- <select id="address-country"></select> -->
-                   
-                    <!-- <input name="mobile_phone" value="{{ form.data.mobile_phone }}" class="form-control" placeholder="Enter Mobile Phone"  type="text"> -->
+                     
                     {{ form.mobile_phone.errors }}
-              </div>
+                 </div>
                 </div>
                  
                 <div class="col-md-4"> 
@@ -361,7 +395,7 @@ input[type=number] {
                   <div class="col-md-4">
                     <div class="form-group">
                       <label class="form-control-label" for="input-address">Birth Date</label>
-                      <input name="birth_date" value="{{ employee.birth_date|date:'d-m-Y' }}" class="form-control startdate" placeholder="dd-mm-yyyy"  type="text">
+                      <input name="birth_date" value="{{ employee.birth_date|date:'d-m-Y' }}" class="form-control startdate" autocomplete placeholder="dd-mm-yyyy"  type="text">
                     </div>
                   </div>
 
@@ -428,7 +462,7 @@ input[type=number] {
               <div class="col-lg-4">
                   <div class="form-group">
                       <label class="form-control-label" for="input-email">Passport Expiry Date</label>
-                      <input name="passport_exp_date" value="{{ employee.passport_exp_date|date:'d-m-Y' }}" class="form-control startdate" placeholder="dd-mm-yyyy"  type="text">
+                      <input name="passport_exp_date" value="{{ employee.passport_exp_date|date:'d-m-Y' }}" class="form-control startdate" autocomplete placeholder="dd-mm-yyyy"  type="text">
                       
                   </div>
              
@@ -440,6 +474,13 @@ input[type=number] {
                       <input type="file" name="psssport_url" value="{{ employee.psssport_url }}" accept="image/*,application/pdf" class="form-control" >
                   </div>
              
+              </div>
+
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-city">Work phone</label>
+                  <input type="text" name="work_phone" value="{{ employee.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                </div>
               </div>
 
               </div> 
@@ -458,6 +499,12 @@ input[type=number] {
          
         </div>
       </div>
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label class="form-control-label" for="input-country">Title</label>
+          <input type="text" value="{{ employee.title }}" name="title" class="form-control" placeholder="Enter Title">
+        </div>
+      </div>
       <div class="col-lg-4"> 
         <div class="form-group"> 
          
@@ -466,15 +513,15 @@ input[type=number] {
          
         </div>
       </div>
+     
       <div class="col-lg-4">
         <div class="form-group">
               <label class="form-control-label" for="input-username">Date of exit</label>
-              <input type="text" name="date_of_exit" value="{{ employee.date_of_exit|date:'d-m-Y' }}" class="form-control startdate" placeholder="dd-mm-yyyy" >
+              <input type="text" name="date_of_exit" value="{{ employee.date_of_exit|date:'d-m-Y' }}" autocomplete class="form-control startdate" placeholder="dd-mm-yyyy" >
          
         </div>
       </div>
-    </div>
-    <div class="row">
+   
       <div class="col-lg-4">
         <div class="form-group">
           <label class="form-control-label" for="input-username">Gender</label>
@@ -497,6 +544,8 @@ input[type=number] {
           <!-- {{ form.nick_name.errors }} -->
         </div>
       </div>
+
+    
     
     </div>
 
@@ -509,7 +558,7 @@ input[type=number] {
 
         <div class="card-footer">
 
-            <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Update<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+            <button type="submit" name="submit_button" id="" class="btn btn-primary">Update</button>
            
             <a href="/employees/" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
 
@@ -525,7 +574,6 @@ input[type=number] {
     </div>
     </div>
 
-    {% include 'includes/footer.html' %}
 
 </div>
 
@@ -541,6 +589,12 @@ input[type=number] {
 
 
 <script src="/static/build/js/intlTelInput.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
 
 <script>
 
@@ -578,6 +632,7 @@ var iti = window.intlTelInput(input, {
       separateDialCode: true,
       utilsScript: "build/js/utils.js",
 });
+
 
 setTimeout(function () {
       var mobi_num =  $('#Hid_mobi').val();
@@ -645,11 +700,39 @@ window.addEventListener("DOMContentLoaded", function(){
 
 $(function() {
 
-      $( ".startdate" ).datepicker({
-  dateFormat: 'dd-mm-yy',//check change
-  changeMonth: true,
-  changeYear: true
+      // $( ".startdate" ).datepicker({
+      //   dateFormat: 'dd-mm-yy',//check change
+      //   changeMonth: true,
+      //   changeYear: true
+      // });
+
+        $(".startdate").datepicker({
+          format: 'dd-mm-yyyy',  autoclose: true,
+        });
 });
+
+$("#update_form").submit(function(e) {
+
+  // e.preventDefault(); // avoid to execute the actual submit of the form.
+
+  f_name = $("#first_name").val();
+  l_name = $("#last_name").val();
+  n_name = $("#nick_name").val();
+
+  if (!/^[a-zA-Z\s]+$/g.test(f_name)) {
+    alert("First Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(l_name)) {
+    alert("Last Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(n_name)) {
+    alert("Nick Name should be only alphabatics..");
+    return false;
+  }
+
+
 });
 
 </script>

@@ -206,7 +206,9 @@
                          </tbody>
                       </table>
             <div id="ZPAtt_dashboard_dayCont">
-            {% if request.session.checkin_session %}
+
+            
+            {% if request.session.checkin_session or today_attn != None and today_attn.checkout_time == None %}
               <form method="POST" class="post-form" action="check_out_attn/">  
                 {% csrf_token %}  
                
@@ -216,7 +218,7 @@
 
                 <div class="row">
                 <div class="col-lg-8">
-                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                  <input class="form-control" value="" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
                  
                 </div>
 
@@ -498,9 +500,9 @@
                       {% for date_no,days,dates in days_and_no %}
 
                         {% if todays_date == date_no %}
-                          <li value="{{ dates|date:"d" }}" class="sel time-log-click"><b>{{ date_no }}</b> {{ days }}</li>
+                          <li value="{{ dates|date:"d" }}" class="sel time-log-click {{ dates|date:"d" }}T "><b>{{ date_no }}</b> {{ days }}</li>
                         {% else %}
-                          <li value="{{ dates|date:"d" }}" class="time-log-click" ><b>{{ date_no }}</b> {{ days }}</li>
+                          <li value="{{ dates|date:"d" }}" class="time-log-click {{ dates|date:"d" }}T " ><b>{{ date_no }}</b> {{ days }}</li>
                         {% endif %}
 
                       {% endfor %}
@@ -607,18 +609,24 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
 
         $(".time-logs").hide();
         $(".no-log").hide();
-        const d = new Date();
-        // alert(d.getDate())
-        $("."+d.getDate()).show();
+        d = new Date();
         
+        if(d.getDate() <= 9 ){
+          d = "0"+d.getDate();
+        }
+        else{
+          d = d.getDate()
+        }
 
+        $("."+d).show();
+        
         var login_time = "{{login_time}}";
         var check_in = "{{check_in}}";
-    	var session = "{{session}}";
+    	  var session = "{{session}}";
     	
         // alert(session);
         if(login_time && session){
-        	// alert(1);
+        	  // alert(1);
             //create date format  
             // str = login_time.replace(" p.m.", ":00");
         
@@ -680,8 +688,12 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
 
         var login_time = "{{login_time}}";
         var session = "{{session}}";
-        // alert(a);
-        if(login_time && session){
+        var checkout = "{{ today_attn.checkout_time }}"
+        
+        // alert(session);
+        // alert(checkout);
+
+        if(login_time && (session || checkout == "None") ){
             //create date format  
             // str = login_time.replace(" p.m.", ":00");
             str = login_time.split(' ')[0];

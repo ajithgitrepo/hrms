@@ -952,7 +952,7 @@ def update_employee(request, pk):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            employee = Employee.objects.get(employee_id = request.user.emp_id)            
+            employee = Employee.objects.get(employee_id = pk)            
 
             # if len(request.FILES) != 0:
             if request.FILES.get('profile', False):
@@ -994,13 +994,6 @@ def update_employee(request, pk):
             else:
                 date_of_joining = None
 
-            #d = datetime.strptime('11/11/2012', '%m/%d/%Y')
-
-            # cr_date = datetime.strptime(date, '%Y-%m-%d')
-            #date_of_joining = date.strftime("%Y-%m-%d")
-            # d = datetime.strptime(date, '%dd/%mm/%YYYY')
-            # date_of_joining = d.strftime('%Y/%m/%d')
-
             employee_status = request.POST.get('employee_status')
             employee_type = request.POST.get('employee_type')
             work_phone = request.POST.get('work_phone')
@@ -1021,9 +1014,6 @@ def update_employee(request, pk):
             code_num = request.POST.get('code_num')
 
             marital_status = request.POST.get('marital_status')
-            # return HttpResponse(marital_status)
-            # marital_status = form.ChoiceField(choices=Employee.MARITAL_CHOICES, widget=form.RadioSelect())
-            # return HttpResponse(marital_status )
             birth_date = request.POST.get('birth_date')
 
             if birth_date != "" and birth_date != None:
@@ -1033,8 +1023,6 @@ def update_employee(request, pk):
                 birth_date = None
             address = request.POST.get('address')
             tags = request.POST.get('tags')
-            # return HttpResponse(address )
-            # return HttpResponse(birth_date )
 
             date_of_exit = request.POST.get('date_of_exit')
             if date_of_exit != "" and date_of_exit != None:
@@ -1066,8 +1054,6 @@ def update_employee(request, pk):
 
             passport_num = request.POST.get('passport_num')
 
-            
-            # return HttpResponse(pk)
             obj = Employee.objects.filter(employee_id=pk).update(
                 employee_id=employee_id, first_name=first_name,
                 last_name=last_name, email_id=email_id, nick_name=nick_name,
@@ -1395,6 +1381,206 @@ def update_employee(request, pk):
                 return redirect('employees')
             else:
                 return redirect('profile')
+
+    role = Group.objects.all()
+    department = Department.objects.filter(is_active=1)
+    reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
+    reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
+    loc = Location.objects.filter(is_active=1)
+    # print(reporting_to)
+    context_role = {
+        'roles': role,
+        'reporting': reporting,
+        'department': department,
+        'reporting_to': reporting_to,
+         'location': loc,
+    }
+
+   # tes = Group.objects.all()
+    context_role.update({"form": form, 'employee': employee})
+    # print(context_role)
+  #  context_role = {'form':form,'employee':employee}
+    return render(request, "employee/update_employee.html", context_role)
+
+
+def update_employee_emp(request, pk):
+   
+    employee = Employee.objects.get(employee_id=pk)
+    form = EmployeeForm(instance=employee)
+    # print(role)
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+
+            employee_id = request.POST.get('employee_id')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            mobile_number = request.POST.get('mobile_phone')
+            # print(mobile_number)
+            title = request.POST.get('title')
+            nick_name = request.POST.get('nick_name')
+            email_id = request.POST.get('email_id')
+
+            department = request.POST.get('department')
+
+            current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+
+            employee = Employee.objects.get(employee_id = pk)            
+
+            # if len(request.FILES) != 0:
+            if request.FILES.get('profile', False):
+                name = os.path.splitext(str(request.FILES['profile']))[0]
+                extesion = os.path.splitext(str(request.FILES['profile']))[1]
+                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                file_name = name+"-"+current_date_time+""+extesion
+            else:
+                if employee.profile == None:
+                    file_name = None
+                else:
+                    file_name = employee.profile
+
+            if request.FILES.get('signature', False):
+                s_name = os.path.splitext(str(request.FILES['signature']))[0]
+                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
+                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_file_name = s_name+"-"+current_date_time+""+s_extesion
+            else:
+                if employee.signature == None:
+                    s_file_name = None
+                else:
+                    s_file_name = employee.signature
+
+         
+            # reporting_to = request.POST.get('reporting_to')
+            # source_of_hire = request.POST.get('source_of_hire')
+            # seating_location = request.POST.get('seating_location')
+            # location = request.POST.get('location')
+            # title = request.POST.get('title')
+
+            # date_of_joining = request.POST.get('date_of_joining')
+
+            # date = request.POST.get('date_of_joining')
+            # if date != "" and date != None:
+            #     # return HttpResponse(date)
+            #     d1 = datetime.datetime.strptime(date, '%d-%m-%Y')
+            #     date_of_joining = d1.strftime('%Y-%m-%d')
+            # else:
+            #     date_of_joining = None
+
+            #d = datetime.strptime('11/11/2012', '%m/%d/%Y')
+
+            # cr_date = datetime.strptime(date, '%Y-%m-%d')
+            #date_of_joining = date.strftime("%Y-%m-%d")
+            # d = datetime.strptime(date, '%dd/%mm/%YYYY')
+            # date_of_joining = d.strftime('%Y/%m/%d')
+
+            # employee_status = request.POST.get('employee_status')
+            # employee_type = request.POST.get('employee_type')
+            work_phone = request.POST.get('work_phone')
+
+            # extension = request.POST.get('extension')
+            # role = request.POST.get('role')
+
+            # if role == "":
+            #     role = None
+            # return HttpResponse(role)
+            # total_experience = request.POST.get('total_experience')
+            # experience = request.POST.get('experience')
+
+            other_email = request.POST.get('other_email')
+
+            mobile_phone = request.POST.get('mobile_phone')
+            code_name = request.POST.get('code_name')
+            code_num = request.POST.get('code_num')
+
+            marital_status = request.POST.get('marital_status')
+            # return HttpResponse(marital_status)
+            # marital_status = form.ChoiceField(choices=Employee.MARITAL_CHOICES, widget=form.RadioSelect())
+            # return HttpResponse(marital_status )
+            birth_date = request.POST.get('birth_date')
+
+            if birth_date != "" and birth_date != None:
+                d2 = datetime.datetime.strptime(birth_date, '%d-%m-%Y')
+                birth_date = d2.strftime('%Y-%m-%d')
+            else:
+                birth_date = None
+            address = request.POST.get('address')
+            tags = request.POST.get('tags')
+            # return HttpResponse(address )
+            # return HttpResponse(birth_date )
+
+            date_of_exit = request.POST.get('date_of_exit')
+            if date_of_exit != "" and date_of_exit != None:
+                # return HttpResponse(date)
+                d3 = datetime.datetime.strptime(date_of_exit, '%d-%m-%Y')
+                date_of_exit = d3.strftime('%Y-%m-%d')
+            else:
+                date_of_exit = None
+            gender = request.POST.get('gender')
+            about_me = request.POST.get('about_me')
+            expertise = request.POST.get('expertise')
+            job_description = request.POST.get('job_description')
+
+            date = request.POST.get('passport_exp_date')
+            if date != "" and date != None:
+                #return HttpResponse(date)
+                d4 = datetime.datetime.strptime(date, '%d-%m-%Y')
+                passport_expir_date = d4.strftime('%Y-%m-%d')
+            else:
+                passport_expir_date = None
+
+            if request.FILES.get('psssport_url', False):
+                s_name = os.path.splitext(str(request.FILES['psssport_url']))[0]
+                s_extesion = os.path.splitext(str(request.FILES['psssport_url']))[1]
+                handle_uploaded_file(request.FILES['psssport_url'], current_date_time, 'passport_images')
+                passport_file_name = s_name+"-"+current_date_time+""+s_extesion
+            else:
+                passport_file_name = None
+
+            passport_num = request.POST.get('passport_num')
+
+            
+            # return HttpResponse(pk)
+            obj = Employee.objects.filter(employee_id=pk).update(
+                employee_id=employee_id, first_name=first_name,
+                last_name=last_name, email_id=email_id, nick_name=nick_name,
+                department=department,
+                # reporting_to=reporting_to,
+                mobile_number = mobile_number,
+                work_phone = work_phone,
+                code_name=code_name,
+                code_num=code_num,
+                other_email=other_email,
+                mobile_phone=mobile_phone,
+                marital_status=marital_status,
+                birth_date=birth_date,
+                address=address,
+                tags=tags,
+                title=title,
+                job_description=job_description,
+                expertise=expertise,
+                about_me=about_me,
+                date_of_exit=date_of_exit,
+                gender=gender,
+                profile=file_name,
+                signature=s_file_name,
+                passport_num = passport_num,
+                passport_exp_date = passport_expir_date,
+                psssport_url = passport_file_name,
+
+            )
+
+            check_reporting = Reporting.objects.filter(
+                employee_id=pk, is_active=1)
+
+            role = role_name(request)
+
+            messages.success(request, first_name + ' Employee profile was updated! ')
+            if role == 'Admin':
+                return redirect('employees')
+            else:
+                return redirect('profile')
+
 
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)
