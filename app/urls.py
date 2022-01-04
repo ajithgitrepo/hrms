@@ -157,6 +157,7 @@ urlpatterns = [
     path('add_asset_details', views.asset_deatails_view.add_asset_details, name="add_asset_details"),
     path('delete_asset_details/<str:pk>/', views.asset_deatails_view.delete_asset_details, name="delete_asset_details"),
     path('snippets_asset_all_info', views.asset_deatails_view.snippets_asset_all_info, name="snippets_asset_all_info"),
+    path('assets_approve/', views.asset_deatails_view.assets_approve, name="assets_approve"),
     
     # Holiday Details
     path('holiday_details/', views.holiday_details_view.holiday_details, name="holiday_details"),

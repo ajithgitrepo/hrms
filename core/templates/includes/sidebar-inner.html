@@ -123,12 +123,12 @@
 
             {% if role == "Manager" %}   
 
-                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}active{% endif %} {% if request.resolver_match.url_name == "time_logs" %}active{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}active{% endif %} " 
+                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}active{% endif %} {% if request.resolver_match.url_name == "time_logs" %}active{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}active{% endif %} {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} " 
                 href="#navbar-leave_approve" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave_approve">
                 <i class="fas fa-users text-primary"></i>
                     <span class="nav-link-text">Employees</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}show{% endif %}{% if request.resolver_match.url_name == "time_logs" %}show{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}show{% endif %}  " id="navbar-leave_approve">
+                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}show{% endif %}{% if request.resolver_match.url_name == "time_logs" %}show{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} " id="navbar-leave_approve">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a href="/reporting/" class="nav-link {% if request.resolver_match.url_name == "reporting" %}active{% endif %} ">
@@ -166,6 +166,14 @@
                             <span class="sidenav-normal"> Compensatory Request </span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'asset_details' %}" class="nav-link {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} ">
+                                <span class="sidenav-mini-icon"> AD </span>
+                                <span class="sidenav-normal"> Asset Details </span>
+                            </a>
+                        </li>
+
                    
                     </ul>
                    
@@ -400,6 +408,33 @@
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link {% if request.resolver_match.url_name == "clients" %}active{% endif %} {% if request.resolver_match.url_name == "add_client" %}active{% endif %} {% if request.resolver_match.url_name == "update_client" %}active{% endif %} {% if request.resolver_match.url_name == "projects" %}active{% endif %} {% if request.resolver_match.url_name == "add_project" %}active{% endif %} {% if request.resolver_match.url_name == "update_project" %}active{% endif %}  " 
+                    href="#navbar-client" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-client">
+                    <i class="fas fa-clock text-primary"></i>
+                        <span class="nav-link-text">Client & Project</span>
+                    </a>
+
+                    <div class="collapse {% if request.resolver_match.url_name == "clients" %}show{% endif %} {% if request.resolver_match.url_name == "add_client" %}show{% endif %}  {% if request.resolver_match.url_name == "update_client" %}show{% endif %} {% if request.resolver_match.url_name == "projects" %}show{% endif %} {% if request.resolver_match.url_name == "add_project" %}show{% endif %} {% if request.resolver_match.url_name == "update_project" %}show{% endif %} " id="navbar-client">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{% url 'clients' %}" class="nav-link {% if request.resolver_match.url_name == "clients" %}active{% endif %} {% if request.resolver_match.url_name == "add_client" %}active{% endif %} {% if request.resolver_match.url_name == "update_client" %}active{% endif %}  ">
+                                    <span class="sidenav-mini-icon"> C </span>
+                                    <span class="sidenav-normal"> Clients </span>
+                                </a>
+                                <a href="{% url 'projects' %}" class="nav-link {% if request.resolver_match.url_name == "projects" %}active{% endif %} {% if request.resolver_match.url_name == "add_project" %}active{% endif %} {% if request.resolver_match.url_name == "update_project" %}active{% endif %}  ">
+                                    <span class="sidenav-mini-icon"> P </span>
+                                    <span class="sidenav-normal"> Projects </span>
+                                </a>
+                            </li>
+            
+                        </ul>
+                    </div>
+
+                </li>
+
+              
                 <li class="nav-item">
                     <a class="nav-link  {% if request.resolver_match.url_name == "travel_expense_details" %}active{% endif %} {% if request.resolver_match.url_name == "travel_request_details" %}active{% endif %}  {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "tasks" %}active{% endif %} {% if request.resolver_match.url_name == "add_task" %}active{% endif %} {% if request.resolver_match.url_name == "update_task" %}active{% endif %} {% if request.resolver_match.url_name == "locations" %}active{% endif %} {% if request.resolver_match.url_name == "add_location" %}active{% endif %} {% if request.resolver_match.url_name == "update_location" %}active{% endif %} {% if request.resolver_match.url_name == "search" %}active{% endif %}{% if request.resolver_match.url_name == "add_announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcements" %}active{% endif %} {% if request.resolver_match.url_name == "announcement_view" %}active{% endif %} " 
                     href="#navbar-more" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-more">

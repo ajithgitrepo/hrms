@@ -32,6 +32,9 @@ from django.http import JsonResponse
 from django.db import connection
 from datetime import datetime
 import datetime
+from app.views.restriction_view import admin_only,role_name
+from app.models.reporting_to_model import Reporting
+
 
 from django.utils import timezone
 
@@ -40,40 +43,20 @@ from django.utils import timezone
 
 
 @login_required(login_url="/login/")
-def index(request):
-    
-    context = {}
-    context['segment'] = 'index' 
-
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
-
-
-def pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
-        
-        load_template      = request.path.split('/')[-1]
-        context['segment'] = load_template
-        
-        html_template = loader.get_template( load_template )
-        return HttpResponse(html_template.render(context, request))
-        
-    except template.TemplateDoesNotExist:
-
-        html_template = loader.get_template( 'page-404.html' )
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-    
-        html_template = loader.get_template( 'page-500.html' )
-        return HttpResponse(html_template.render(context, request))
 
 def asset_details(request):
-    employee = Asset_Detail.objects.filter(is_active='1')
-    context = {'employees':employee}
+    
+    role = role_name(request)
+    # print(role)
+    if role == "Admin":
+        asset = Asset_Detail.objects.filter(is_active=1)
+    if role == "Manager":
+        reporting_id=request.user.emp_id
+        # print(reporting_id)
+        reporting = Reporting.objects.filter(is_active=1 ,reporting_id=reporting_id).values('employee_id')
+        # print(reporting)
+        asset = Asset_Detail.objects.filter(is_active=1,employee_id__in=reporting)
+    context = {'assets':asset}
     return render(request, "asset_details/index.html", context)
 
 
@@ -177,3 +160,19 @@ def delete_asset_details(request, pk):
     messages.error(request, 'Asset was deleted! ')
     # return redirect('asset_details')
     return redirect(request.META.get('HTTP_REFERER'))
+
+def assets_approve(request):
+
+    id = request.POST.get('id')
+    value = request.POST.get('value')
+    # print(value)
+
+    data = Asset_Detail.objects.get(id = id)
+
+    update = Asset_Detail.objects.filter(id=id).update(
+        is_approved=value, 
+        updated_by= request.user.emp_id,
+        updated_at=timezone.now()
+    )    
+
+    return HttpResponse(1)    

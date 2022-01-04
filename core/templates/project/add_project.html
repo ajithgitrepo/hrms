@@ -87,6 +87,18 @@ input[type=number] {
     border:1px solid #0000ff;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    font-size: .875rem;
+    line-height: 1.5rem;
+    display: inline-flex;
+    margin: 0 0 0.25rem 0.25rem;
+    padding: 0 0.5rem;
+    color: #000000 !important;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #eeeff0 !important;
+}
+
 </style>
 {% endblock stylesheets %}
 
@@ -102,43 +114,6 @@ input[type=number] {
         </div>
         <div class="col-xl-12 order-xl-1">
          
-
-          {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'success'%}
-
-               
-                    <script type=text/javascript>
-                     toastr.options = {
-                  "closeButton": true,
-                  "debug": false,
-                  "newestOnTop": true,
-                  "progressBar": true,
-                  "positionClass": "toast-top-right",
-                  "preventDuplicates": true,
-                  "onclick": null,
-                  "showDuration": "300",
-                  "hideDuration": "1000",
-                  "timeOut": "5000",
-                  "extendedTimeOut": "1000",
-                  "showEasing": "swing",
-                  "hideEasing": "linear",
-                  "showMethod": "fadeIn",
-                  "hideMethod": "fadeOut"
-                }
-                    
-                    toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'info' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'warning' %} 
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% elif message.tags == 'error' %}
-                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-
           <div class="card">
             <div class="card-header">
               <div class="row align-items-center">
@@ -196,8 +171,8 @@ input[type=number] {
                     <div class="col-lg-4">
                         <div class="form-group">
                           <label class="form-control-label" >Project Users</label>
-                          <select class="form-control select2" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
-                            <option value="" selected >Select</option>
+                          <select class="form-control select2 multiple" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
+                            <option value="" disabled >Select</option>
                             {% for employee in employees %}
                                 <option value="{{ employee.employee_id }}" {% if form.data.project_users == employee.employee_id %} selected {% endif %}> {{ employee.first_name }}({{ employee.employee_id }})</option>
                             {% endfor %} 
@@ -229,9 +204,9 @@ input[type=number] {
             <div class="pl-lg-4">
                 
                         <div class="card-footer">
-                                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
-                            
-                                <a href="{% url 'projects' %}" class="btn btn-default">Back</a>
+                            <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+                        
+                            <a href="{% url 'projects' %}" class="btn btn-default">Back</a>
                                 
                         </div>
             </div>
@@ -268,6 +243,9 @@ input[type=number] {
 
 <script>
 
+$(".multiple").select2({
+    multiple: true,
+});
 
 $(function () {
       var dateToday = new Date();

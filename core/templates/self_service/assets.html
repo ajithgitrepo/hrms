@@ -78,8 +78,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
             </nav>
           </div>
           <div class="col-lg-6 col-5 text-right">
-            {% if role == "Admin" %} 
-             <a href="{% url 'add_asset' %}" class="btn btn-sm btn-neutral">Add</a>
+            {% if role == "Associate" %} 
+             <a href="{% url 'add_asset' %}" class="btn btn-sm btn-neutral">Request</a>
             {% endif %}
           </div>
         </div>
@@ -113,6 +113,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <th>Asset Details</th>
                   <th>Given Date</th>
                   <th>Return Date</th>
+                  <th>Status</th>
                   {% if role == "Admin" %} 
                     <th>Action</th>
                   {% endif %}
@@ -129,6 +130,15 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     
                     <td>{{ass.given_date |date:"d-m-Y" }}</td>
                     <td>{{ass.return_date |date:"d-m-Y" }}</td>
+                    {% if role == "Associate" %} 
+                        {% if ass.is_approved == '1' %}
+                        <td style="color: darkgreen;">Approved</td>
+                        {% elif ass.is_approved == '0'  %}
+                            <td style="color:darkorange">Pending</td>
+                        {% else %}
+                            <td style="color: darkred;">Rejected</td>
+                        {% endif %}
+                    {% endif %}
                     {% if role == "Admin" %} 
                       <td> 
                           <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> -->

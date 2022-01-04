@@ -12,7 +12,7 @@ class ClientForm(forms.ModelForm):
     class Meta:  
         model = Client  
        # fields = "__all__",   "mobile_number",
-        fields =("client_name", "first_name", "last_name",  "email_id","mobile_number","address" )
+        fields =("client_name", "first_name", "last_name",  "email_id","mobile_number" )
         readonly_fields = ['created_at', 'updated_at', 'is_active' ]
 
 

@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from app.forms.EmployeeForm import EmployeeForm
 from app.models.department_model import Department
+from app.views.employee_view import employees
 from app.views.restriction_view import admin_only,role_name
 #from app.forms import UserGroupForm
 
@@ -74,7 +75,9 @@ def add_project(request):
             project_client = request.POST.get('project_client')
             # project_head = request.POST.get('project_head')
             project_manager = request.POST.get('project_manager')
-            project_users = request.POST.get('project_users')
+            project_users = request.POST.getlist('project_users')
+            project_users.append(project_manager)
+            # print(project_users)
             project_cost = request.POST.get('project_cost')
             project_description = request.POST.get('project_description')
 
@@ -83,7 +86,7 @@ def add_project(request):
                                               project_client=Client.objects.get(id = project_client) if project_client else None, 
                                             #   project_head=Employee.objects.get(employee_id = project_head) if project_head else None, 
                                               project_manager=Employee.objects.get(employee_id = project_manager) if project_manager else None,
-                                              project_users=project_users+","+str(project_manager),
+                                              project_users=project_users,
                                               project_cost=project_cost,
                                               project_description=project_description,                                             
                                          )
@@ -110,7 +113,9 @@ def update_project(request, pk):
             project_client = request.POST.get('project_client')
             project_head = request.POST.get('project_head')
             project_manager = request.POST.get('project_manager')
-            project_users = request.POST.get('project_users')
+            project_users = request.POST.getlist('project_users')
+            project_users.append(project_manager)
+            
             project_cost = request.POST.get('project_cost')
             project_description = request.POST.get('project_description')
             obj = Project.objects.filter(id=pk).update( 
@@ -118,7 +123,7 @@ def update_project(request, pk):
                                               project_client=project_client, 
                                             #   project_head=Employee.objects.get(employee_id = project_head) if project_head else None, 
                                               project_manager=Employee.objects.get(employee_id = project_manager) if project_manager else None,
-                                              project_users=project_users+","+str(project_manager),
+                                              project_users=project_users,
                                               project_cost=project_cost,
                                               project_description=project_description,
                                                                  )           
@@ -128,7 +133,7 @@ def update_project(request, pk):
     # hr = Employee.objects.filter(is_active='1',role_id='2')
     manager = Employee.objects.filter(is_active='1', role__name='Manager')
     employee = Employee.objects.filter(is_active='1', role__name='Associate')
-
+    # print(employee)
             
     context_role = {'form':form,'project':project,'clients':client, 'managers':manager, 'employees':employee}
     return render(request, "project/update_project.html", context_role)

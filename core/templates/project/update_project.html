@@ -38,6 +38,18 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    font-size: .875rem;
+    line-height: 1.5rem;
+    display: inline-flex;
+    margin: 0 0 0.25rem 0.25rem;
+    padding: 0 0.5rem;
+    color: #000000 !important;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #eeeff0 !important;
+}
+
 
 </style>
 
@@ -113,19 +125,18 @@ input[type=number] {
                
                 </div>
                 <div class="row">
-                 
                   <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" >Project Users</label>
-                        <select class="form-control select2" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
-                            <option value="" selected >Select</option>
-                            {% for employee in employees %}
-                                <option value="{{ employee.employee_id }}" {% if project.project_users_id == employee.employee_id %} selected {% endif %}> {{ employee.first_name }}({{ employee.employee_id }})</option>
-                            {% endfor %} 
-                          </select>
-                          {{ form.project_users.errors }}
-                      </div>
+                    <div class="form-group">
+                      <label class="form-control-label" >Project Users</label>
+                      <select class="form-control select2 multiple" data-toggle="select" value="{{ form.data.project_users }}" name="project_users">
+                        <option value="" disabled >Select</option>
+                        {% for employee in employees %}
+                            <option value="{{ employee.employee_id }}" {% if employee.employee_id in project.project_users %} selected {% endif %}> {{ employee.first_name }}({{ employee.employee_id }})</option>
+                        {% endfor %} 
+                      </select>
+                      {{ form.project_users.errors }}
                     </div>
+                  </div>
 
                         <div class="col-lg-4">
                             <div class="form-group">
@@ -177,6 +188,10 @@ input[type=number] {
 <script src="/static/build/js/intlTelInput.js"></script>
 
 <script>
+
+$(".multiple").select2({
+    multiple: true,
+});
 
 //function get_country()
 {

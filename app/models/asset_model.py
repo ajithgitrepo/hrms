@@ -26,6 +26,9 @@ class Asset_Detail(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) 
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
+
+    updated_by = models.ForeignKey(Employee, blank=True, null=True, related_name='asset_approve', on_delete= models.SET_NULL)
+    is_approved = models.CharField(max_length=20, blank = True, null = True,default=0)
   
     class Meta:  
         db_table = "asset_details"  

@@ -24,7 +24,7 @@ class Employee(models.Model):
 #     )
 #    user = models.ForeignKey(Group, related_name='role', on_delete=models.CASCADE)
 
-    employee_id = models.CharField(primary_key=True,max_length=20, blank = False, null = False)  
+    employee_id = models.CharField(primary_key=True,max_length=35, blank = False, null = False)  
     first_name = models.CharField(max_length=35 , blank = False, null = False)
     last_name = models.CharField(max_length=35)  
     email_id = models.EmailField(max_length=50)  
@@ -55,7 +55,7 @@ class Employee(models.Model):
     #code_name = models.CharField(max_length=30) 
     #code_num = models.CharField(max_length=30) 
     
-    other_email = models.CharField(max_length=20, blank = True, null = True)  
+    other_email = models.CharField(max_length=35, blank = True, null = True)  
     birth_date = models.DateField( blank = True, null = True)  
     marital_status = models.CharField(max_length=20, choices= boolChoice,  blank = True, null = True)  
     address = models.TextField (blank = True, null = True)  
