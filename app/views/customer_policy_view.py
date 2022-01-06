@@ -261,9 +261,9 @@ def add_custom_leave_type(request):
             monday2 = (date2 - timedelta(days=date2.weekday()))
             week = (monday2 - monday1).days / 7
             leave_no_of_days = float(float(effective_no_of_days) * week)
-        print(leave_no_of_days)
-        print(employee_id)
-        print(leave_type_id)
+        # print(leave_no_of_days)
+        # print(employee_id)
+        # print(leave_type_id)
         obj = Leave_Balance.objects.filter(leave_type_id=leave_type_id, employee_id=employee_id).update(
 
             balance=leave_no_of_days,

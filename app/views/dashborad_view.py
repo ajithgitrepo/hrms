@@ -61,19 +61,6 @@ def index(request):
     # del request.session['checkin_session']
     myDate = datetime.date.today()
    
-    # attn = Attendance.objects.filter(is_active = 1,  date = myDate, is_present = 1, checkin_active = 1, checkout_active = 0 )
-    # # print(attn)
-
-    # for att in attn:
-    #     Attendance.objects.filter(id = att.id ).update(
-    #         checkout_time = datetime.datetime.now().strftime('%H:%M:%S'),
-    #         updated_at = datetime.datetime.now(),
-    #         checkout_active=1, 
-    #     )
-
-    # ip = request.META.get('REMOTE_ADDR')
-    # print(ip)
-
     query = Employee.objects.filter(role__is_active ='1', department__is_active ='1', birth_date= datetime.date.today() )
 
     role = role_name(request)
