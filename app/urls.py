@@ -182,6 +182,13 @@ urlpatterns = [
     path('update_task/<str:pk>/', views.task_view.update_task, name="update_task"),
     path('search/', views.task_view.search, name="search"),
 
+    # customer_policy 
+    path('customer_policy/', views.customer_policy_view.customer_policy, name="customer_policy"),
+    path('get_custom_leave_type', views.customer_policy_view.get_custom_leave_type, name="get_custom_leave_type"),
+    path('add_custom_leave_type', views.customer_policy_view.add_custom_leave_type, name="add_custom_leave_type"),
+    path('get_custom_leave_type_bychange', views.customer_policy_view.get_custom_leave_type_bychange, name="get_custom_leave_type_bychange"),
+
+
     # Location
     path('locations/', views.location_view.locations, name="locations"),
     path('add_location/', views.location_view.add_location, name="add_location"),

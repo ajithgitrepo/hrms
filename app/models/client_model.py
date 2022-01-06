@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 # Create your models here.
 
 class Client(models.Model):  
-    
+    id = models.AutoField(primary_key=True)
     client_name = models.CharField(max_length=30 , blank = False, null = False)
     first_name = models.CharField(max_length=30 , blank = False, null = False)
     last_name = models.CharField(max_length=30, blank = False, null = False)  

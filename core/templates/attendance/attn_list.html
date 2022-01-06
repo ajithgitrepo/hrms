@@ -1,5 +1,7 @@
 {% extends "layouts/base.html" %}
 
+{% load custom_tags %}
+
 {% block title %} Attendance {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -152,8 +154,7 @@
 
 {% block content %}
 
-  <!-- Page plugins -->
- 
+{% role_name as role %}
 
   <!-- Header -->
   <div class="header bg-primary pb-6">
@@ -193,9 +194,19 @@
                 <div class="col-lg-5">
                     <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
                         <option value="general" selected disabled>Select employee</option>
-                        {% for emp in employees %}
-                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
-                        {% endfor %} 
+                        {% if role == "Admin" %}
+                            {% for emp in employees %}
+                                <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                            {% endfor %} 
+                        {% endif %}
+
+                        {% if role == "Manager" %}
+                            <option value="{{ request.user.emp_id }}" {% if request.user.emp_id == emp_id %} selected{% endif %} {% if request.user.emp_id == user.emp_id %} selected{% endif %} > {{ request.user.first_name }} {{ request.user.last_name }}</option>
+                            {% for emp in employees %}
+                                <option value="{{ emp.employee.employee_id }}" {% if emp.employee.employee_id == emp_id %} selected{% endif %} {% if emp.employee.employee_id == user.emp_id %} selected{% endif %} > {{ emp.employee.first_name }} {{ emp.employee.last_name }} </option>
+                            {% endfor %} 
+                        {% endif %}
+
                     </select>
                 </div> 
 

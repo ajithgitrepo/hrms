@@ -2,6 +2,7 @@ from django import http
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
 from django.shortcuts import render, get_object_or_404, redirect
+from app.views.restriction_view import admin_only,role_name
 from django.template import loader
 from django.http import HttpResponse
 from django import template
@@ -11,6 +12,7 @@ from django.utils import timezone
 from app.models import weekend_model
 from app.models.employee_model import Employee
 from app.models.holiday_details_model import Holiday_Detail 
+from app.models.reporting_to_model import Reporting
 from app.models.weekend_model import Weekend
 import datetime 
 from datetime import date, time, datetime, timedelta
@@ -44,8 +46,11 @@ def check_in_attn(request):
                 checkin_location = request.POST.get('checkin_location'),
                 checkin_lat = request.POST.get('checkin_lat'),
                 checkin_lang = request.POST.get('checkin_lang'),
-                employee_id= request.user.emp_id
+                employee_id= request.user.emp_id,
+                checkin_active=1, 
+                checkout_active=0, 
             )
+
             request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             if not Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_leave=1, is_active = 1)).exists():
                 update = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
@@ -67,6 +72,8 @@ def check_in_attn(request):
                     created_at = datetime.now(),
                     updated_at = datetime.now(),
                     is_present = 1,
+                    checkin_active=1, 
+                    checkout_active=0, 
                 )
                 request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             else:
@@ -75,6 +82,8 @@ def check_in_attn(request):
                     checkin_lat = request.POST.get('checkin_lat'),
                     checkin_lang = request.POST.get('checkin_lang'),
                     updated_at = datetime.now(),
+                    checkin_active=1, 
+                    checkout_active=0, 
                 )
                 request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             # print(request.session['checkin_session'])
@@ -118,6 +127,7 @@ def check_out_attn(request):
                 checkout_lat = request.POST.get('checkout_lat'),
                 checkout_lang = request.POST.get('checkout_lang'),
                 updated_at = datetime.now(),
+                checkout_active=1, 
                 
             )
             if 'checkin_session' in request.session:
@@ -145,6 +155,10 @@ def attn_listview(request):
     first_day = now.replace(day = 1)
     last_day = now.replace(day = calendar.monthrange(now.year, now.month)[1])
     # no_of_days = calendar.monthrange(current_year, current_month )
+
+    role = role_name(request)
+    # print(role)
+
     
     dates = []
     date_no = []
@@ -171,7 +185,12 @@ def attn_listview(request):
 
     zipped_data = zip(dates, date_no)
     # print(date_no)
-    employees = Employee.objects.filter(is_active = 1)
+
+    if role =="Admin":
+        employees = Employee.objects.filter(is_active = 1)
+    if role =="Manager":
+        employees = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
+        # print(reporting)
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
 
@@ -215,6 +234,9 @@ def search_listview(request,pk,month):
     last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
     # print(date.strftime("%Y"))
 
+    role = role_name(request)
+    # print(role)
+
     dates = []
     date_no = []
 
@@ -229,7 +251,12 @@ def search_listview(request,pk,month):
 
     zipped_data = zip(dates, date_no)
 #    print(zipped_data)
-    employees = Employee.objects.filter(is_active = 1)
+    
+    if role =="Admin":
+        employees = Employee.objects.filter(is_active = 1)
+    if role =="Manager":
+        employees = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
+        # print(reporting)
 
     present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(present_days)
@@ -442,18 +469,45 @@ def export_excel(request):
     present_color = book.add_format({'font_color': '#3dce4c'})
     comp_off_color = book.add_format({'font_color': '#3d81ce'})
 
+    format1 = book.add_format({'border': 1})
+
+    format2 = book.add_format({'border': 1, 'bold': True })
+
     # print(request.POST.get('type'))
 
-    if request.POST.get('type') == "All":
-        employees = Employee.objects.filter(is_active = 1)
-        
-    if request.POST.get('type') == "Selected":
-        employees = Employee.objects.filter(is_active = 1, employee_id = request.POST.get('employee_id'))
-        
+    role = role_name(request)
+    # print(role)
 
+    if role =="Admin":
+        if request.POST.get('type') == "All":
+            employees = Employee.objects.filter(is_active = 1)
+        
+        if request.POST.get('type') == "Selected":
+            employees = Employee.objects.filter(is_active = 1, employee_id = request.POST.get('employee_id'))
+
+    
+    if role =="Manager":
+        if request.POST.get('type') == "All":
+
+            emp_ids = []
+            emp_ids.append(request.user.emp_id)
+            reporing = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
+
+            for report in reporing:
+                emp_ids.append(report.employee.employee_id)
+
+            # print(emp_ids)    
+
+            employees = Employee.objects.filter(is_active = 1, employee_id__in = emp_ids)
+          
+        if request.POST.get('type') == "Selected":
+            employees = Employee.objects.filter(is_active = 1, employee_id = request.POST.get('employee_id'))
+
+   
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
 
     weekend = Weekend.objects.filter(is_active = 1)
+    
     # print(employees)
 
     row_num = 2
@@ -462,7 +516,8 @@ def export_excel(request):
         # print(emp.employee_id)
 
         sheet = book.add_worksheet(emp.first_name +" "+emp.last_name)
-        sheet.set_column(0, 6, 25)
+        sheet.set_column(0, 3, 25)
+        sheet.set_column(4, 4, 50)
 
         # format = sheet.add_format()
         # format.set_bottom(7)
@@ -477,6 +532,9 @@ def export_excel(request):
         sheet.write('B4', 'Employee ID', bold)
         sheet.write('C3', emp.first_name +" "+emp.last_name)
         sheet.write('C4', emp.employee_id)
+
+        sheet.conditional_format('B3:E4', { 'type' : 'no_blanks' , 'format' : format1})
+        
 
         sheet.write('D3', 'Month / Year', bold)
         sheet.write('E3', date.strftime("%B")+ "/"+date.strftime("%Y"))
@@ -495,13 +553,14 @@ def export_excel(request):
         absent_days = 0
 
         for date in dates:
+
+            sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
+            
             for row_data in month_atten.iterator():
                 
                 date_time_attn = datetime.strptime(str(row_data.date), '%Y-%m-%d')
                 # print(date_time_attn)
 
-                sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
-            
                 if date_time_attn == date:
                     
                     if row_data.is_present == 1:
@@ -548,15 +607,17 @@ def export_excel(request):
 
             row_num += 1
 
+        sheet.conditional_format('A7:E'+str(row_num), { 'type' : 'no_blanks' , 'format' : format1})
+
         row_num +=3
         
         for i in range(2):
             if i ==0:
-                sheet.write('B'+str(row_num), 'Present Days', bold)
-                sheet.write('C'+str(row_num), present_days)
+                sheet.write('B'+str(row_num), 'Present Days', format2)
+                sheet.write('C'+str(row_num), present_days, format2)
             if i ==1:
-                sheet.write('B'+str(row_num), 'Absent Days', bold)
-                sheet.write('C'+str(row_num), absent_days)
+                sheet.write('B'+str(row_num), 'Absent Days', format2)
+                sheet.write('C'+str(row_num), absent_days, format2)
            
             row_num += 1
 

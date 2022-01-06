@@ -207,7 +207,7 @@
           </div>
 
           <div class="attn_div" style="padding:10px;">
-            {% if request.session.checkin_session or today_attn != None and today_attn.checkout_time == None %}
+            {% if request.session.checkin_session or today_attn != None and today_attn.checkin_active == 1 and today_attn.checkout_active == 0 %}
               <form method="POST" class="post-form" action="/check_out_attn/">  
                 {% csrf_token %}  
                 <input type="hidden" name="checkout_lat" id="Hid_checkoutlat"></input>

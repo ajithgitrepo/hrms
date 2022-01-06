@@ -34,5 +34,7 @@ from .client_view import *
 from .project_view import *
 from .timelogs_view import *
 
+from .customer_policy_view import *
+
 
 

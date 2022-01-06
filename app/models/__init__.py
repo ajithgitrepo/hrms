@@ -33,3 +33,4 @@ from .workhome_model import *
 from .client_model import *
 from .project_model import *
 from .timelogs import *
+from .calendar_model import *

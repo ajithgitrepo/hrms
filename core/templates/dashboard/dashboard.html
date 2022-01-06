@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
 
     <style>
+
         .Usrimg
         {
             border-radius: 50%;
@@ -82,6 +83,21 @@
           border-top: 1px solid rgba(0, 0, 0, .1);
         }
 
+        @media (max-width: 600px) {
+          .mobile-add-notes{
+              width: 63% !important;
+            }
+
+            .mobile-check-in{
+              width: 35% !important;
+            }
+
+            .dash-col .dash-body .atlist .lingr {
+                width: 90% !important;
+            }
+        }
+
+        
       
     </style>
 
@@ -208,7 +224,7 @@
             <div id="ZPAtt_dashboard_dayCont">
 
             
-            {% if request.session.checkin_session or today_attn != None and today_attn.checkout_time == None %}
+            {% if request.session.checkin_session or today_attn != None and today_attn.checkin_active == 1 and today_attn.checkout_active == 0 %}
               <form method="POST" class="post-form" action="check_out_attn/">  
                 {% csrf_token %}  
                
@@ -217,16 +233,16 @@
                 <input type="hidden" name="checkout_location" id="Hid_outinlocation"></input>
 
                 <div class="row">
-                <div class="col-lg-8">
-                  <input class="form-control" value="" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
-                 
-                </div>
+                  <div class="col-lg-8 mobile-add-notes">
+                    <input class="form-control" value="" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                  
+                  </div>
 
-                <div class="col-lg-4">
-                    <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
-                    
+                  <div class="col-lg-4 mobile-check-in">
+                      <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
+                      
+                  </div>
                 </div>
-              </div>
                  
               </form>
               {% else %}
@@ -237,12 +253,12 @@
                <input type="hidden" name="checkin_location" id="Hid_inlocation"></input>
              
                 <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 mobile-add-notes">
                   <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
                  
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-4 mobile-check-in">
                     {% if check_leave %}
                         <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></div>
                       
@@ -623,12 +639,10 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
         var login_time = "{{login_time}}";
         var check_in = "{{check_in}}";
     	  var session = "{{session}}";
+        var checkout_active = "{{ today_attn.checkout_active }}"
     	
         // alert(session);
-        if(login_time && session){
-        	  // alert(1);
-            //create date format  
-            // str = login_time.replace(" p.m.", ":00");
+        if(login_time && (session || checkout_active == 0) ){
         
         	str = login_time.split(' ')[0];
         	// alert(str);
@@ -689,11 +703,12 @@ var api_key = '{{GOOGLE_MAPS_API_KEY}}';
         var login_time = "{{login_time}}";
         var session = "{{session}}";
         var checkout = "{{ today_attn.checkout_time }}"
+        var checkout_active = "{{ today_attn.checkout_active }}"
         
         // alert(session);
-        // alert(checkout);
+        // alert(checkout_active);
 
-        if(login_time && (session || checkout == "None") ){
+        if(login_time && (session || checkout_active == 0 ) ){
             //create date format  
             // str = login_time.replace(" p.m.", ":00");
             str = login_time.split(' ')[0];

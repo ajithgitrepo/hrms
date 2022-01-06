@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group
@@ -11,6 +10,7 @@ class Attendance(models.Model):
     employee = models.ForeignKey(Employee, blank=True, null=True, related_name='employee_id_attendance', on_delete= models.SET_NULL)
     is_present = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     is_leave = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    is_half = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     checkin_time = models.TimeField(blank=True, null=True)
     checkout_time = models.TimeField(blank=True, null=True)
 
@@ -21,11 +21,13 @@ class Attendance(models.Model):
     checkout_lat = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
     checkout_lang = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
     is_leave_approved = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
-    is_wfh_approved = models.PositiveSmallIntegerField(default=None, blank=True, null=True)
     leave_approved_by = models.ForeignKey(Employee, blank=True, null=True, related_name='approved_by_attendance', on_delete= models.SET_NULL)
     is_active = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add = True,blank=True, null=True,)
     updated_at = models.DateTimeField(auto_now_add = True,blank = True, null = True)
+    is_wfh_approved = models.PositiveSmallIntegerField(default=None, blank=True, null=True)
+    checkin_active = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    checkout_active = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
 
     class Meta:  
         db_table = "attendance" 

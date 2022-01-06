@@ -123,17 +123,24 @@
 
             {% if role == "Manager" %}   
 
-                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}active{% endif %} {% if request.resolver_match.url_name == "time_logs" %}active{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}active{% endif %} {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} " 
+                <a class="nav-link {% if request.resolver_match.url_name == "leave_request" %}active{% endif %} {% if request.resolver_match.url_name == "reporting" %}active{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}active{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}active{% endif %} {% if request.resolver_match.url_name == "time_logs" %}active{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}active{% endif %} {% if request.resolver_match.url_name == "asset_details" %}active{% endif %} {% if request.resolver_match.url_name == "attn_listview" %}active{% endif %} {% if request.resolver_match.url_name == "search_listview" %}active{% endif %} {% if request.resolver_match.url_name == "customer_policy" %}active{% endif %} " 
                 href="#navbar-leave_approve" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-leave_approve">
                 <i class="fas fa-users text-primary"></i>
                     <span class="nav-link-text">Employees</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}show{% endif %}{% if request.resolver_match.url_name == "time_logs" %}show{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} " id="navbar-leave_approve">
+                <div class="collapse {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "reporting" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %} {% if request.resolver_match.url_name == "workhome_approves" %}show{% endif %}{% if request.resolver_match.url_name == "time_logs" %}show{% endif %} {% if request.resolver_match.url_name == "search_timelog" %}show{% endif %} {% if request.resolver_match.url_name == "asset_details" %}show{% endif %} {% if request.resolver_match.url_name == "attn_listview" %}show{% endif %} {% if request.resolver_match.url_name == "search_listview" %}show{% endif %} {% if request.resolver_match.url_name == "customer_policy" %}show{% endif %} " id="navbar-leave_approve">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a href="/reporting/" class="nav-link {% if request.resolver_match.url_name == "reporting" %}active{% endif %} ">
                             <span class="sidenav-mini-icon"> E </span>
                             <span class="sidenav-normal"> Employees </span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "attn_listview" %}active{% endif %} {% if request.resolver_match.url_name == "search_listview" %}active{% endif %} " href="/attn_listview/">
+                                <span class="sidenav-mini-icon"> A </span>
+                                <span class="sidenav-normal">Attendance</span>
                             </a>
                         </li>
 
@@ -145,8 +152,15 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{% url 'customer_policy' %}" class="nav-link {% if request.resolver_match.url_name == "customer_policy" %}active{% endif %} ">
+                                <span class="sidenav-mini-icon"> LB </span>
+                                <span class="sidenav-normal"> Leave Balance </span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="/workhome_approves/" class="nav-link {% if request.resolver_match.url_name == "workhome_approves" %}active{% endif %} ">
-                            <span class="sidenav-mini-icon"> WFH </span>
+                            <span class="sidenav-mini-icon"> W </span>
                             <span class="sidenav-normal"> WFH Approval </span>
                             </a>
                         </li>
@@ -311,16 +325,16 @@
                     <i class="fas fa-calendar-alt text-primary"></i>
                         <span class="nav-link-text">Leave Tracker</span>
                     </a>
-                    <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "holiday_details" %}show{% endif %} {% if request.resolver_match.url_name == "weekends" %}show{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "add_leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %}  " >
+                    <div id="navbar-leave" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customer_policy" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "holiday_details" %}show{% endif %} {% if request.resolver_match.url_name == "weekends" %}show{% endif %} {% if request.resolver_match.url_name == "add_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "update_weekend" %}show{% endif %} {% if request.resolver_match.url_name == "add_leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "leave_request" %}show{% endif %} {% if request.resolver_match.url_name == "compensatory_request_details" %}show{% endif %}  " >
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                             
-                                <a class="nav-link" href="#leave-settings" data-toggle="collapse" {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %}   role="button" aria-expanded="true" aria-controls="navbar-leave">
+                                <a class="nav-link" href="#leave-settings" data-toggle="collapse" {% if request.resolver_match.url_name == "add_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "customer_policy" %}active{% endif %} {% if request.resolver_match.url_name == "leave_types" %}active{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %}   role="button" aria-expanded="true" aria-controls="navbar-leave">
                                     <span class="sidenav-mini-icon"> S </span>
                                     <span class="sidenav-normal"> Settings </span>
                                 </a>
 
-                                <div id="leave-settings" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "leave_balance" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
+                                <div id="leave-settings" class="collapse {% if request.resolver_match.url_name == "add_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customer_policy" %}show{% endif %} {% if request.resolver_match.url_name == "leave_types" %}show{% endif %} {% if request.resolver_match.url_name == "edit_leave_type" %}show{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}show{% endif %} " >
                                     
                                     <ul>
                                         <li class="nav-item">
@@ -335,12 +349,20 @@
                                                 <span class="sidenav-normal"> Customize Policy </span>
                                             </a>
                                         </li> -->
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a href="{% url 'leave_balance' %}" class="nav-link {% if request.resolver_match.url_name == "leave_balance" %}active{% endif %} {% if request.resolver_match.url_name == "customize_leave_balance" %}active{% endif %} ">
                                                 <span class="sidenav-mini-icon"> LB </span>
                                                 <span class="sidenav-normal"> Leave Balance </span>
                                             </a>
+                                        </li> -->
+
+                                        <li class="nav-item">
+                                            <a href="{% url 'customer_policy' %}" class="nav-link {% if request.resolver_match.url_name == "customer_policy" %}active{% endif %} ">
+                                                <span class="sidenav-mini-icon"> LB </span>
+                                                <span class="sidenav-normal"> Leave Balance </span>
+                                            </a>
                                         </li>
+
                                     </ul>
 
                                 </div>

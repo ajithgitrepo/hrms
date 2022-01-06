@@ -244,7 +244,7 @@ def time_logs(request):
     minutes = seconds // 60
     seconds %= 60
 
-    print("%02d:%02d" % (minutes, seconds))
+    # print("%02d:%02d" % (minutes, seconds))
 
 
     context = {
