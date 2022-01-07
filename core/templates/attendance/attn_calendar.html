@@ -186,6 +186,11 @@ function csrfSafeMethod(method) {
             {
                 $(element).tooltip({title: 'Check - In : '+event.checkin + ' / Check - Out : ' +event.checkout});    
             }
+
+            if(event.title == "Absent - HalfDay / Present")
+            {
+                $(element).tooltip({title: 'Check - In : '+event.checkin + ' / Check - Out : ' +event.checkout});    
+            }
                         
         },
 

@@ -25,7 +25,7 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=35 , blank = False, null = False)
     last_name = models.CharField(max_length=35)  
     email_id = models.EmailField(max_length=50)  
-    mobile_number = models.CharField(max_length=12) 
+    mobile_number = models.CharField(max_length=15) 
     created_at = models.DateTimeField(auto_now_add = True)
     nick_name = models.CharField(max_length=35) 
     emirate_id = models.CharField(max_length=30, blank = True, null = True) 

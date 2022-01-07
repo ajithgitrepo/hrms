@@ -18,7 +18,7 @@ class LeaveRequest(models.Model):
     leave_type = models.ForeignKey(Leave_Type, blank=False, null=True, related_name='leave_type_id_request', on_delete= models.SET_NULL)
     from_date = models.DateField(blank = False, null = False)  
     to_date = models.DateField(blank = False, null = False)  
-    total_days = models.CharField(max_length=12) 
+    total_days = models.FloatField(blank = True, null = True, default=0.0)
     reason = models.TextField (blank = False, null = True)  
     is_approved = models.PositiveSmallIntegerField(default=0)
     is_rejected = models.PositiveSmallIntegerField(default=0) 
@@ -33,7 +33,9 @@ class LeaveRequest(models.Model):
     updated_at = models.DateTimeField(auto_now_add = True,blank = True, null = True)
     is_active = models.PositiveSmallIntegerField(default=1)
     device = models.CharField(max_length=20, blank = True, null = True) 
-    document_url = models.FileField(max_length=500, blank = True, null = True) 
+    document_url = models.FileField(max_length=500, blank = True, null = True)  
+    leave_mode = models.CharField(max_length=20, blank = True, null = True)
+    leave_part = models.CharField(max_length=20, blank = True, null = True)  
 
       
     class Meta:  

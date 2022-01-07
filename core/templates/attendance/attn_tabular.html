@@ -148,7 +148,7 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
-                    width: 120px;
+                    width: 200px;
                     display: block;
                     padding-bottom: 1px;
                 }
@@ -319,18 +319,34 @@
                                         <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
                                         {% endif %}
 
-                                        {% if attn.is_leave == 1 %}
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>
-                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
-                                                <div class="RTC1 absent-bg">
+                                        {% if attn.is_leave == 1 and attn.is_half == 0 %}
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                                    <div class="RTC1 absent-bg">
 
-                                                </div>Absent
-                                            </span>
-                                        </td>
+                                                    </div>Absent
+                                                </span>
+                                            </td>
                                         
+                                        {% endif %}
+
+                                        {% if attn.is_half == 1 %}
+                                           
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / Present">
+                                                    <div class="RTC1 absent-bg">
+
+                                                    </div>Absent - HalfDay / Present
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
                                         {% endif %}
 
                                         {% if attn.is_present == 1 and attn.is_wfh_approved == 1 %}
@@ -339,7 +355,7 @@
                                         <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                         <td>
                                             <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present / WFH">
-                                                <div class="RTC1 present-bg">
+                                                <div class="RTC1 absent-bg">
 
                                                 </div>Present / WFH
                                             </span>

@@ -90,17 +90,26 @@ def attendance(request):
         is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
-    present_days = Attendance.objects.filter(
-        is_active=1, is_present=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    present_days = Attendance.objects.filter(is_active=1, is_present=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(present_days)
 
-    absent_days = Attendance.objects.filter(
-        is_active=1, is_leave=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    half_present = Attendance.objects.filter(is_active=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    present_days = present_days + (half_present * 0.5)
+
+    # print(present_days)
+
+    absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
-    comp_off = Attendance.objects.filter(
-    is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    half_days = Attendance.objects.filter(is_active=1, is_leave=1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(half_days * 0.5)
+
+    absent_days = absent_days + (half_days * 0.5)
     # print(absent_days)
+
+    comp_off = Attendance.objects.filter(is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(comp_off)
 
     zipped_data = zip(dates, date_no)
     # print(date_no)
@@ -178,20 +187,26 @@ def filter_attendance(request, month):
 #    print(zipped_data)
     employees = Employee.objects.filter(is_active=1)
 
-    present_days = Attendance.objects.filter(
-        is_active=1, is_present=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    present_days = Attendance.objects.filter(is_active=1, is_present=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(present_days)
 
-    comp_off = Attendance.objects.filter(
-    is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    half_present = Attendance.objects.filter(is_active=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    present_days = present_days + (half_present * 0.5)
+    # print(present_days)
+
+    comp_off = Attendance.objects.filter(is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(absent_days)
 
-    absent_days = Attendance.objects.filter(
-        is_active=1, is_leave=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    half_days = Attendance.objects.filter(is_active=1, is_leave=1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    # print(half_days * 0.5)
+
+    absent_days = absent_days + (half_days * 0.5)
     # print(absent_days)
 
-    holidays = Holiday_Detail.objects.filter(
-        is_active=1, date__range=[first_day, last_day])
+    holidays = Holiday_Detail.objects.filter(is_active=1, date__range=[first_day, last_day])
 
     weekend = Weekend.objects.filter(is_active=1)
     # print(weekend)

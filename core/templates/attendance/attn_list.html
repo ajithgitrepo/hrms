@@ -290,12 +290,21 @@
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                     {% endif %}
 
-                                    {% if attn.is_leave == 1 %}
+                                    {% if attn.is_leave == 1 and attn.is_half == 0 %}
                                         <td width="145"></td>
                                         <td colspan="1" class="text-center">
                                             <div class="lingr absent-bg"><span>Absent</span></div>
                                         </td>
                                         <td width="145"></td>
+                                    {% endif %}
+
+                                    {% if attn.is_half == 1 %}
+                                        <td width="145">{{ attn.checkin_time }}</td>
+                                        <td colspan="1" class="text-center">
+                                            <div class="lingr absent-bg"><span>Absent - HalfDay / Present</span></div>
+                                        </td>
+                                        <td width="145">{{ attn.checkout_time }}</td>
+                                        <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                     {% endif %}
 
                                     {% if attn.is_present == 1 and attn.is_wfh_approved == 1 %}
