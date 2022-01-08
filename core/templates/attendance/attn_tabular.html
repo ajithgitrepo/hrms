@@ -290,36 +290,36 @@
                                 {% if attn.date|date:"d" == date_no %}
 
 
-                                        {% if attn.is_present == 1 and attn.is_wfh_approved == None %}
-                                        <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
-                                        <td >{{ attn.checkout_time }}</td>
-                                        <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
-                                        <td>
-                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
-                                                <div class="RTC1 present-bg">
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0  %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                    <div class="RTC1 present-bg">
 
-                                                </div>Present
-                                            </span>
-                                        </td>
-                                        <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+                                                    </div>Present
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
                                         {% endif %}
 
                                         {% if attn.is_present == 2 %}
-                                        <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
-                                        <td >{{ attn.checkin_time }}</td>
-                                        <td>{{ attn.checkout_time }}</td>
-                                        <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
-                                        <td>
-                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
-                                                <div class="RTC1 comp-bg">
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkin_time }}</td>
+                                            <td>{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                    <div class="RTC1 comp-bg">
 
-                                                </div>Comp Off
-                                            </span>
-                                        </td>
-                                        <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+                                                    </div>Comp Off
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
                                         {% endif %}
 
-                                        {% if attn.is_leave == 1 and attn.is_half == 0 %}
+                                        {% if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0 %}
                                             <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
@@ -330,17 +330,15 @@
                                                     </div>Absent
                                                 </span>
                                             </td>
-                                        
                                         {% endif %}
 
-                                        {% if attn.is_half == 1 %}
-                                           
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1 %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkout_time }}</td>
                                             <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / Present">
-                                                    <div class="RTC1 absent-bg">
+                                                    <div class="RTC1 present-bg">
 
                                                     </div>Absent - HalfDay / Present
                                                 </span>
@@ -349,20 +347,37 @@
 
                                         {% endif %}
 
-                                        {% if attn.is_present == 1 and attn.is_wfh_approved == 1 %}
-                                        <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
-                                        <td >{{ attn.checkout_time }}</td>
-                                        <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
-                                        <td>
-                                            <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present / WFH">
-                                                <div class="RTC1 absent-bg">
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / WFH">
+                                                    <div class="RTC1 present-bg">
 
-                                                </div>Present / WFH
-                                            </span>
-                                        </td>
-                                        <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+                                                    </div>Absent - HalfDay / WFH
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
                                         {% endif %}
 
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present / WFH">
+                                                    <div class="RTC1 present-bg">
+
+                                                    </div>Present / WFH
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
+                                        {% endif %}
+
+                                     
                                 {% endif %}
 
                             {% endfor %}

@@ -124,7 +124,7 @@ def index(request):
     leave_today = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee__is_active = 1, employee__department__is_active = 1)
     # print(leave_today[0].employee.mobile_number)
 
-    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, is_half = 0, employee_id = request.user.emp_id)
     # print(check_leave)
 
     timelogs = TimeLogs.objects.filter(is_active = 1, date__range=[start_week, end_week], employee_id = request.user.emp_id, project__is_active = 1)

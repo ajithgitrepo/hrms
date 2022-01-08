@@ -38,6 +38,8 @@ def check_in_attn(request):
         # return HttpResponse(request.POST.get('checkin_lat')) 
 
         myDate = datetime.now()
+
+        # Regular day check-in
         if not Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_active = 1)).exists():
            
             insert = Attendance.objects.create(
@@ -60,10 +62,11 @@ def check_in_attn(request):
             # return redirect('home')
             return redirect(request.META.get('HTTP_REFERER'))
 
-            
+        # Work from home and half day leave check-in   
         else:
-
-            if Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_wfh_approved = 1, is_active = 1, checkin_time__isnull=True)).exists():    
+            
+            if Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_wfh_approved = 1, is_active = 1, checkin_time__isnull=True) | Q(employee_id=request.user.emp_id, date=myDate, is_wfh_approved = 0, is_active = 1, checkin_time__isnull=True) | Q(employee_id=request.user.emp_id, date=myDate, is_half = 1, is_active = 1, checkin_time__isnull=True) | Q(employee_id=request.user.emp_id, date=myDate, is_leave = 1, is_leave_approved = 0, is_active = 1, checkin_time__isnull=True) | Q(employee_id=request.user.emp_id, date=myDate, is_wfh_approved = 1, is_half = 1, is_active = 1, checkin_time__isnull=True) ).exists():   
+                
                 update = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
                     checkin_time=datetime.now().strftime('%H:%M:%S'), 
                     checkin_location = request.POST.get('checkin_location'),
@@ -174,16 +177,19 @@ def attn_listview(request):
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
-    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
-    # print(present_days)
-
-    half_present = Attendance.objects.filter(is_active = 1, is_half = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     
-    present_days = present_days + (half_present * 0.5)
+    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    present_days = full_present_days + (half_present_days * 0.5)
 
     # print(present_days)
 
-    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+   
+    absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
     comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
@@ -264,22 +270,19 @@ def search_listview(request,pk,month):
         employees = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=request.user.emp_id) )
         # print(reporting)
 
-    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = pk, date__range=[first_day, last_day]).count()
-    # print(present_days)
-
-    half_present = Attendance.objects.filter(is_active = 1, is_half = 1, employee_id = pk, date__range=[first_day, last_day]).count()
+    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=pk, date__range=[first_day, last_day]).count()
     
-    present_days = present_days + (half_present * 0.5)
-
+    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=pk, date__range=[first_day, last_day]).count()
+    
+    present_days = full_present_days + (half_present_days * 0.5)
     # print(present_days)
 
-    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 0, employee_id=pk, date__range=[first_day, last_day]).count()
-    # print(absent_days)
 
-    half_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 1, employee_id = pk, date__range=[first_day, last_day]).count()
-    # print(half_days * 0.5)
-
-    absent_days = absent_days + (half_days * 0.5)
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=pk, date__range=[first_day, last_day]).count()
+    
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=pk, date__range=[first_day, last_day]).count()
+   
+    absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
 
@@ -337,20 +340,20 @@ def attn_tableview(request):
     month_atten = Attendance.objects.filter(is_active = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
-    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
    
-    half_present = Attendance.objects.filter(is_active = 1, is_half = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     
-    present_days = present_days + (half_present * 0.5)
+    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    present_days = full_present_days + (half_present_days * 0.5)
     # print(present_days)
 
-    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 0, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
-    # print(absent_days)
 
-    half_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
-    # print(half_days * 0.5)
-
-    absent_days = absent_days + (half_days * 0.5)
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+   
+    absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
     comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
@@ -432,20 +435,19 @@ def search_tableview(request,pk,month):
     employees = Employee.objects.filter(is_active = 1)
 
 
-    present_days = Attendance.objects.filter(is_active = 1, is_present = 1, employee_id = pk, date__range=[first_day, last_day]).count()
-   
-    half_present = Attendance.objects.filter(is_active = 1, is_half = 1, employee_id = pk, date__range=[first_day, last_day]).count()
+    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=pk, date__range=[first_day, last_day]).count()
     
-    present_days = present_days + (half_present * 0.5)
+    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=pk, date__range=[first_day, last_day]).count()
+    
+    present_days = full_present_days + (half_present_days * 0.5)
     # print(present_days)
 
-    absent_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 0, employee_id = pk, date__range=[first_day, last_day]).count()
-    # print(absent_days)
 
-    half_days = Attendance.objects.filter(is_active = 1, is_leave = 1, is_half = 1, employee_id = pk, date__range=[first_day, last_day]).count()
-    # print(half_days * 0.5)
-
-    absent_days = absent_days + (half_days * 0.5)
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=pk, date__range=[first_day, last_day]).count()
+    
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=pk, date__range=[first_day, last_day]).count()
+   
+    absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
     comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = pk, date__range=[first_day, last_day]).count()
@@ -482,7 +484,8 @@ def export_excel(request):
         
     # create a workbook in memory
     output = BytesIO()
-
+    myDate = datetime.now()
+    # print(myDate)
     date = datetime.strptime(request.POST.get('month'), "%m-%Y")
     # print(date.strftime("%B"))
     first_day = date.replace(day = 1)
@@ -593,43 +596,59 @@ def export_excel(request):
         absent_days = 0
 
         for date in dates:
-
+            # print(date)
             sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
+
+            db_date = []
             
             for row_data in month_atten.iterator():
                 
                 date_time_attn = datetime.strptime(str(row_data.date), '%Y-%m-%d')
                 # print(date_time_attn)
 
+                db_date.append(date_time_attn)
+
                 if date_time_attn == date:
                     
-                    if row_data.is_present == 1:
+                    if row_data.is_present == 1 and row_data.is_wfh_approved == None and row_data.is_half == 0 or row_data.is_wfh_approved == 0:
                         sheet.write('B'+str(row_num), "Present", present_color)
                         present_days += 1
                     if row_data.is_present == 2:
                         sheet.write('B'+str(row_num), "Comp Off", comp_off_color)
                         present_days += 1
-                    if row_data.is_leave == 1 and row_data.is_half == 0:
+                    if row_data.is_present == 0 and row_data.is_leave == 1 and row_data.is_leave_approved == 1 and row_data.is_half == 0:
                         sheet.write('B'+str(row_num), "Absent", absent_color)
                         absent_days += 1
-                    if row_data.is_leave == 1 and row_data.is_half == 1:
-                        sheet.write('B'+str(row_num), "Absent-HalfDay / Present", absent_color)
+                    if row_data.is_present == 1 and row_data.is_wfh_approved == None and row_data.is_half == 1:
+                        sheet.write('B'+str(row_num), "Absent-HalfDay / Present", present_color)
                         absent_days += 0.5
                         present_days += 0.5
-                        
+                    if row_data.is_present == 1 and row_data.is_wfh_approved == 1 and row_data.is_half == 1:
+                        sheet.write('B'+str(row_num), "Absent-HalfDay / WFH", present_color)
+                        absent_days += 0.5
+                        present_days += 0.5
+                    if row_data.is_present == 1 and row_data.is_wfh_approved == 1 and row_data.is_half == 0:
+                        sheet.write('B'+str(row_num), "Present / WFH", present_color)
+                        present_days += 1
+
                     sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
                     sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
                     sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
+
+            if date not in db_date:
+                if date < myDate:
+                    sheet.write('B'+str(row_num), "Absent / No Record", absent_color)  
                 
+
             for holi in holidays:
                 date_time_holi = datetime.strptime(str(holi.date), '%Y-%m-%d')
                 
                 if date_time_holi == date:
                     sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                     sheet.write('B'+str(row_num), holi.holiday_name	+ '(Holiday)', holiday_color)
-                    sheet.write('C'+str(row_num), '-')
-                    sheet.write('D'+str(row_num), '-')
-                    sheet.write('E'+str(row_num), '-')
+                    # sheet.write('C'+str(row_num), '-')
+                    # sheet.write('D'+str(row_num), '-')
+                    # sheet.write('E'+str(row_num), '-')
 
             for week in weekend:
                 remove_single_quotes = week.week_off.replace("'", "")
@@ -645,12 +664,12 @@ def export_excel(request):
                     if date.strftime("%A") == day_name:
                         sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                         sheet.write('B'+str(row_num), 'Weekend', weekend_color)
-                        sheet.write('C'+str(row_num), '-')
-                        sheet.write('D'+str(row_num), '-')
-                        sheet.write('E'+str(row_num), '-')
+                        # sheet.write('C'+str(row_num), '-')
+                        # sheet.write('D'+str(row_num), '-')
+                        # sheet.write('E'+str(row_num), '-')
             
-
             row_num += 1
+
 
         sheet.conditional_format('A7:E'+str(row_num), { 'type' : 'no_blanks' , 'format' : format1})
 
@@ -723,7 +742,7 @@ def show_cal_view(request):
                                                                                        
     out = []                                                                                                             
     for attn in month_atten:     
-        if attn.is_present == 1 and attn.is_wfh_approved == None:
+        if attn.is_present == 1 and (attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0):
             out.append({                                                                                                     
                 'title': 'Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -733,7 +752,7 @@ def show_cal_view(request):
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3dce4cd9',                                                           
             }) 
-        elif attn.is_present == 1 and attn.is_wfh_approved == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
             out.append({                                                                                                     
                 'title': 'Present / WFH',                                                                                         
                 'id': attn.id,                                                                                              
@@ -744,7 +763,7 @@ def show_cal_view(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_half == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
             out.append({                                                                                                     
                 'title': 'Absent - HalfDay / Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -752,7 +771,17 @@ def show_cal_view(request):
                 'end': attn.date.strftime("%m/%d/%Y"),  
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
-                'color': '#f0989a',                                                           
+                'color': '#3dce4cd9',                                                           
+            })
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+            out.append({                                                                                                     
+                'title': 'Absent - HalfDay / WFH',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3dce4cd9',                                                           
             })
 
         elif attn.is_present == 2:
@@ -871,7 +900,7 @@ def search_attn_time(request):
                                                                             
     out = []                                                                                                             
     for attn in month_atten:     
-        if attn.is_present == 1 and attn.is_wfh_approved == None:
+        if attn.is_present == 1 and (attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0):
             out.append({                                                                                                     
                 'title': 'Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -881,7 +910,7 @@ def search_attn_time(request):
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3dce4cd9',                                                           
             }) 
-        elif attn.is_present == 1 and attn.is_wfh_approved == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
             out.append({                                                                                                     
                 'title': 'Present / WFH',                                                                                         
                 'id': attn.id,                                                                                              
@@ -892,7 +921,7 @@ def search_attn_time(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_half == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
             out.append({                                                                                                     
                 'title': 'Absent - HalfDay / Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -900,9 +929,19 @@ def search_attn_time(request):
                 'end': attn.date.strftime("%m/%d/%Y"),  
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
-                'color': '#f0989a',                                                           
+                'color': '#3dce4cd9',                                                           
             })
- 
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+            out.append({                                                                                                     
+                'title': 'Absent - HalfDay / WFH',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3dce4cd9',                                                           
+            })
+
         elif attn.is_present == 2:
             out.append({                                                                                                     
                 'title': 'Comp Off',                                                                                         
@@ -912,7 +951,8 @@ def search_attn_time(request):
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3d81ced9',                                                           
-            })  
+            }) 
+
         else:
             out.append({                                                                                                     
                 'title': 'Absent',                                                                                         
@@ -920,7 +960,7 @@ def search_attn_time(request):
                 'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
                 'end': attn.date.strftime("%m/%d/%Y"),  
                 'color': '#f0989a',                                                           
-            })   
+            })
 
          
     for holi in all_holidays:                                                                                             
@@ -980,7 +1020,7 @@ def search_attn_date(request):
                                                                                        
     out = []                                                                                                             
     for attn in month_atten:     
-        if attn.is_present == 1 and attn.is_wfh_approved == None:
+        if attn.is_present == 1 and (attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0):
             out.append({                                                                                                     
                 'title': 'Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -990,7 +1030,7 @@ def search_attn_date(request):
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3dce4cd9',                                                           
             }) 
-        elif attn.is_present == 1 and attn.is_wfh_approved == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
             out.append({                                                                                                     
                 'title': 'Present / WFH',                                                                                         
                 'id': attn.id,                                                                                              
@@ -1001,7 +1041,7 @@ def search_attn_date(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_half == 1:
+        elif attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
             out.append({                                                                                                     
                 'title': 'Absent - HalfDay / Present',                                                                                         
                 'id': attn.id,                                                                                              
@@ -1009,9 +1049,19 @@ def search_attn_date(request):
                 'end': attn.date.strftime("%m/%d/%Y"),  
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
-                'color': '#f0989a',                                                           
+                'color': '#3dce4cd9',                                                           
             })
-  
+        elif attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+            out.append({                                                                                                     
+                'title': 'Absent - HalfDay / WFH',                                                                                         
+                'id': attn.id,                                                                                              
+                'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
+                'end': attn.date.strftime("%m/%d/%Y"),  
+                'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
+                'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
+                'color': '#3dce4cd9',                                                           
+            })
+
         elif attn.is_present == 2:
             out.append({                                                                                                     
                 'title': 'Comp Off',                                                                                         
@@ -1021,7 +1071,8 @@ def search_attn_date(request):
                 'checkin': attn.checkin_time.strftime("%H:%M:%S") if attn.checkin_time else "None",
                 'checkout': attn.checkout_time.strftime("%H:%M:%S") if attn.checkout_time else "None", 
                 'color': '#3d81ced9',                                                           
-            })  
+            }) 
+
         else:
             out.append({                                                                                                     
                 'title': 'Absent',                                                                                         
@@ -1029,8 +1080,7 @@ def search_attn_date(request):
                 'start': attn.date.strftime("%m/%d/%Y"),    #, %H:%M:%S                                                      
                 'end': attn.date.strftime("%m/%d/%Y"),  
                 'color': '#f0989a',                                                           
-            })   
-
+            })
          
     for holi in all_holidays:                                                                                             
         out.append({                                                                                                     

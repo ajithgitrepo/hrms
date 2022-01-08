@@ -181,17 +181,42 @@
                                     {% for week in week_atten %}
 
                                         {% if week.date|date:"d" in date_no %}
-                                            {% if week.is_present == 1 %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == None and week.is_half == 0  %}
                                                 <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
                                             {% endif %}
-                                            {% if week.is_leave == 1 and  week.is_leave_approved == 1 %}
-                                                <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
+
+                                            {% if week.is_present == 2 %}
+                                              <div class="lingr comp-bg"><span data-toggle="tooltip" data-original-title="Absent">Comp-Off</span></div>
                                             {% endif %}
-                                            {% if week.is_leave == 1 and  week.is_leave_approved == 0 %}
+
+                                            {% if week.is_present == 0 and week.is_leave == 1 and  week.is_leave_approved == 1 and week.is_half == 0 %}
+                                              <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 1 and week.is_half == 1 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 0 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 1 and week.is_half == 0 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == None and week.is_half == 1 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 0 and week.is_leave == 1 and  week.is_leave_approved == 0 %}
                                                 <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Leave Requested">Leave Requested</span></div>
                                             
                                             {% endif %}
+
                                         {% endif %}
+
 
                                     {% endfor %}
 
