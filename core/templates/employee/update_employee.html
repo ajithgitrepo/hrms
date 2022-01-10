@@ -1,0 +1,741 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Update Employee {% endblock %}
+
+{% load custom_tags %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+  <link rel="stylesheet" href="/static/build/css/demo.css">
+ 
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#mobile_phone{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% role_name as role %}
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+      
+          
+        </div>
+        <div class="col-xl-12 order-xl-1">
+        
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Update Employee </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+
+              {% if role == "Admin" %} 
+                <form method="POST" class="post-form" action="" id="update_form" enctype="multipart/form-data"> 
+              {% else %} 
+                <form method="POST" class="post-form" action="{% url 'update_employee_emp' request.user.emp_id %}" id="update_form" enctype="multipart/form-data"> 
+              {% endif %}
+               
+              {% csrf_token %}  
+                   
+
+            <h6 class="heading-small text-muted mb-4">Basic Info</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                        <span>{{ request.message }}</span>
+                       <!-- {{ form.data }} -->
+                    {% if role == "Admin" %} 
+                    <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                    <input type="text" name="employee_id" value="{{ employee.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
+                    <!-- {{ form.employee_id }} -->
+                    {% else %}
+                      <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                      <input type="text" name="employee_id" readonly value="{{ employee.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
+                    {{ form.employee_id.errors }}
+
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-lg-4"> 
+                  <div class="form-group"> 
+                    <label class="form-control-label" for="input-email">First Name</label>
+                    <input type="text" name="first_name" value="{{ employee.first_name }}" id="first_name"  class="form-control" placeholder="Enter First Name" >
+                    {{ form.first_name.errors }}
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Last Name</label>
+                    <input type="text" name="last_name" value="{{ employee.last_name }}" id="last_name" class="form-control" placeholder="Enter Last Name" >
+                    {{ form.last_name.errors }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-username">Email ID</label>
+                    <input type="text" name="email_id" value="{{ employee.email_id }}" class="form-control" placeholder="Enter Email ID" >
+                    {{ form.email_id.errors }}
+                  </div>
+                </div>
+
+                 
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Nick Name</label>
+                    <input type="text" name="nick_name" value="{{ employee.nick_name }}" id="nick_name" class="form-control" placeholder="Enter Nick Name" >
+                    <!-- {{ form.nick_name.errors }} -->
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Profile</label>
+                      <input type="file" name="profile" value="{{ form.data.profile }}" accept="image/*"class="form-control" >
+                  </div>
+             
+              </div>
+
+            </div>
+            
+            {% if role == "Admin" %} 
+            <hr class="my-4" />
+            
+            <h6 class="heading-small text-muted mb-4">Work</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-address">Department</label>
+                  
+                    <select class="form-control" value="{{ form.data.role }}" name="department">
+                        <option value="">select</option>
+                          {% for dept in department %}
+                              <option value="{{ dept.id }}" {% if employee.department_id ==  dept.id %} selected{% endif %}>  {{ dept.name }}</option>
+                          {% endfor %} 
+                        </select>
+                  
+                    {{ form.department.errors }}
+              </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Role</label>
+                     
+                       <select class="form-control"  name="role">
+                            <option value="">select</option>
+                            {% for role in roles %}
+                                <option value="{{ role.id }}" {% if employee.role_id == role.id %} selected{% endif %} >  {{ role.name }}</option>
+                            {% endfor %} 
+                       </select>
+                       {{ form.role.errors }}
+                       
+                      <!-- <input type="number" name="role" value="{{ form.data.role }}" class="form-control" placeholder="Enter Role"> -->
+                      
+                  </div>
+                  </div>
+              
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-address">Source of hire</label>
+                      <!-- <input name="source_of_hire" value="{{ form.data.source_of_hire }}" class="form-control" placeholder="Enter Source of hire"  type="text"> -->
+                      <select name="source_of_hire" class="form-control" placeholder="Enter Department">
+                          <option value="">select</option>
+                          <option value="Direct" {% if employee.source_of_hire == "Direct" %} selected{% endif %}>Direct</option>
+                          <option value="Referral" {% if employee.source_of_hire == "Referral" %} selected{% endif %}>Referral</option>
+                          <option value="Web" {% if employee.source_of_hire == "Web" %} selected{% endif %}>Web</option>
+                          <option value="Newspaper" {% if employee.source_of_hire == "Newspaper" %} selected{% endif %}>Newspaper</option>
+                          <option value="Advertisment" {% if employee.source_of_hire == "Advertisment" %} selected{% endif %}>Advertisment</option>
+                    </select>
+                    </div>
+                  </div>
+
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-city">Seating Location</label>
+                    <input type="text" name="seating_location" value="{{ employee.seating_location }}" class="form-control" placeholder="Enter Seating Location" >
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-country">Location</label>
+                    <!-- <input type="text" name="location" value="{{ employee.location }}" class="form-control" placeholder="Enter Location" > -->
+                    <select class="form-control" value="{{ form.data.location }}" name="location">
+                    <option value="">select</option>
+                        {% for loc in location %}
+                            <option value="{{ loc.id }}" {% if loc.id == employee.location_id %} selected{% endif %}>  {{ loc.location }}</option>
+                        {% endfor %} 
+                    </select>
+                  
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-country">Title</label>
+                    <input type="text" value="{{ employee.title }}" name="title" class="form-control" placeholder="Enter Title">
+                  </div>
+                </div>
+              </div>
+            
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-city">Date of joining</label>
+                  <!-- <input type="text" name="input-city" value="{{ form.data.date_of_joining }}" class="form-control" placeholder="Enter Date of joining" > -->
+                  <!-- <input class="form-control datepicker" id="date_of_joining1" name="date_of_joining" placeholder="Select date" type="text" value="{{ form.data.date_of_joining }}"> -->
+                  <input type="text" class="form-control startdate" id="date_of_joining1" placeholder="dd-mm-yyyy" autocomplete name="date_of_joining" size="25" autocomplete="" value="{{ employee.date_of_joining|date:'d-m-Y' }}"/>
+                  {{ form.date_of_joining.errors }}
+              </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-country">Employee status</label>
+                  <!-- <input type="text" name="employee_status" value="{{ form.data.employee_status }}" class="form-control" placeholder="Enter Employee status" > -->
+                  <select name="employee_status" class="form-control" placeholder="Enter Department">
+                    <option value="">select</option> 
+                    <option value="Active" {% if employee.employee_status == "Active" %} selected{% endif %}>Active</option>
+                    <option value="Terminated" {% if employee.employee_status == "Terminated" %} selected{% endif %}>Terminated</option>
+                    <option value="Deceased" {% if employee.employee_status == "Deceased" %} selected{% endif %}>Deceased</option>
+                    <option value="Resigned" {% if employee.employee_status == "Resigned" %} selected{% endif %}>Resigned</option>
+                    </select>
+              
+              </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-country">Employee type</label>
+                  <!-- <input type="text" name="employee_type" value="{{ form.data.employee_type }}" class="form-control" placeholder="Enter Employee type"> -->
+                  <select name="employee_type" class="form-control" placeholder="Enter Department">
+                    <option value="">select</option>
+                    <option value="Permanant"  {% if employee.employee_type == "Permanant" %} selected{% endif %}>Permanant</option>
+                    <option value="On Contract"  {% if employee.employee_type == "On Contract" %} selected{% endif %}>On Contract</option>
+                    <option value="Temporary"  {% if employee.employee_type == "Temporary" %} selected{% endif %}>Temporary</option>
+                    <option value="Trainee"  {% if employee.employee_type == "Trainee" %} selected{% endif %}>Trainee</option>
+                    
+              </select>
+              
+              </div>
+              </div>
+            </div>
+          
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-city">Work phone</label>
+                  <input type="text" name="work_phone" value="{{ employee.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-country">Extension</label>
+                  <input type="text" name="extension" value="{{ employee.extension }}" class="form-control" placeholder="Enter Extension" >
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-city">Total experience</label>
+                  <input type="number" name="total_experience" value="{{ employee.total_experience }}" class="form-control" placeholder="Enter Total experience" >
+                </div>
+              </div>
+             
+            </div>
+
+            <div class="row">
+            
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-country">Experience</label>
+                  <input type="number" name="experience" value="{{ employee.experience }}" class="form-control" placeholder="Enter Experience" >
+                </div>
+              </div>
+
+             
+            </div>
+
+            </div>
+        </div>
+        {% endif %}
+
+        {% if role == "Admin" %} 
+        <hr class="my-4" />
+        
+        <h6 class="heading-small text-muted mb-4">Hierarchy Information</h6>
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-4"> 
+              <div class="form-group">
+                <label class="form-control-label" for="input-address">Reporting To</label>
+                {% if role == "Admin" %} 
+                <select class="form-control select2" data-toggle="select" value="{{ form.data.reporting_to }}" name="reporting_to">
+                    <option value="" selected >Select</option>
+                    {% for report in reporting %}
+                        
+                          {% if reporting_to %}
+                            {% for data in reporting_to %}
+                                <option value="{{ report.employee_id }}" {% if data.reporting_id ==  report.employee_id   %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                            {% endfor %}
+                          {% else %} 
+                            <option value="{{ report.employee_id }}"> {{ report.first_name }} {{ report.last_name }}</option>
+                          {% endif %}
+                     
+                    {% endfor %} 
+                </select>
+                {% else %}
+                <select class="form-control select2" data-toggle="select" disabled value="{{ form.data.reporting_to }}" name="reporting_to">
+                  <option value="" selected >Select</option>
+                  {% for report in reporting %}
+                     
+                          {% for data in reporting_to %}
+                              <option value="{{ report.employee_id }}" {% if report.employee_id == data.reporting_id %} selected {% endif %}> {{ report.first_name }} {{ report.last_name }}</option>
+                          {% endfor %} 
+                     
+                  {% endfor %} 
+              </select>
+                {% endif %}
+                
+                {{ form.reporting_to.errors }}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <hr class="my-4" />
+       
+            <select style="display: none;" id="address-country"></select>
+            
+            <h6 class="heading-small text-muted mb-4">Personal</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                
+                <div class="col-md-4">
+                  <div class="form-group">
+                       
+                        <label class="form-control-label" for="input-address">Mobile Phone</label>
+                        <input type="hidden"  id="Hid_mobi"  value="{{ employee.mobile_phone }}" name =""  >
+
+                        <input type="hidden"  id="Hid_code_name"  value="{{ employee.code_name }}" name ="code_name"  >
+                        <input id="mobile_phone" name="mobile_phone"  placeholder="Enter Mobile Phone" type="tel">
+                        <input type="hidden" id="Hid_code_num" name="code_num"  value="{{ employee.code_num }}" ></input>
+                     
+                    {{ form.mobile_phone.errors }}
+                 </div>
+                </div>
+                 
+                <div class="col-md-4"> 
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-address">Other Email</label>
+                      <input name="other_email" value="{{ employee.other_email }}" class="form-control" placeholder="Enter Other Email"  type="text">
+                      {{ form.other_email.errors }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-address">Birth Date</label>
+                      <input name="birth_date" value="{{ employee.birth_date|date:'d-m-Y' }}" class="form-control startdate" autocomplete placeholder="dd-mm-yyyy"  type="text">
+                    </div>
+                  </div>
+
+              </div>
+              
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-city">Marital status</label>
+                    <table>
+                          <tbody>
+                            <tr>
+                              <td> </td>
+                              <td><div class="custom-control custom-radio mb-3">
+                                <input  class="custom-control-input" {% if employee.marital_status == "Single" %} checked{% endif %} name="marital_status"  id="customRadio6" value="Single" type="radio">
+                                <label class="custom-control-label" for="customRadio6">Single</label>&nbsp;&nbsp;&nbsp;
+                              </div></td>
+
+                              <td>
+                                <div class="custom-control custom-radio mb-3">
+                                      <input name="marital_status" class="custom-control-input" {% if employee.marital_status == "Married" %} checked{% endif %}  value="Married" id="customRadio7"  type="radio">
+                                      <label class="custom-control-label" for="customRadio7"> Married</label>
+                                    </div>
+                              </td>
+                            
+                      
+                            </tr>
+                          </tbody>
+                        </table>
+                   
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-country">Address</label>
+                    <input type="text" name="address" value="{{ employee.address }}" class="form-control" placeholder="Enter Address" >
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-country">Tags</label>
+                    <input type="text" value="{{ employee.tags }}" name="tags" class="form-control" placeholder="Enter Tags">
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Signature</label>
+                      <input type="file" name="signature" value="{{ form.data.signature }}" accept="image/*" class="form-control" >
+                  </div>
+             
+              </div>
+
+              <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Passport Number</label>
+                      <input name="passport_num" value="{{ employee.passport_num }}" class="form-control" placeholder="Enter Passport Number"  type="text">
+                     
+                  </div>
+             
+              </div>
+
+              <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Passport Expiry Date</label>
+                      <input name="passport_exp_date" value="{{ employee.passport_exp_date|date:'d-m-Y' }}" class="form-control startdate" autocomplete placeholder="dd-mm-yyyy"  type="text">
+                      
+                  </div>
+             
+              </div>
+
+              <div class="col-lg-4">
+                  <div class="form-group">
+                      <label class="form-control-label" for="input-email">Passport Copy</label>
+                      <input type="file" name="psssport_url" value="{{ employee.psssport_url }}" accept="image/*,application/pdf" class="form-control" >
+                  </div>
+             
+              </div>
+
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-city">Work phone</label>
+                  <input type="text" name="work_phone" value="{{ employee.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                </div>
+              </div>
+
+              </div> 
+            
+          
+  <h6 class="heading-small text-muted mb-4">Summary</h6>
+  <div class="pl-lg-4">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="form-group">
+              <span>{{ request.message }}</span>
+             <!-- {{ form.data }} -->
+          <label  class="form-control-label" for="input-employeeid">Job Description</label>
+          <input type="text" name="job_description" value="{{ employee.job_description }}"   class="form-control" placeholder="Enter job description" >
+          <!-- {{ form.employee_id }} -->
+         
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label class="form-control-label" for="input-country">Title</label>
+          <input type="text" value="{{ employee.title }}" name="title" class="form-control" placeholder="Enter Title">
+        </div>
+      </div>
+      <div class="col-lg-4"> 
+        <div class="form-group"> 
+         
+          <label class="form-control-label" for="input-email">Ask me about/Expertise</label>
+          <input type="text" name="expertise" value="{{ employee.expertise }}"  class="form-control" placeholder="Enter Ask me about/Expertise" >
+         
+        </div>
+      </div>
+     
+      <div class="col-lg-4">
+        <div class="form-group">
+              <label class="form-control-label" for="input-username">Date of exit</label>
+              <input type="text" name="date_of_exit" value="{{ employee.date_of_exit|date:'d-m-Y' }}" autocomplete class="form-control startdate" placeholder="dd-mm-yyyy" >
+         
+        </div>
+      </div>
+   
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label class="form-control-label" for="input-username">Gender</label>
+          <select class="form-control" name="gender">
+              <option value="">select</option>
+              <option value="Male"  {% if employee.gender == "Male" %} selected{% endif %}>Male</option>
+              <option  value="Female"  {% if employee.gender == "Female" %} selected{% endif %}>Female</option>
+              <option  value="Others" {% if employee.gender == "Others" %} selected{% endif %}>Others</option>
+              
+        </select>
+         
+        </div>
+      </div>
+
+       
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label class="form-control-label" for="input-email">About me</label>
+          <input type="text" name="about_me" value="{{ employee.about_me }}" class="form-control" placeholder="Enter About Me" >
+          <!-- {{ form.nick_name.errors }} -->
+        </div>
+      </div>
+
+    
+    
+    </div>
+
+            </div>
+
+              
+            </div>
+        </div>
+
+
+        <div class="card-footer">
+
+            <button type="submit" name="submit_button" id="" class="btn btn-primary">Update</button>
+           
+            <a href="/profile/" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+        </div>
+
+        <hr class="my-4" />
+
+          </div>
+          
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.js" data-modules="effect effect-bounce effect-blind effect-bounce effect-clip effect-drop effect-fold effect-slide"></script> -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+//function get_country()
+{
+      // get the country data from the plugin
+var countryData = window.intlTelInputGlobals.getCountryData(),
+  input = document.querySelector("#mobile_phone"), 
+  addressDropdown = document.querySelector("#address-country");
+  
+// init plugin
+var iti = window.intlTelInput(input, {
+  utilsScript: "../../build/js/utils.js?1613236686837", // just for formatting/placeholders etc
+   // allowDropdown: false,
+     // autoHideDialCode: false,
+     autoPlaceholder: "off",
+      dropdownContainer: document.body,
+    //  excludeCountries: ["us"],
+     // formatOnDisplay: false,
+      geoIpLookup: function(callback) {
+        $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+          var countryCode = (resp && resp.country) ? resp.country : "";
+        //  alert(countryCode);
+        var c_code = $('#Hid_code_name').val();   // $('#mobile_phone').val('rr');
+          callback(c_code);
+        });
+      },
+      hiddenInput: "full_number",
+      initialCountry: "auto",
+      localizedCountries: { 'de': 'Deutschland' },
+     // nationalMode: false,
+     // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+      placeholderNumberType: "MOBILE",
+     // preferredCountries: ['cn', 'jp'],
+      separateDialCode: true,
+      utilsScript: "build/js/utils.js",
+});
+
+
+setTimeout(function () {
+      var mobi_num =  $('#Hid_mobi').val();
+      $('#mobile_phone').val(mobi_num);
+   }, 1000);
+
+// populate the country dropdown
+for (var i = 0; i < countryData.length; i++) {
+  var country = countryData[i];
+  var optionNode = document.createElement("option");
+  optionNode.value = country.iso2;
+  var textNode = document.createTextNode(country.name);
+  optionNode.appendChild(textNode);
+  addressDropdown.appendChild(optionNode);
+}
+// set it's initial value
+addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// listen to the telephone input for changes
+input.addEventListener('countrychange', function(e) {
+  addressDropdown.value = iti.getSelectedCountryData().iso2;
+  $('#Hid_code_name').val(iti.getSelectedCountryData().iso2);
+ //// alert(iti.getSelectedCountryData().iso2);
+  var titleStr    = $('.iti__selected-flag').attr("title");
+             var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+             $('#Hid_code_num').val(titleStr);
+          ///  alert(titleStr);
+});
+
+// listen to the address dropdown for changes
+addressDropdown.addEventListener('change', function() {
+  iti.setCountry(this.value);
+});
+$(window).bind("load", function() {
+ // code here
+//  $('#mobile_phone').val('rr');
+});
+window.addEventListener("DOMContentLoaded", function(){
+     // $('#mobile_phone').val('rr');
+});
+//       $('.iti iti--container').on('click','li', function(event){
+//             alert("sr");
+//     event.preventDefault();
+//     console.log(event.currentTarget);
+// });
+ 
+
+// $(".iti iti--allow-dropdown iti--separate-dial-code").click( function() {  
+//       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+           
+//     // this will fire when you click edit
+//     // hide the view button here and upon submit, show it again
+//     // like $("#viewclick").hide() or $("#viewclick").fadeOut()
+//   });
+
+      // $('#phone').change(function(e) {  
+      //       var titleStr    = $('.iti__selected-flag').attr("title");
+      //       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+      //       alert(titleStr);
+      //        });
+// $('#phone').on('input',function(e){
+//  alert('Changed!')
+// });
+}
+
+$(function() {
+
+      // $( ".startdate" ).datepicker({
+      //   dateFormat: 'dd-mm-yy',//check change
+      //   changeMonth: true,
+      //   changeYear: true
+      // });
+
+        $(".startdate").datepicker({
+          format: 'dd-mm-yyyy',  autoclose: true,
+        });
+});
+
+$("#update_form").submit(function(e) {
+
+  // e.preventDefault(); // avoid to execute the actual submit of the form.
+
+  f_name = $("#first_name").val();
+  l_name = $("#last_name").val();
+  n_name = $("#nick_name").val();
+
+  if (!/^[a-zA-Z\s]+$/g.test(f_name)) {
+    alert("First Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(l_name)) {
+    alert("Last Name should be only alphabatics..");
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/g.test(n_name)) {
+    alert("Nick Name should be only alphabatics..");
+    return false;
+  }
+
+
+});
+
+</script>
+
+{% endblock javascripts %}
+ 

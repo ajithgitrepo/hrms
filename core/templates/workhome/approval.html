@@ -1,0 +1,282 @@
+{% extends "layouts/base.html" %}
+
+{% load custom_tags %}
+
+{% block title %} Work From Home {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% role_name as role %}
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">WFH Approval</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">All Work From Home Approval</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <!-- <a href="{% url 'add_workhome_request' %}" class="btn btn-sm btn-neutral">Request</a> -->
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+<div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Work From Home Approval</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee Name</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reason</th>
+                  <th>Status </th>
+                 
+                </tr>
+              </thead>
+             
+              <tbody>
+                {% if role == "Admin" %}
+                  {% for approve in workhome_approves %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{approve.employee.first_name}}({{approve.employee_id}})</td>
+                      <td>{{approve.start_date}}</td>
+                      <!-- |date:"d-m-Y"  -->
+                      <td>{{approve.end_date}}</td>
+                      <td>{{approve.reason}}</td>
+                      {% if approve.is_approved == '1' %}
+                      <td style="color: darkgreen;">Approved</td>
+                      {% elif approve.is_approved == '0'  %}
+                      <td style="color:darkorange">Pending</td>
+                      {% else %}
+                      <td style="color: darkred;">Rejected</td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+
+                {% if role == "Manager" %}
+                  {% for approve in workhome_approves %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{approve.employee.first_name}}({{approve.employee_id}})</td>
+                      <td>{{approve.start_date}}</td>
+                      <!-- |date:"d-m-Y"  -->
+                      <td>{{approve.end_date}}</td>
+                      <td>{{approve.reason}}</td>
+                      <td>
+                          <select class="form-control wfh_status" name="wfh_status" id="{{ approve.id }}">
+                              <option value="0" {% if approve.is_approved == '0' %} selected{% endif %} >Pending</option>
+                              <option value="1" {% if approve.is_approved == '1' %} selected{% endif %} >Approve</option>
+                              <option value="2" {% if approve.is_approved == '2' %} selected{% endif %} >Reject</option>
+                          </select>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+<script type="text/javascript">
+     
+    
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Are you sure you want to delete this project?');
+    }) 
+
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            // dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    filename: function(){
+                        var dt = new Date();
+                        dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+                        return 'employees-' + dt;
+                    },
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        },
+                        columns: [1, 2, 3, 4, 5, 6],
+                    },
+                },
+                //'colvis'
+            ]
+        } );
+    
+    } );
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $('.wfh_status').on('change', function() {
+        value = this.value;
+        id = $(this).attr("id");
+        // alert(id);
+
+        swal({
+            title: 'Are you sure?',
+            text: "You want to change status!",
+            type: 'warning',
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, change it!',
+            cancelButtonClass: 'btn btn-secondary'
+        }).then((result) => {
+            if (result.value) {
+                // Show confirmation
+                $.ajax({  
+                type: "POST",  
+                url: "/change_wfh_status/",  
+                data: {value : value, id : id, csrfmiddlewaretoken : csrftoken},
+                success: $.proxy(function(data) {
+                    // alert(data);
+                    
+                    if(data == 1){
+                     
+                        swal({
+                            title: 'Changed!',
+                            text: 'WFH status has been updated.',
+                            type: 'success',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-primary'
+                        });
+                    }
+
+                    if(data == 0){
+                     
+                        swal({
+                            title: 'Error!',
+                            text: 'Someting went wrong.',
+                            type: 'error',
+                            buttonsStyling: false,
+                            confirmButtonClass: 'btn btn-primary'
+                        });
+                    }
+                   
+        
+                })
+                });
+
+            }
+        })
+
+    });
+</script>
+
+
+{% endblock javascripts %}
+
+

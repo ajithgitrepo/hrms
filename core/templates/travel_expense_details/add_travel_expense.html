@@ -1,0 +1,789 @@
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+
+{% load custom_tags %}
+
+{% block title %} Travel Expense {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    /*margin-bottom: 30px;*/
+    background-color: #ffffff;
+}
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+i.fas.fa-plus-circle {
+      color: blue;
+}
+
+i.fas.fa-times-circle {
+      color: red;
+}
+
+/* The heart of the matter */ 
+.testimonial-group > .row1 {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.testimonial-group > .row1 > .col-4 {
+  display: inline-block;
+}
+
+/* .testimonial-group > .dynamin_work_exp_form > .row {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.testimonial-group > .dynamin_work_exp_form > .row > .col-4 {
+      display: inline-block;
+} */
+
+/* Decorations
+.col-4 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
+.col-4:nth-child(3n+1) { background: #c69; }
+.col-4:nth-child(3n+2) { background: #9c6; }
+.col-4:nth-child(3n+3) { background: #69c; } */
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+{% role_name as role %}
+
+    <!-- Header -->
+    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      
+      <span class="mask bg-gradient-default opacity-8"></span>
+    
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
+            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+            
+         
+        </div>
+        <div class="col-xl-12 order-xl-1">
+         
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Add Travel Expense </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                {% csrf_token %}  
+                   
+
+                <h6 class="heading-small text-muted mb-4">Travel Expense</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <!--<div class="col-lg-4">
+                      <div class="form-group">
+                            <span>{{ request.message }}</span>
+                           
+                        <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                        <input type="text" name="employee_id" value="{{ form.data.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
+                     
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div>-->
+                    {% if role == 'Associate' %}
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Employee ID</label>
+                        <input  class="form-control"  type="text" name="employee" readonly value="{{ request.user.emp_id}}"  >
+
+                        
+                      {{ form.errors.employee  }}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Travel ID</label>
+                        <select  class="form-control" id="ddl_travel_id" value="{{ form.data.travel  }}" name="travel">
+                            <option value="">select</option>
+                            {% for tvl in travel_emp %}
+                                <option value="{{ tvl.travel_id }}" {% if tvl.travel_id == form.data.travel %} selected{% endif %}>  {{ tvl.travel_id }}</option>
+                            {% endfor %}
+                      </select>
+                      {{ form.errors.travel  }}
+                      </div>
+                    </div>
+
+                    {% endif %}
+                    {% if role == 'Admin' %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Employee ID</label>
+                          <select  class="form-control" value="{{ form.data.employee }}" name="employee">
+                              <option value="">select</option>
+                              {% for emp in employees %}
+                                  <option value="{{ emp.employee_id  }}" {% if emp.employee_id == form.data.employee %} selected{% endif %}>  {{ emp.first_name }} {{ emp.last_name }}  ({{ emp.employee_id }})</option>
+                              {% endfor %} 
+                        </select>
+                        {{ form.errors.employee  }}
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Travel ID</label>
+                          <select  class="form-control" id="ddl_travel_id" value="{{ form.data.travel  }}" name="travel">
+                              <option value="">select</option>
+                              {% for tvl in travels %}
+                                  <option value="{{ tvl.travel_id }}" {% if tvl.travel_id == form.data.travel %} selected{% endif %}>  {{ tvl.travel_id }}</option>
+                              {% endfor %}
+                        </select>
+                        {{ form.errors.travel  }}
+                        </div>
+                      </div>
+
+                        <div class="col-md-6">
+                              <div class="form-group">
+                                    <label class="form-control-label" for="input-address">Place of visit</label>
+                                    <input type="text" id="place_of_visit" class="form-control" placeholder="" >
+                                <!-- {{ form.mobile_phone.errors }} -->
+                             </div>
+                            </div>
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label class="form-control-label" for="input-username">Purpose of visit</label>
+                                <input type="text" id="purpose_of_visit"  class="form-control" placeholder="" >
+                                <!-- {{ form.email_id.errors }} -->
+                              </div>
+                            </div>
+                 
+                      {% endif %}
+                     
+                </div>
+
+                <!-- <div class="row">
+                  
+                  
+        </div> -->
+                <hr class="my-4" />
+              
+               
+                <div class="pl-lg-4">
+                  
+               
+             
+                <h6 class="heading-small text-muted mb-4 zpcont-title">Expense<a class="add-one IC-plus-big"><i class="fas fa-plus-circle"></i></a></h6> 
+
+                      <div class="pl-lg-4">
+
+                        <div class="container testimonial-group" >
+                              <div class="row row1 text-center" >
+                 
+                    <div class="col-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-address">Description</label>
+                        <input name="description" id="description" class="form-control" placeholder=""  type="text">
+                      </div>
+                    </div>
+                     
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label example-date-input" for="input-address"> Date</label>
+                          <input name="date" id="date" class="form-control startdate" placeholder=""  type="text">
+                        </div>
+                      </div>
+
+                       <div class="col-4">
+                      <div class="form-group">
+                        <label class="form-control-label example-date-input" for="input-city">Ticket</label>
+                        <input name="ticket" type="text" id="ticket" class="form-control" placeholder="" value="">
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Lodging</label>
+                        <input name="lodging" type="text" id="lodging" class="form-control" placeholder="" value=""></input>
+
+                      </div>
+                    </div>
+
+                   <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Boarding</label>
+                          <input type="text" name="boarding"  id="boarding" class="form-control" placeholder="" value=""></input>
+  
+                        </div>
+                      </div>
+
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Phone</label>
+                          <input type="text" name="phone"  id="phone" class="form-control" placeholder="" value=""></input>
+  
+                        </div>
+                      </div>
+
+                       <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Local conveyance</label>
+                          <input name="local_conveyance"  id="local_conveyance" class="form-control" placeholder="" value=""></input>
+  
+                        </div>
+                      </div>
+
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Incidentals</label>
+                          <input type="text" name="incidentals" rows="1" id="incidentals" class="form-control" placeholder="" value=""></input>
+  
+                        </div>
+                      </div>
+
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Others</label>
+                          <input type="text" name="others" id="others" class="form-control" placeholder="" value=""></textarea>
+  
+                        </div>
+                      </div>
+
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Currency</label>
+                          <input name="currency" type="text" id="currency" class="form-control" placeholder="" value=""></input>
+  
+                        </div>
+                      </div>
+                      
+                      <div class="dynamin_work_exp_form" >
+
+
+                  </div> 
+
+                  </div>
+
+                   
+
+                 
+            
+            
+            
+            </div></div>
+                 
+             </div>
+
+            
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <a type="button" href="/travel_expense_details/" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+            </div>
+
+            <hr class="my-4" />
+
+              </div>
+              
+              
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+
+$(function () {
+      var dateToday = new Date();
+           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+           $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,});
+         
+});
+
+ 
+
+
+    $(document).ready(function() {
+      // initialise Datetimepicker and Sliders
+    //  md.initFormExtendedDatetimepickers();
+});
+
+var html = '';
+    var html2 = '';
+    var html3 = '';
+
+    html +='<div class="row text-center closest_row" style="display: block;white-space: nowrap;" >';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+        html +='<input name="description" id="description" class="form-control" placeholder=""  type="text">';
+      html +='</div>';
+    html +='</div>';
+     
+    html +='<div class="col-4" style="display: inline-block;">';
+        html +='<div class="form-group">';
+          html +='<input name="date" id="date" class="form-control startdate" placeholder=""  type="text">';
+        html +='</div>';
+      html +='</div>';
+
+      html +='<div class="col-4" style="display: inline-block;">';
+        html +='<div class="form-group">';
+          html +='<input name="ticket" id="ticket" class="form-control" placeholder=""  type="text">';
+        html +='</div>';
+      html +='</div>';
+
+      html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+        html +='<input name="lodging" type="text" id="lodging" class="form-control" placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+        html +='<input type="text" name="boarding"  id="boarding" class="form-control" placeholder="" value=""></inut>';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+            html +='<input name="phone" type="text" id="phone" class="form-control" placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+        html +='<textarea name="local_conveyance" rows="1" id="local_conveyance" class="form-control" placeholder="" value=""></textarea>';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+            html +='<input name="incidentals" type="text" id="incidentals" class="form-control" placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+            html +='<input name="others" type="text" id="others" class="form-control " placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+
+    html +='<div class="col-4" style="display: inline-block;">';
+      html +='<div class="form-group">';
+            html +='<input name="currency" type="text" id="currency" class="form-control " placeholder="" value="">';
+      html +='</div>';
+    html +='</div>';
+
+//     html +='<div class="col-4" style="display: inline-block;">';
+//       html +='<div class="form-group">';
+//             html +='<input name="to_date" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+//       html +='</div>';
+//     html +='</div>';
+
+//     html +='<div class="col-4" style="display: inline-block;">';
+//       html +='<div class="form-group">';
+//             html +='<input name="to_date" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+//       html +='</div>';
+//     html +='</div>';
+
+     html +='<div class="col-2" style="display: inline-block;">';
+      html +='<div class="form-group">';
+         html +='<p class="delete"><i class="fas fa-times-circle"></i></p>';
+      html +='</div>';
+    html +='</div>';
+    // html +='<div class="col-lg-2">';
+    //   html +='<div class="form-group">';
+    //     html +='<input name="relevance" type="text" id="input-postal-code" class="form-control" placeholder="">';
+    //   html +='</div>';
+    // html +='</div>';
+    html +='</div>';
+
+
+   /* html2 +='<div class="row closest_row">';
+                 
+      html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="school_name" id="input-address" class="form-control" placeholder=""  type="text">';
+          html2 +='</div>';
+        html2 +='</div>';
+         
+        html2 +='<div class="col-4">';
+            html2 +='<div class="form-group">';
+              html2 +='<input name="degree" id="input-address" class="form-control" placeholder=""  type="text">';
+            html2 +='</div>';
+          html2 +='</div>';
+
+          html2 +='<div class="col-4">';
+            html2 +='<div class="form-group">';
+              html2 +='<input name="field" id="input-address" class="form-control" placeholder=""  type="text">';
+            html2 +='</div>';
+          html2 +='</div>';
+
+          html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="date_of_completion" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html2 +='</div>';
+        html2 +='</div>';
+        
+        html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="date_of_completion" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html2 +='</div>';
+        html2 +='</div>';
+
+        html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="date_of_completion" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html2 +='</div>';
+        html2 +='</div>';
+
+        html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<input name="date_of_completion" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html2 +='</div>';
+        html2 +='</div>';
+      
+        html2 +='<div class="col-4">';
+          html2 +='<div class="form-group">';
+            html2 +='<textarea name="interests" rows="1" id="input-country" class="form-control" placeholder="" value=""></textarea>';
+
+          html2 +='</div>';
+        html2 +='</div>';
+        
+      html2 +='</div>';
+
+      html3 +='<div class="row closest_row">';
+                 
+            html3 +='<div class="col-4">';
+          html3 +='<div class="form-group">';
+            html3 +='<input name="dependent_name" id="input-address" class="form-control" placeholder=""  type="text">';
+          html3 +='</div>';
+        html3 +='</div>';
+         
+        html3 +='<div class="col-4">';
+            html3 +='<div class="form-group">';
+             html3 +=' <input name="relationship" id="input-address" class="form-control" placeholder=""  type="text">';
+            html3 +='</div>';
+          html3 +='</div>';
+
+
+          html3 +='<div class="col-4">';
+          html3 +='<div class="form-group">';
+            html3 +='<input name="date_of_birth" type="text" id="input-city" class="form-control startdate" placeholder="" value="">';
+          html3 +='</div>';
+        html3 +='</div>';
+     
+        html3 +='<div class="col-4">';
+          html3 +='<div class="form-group">';
+                html3 +='<p class="delete"><i class="fas fa-times-circle"></i></p>';
+            html3 +='</div>';
+       html3 +=' </div>';
+
+      html3 +='</div>'; */
+
+$('.add-one').click(function(){
+
+     
+
+// $(this).closest('td').find('.dynamin_work_exp_form').append(html);
+$('.dynamin_work_exp_form').append(html);
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+attach_delete(); 
+
+});
+
+$('.add-two').click(function(){
+
+     // alert('s');
+
+// $(this).closest('td').find('.dynamin_education_form').append(html);
+$('.dynamin_education_form').append(html2);
+
+attach_delete();
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+});
+
+$('.add-three').click(function(){
+
+      
+
+// $(this).closest('td').find('.dynamin_education_form').append(html);
+$('.dynamin_dependent_form').append(html3);
+
+attach_delete();
+
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+});
+
+function attach_delete(){ 
+  $('.delete').off();
+   $('.delete').click(function(){ //alert();
+    //alert("click");
+    $(this).closest('.closest_row').remove();
+   
+});
+
+}
+
+// $(function() {
+
+// $( ".startdate" ).datepicker({
+// dateFormat: 'dd-mm-yy',//check change
+// changeMonth: true,
+// changeYear: true
+// });
+// });
+
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$('#ddl_travel_id').on('change', function() {
+ // alert(  );
+  $id = this.value;
+  $.ajax({  
+            type: "POST",  
+            url: "/snippets_travel_details_expense_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"travel_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        //  alert(item.fields.name);
+                        if(check == false)
+                        {
+                              check = true;
+                             // var name = item.fields.first_name + " " + item.fields.last_name; 
+                            //  var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                            //  $('#employee_id_other').html(item.pk);
+                            //  $('#first_name_other').html(name);
+                            //alert(item.fields.purpose_of_visit);
+                            $purp = "Not Mentioned";
+                            if(item.fields.purpose_of_visit !== null && item.fields.purpose_of_visit !== "")
+                            $purp = item.fields.purpose_of_visit;
+
+                            $plac = "Not Mentioned";
+                            if(item.fields.place_of_visit !== null && item.fields.place_of_visit !== "")
+                            $plac = item.fields.place_of_visit;
+
+                              $('#purpose_of_visit').val($purp);
+                              $('#place_of_visit').val($plac);
+                              
+                        }
+                   //now you can access properties using dot expected_duration_days
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+
+});
+
+
+
+
+</script>
+
+{% endblock javascripts %}
+ 

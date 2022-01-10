@@ -1,0 +1,1047 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% load custom_tags %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+    <style>
+
+        .Usrimg
+        {
+            border-radius: 50%;
+            border-style: solid;
+            border-width: 1px;
+            padding: 2px;
+            width: 40px;
+        }
+
+        .Usrimg-leave{
+            border-radius: 50%;
+            border-style: solid;
+            border-width: 2px;
+            padding: 5px;
+            width: 40px;
+            text-align: center;
+            height: 40px;
+        }
+
+        .hide-plus{
+            display: none;
+        }
+
+        .leaves-hove:hover .hide-plus {
+            display: block;
+        }
+
+        .hdaydiv {
+            display: flex;
+            height: 50px;
+            align-items: center;
+            width: 100%;
+            /* padding: 0 20px; */
+        }
+
+        .hdname {
+            float: left;
+            width: calc(100% - 65px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-bottom: 1px;
+        }
+
+        .hdate {
+            float: right;
+            width: 65px;
+            text-align: right;
+        }
+
+        .hdaydiv:after {
+            content: "";
+            clear: both;
+            overflow: hidden;
+            display: table;
+        }
+
+        .dash-body {
+            /* height: 300px; */
+            overflow-y: auto;
+            padding: 0px 0px 0px 0px;
+        }
+
+        hr {
+          margin-top: 0.5em !important;
+          margin-bottom: 0.5em !important;
+          border: 0;
+          border-top: 1px solid rgba(0, 0, 0, .1);
+        }
+
+        @media (max-width: 600px) {
+          .mobile-add-notes{
+              width: 63% !important;
+            }
+
+            .mobile-check-in{
+              width: 35% !important;
+            }
+
+            .dash-col .dash-body .atlist .lingr {
+                width: 90% !important;
+            }
+        }
+
+        
+      
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% role_name as role %}
+
+    <!-- Header -->
+    <div class="header pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 d-inline-block mb-0">Dashboard</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Alternative</li> -->
+                </ol>
+              </nav>
+            </div>
+            <!-- <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral">New</a>
+              <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      
+      <div class="card-deck flex-column flex-xl-row">
+
+        
+        <!-- Progress track -->
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-12">
+                <span class="h3 mb-0">Attendance</span>
+                
+                <a onclick="Attendance_week(this);" id="remove_sel_week" class="IC-week float-right margin-right">
+                    <i class="fas fa-calendar-week" data-toggle="tooltip" data-original-title="Week View"></i>
+                </a>
+                
+                <a onclick="Attendance_today(this);" id="remove_sel_today" class="IC-today float-right margin-right sel">
+                    <i class="far fa-calendar-check" data-toggle="tooltip" data-original-title="Today View"></i>
+                </a>
+               
+              </div>
+            </div>
+          </div>
+          <!-- Card body -->
+          <div class="card-body card-body-attn">
+
+              <div class="zp-sm-4" name="ATTENDANCE" widget="true" widid="57753000000210063" loaded="true">
+                <div class="dash-col  ">
+                
+                   <div id="ATTENDANCE" class="dash-body ">
+                      <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                         <tbody>
+                            
+                            {% now "d" as todays_date %}
+
+                            {% for days,date_no,dates in weekdays %}
+
+                            <tr>
+                                {% if todays_date == date_no %}
+                                    <td width="75" class="sel">{{ days }} <span> {{ date_no }} </span></td>
+                                {% else %}
+                                    <td width="75" class="">{{ days }} <span> {{ date_no }} </span></td>
+                                {% endif %}
+                                
+                                <td colspan="3">
+                                    {% for week in week_atten %}
+
+                                        {% if week.date|date:"d" in date_no %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == None and week.is_half == 0  %}
+                                                <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 2 %}
+                                              <div class="lingr comp-bg"><span data-toggle="tooltip" data-original-title="Absent">Comp-Off</span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 0 and week.is_leave == 1 and  week.is_leave_approved == 1 and week.is_half == 0 %}
+                                              <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Absent">Absent</span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 1 and week.is_half == 1 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 0 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == 1 and week.is_half == 0 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 1 and week.is_wfh_approved == None and week.is_half == 1 %}
+                                              <div class="lingr present-bg"><span><small data-toggle="tooltip" data-original-title="First CheckIn">{{ week.checkin_time }}</small> - <small data-toggle="tooltip" data-original-title="Last CheckOut">{{ week.checkout_time }}</small></span></div>
+                                            {% endif %}
+
+                                            {% if week.is_present == 0 and week.is_leave == 1 and  week.is_leave_approved == 0 %}
+                                                <div class="lingr absent-bg"><span data-toggle="tooltip" data-original-title="Leave Requested">Leave Requested</span></div>
+                                            
+                                            {% endif %}
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {% for holi in holidays %}
+                                        {% if holi.date|date:"d" in date_no %}
+                                            <div class="lingr holyday-bg"><span data-toggle="tooltip" data-original-title="Absent">{{ holi.holiday_name }}</span></div>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% for week in weekend %}
+                               
+                                        {% if dates|date:'l'|lower in week.week_off %}
+                                        
+                                            <div class="lingr weekend-bg"><span data-toggle="tooltip" data-original-title="Weekend">Weekend</span></div>
+
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+
+                                </td>
+
+                            </tr>
+                            
+                            {% endfor %}
+
+                         </tbody>
+                      </table>
+            <div id="ZPAtt_dashboard_dayCont">
+
+            
+            {% if request.session.checkin_session or today_attn != None and today_attn.checkin_active == 1 and today_attn.checkout_active == 0 %}
+              <form method="POST" class="post-form" action="check_out_attn/">  
+                {% csrf_token %}  
+               
+                <input type="hidden" name="checkout_lat" id="Hid_checkoutlat"></input>
+                <input type="hidden" name="checkout_lang" id="Hid_checkoutlang"></input>
+                <input type="hidden" name="checkout_location" id="Hid_outinlocation"></input>
+
+                <div class="row">
+                  <div class="col-lg-8 mobile-add-notes">
+                    <input class="form-control" value="" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                  
+                  </div>
+
+                  <div class="col-lg-4 mobile-check-in">
+                      <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
+                      
+                  </div>
+                </div>
+                 
+              </form>
+              {% else %}
+              <form method="POST" class="post-form" action="check_in_attn/">  
+                {% csrf_token %} 
+                <input type="hidden" name="checkin_lat" id="Hid_checkinlat" value="00.0000000"></input>
+                <input type="hidden" name="checkin_lang" id="Hid_checkinlang" value="00.0000000"></input>
+               <input type="hidden" name="checkin_location" id="Hid_inlocation"></input>
+             
+                <div class="row">
+                <div class="col-lg-8 mobile-add-notes">
+                  <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
+                 
+                </div>
+
+                <div class="col-lg-4 mobile-check-in">
+                    {% if check_leave %}
+                        <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></div>
+                      
+                    {% else %}
+                        <button class="btn-sm btn-success float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></button>
+                       
+                    {% endif %}
+
+                </div>
+              </div>
+                 
+              </form>
+
+              {% endif %}
+              
+            
+              <div class="d-flex justify-content-center align-items-center mt-10" style="margin-top: 16%;">
+                
+                <h1 class="d-flex justify-content-center align-items-center mt-10" id="working_hours" ></h1><br>
+                
+              </div>
+
+              <div class="d-flex justify-content-center align-items-center mt-10" >
+                
+                <span>{% now "d M Y" %}</span>
+
+              </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+          </div>
+        </div>
+
+       
+        {% if role == "Admin" %}
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <h2 class="h3 mb-0">Birthdays<h2> 
+          </div>
+
+          <div class="card-body">
+            <!-- Chart -->
+            <a href="birthdays/" style="color: #5a5858;">
+            <div class="chart overflow-dashboard">
+              
+                <div class="row">
+                    {% for data in birthdays %}
+                        <div class="col-lg-2">
+                            <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                        </div>
+                        <div class="col-lg-10" style="margin-bottom: 10px;">
+                            <span class="CP"><span>{{ data.employee_id}} &nbsp;-&nbsp;</span><b>{{ data.first_name}} {{ data.last_name}}</b> </span><br>
+                            <small>{{ data.department.name}}&nbsp;-&nbsp;{{ data.role.name}}</small> 
+                            <div class="usr_cl">
+                                <small><i class="fas fa-mobile"></i>&nbsp; {{ data.work_phone}}</small> 
+                            </div> 
+                            <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                        </div>
+                        <hr>
+                        {% empty %}
+                        <div style="margin: auto; text-align: center;margin-top: 70px;">
+                            <img src="{% static 'images/no_birthday.png' %}" width="100" > <br>
+                            <span>No Birthday buddies found.</span>
+                        </div>
+                    {% endfor %}
+                </div>
+              
+            </div>
+          </a>
+          </div>
+        </div>
+
+        {% endif %}
+
+        {% if role == "Admin" %}
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">New Hires</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+          <a href="new_hires/" style="color:#5a5858;">
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for new in new_hires %}
+                  <div class="col-lg-2">
+                      <img src="{% static 'images/admin.png' %}" width="50" class="Usrimg"> 
+                  </div>
+                  <div class="col-lg-10" style="margin-bottom: 10px;">
+                      <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
+                      <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
+                      <div class="usr_cl">
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
+                      </div> 
+                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                  </div>
+                  {% empty %}
+                  <div style="margin: auto; text-align: center;margin-top: 100px;">
+                      <img src="{% static 'images/eyes_looking.png' %}" width="100"  > <br>
+                      <span>No New Joinees in past 15 days.</span>
+                  </div>
+                {% endfor %}
+            </div>
+            </div>
+          </a>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <div class="card-deck flex-column flex-xl-row">
+        <div class="card">
+          <div class="card-header bg-transparent">
+            {% if role == "Admin" %}
+            <span class="h3 mb-0">Announcements</span>&nbsp;<a href="/add_announcements/" data-toggle="tooltip" data-original-title="Announcements"><i class="fas fa-plus-circle"></i></a>
+            {% else %}
+            <span class="h3 mb-0">Announcements</span>&nbsp;<a href="#" data-toggle="tooltip" data-original-title="Announcements"></a>
+            {% endif %}
+        </div>
+          <div class="card-body">
+          
+            <ul class="list-group list-group-flush list my--3">
+                {% for data in announcements %}
+              <li class="list-group-item px-0">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <a href="#" class="avatar rounded-circle">
+                        <img src="{% static 'images/admin.png' %}" width="40" class="Usrimg">
+                    </a>
+                  </div>
+                  <div class="col ml--2">
+                    <h4 class="mb-0">
+                      {{ data.title}}
+                    </h4>
+                    <span class="text-warning">●</span>
+                    <small>{{ data.created_at }}</small>
+                  </div>
+                  <div class="col-auto">
+                    <a type="button" class="btn btn-sm btn-primary" href="{% url 'announcement_view' data.pk %}" style="color:#fff;">View</a>
+                  </div>
+                </div>
+              </li>
+              {% empty %}
+              <div style="margin: auto; text-align: center;margin-top: 70px;">
+                  <img src="{% static 'images/announcement.png' %}" width="130"> <br>
+                  <span>No Announcement in last 30 days.</span>
+              </div>
+              {% endfor %}
+            
+            </ul>
+
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">Leave Report</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Chart -->
+            <div class="chart ">
+                
+                    <div class="chart overflow-dashboard">
+                      
+                        {% for leave in leaves %}
+                        <div class="row leaves-hove">
+                            <div class="col-lg-2">
+                                <h5 class="Usrimg-leave" style="color:{{ leave.leave_type.color}};" width="50">{{ leave.balance|floatformat }}</h5>
+                            </div>
+                            <div class="col-lg-8" style="margin-bottom: 10px;">
+                                <span class="CP"><b>{{ leave.leave_type.name}} </b> </span><br>
+                                <small>Available {{ leave.balance|floatformat }} Day(s)</small> 
+
+                                <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                            </div>
+
+                            <div class="col-lg-2">
+                                <a class="button" style="color: #2dce89;" href="{% url 'leave' leave.leave_type.name %}" ><i class="fas fa-plus-circle hide-plus"></i></a>
+                            </div>
+                        </div>
+                       
+                          {% empty %}
+                          <div style="margin: auto; text-align: center;margin-top: 100px;">
+                              <span>No Leaves Available.</span>
+                          </div>
+                        {% endfor %}
+                   
+                    </div>
+                 
+            </div>
+          </div>
+        </div>
+        <!-- Progress track -->
+      
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <!-- <h6 class="text-muted text-uppercase ls-1 mb-1">Overview</h6> -->
+            <h2 class="h3 mb-0">Upcoming Holidays</h2>
+          </div>
+          <div class="card-body">
+
+            <div class="chart">
+                <ul class="hdaylist dash-body">
+                    {% for data in upcoming_holidays %}
+                    <li class="hdaydiv">
+                        <div class="hdname MT8">{{ data.holiday_name }}</div>
+                        <div class="hdate">{{ data.date|date:'d' }} - {{ data.date|date:'M' }} <h6>{{ data.date|date:'l' }}</h6></div>
+                    </li>
+                    <hr>
+                    {% empty %}
+                    <div style="margin: auto; text-align: center;margin-top: 70px;">
+                        <i class="far fa-calendar fa-6x" style="color: #010101a6;"></i> <br>
+                        <span>No Holidays Found..</span>
+                    </div> 
+                    {% endfor %}
+                </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+        
+      <div class="card-deck flex-column flex-xl-row">
+       
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h5 class="h3 mb-0">My Timelogs</h5>
+              </div>
+            </div>
+          </div>
+          <!-- Card body -->
+          <div class="card-body">
+            <!-- <div class="chart text-center">
+              <span class="">Under Development</span>
+            </div> -->
+            <div id="TIMELOGS" class="dash-body ">
+              <div id="dashboardTimelogsNavBar">
+                    <ul class="Dnav" id="date_my_timelogs">
+                      {% for date_no,days,dates in days_and_no %}
+
+                        {% if todays_date == date_no %}
+                          <li value="{{ dates|date:"d" }}" class="sel time-log-click {{ dates|date:"d" }}T "><b>{{ date_no }}</b> {{ days }}</li>
+                        {% else %}
+                          <li value="{{ dates|date:"d" }}" class="time-log-click {{ dates|date:"d" }}T " ><b>{{ date_no }}</b> {{ days }}</li>
+                        {% endif %}
+
+                      {% endfor %}
+                    </ul>
+                </div>
+                 <div id="dashboardTimelogs" class="tlogscrl">
+                    <table class="table table-hover">
+                        <tbody id="tbody_id">
+                          {% for time in timelogs %}
+                            <tr class="time-logs {{ time.date|date:"d" }}" style="border-bottom: 1px solid #d5d5d5;">
+                                <td class="CP" onclick=""></span>{{ time.project.project_name }}</span></td>
+                                <td width="100"><bclass="zp_font" data-toggle="tooltip" data-original-title="{{ time.start_time }} - {{ time.end_time }}">{{ time.updated_at|timeuntil:time.created_at }}</bclass="zp_font"></td><td width="75"><i class="IC-player grn S18" tid="57753000000234023"></i></td>
+                            </tr>
+                          {% empty %}
+                            <tr class="text-center no-time-logs {{ time.date|date:"d" }}">
+                              <td> No Timelogs Found..</td>
+                            </tr>
+                          {% endfor %}
+                          <tr class="no-log">
+                            <td class="text-center"> No Timelogs Found..</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+          </div>
+        </div>
+
+        {% if role == "Admin" %}
+        <div class="card">
+          <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="h3 mb-0">On Leave Today</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart overflow-dashboard">
+              <div class="row">
+                {% for today in leave_today %}
+                  <div class="col-lg-2">
+
+                    {% if today.employee.profile %}
+                      <img src="{% static '' %}profile_images/{{ today.employee.profile}}" width="50" class="Usrimg"> 
+                    {% else %}
+                      <img src="{% static '' %}profile_images/admin.png" width="50" class="Usrimg"> 
+                    {% endif %}
+
+                  </div>
+                  <div class="col-lg-10" style="margin-bottom: 10px;">
+                      <span class="CP"><span>{{ today.employee_id}} &nbsp;-&nbsp;</span><b>{{ today.employee.first_name}} {{ today.employee.last_name}}</b> </span><br>
+                      <small>{{ today.employee.department.name}}&nbsp;-&nbsp;{{ today.employee.role.name}}</small> 
+                      <div class="usr_cl">
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ today.employee.mobile_number }}</small> 
+                      </div> 
+                      <hr style="margin-top: 1rem;margin-bottom: 1rem;">
+                  </div>
+                  {% empty %}
+                  <div style="margin: auto; text-align: center;margin-top: 100px;">
+                    <i class="fas fa-calendar-times fa-5x"></i> <br>
+                      <span>No records found.</span>
+                  </div>
+                {% endfor %}
+            </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+       
+      </div>
+
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+  <script src="/static/assets/vendor/jvectormap-next/jquery-jvectormap.min.js"></script>
+  <script src="/static/assets/js/vendor/jvectormap/jquery-jvectormap-world-mill.js"></script>
+
+  <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+  <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+  <!-- MAP FOR LOCATION -->
+  
+<script async defer src="https://maps.google.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}" type="text/javascript"></script>
+<!-- <script src="https://gmap3.js?body=1" type="text/javascript" ></script> -->
+  <script>
+        
+var api_key = '{{GOOGLE_MAPS_API_KEY}}';
+
+//alert(api_key);
+
+  $("#atte_absent").click(function(){
+    alert("You won't able to check-in because you are in leave today..")
+  });
+
+    $(function(){
+
+        $(".time-logs").hide();
+        $(".no-log").hide();
+        d = new Date();
+        
+        if(d.getDate() <= 9 ){
+          d = "0"+d.getDate();
+        }
+        else{
+          d = d.getDate()
+        }
+
+        $("."+d).show();
+        
+        var login_time = "{{login_time}}";
+        var check_in = "{{check_in}}";
+    	  var session = "{{session}}";
+        var checkout_active = "{{ today_attn.checkout_active }}"
+    	
+        // alert(session);
+        if(login_time && (session || checkout_active == 0) ){
+        
+        	str = login_time.split(' ')[0];
+        	// alert(str);
+        
+            var timeStart = new Date("01/01/2021 " + str).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + today_time).getTime();
+
+            //alert(timeEnd);
+             
+            // var hourDiff = timeEnd - timeStart;    
+           
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            var duration = hours+":"+minutes+":"+seconds;
+
+           // alert(str)
+        
+            $("#working_hours").html(duration +" Hrs")
+
+        } 
+        else{
+        	// alert(2);
+            $("#working_hours").html(check_in +" Hrs")
+        }
+
+        $('#ZPAtt_dashboard_weekCont').hide();
+    })
+
+    function Attendance_today(val)
+    {
+        $('#ZPAtt_dashboard_weekCont').hide();
+        $('#ZPAtt_dashboard_dayCont').show();
+
+        $("#remove_sel_week").removeClass("sel");
+        $(val).addClass("sel")
+    }
+
+    function Attendance_week(val)
+    {
+        
+        $('#ZPAtt_dashboard_dayCont').hide();
+        $('#ZPAtt_dashboard_weekCont').show();
+
+        $("#remove_sel_today").removeClass("sel");
+        $(val).addClass("sel")
+       
+    }
+
+    setInterval(function(){ 
+
+        var login_time = "{{login_time}}";
+        var session = "{{session}}";
+        var checkout = "{{ today_attn.checkout_time }}"
+        var checkout_active = "{{ today_attn.checkout_active }}"
+        
+        // alert(session);
+        // alert(checkout_active);
+
+        if(login_time && (session || checkout_active == 0 ) ){
+            //create date format  
+            // str = login_time.replace(" p.m.", ":00");
+            str = login_time.split(' ')[0];
+        
+            var timeStart = new Date("01/01/2021 " + str).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + today_time).getTime();
+
+            // alert(today_end);
+             
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            var duration = hours+":"+minutes+":"+seconds;
+
+            //console.log(duration)
+
+            $("#working_hours").html(duration +" Hrs")
+
+        }
+       
+
+    }, 5000);
+
+    setInterval(function(){ 
+
+        // var start = new Date;
+        // var dt = new Date();
+        // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+        // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
+
+        var dt = new Date();
+        var h =  dt.getHours(), m = dt.getMinutes();
+        
+        var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+
+        $('.Timer').text(time); 
+
+    }, 1000);
+
+    let curr = new Date 
+    let days_name = []
+    let days_no = []
+
+    for (let i = 1; i <= 7; i++) {
+        let first = curr.getDate() - curr.getDay() + i 
+        let date_initial = new Date(curr.setDate(first)).toISOString().slice(0, 10)
+        let date_convert = new Date(date_initial);
+        let day = date_convert.toLocaleString("default", { weekday: "short" })
+        split_date = date_initial.split('-');
+        days_name.push(day)
+        days_no.push(split_date[2])
+
+    }
+
+    // alert(days_name)
+    // alert(days_no)
+
+    html = '';
+    for(i=0;i<=days_no.length-1;i++){
+        
+        html +='<li id="day3" onclick=""><b>'+days_no[i]+'</b>'+days_name[i]+'</li>';
+       
+    }
+
+    // $("#date_my_timelogs").empty();
+    // $("#date_my_timelogs").html(html);
+
+ /*****  LOCATION ******/
+
+ $(document).ready(function() { // alert('s');
+     // window.localStorage.removeItem('user_idd');
+    var pas_acc = 0;  
+    var pas_acc_val =  localStorage.getItem('pass_ok'); //alert(pas_acc);
+    if(pas_acc_val != 1)
+      pas_acc = 0;
+     else
+      pas_acc = 1;
+   var exp = '{{expiry}}';   
+   var usr = localStorage.getItem('user_idd'); // alert(exp); alert(usr);
+   var user_id = '{{request.user.id}}'; //alert(user_id);
+    
+  // alert(user_id); alert(usr);
+   if(user_id != usr)
+   {
+     // alert(user_id); alert(usr);
+      window.localStorage.removeItem('pass_ok');
+      localStorage.removeItem('pass_ok');
+       localStorage.setItem('pass_ok', 0); 
+       pas_acc = localStorage.getItem('pass_ok');
+   }
+  // alert(exp);   
+  //alert(pas_acc);
+    if(exp == 1 && pas_acc == 0 ) 
+    { //alert('s2');
+                  swal({
+            title: 'Your passport is going to expiry soon !!!',
+            html: $('<div>')
+            .addClass('some-class')
+            .text('Renew it ASAP.'),
+            animation: false,
+            customClass: 'animated tada'
+            })
+    }
+ 
+
+$(document).ready(function() { 
+    
+      var currgeocoder;
+      //alert('po');
+      //Set geo location  of lat and long
+      
+      navigator.geolocation.getCurrentPosition(function(position, html5Error) {
+      //alert('v');
+          geo_loc = processGeolocationResult(position);
+          currLatLong = geo_loc.split(",");
+          //alert(currLatLong);
+          initializeCurrent(currLatLong[0], currLatLong[1]);
+ 
+     });
+
+}); 
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    timelog = "";
+    not_found = "";
+
+    $(".time-log-click").click(function(){
+
+        // alert($(this).attr('value'));
+
+        $(".time-logs").hide()
+
+        if ($("."+$(this).attr('value'))[0]){
+            
+            $(".no-log").hide();
+            $("."+$(this).attr('value')).show();
+            $(".time-log-click").removeClass("sel");
+            $(this).addClass('sel');
+
+        }
+        else{
+
+            $(".time-log-click").removeClass("sel");
+            $(this).addClass('sel');  
+            $(".no-log").show(); 
+            $(".no-time-logs").hide();
+
+
+        }
+
+
+    });
+
+
+// var apiGeolocationSuccess = function(position) {
+//    // alert("API geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+//    initializeCurrent(position.coords.latitude, position.coords.longitude);
+// };
+
+// var tryAPIGeolocation = function() {
+//     jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCUNTZl1vh8BheJzaGuBOGhV8FtNr7vlik", function(success) {
+//         apiGeolocationSuccess({coords: {latitude: success.location.lat, longitude: success.location.lng}});
+//   })
+//   .fail(function(err) {
+//     alert("API Geolocation error! \n\n"+err);
+//   });
+// };
+
+
+
+// var browserGeolocationSuccess = function(position) {
+//     //alert("Browser geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+//     initializeCurrent(position.coords.latitude, position.coords.longitude);
+// };
+
+// var browserGeolocationFail = function(error) {
+//   switch (error.code) {
+//     case error.TIMEOUT:
+//       alert("Browser geolocation error !\n\nTimeout.");
+//       break;
+//     case error.PERMISSION_DENIED:
+//       if(error.message.indexOf("Only secure origins are allowed") == 0) {
+//         tryAPIGeolocation();
+//       }
+//       break;
+//     case error.POSITION_UNAVAILABLE:
+//       alert("Browser geolocation error !\n\nPosition unavailable.");
+//       break;
+//   }
+// };
+
+// var tryGeolocation = function() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//         browserGeolocationSuccess,
+//       browserGeolocationFail,
+//       {maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
+//   }
+// };
+
+// tryGeolocation();
+ 
+     //Get geo location result
+ 
+  function processGeolocationResult(position) {
+          html5Lat = position.coords.latitude; //Get latitude
+          html5Lon = position.coords.longitude; //Get longitude
+          html5TimeStamp = position.timestamp; //Get timestamp
+          html5Accuracy = position.coords.accuracy; //Get accuracy in meters
+          return (html5Lat).toFixed(8) + ", " + (html5Lon).toFixed(8);
+  } 
+ 
+     //Check value is present or not & call google api function
+ 
+     function initializeCurrent(latcurr, longcurr) {
+         
+          //alert(currgeocoder);
+         // alert(latcurr + "-- ######## --" + longcurr);
+          $('#Hid_checkinlat').val(latcurr);
+          $('#Hid_checkinlang').val(longcurr);
+          $('#Hid_checkoutlat').val(latcurr);
+          $('#Hid_checkoutlang').val(longcurr);
+          currgeocoder = new google.maps.Geocoder();
+        //  alert(JSON.stringify(currgeocoder));
+          if (latcurr != '' && longcurr != '') {
+              var myLatlng = new google.maps.LatLng(latcurr, longcurr);
+              return getCurrentAddress(myLatlng);
+          }
+    }
+ 
+     //Get current address
+ 
+      function getCurrentAddress(location) {
+           currgeocoder.geocode({
+               'location': location
+ 
+         }, function(results, status) {
+ 
+             if (status == google.maps.GeocoderStatus.OK) {
+                 console.log(results[0]);
+                 var res = [results[0]];
+                 res.forEach(function(e) {
+               //   alert(e.formatted_address);
+                  $('#Hid_inlocation').val(e.formatted_address);
+                  $('#Hid_outinlocation').val(e.formatted_address);
+                  });
+                 $("#address").html(results[0].formatted_address);
+             } else {
+                 alert('Geocode was not successful for the following reason: ' + status);
+             }
+         });
+      }
+ });
+
+ $(document).ready(function(){
+
+$('.swal2-confirm').bind("click",function(e){
+      e.preventDefault(); //alert('S5');
+      localStorage.setItem('pass_ok', 1);
+      localStorage.setItem('user_idd', '{{request.user.id}}' );
+
+      //  var exp = '{{expiry}}';  //alert(exp); 
+      //  var usr = '{{user}}';
+      //  var user_id = '{{request.user.id}}'; 
+
+
+       // your statements;
+});
+
+// var d1 = new Date (),
+//     d2 = new Date ( d1 );
+//  d3 =  d1.getMinutes() + 30;   //d2.setMinutes ( d1.getMinutes() + 30 );
+// alert ( d3 );
+
+function explode(){
+    localStorage.setItem('user_idd', null );
+}
+setTimeout(explode, 98000);
+
+// you can use the above or the one shown below
+
+
+
+
+})
+
+
+  </script>
+
+{% endblock javascripts %}
