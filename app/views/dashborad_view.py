@@ -50,6 +50,8 @@ from app.models.project_model import Project
 from app.models.timelogs import TimeLogs
 from django.conf import settings
 
+import logging
+logger = logging.getLogger(__name__)
 
 #from app.models import QuillModel
 
@@ -57,6 +59,8 @@ from django.conf import settings
 def index(request):
 
     # print(request.session['checkin_session'])
+
+    logger.warning('Homepage was accessed at '+str(datetime.datetime.now())+' hours!')
 
     # del request.session['checkin_session']
     myDate = datetime.date.today()
