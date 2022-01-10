@@ -142,6 +142,8 @@ def index(request):
             role = 1,
         )
 
+        logger.warning('Initial Superuser, Dept, Role, Emp created at '+str(datetime.datetime.now())+' hours!')
+
         return redirect('/home/')
 
     logger.warning('Homepage was accessed at '+str(datetime.datetime.now())+' hours!')
