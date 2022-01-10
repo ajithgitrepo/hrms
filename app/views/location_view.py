@@ -57,7 +57,7 @@ def update_location(request, pk):
 
         form = LocationForm(request.POST, instance=dept)
         if form.is_valid():
-            print('dsa')
+            # print('dsa')
             loc = request.POST.get('location')
             des = request.POST.get('description')
             dept.location = loc

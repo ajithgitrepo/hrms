@@ -22,7 +22,6 @@ class Role(models.Model):
  Group.add_to_class('updated_at', models.DateTimeField(auto_now_add=True, null=True))
  Group.add_to_class('is_active', models.IntegerField(null=True, blank=True,default='1'))
     
-
  User.add_to_class('role', models.IntegerField(null=True, blank=True))
  User.add_to_class('emp', models.ForeignKey(Employee,blank=True, null=True, related_name='emp_id', on_delete= models.SET_NULL))
     

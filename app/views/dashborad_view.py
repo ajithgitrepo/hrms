@@ -39,6 +39,7 @@ from django.db.models import Max, Subquery, OuterRef
 from django.db import connection,transaction
 from django.db.models import F
 from app.models.employee_model import Employee , Work_Experience, Education, Dependent 
+from app.models.department_model import Department
 import datetime
 from app.models.attendance_model import Attendance
 from app.models.announcement_model import Announcement 
@@ -50,6 +51,8 @@ from app.models.project_model import Project
 from app.models.timelogs import TimeLogs
 from django.conf import settings
 
+from django_seed import Seed
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -59,6 +62,89 @@ logger = logging.getLogger(__name__)
 def index(request):
 
     # print(request.session['checkin_session'])
+
+    dept_count = Department.objects.all().count()
+    role_count = Group.objects.all().count()
+    emp_count = Employee.objects.all().count()
+    # print(emp_count)
+
+    if dept_count == 0 and role_count == 0 and emp_count == 0:
+       
+        seeder = Seed.seeder()
+        # seeder.add_entity(Department, 1)
+        # seeder.add_entity(Group, 1)
+        seeder.add_entity(Department, 1, {
+            'name': 'Admin',
+            'description': 'This is admin dept..',
+            'created_at': datetime.datetime.now(),
+            'updated_at': datetime.datetime.now(),
+            'added_by': None,
+            'updated_by': None,
+            'is_active': 1,
+            'device':'web',
+        })
+        seeder.add_entity(Group, 1, {
+            'name': 'Admin',
+            'description': 'This is admin role..',
+            'created_at': datetime.datetime.now(),
+            'updated_at': datetime.datetime.now(),
+            'created_by': None,
+            'is_active': 1,
+            'role_type': 'admin',
+        })
+        seeder.add_entity(Employee, 1, {
+            'employee_id': 'Emp001',
+            'first_name': 'Admin',
+            'last_name': 'Admin',
+            'nick_name':'admin',
+            'email_id': 'admin@gmail.com',
+            'mobile_number': '9874563210',
+            'department_id': 1,
+            'source_of_hire':None,
+            'seating_location':None,
+            'location_id':None,
+            'title':None,
+            'date_of_joining':None,
+            'employee_status':'Active',
+            'employee_type':'Permenant',
+            'work_phone':None,
+            'extension':None,
+            'total_experience':None,
+            'experience':None,
+            'mobile_phone':None,
+            'other_email':None,
+            'birth_date':None,
+            'marital_status':None,
+            'address':None,
+            'tags':None,
+            'job_description':None,
+            'expertise':None,
+            'date_of_exit':None,
+            'gender':None,
+            'about_me':None,
+            'code_name':None,
+            'code_num':None,
+            'emirate_id':None,
+            'profile':None,
+            'signature':None,
+            'passport_exp_date':None,
+            'passport_num':None,
+            'psssport_url':None,
+            'role_id': 1,
+            'created_at': datetime.datetime.now(),
+            'updated_at': datetime.datetime.now(),
+            'is_active': 1,
+        })
+
+        seeder.execute()
+
+        update_usr = User.objects.filter(id=request.user.id).update( 
+            emp_id='Emp001',
+            role = 1,
+        )
+
+        return redirect('/home/')
+    
 
     logger.warning('Homepage was accessed at '+str(datetime.datetime.now())+' hours!')
 

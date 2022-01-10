@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
  	'django_crontab',
+    'django_seed',
 ]
 
 MIDDLEWARE = [
