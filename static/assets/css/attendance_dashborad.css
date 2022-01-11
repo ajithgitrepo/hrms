@@ -395,6 +395,11 @@ table {
 }
 .present-bg{
     background-color: #3dce4cd9 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .holyday-bg{

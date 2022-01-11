@@ -1,6 +1,8 @@
+from django.http import request
 from django.urls import path, re_path, include
 from app import views 
 from app.views.restriction_view import admin_only,role_name
+
 
 urlpatterns = [
    
@@ -31,28 +33,29 @@ urlpatterns = [
     path('self_vaccination_details/', views.self_service_view.self_vaccination_details, name="self_vaccination_details"),
 
     # Employee 
-	path('employees/', views.employee_view.employees, name="employees"),
-	path('add_employee/', views.employee_view.add_employee, name="add_employee"),
-	path('update_employee/<str:pk>/', views.employee_view.update_employee, name="update_employee"),
-	path('update_employee_emp/<str:pk>/', views.employee_view.update_employee_emp, name="update_employee_emp"),
-	path('delete_employee/<str:pk>/', views.employee_view.delete_employee, name="delete_employee"),
-	path('status_employee/<str:pk>/<str:val>/', views.employee_view.status_employee, name="status_employee"),
-	path('snippets', views.employee_view.snippets, name="snippets"),
+	path('employees/', admin_only(views.employee_view.employees), name="employees"),
+	path('add_employee/', admin_only(views.employee_view.add_employee), name="add_employee"),
+	path('update_employee/<str:pk>/', admin_only(views.employee_view.update_employee), name="update_employee"),
+	path('update_employee_emp/<str:pk>/', admin_only(views.employee_view.update_employee_emp), name="update_employee_emp"),
+	path('delete_employee/<str:pk>/', admin_only(views.employee_view.delete_employee), name="delete_employee"),
+	path('status_employee/<str:pk>/<str:val>/', admin_only(views.employee_view.status_employee), name="status_employee"),
+	path('snippets', admin_only(views.employee_view.snippets), name="snippets"),
+	path('filter_employee', admin_only(views.employee_view.filter_employee), name="filter_employee"),
+
 	path('reporting/', views.employee_view.reporting, name="reporting"),
-	path('filter_employee', views.employee_view.filter_employee, name="filter_employee"),
     
     
     # Roles 
-    path('roles/', views.role_view.roles, name="roles"),
-    path('add_roles/', views.role_view.add_roles, name="add_roles"),
-    path('update_role/<str:pk>/', views.role_view.update_role, name="update_role"),
-    path('delete_role/<str:pk>/', views.role_view.delete_role, name="delete_role"),
+    path('roles/', admin_only(views.role_view.roles), name="roles"),
+    path('add_roles/', admin_only(views.role_view.add_roles), name="add_roles"),
+    path('update_role/<str:pk>/', admin_only(views.role_view.update_role), name="update_role"),
+    path('delete_role/<str:pk>/', admin_only(views.role_view.delete_role), name="delete_role"),
 
     # Departments 
-    path('departments/', views.department_view.departments, name="departments"),
-    path('add_departments/', views.department_view.add_departments, name="add_departments"),
-    path('update_department/<str:pk>/', views.department_view.update_department, name="update_department"),
-    path('delete_department/<str:pk>/', views.department_view.delete_department, name="delete_department"),
+    path('departments/', admin_only(views.department_view.departments), name="departments"),
+    path('add_departments/', admin_only(views.department_view.add_departments), name="add_departments"),
+    path('update_department/<str:pk>/', admin_only(views.department_view.update_department), name="update_department"),
+    path('delete_department/<str:pk>/', admin_only(views.department_view.delete_department), name="delete_department"),
 
     # leave_request 
     path('leave_request/', views.leave_request, name="leave_request"),
@@ -63,10 +66,10 @@ urlpatterns = [
     path('change_leave_status/', views.leave_request_view.change_leave_status, name="change_leave_status"),
    
     # leave type / settings
-    path('leave_types/', views.leave_type_view.index, name="leave_types"),
-    path('add_leave_type/', views.leave_type_view.add_leave_type, name="add_leave_type"),
-    path('edit_leave_type/<str:pk>/', views.leave_type_view.edit_leave_type, name="edit_leave_type"),
-    path('change_status/<str:pk>/<str:val>/', views.leave_type_view.change_status, name="change_status"),
+    path('leave_types/', admin_only(views.leave_type_view.index), name="leave_types"),
+    path('add_leave_type/', admin_only(views.leave_type_view.add_leave_type), name="add_leave_type"),
+    path('edit_leave_type/<str:pk>/', admin_only(views.leave_type_view.edit_leave_type), name="edit_leave_type"),
+    path('change_status/<str:pk>/<str:val>/', admin_only(views.leave_type_view.change_status), name="change_status"),
    
     #leave balance
     path('leave_balance/', views.leave_balance_view.index, name="leave_balance"),
@@ -74,19 +77,20 @@ urlpatterns = [
     path('date_change/', views.leave_balance_view.date_change, name="date_change"),
 
     #onboard employee
-    path('add_onboard_employee/', views.onboard_employee_view.add_onboard_employee, name="add_onboard_employee"),
-    path('onboard_employees/', views.onboard_employee_view.onboard_employees, name="onboard_employees"),
-    path('delete_onboard_employee/<str:pk>/', views.onboard_employee_view.delete_onboard_employee, name="delete_onboard_employee"),
-    path('snippets_candidate_all_info', views.snippets_candidate_all_info, name="snippets_candidate_all_info"),
-    path('send_offer_letter/', views.onboard_employee_view.send_offer_letter, name="send_offer_letter"),
-    path('preview_offer_letter/', views.onboard_employee_view.preview_offer_letter, name="preview_offer_letter"),
-    path('convert_to_emp/<str:pk>/', views.onboard_employee_view.convert_to_emp, name="convert_to_emp"),
-    path('status_onboard_employees/<str:pk>/<str:val>/', views.onboard_employee_view.status_onboard_employees, name="status_onboard_employees"),
-    path('filter_onboard_employees/<str:status>/', views.onboard_employee_view.filter_onboard_employees, name="filter_onboard_employees"),
+    path('add_onboard_employee/', admin_only(views.onboard_employee_view.add_onboard_employee), name="add_onboard_employee"),
+    path('onboard_employees/', admin_only(views.onboard_employee_view.onboard_employees), name="onboard_employees"),
+    path('delete_onboard_employee/<str:pk>/', admin_only(views.onboard_employee_view.delete_onboard_employee), name="delete_onboard_employee"),
+    path('snippets_candidate_all_info', admin_only(views.snippets_candidate_all_info), name="snippets_candidate_all_info"),
+    path('send_offer_letter/', admin_only(views.onboard_employee_view.send_offer_letter), name="send_offer_letter"),
+    path('preview_offer_letter/', admin_only(views.onboard_employee_view.preview_offer_letter), name="preview_offer_letter"),
+    path('convert_to_emp/<str:pk>/', admin_only(views.onboard_employee_view.convert_to_emp), name="convert_to_emp"),
+    path('status_onboard_employees/<str:pk>/<str:val>/', admin_only(views.onboard_employee_view.status_onboard_employees), name="status_onboard_employees"),
+    path('filter_onboard_employees/<str:status>/', admin_only(views.onboard_employee_view.filter_onboard_employees), name="filter_onboard_employees"),
 
     #Attendance
     path('check_in_attn/', views.attendance_view.check_in_attn, name="check_in_attn"),
     path('check_out_attn/', views.attendance_view.check_out_attn, name="check_out_attn"),
+    
     path('attn_listview/', views.attendance_view.attn_listview, name="attn_listview"),
     path('search_listview/<str:pk>/<str:month>/', views.attendance_view.search_listview, name="search_listview"),
     path('export_excel/', views.attendance_view.export_excel, name="export_excel"),
@@ -113,16 +117,16 @@ urlpatterns = [
     path('delete_emp_file/<str:pk>/', views.employee_files_view.delete_emp_file, name="delete_emp_file"),
 
     #New Hires
-    path('new_hires/', views.new_hires_view.index, name="new_hires"),
-    path('birthdays/', views.new_hires_view.birthdays, name="birthdays"),
-    path('get_birthday/', views.new_hires_view.get_birthday, name="get_birthday"),
+    path('new_hires/', admin_only(views.new_hires_view.index), name="new_hires"),
+    path('birthdays/', admin_only(views.new_hires_view.birthdays), name="birthdays"),
+    path('get_birthday/', admin_only(views.new_hires_view.get_birthday), name="get_birthday"),
 
     #Announcements
-    path('announcements/', views.announcements_view.index, name="announcements"),
-    path('add_announcements/', views.announcements_view.add_announcements, name="add_announcements"),
-    path('announcement_view/<str:pk>/', views.announcements_view.announcement_view, name="announcement_view"),
-    path('delete_announcement/<str:pk>/', views.announcements_view.delete_announcement, name="delete_announcement"),
-    path('status_announcement/<str:pk>/<str:val>/', views.announcements_view.status_announcement, name="status_announcement"),
+    path('announcements/', admin_only(views.announcements_view.index), name="announcements"),
+    path('add_announcements/', admin_only(views.announcements_view.add_announcements), name="add_announcements"),
+    path('announcement_view/<str:pk>/', admin_only(views.announcements_view.announcement_view), name="announcement_view"),
+    path('delete_announcement/<str:pk>/', admin_only(views.announcements_view.delete_announcement), name="delete_announcement"),
+    path('status_announcement/<str:pk>/<str:val>/', admin_only(views.announcements_view.status_announcement), name="status_announcement"),
 
     path("unicorn/", include("django_unicorn.urls")),
 
@@ -134,17 +138,17 @@ urlpatterns = [
     path('all_events', views.calendar_details_view.all_events, name='all_events'),
 
     # Travel Expenses
-    path('travel_expense_details/', views.travel_expense_view.travel_expense_details, name="travel_expense_details"),
-    path('add_travel_expense_details/', views.travel_expense_view.add_travel_expense_details, name="add_travel_expense_details"),
-    path('snippets_travel_details_travel_expense_more_all_info', views.travel_expense_view.snippets_travel_details_travel_expense_more_all_info, name="snippets_travel_details_travel_expense_more_all_info"),
-    path('delete_expense_details/<str:pk>/', views.travel_expense_view.delete_expense_details, name="delete_expense_details"),
-   	path('travel_expense_approve/', views.travel_expense_view.travel_expense_approve, name="travel_expense_approve"),
+    path('travel_expense_details/', admin_only(views.travel_expense_view.travel_expense_details), name="travel_expense_details"),
+    path('add_travel_expense_details/', admin_only(views.travel_expense_view.add_travel_expense_details), name="add_travel_expense_details"),
+    path('snippets_travel_details_travel_expense_more_all_info', admin_only(views.travel_expense_view.snippets_travel_details_travel_expense_more_all_info), name="snippets_travel_details_travel_expense_more_all_info"),
+    path('delete_expense_details/<str:pk>/', admin_only(views.travel_expense_view.delete_expense_details), name="delete_expense_details"),
+   	path('travel_expense_approve/', admin_only(views.travel_expense_view.travel_expense_approve), name="travel_expense_approve"),
 
     # Travel Request
-    path('travel_request_details/', views.travel_request_view.travel_request_details, name="travel_request_details"),
-    path('add_travel_request_details', views.travel_request_view.add_travel_request_details, name="add_travel_request_details"),
-    path('delete_asset_details/<str:pk>/', views.travel_request_view.delete_asset_details, name="delete_asset_details"),
-    path('snippets_travel_details_employee_all_info', views.travel_request_view.snippets_travel_details_employee_all_info, name="snippets_travel_details_employee_all_info"),
+    path('travel_request_details/', admin_only(views.travel_request_view.travel_request_details), name="travel_request_details"),
+    path('add_travel_request_details', admin_only(views.travel_request_view.add_travel_request_details), name="add_travel_request_details"),
+    path('delete_asset_details/<str:pk>/', admin_only(views.travel_request_view.delete_asset_details), name="delete_asset_details"),
+    path('snippets_travel_details_employee_all_info', admin_only(views.travel_request_view.snippets_travel_details_employee_all_info), name="snippets_travel_details_employee_all_info"),
     
     # Compensatory Request
     path('compensatory_request_details/', views.compensatory_request_view.compensatory_request_details, name="compensatory_request_details"),
@@ -161,11 +165,11 @@ urlpatterns = [
     path('assets_approve/', views.asset_deatails_view.assets_approve, name="assets_approve"),
     
     # Holiday Details
-    path('holiday_details/', views.holiday_details_view.holiday_details, name="holiday_details"),
-    path('add_holiday_details', views.holiday_details_view.add_holiday_details, name="add_holiday_details"),
-    path('delete_holiday_details/<str:pk>/', views.holiday_details_view.delete_holiday_details, name="delete_holiday_details"),
-    path('filter_holiday/', views.holiday_details_view.filter_holiday, name="filter_holiday"),
-    path('edit_holiday_details/<str:pk>/', views.holiday_details_view.edit_holiday_details, name="edit_holiday_details"),
+    path('holiday_details/', admin_only(views.holiday_details_view.holiday_details), name="holiday_details"),
+    path('add_holiday_details', admin_only(views.holiday_details_view.add_holiday_details), name="add_holiday_details"),
+    path('delete_holiday_details/<str:pk>/', admin_only(views.holiday_details_view.delete_holiday_details), name="delete_holiday_details"),
+    path('filter_holiday/', admin_only(views.holiday_details_view.filter_holiday), name="filter_holiday"),
+    path('edit_holiday_details/<str:pk>/', admin_only(views.holiday_details_view.edit_holiday_details), name="edit_holiday_details"),
 
     # Exit Details
     path('exit_details/', views.exit_deatails_view.exit_details, name="exit_details"),
@@ -185,17 +189,17 @@ urlpatterns = [
     path('search/', views.task_view.search, name="search"),
 
     # Location
-    path('locations/', views.location_view.locations, name="locations"),
-    path('add_location/', views.location_view.add_location, name="add_location"),
-    path('update_location/<str:pk>/', views.location_view.update_location, name="update_location"),
-    path('delete_location/<str:pk>/', views.location_view.delete_location, name="delete_location"),
-    path('filter_location/', views.location_view.filter_location, name="filter_location"),
+    path('locations/', admin_only(views.location_view.locations), name="locations"),
+    path('add_location/', admin_only(views.location_view.add_location), name="add_location"),
+    path('update_location/<str:pk>/', admin_only(views.location_view.update_location), name="update_location"),
+    path('delete_location/<str:pk>/', admin_only(views.location_view.delete_location), name="delete_location"),
+    path('filter_location/', admin_only(views.location_view.filter_location), name="filter_location"),
 
     # Weekend
-    path('weekends/', views.weekend_view.weekends, name="weekends"),
-    path('add_weekend/', views.weekend_view.add_weekend, name="add_weekend"),
-    path('update_weekend/<str:pk>/', views.weekend_view.update_weekend, name="update_weekend"),
-    path('delete_weekend/<str:pk>/', views.weekend_view.delete_weekend, name="delete_weekend"),
+    path('weekends/', admin_only(views.weekend_view.weekends), name="weekends"),
+    path('add_weekend/', admin_only(views.weekend_view.add_weekend), name="add_weekend"),
+    path('update_weekend/<str:pk>/', admin_only(views.weekend_view.update_weekend), name="update_weekend"),
+    path('delete_weekend/<str:pk>/', admin_only(views.weekend_view.delete_weekend), name="delete_weekend"),
 
 	# Work From Home
     path('workhome_requests/', views.workhome_view.workhome_requests, name="workhome_requests"),

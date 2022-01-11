@@ -206,6 +206,11 @@ table {
 }
 .absent-bg {
     background-color: #f0989a !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }
 .dash-col .dash-body .atlist .lingr span {
     background-color: #FFF;
@@ -364,6 +369,7 @@ table {
 
 .org {
     color: #faba59;
+    
 }
 
 .dash-col .dash-body .abar {
@@ -395,16 +401,36 @@ table {
 }
 .present-bg{
     background-color: #3dce4cd9 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .holyday-bg{
     background-color: #0de2ffd9 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .weekend-bg{
     background-color: #ff8700 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .comp-bg{
     background-color: #3d81ced9 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
 }

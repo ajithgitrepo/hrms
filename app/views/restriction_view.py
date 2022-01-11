@@ -16,6 +16,7 @@ from app.models.employee_model import Employee , Work_Experience, Education, Dep
 from django.contrib.auth.models import Group
 
 
+
 def admin_only(function):
  
     def _inner(request, *args, **kwargs):
