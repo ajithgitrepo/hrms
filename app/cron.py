@@ -15,6 +15,9 @@ from django.db.models import Q
 import random
 import string
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def my_scheduled_job():
 
@@ -227,5 +230,8 @@ def checkout():
             updated_at = datetime.now(),
             checkout_active=1, 
         )
+    
+    logger.warning('Attendance cron run at '+str(datetime.datetime.now())+' hours!')
+
 	
 	

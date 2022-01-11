@@ -434,3 +434,28 @@ table {
     text-align: center;
     margin-top: 5px;
 }
+
+.weekend-border{
+    border: 1px solid;
+    border-color: #ff8700 !important;
+}
+
+.present-border{
+    border: 1px solid;
+    border-color: #3dce4cd9 !important;
+}
+
+.absent-border{
+    border: 1px solid;
+    border-color: #f0989a !important;
+}
+
+.comp-border{
+    border: 1px solid;
+    border-color: #3d81ced9 !important;
+}
+
+.holyday-border{
+    border: 1px solid;
+    border-color: #0de2ffd9 !important;
+}

@@ -152,6 +152,37 @@
                 }
 
 
+                @media (max-width: 600px) {
+                    .mob-notes{
+                        width: 33% !important;
+                    }
+
+                    .mob-shipt{
+                        width:36% !important;
+                        font-size: 13px;
+                    }
+
+                    .mob-button{
+                        width: 31% !important;
+                    }
+
+                    .table-responsive{
+                        zoom: 60%;
+                    }
+
+                    .card-footer{
+                        zoom: 58%;
+                    }
+                    strong{
+                        font-size: 10px;
+                    }
+                }
+
+                
+
+
+
+
 
 </style>
 
@@ -219,12 +250,12 @@
                 <input type="hidden" name="checkout_location" id="Hid_outinlocation"></input>
 
                 <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 mob-notes">
                   <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
                  
                 </div>
 
-                <div class="col-lg-2" style="text-align: center;">
+                <div class="col-lg-2 mob-shipt" style="text-align: center;">
                     <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
                         <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
                         <time class="DB"> [ 12AM - 12AM ] </time>
@@ -232,7 +263,7 @@
                   
                 </div>
 
-                <div class="col-lg-2">
+                <div class="col-lg-2 mob-button">
                     <button class="btn-sm btn-danger float-right" type="submit" name="submit" id="atte_submit" style="border-style: solid;" ><i class="far fa-clock"></i> <small>Check-out</small> <br><small class="Timer"></small></button>
                     
                 </div>
@@ -250,12 +281,12 @@
              
 
                 <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 mob-notes">
                   <input class="form-control" type="text" name="check_in" id="atte_check_in" placeholder="Add Notes">
                  
                 </div>
 
-                <div class="col-lg-2" style="text-align: center;">
+                <div class="col-lg-2 mob-shipt" style="text-align: center;">
                     <span class="SfTxt" id="ZPAtt_userShiftName" style="right: 165px;">
                         <div class="ellipsis" data-toggle="tooltip" data-placement="bottom" style="width: 100%;" title="" data-original-title="General">General</div>
                         <time class="DB"> [ 12AM - 12AM ] </time>
@@ -263,7 +294,7 @@
                   
                 </div>
 
-                <div class="col-lg-2">
+                <div class="col-lg-2 mob-button">
                     {% if check_leave %}
                         <div class="btn-sm btn-secondary float-right" id="atte_absent"><i class="far fa-clock"></i> <strong>Check-in</strong> <br><small class="Timer"></small></div>
                       
@@ -304,7 +335,7 @@
                                     {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0  %}
                                         <td width="145">{{ attn.checkin_time }}</td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr present-bg"><span>Present</span></div>
+                                            <div class="lingr present-bg"><span class="present-border">Present</span></div>
                                         </td>
                                         <td width="145">{{ attn.checkout_time }}</td>
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
@@ -313,7 +344,7 @@
                                     {% if attn.is_present == 2 %}
                                         <td width="145">{{ attn.checkin_time }}</td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr comp-bg"><span>Comp Off</span></div>
+                                            <div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>
                                         </td>
                                         <td width="145">{{ attn.checkout_time }}</td>
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
@@ -322,7 +353,7 @@
                                     {% if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0 %}
                                         <td width="145"></td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr absent-bg"><span>Absent</span></div>
+                                            <div class="lingr absent-bg"><span class="absent-border">Absent</span></div>
                                         </td>
                                         <td width="145"></td>
                                     {% endif %}
@@ -330,7 +361,7 @@
                                     {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1 %}
                                         <td width="145">{{ attn.checkin_time }}</td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr present-bg"><span>Absent - HalfDay / Present</span></div>
+                                            <div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>
                                         </td>
                                         <td width="145">{{ attn.checkout_time }}</td>
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
@@ -339,7 +370,7 @@
                                     {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1 %}
                                         <td width="145">{{ attn.checkin_time }}</td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr present-bg"><span>Absent - HalfDay / WFH</span></div>
+                                            <div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>
                                         </td>
                                         <td width="145">{{ attn.checkout_time }}</td>
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
@@ -348,7 +379,7 @@
                                     {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0 %}
                                         <td width="145">{{ attn.checkin_time }}</td>
                                         <td colspan="1" class="text-center">
-                                            <div class="lingr present-bg"><span>Present / WFH</span></div>
+                                            <div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>
                                         </td>
                                         <td width="145">{{ attn.checkout_time }}</td>
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
@@ -381,7 +412,7 @@
 
                                     <td width="145"></td>
                                     <td colspan="1" class="text-center">
-                                        <div class="lingr holyday-bg"><span>{{ holi.holiday_name }}</span></div>
+                                        <div class="lingr holyday-bg"><span class="holyday-border">{{ holi.holiday_name }}</span></div>
                                     </td>
                                     <td width="145"></td>
 
@@ -395,7 +426,7 @@
                                    
                                     <td width="145"></td>
                                     <td colspan="1" class="text-center">
-                                        <div class="lingr weekend-bg"><span>Weekend</span></div>
+                                        <div class="lingr weekend-bg"><span class="weekend-border">Weekend</span></div>
                                     </td>
                                     <td width="145"></td>
 
