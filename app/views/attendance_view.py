@@ -484,8 +484,12 @@ def export_excel(request):
     # create a workbook in memory
     output = BytesIO()
 
+    current_date = datetime.now()
+    # print(current_date)
+
     date = datetime.strptime(request.POST.get('month'), "%m-%Y")
     # print(date.strftime("%B"))
+
     first_day = date.replace(day = 1)
     last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
 
@@ -498,7 +502,7 @@ def export_excel(request):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
 
-    # print(date_no)
+    # print(dates)
 
     book = xlsxwriter.Workbook(output)
         
@@ -509,6 +513,7 @@ def export_excel(request):
     holiday_color = book.add_format({'font_color': '#0de2ff'})
     present_color = book.add_format({'font_color': '#3dce4c'})
     comp_off_color = book.add_format({'font_color': '#3d81ce'})
+    lop_color = book.add_format({'font_color': '#f20505'})
 
     format1 = book.add_format({'border': 1})
 
@@ -549,9 +554,10 @@ def export_excel(request):
 
     weekend = Weekend.objects.filter(is_active = 1)
     
-    # print(employees)
+    # print(holidays.count())
 
     row_num = 2
+    obj = []
 
     for emp in employees:
         # print(emp.employee_id)
@@ -587,11 +593,14 @@ def export_excel(request):
         sheet.write('E7', 'Check-In Location', bold)
 
         month_atten = Attendance.objects.filter(is_active = 1,  employee_id = emp.employee_id, employee__is_active = 1, date__range=[first_day, last_day])
-        # print(month_atten)
+        # print(month_atten.count())
 
         row_num = 8
         present_days = 0
         absent_days = 0
+        lop_days = 0
+        week_end_count = 0
+        day_no = []
 
         for date in dates:
 
@@ -603,36 +612,65 @@ def export_excel(request):
                 # print(date_time_attn)
 
                 if date_time_attn == date:
+
+                    day_no.append(date_time_attn)
                     
                     if row_data.is_present == 1 and row_data.is_wfh_approved == None and row_data.is_half == 0 or row_data.is_wfh_approved == 0:
                         sheet.write('B'+str(row_num), "Present", present_color)
                         present_days += 1
+
                     if row_data.is_present == 2:
                         sheet.write('B'+str(row_num), "Comp Off", comp_off_color)
                         present_days += 1
+
                     if row_data.is_present == 0 and row_data.is_leave == 1 and row_data.is_leave_approved == 1 and row_data.is_half == 0:
-                        sheet.write('B'+str(row_num), "Absent", absent_color)
+                        sheet.write('B'+str(row_num), "Absent / Paid", absent_color)
                         absent_days += 1
+
+                    if row_data.is_present == 0 and row_data.is_leave == 1 and row_data.is_leave_approved == 0:
+                        if (current_date.month == date.month and current_date.year == date.year):
+                            if date_time_attn < current_date:
+                                sheet.write('B'+str(row_num), "Absent / LOP", lop_color)
+                                absent_days += 1
+                                lop_days += 1
+                        else:
+                            sheet.write('B'+str(row_num), "Absent / LOP", lop_color)
+                            absent_days += 1
+                            lop_days += 1
+
                     if row_data.is_present == 1 and row_data.is_wfh_approved == None and row_data.is_half == 1:
                         sheet.write('B'+str(row_num), "Absent-HalfDay / Present", present_color)
                         absent_days += 0.5
                         present_days += 0.5
+
                     if row_data.is_present == 1 and row_data.is_wfh_approved == 1 and row_data.is_half == 1:
                         sheet.write('B'+str(row_num), "Absent-HalfDay / WFH", present_color)
                         absent_days += 0.5
                         present_days += 0.5
+
                     if row_data.is_present == 1 and row_data.is_wfh_approved == 1 and row_data.is_half == 0:
                         sheet.write('B'+str(row_num), "Present / WFH", present_color)
                         present_days += 1
 
-                    sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
-                    sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
-                    sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
-                
+                    if (current_date.month == date.month and current_date.year == date.year):
+                        if date_time_attn < current_date:
+                            sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
+                            sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
+                            sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
+
+                    else:
+                        sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
+                        sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
+                        sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
+
+               
             for holi in holidays:
                 date_time_holi = datetime.strptime(str(holi.date), '%Y-%m-%d')
-                
+                # print(date_time_holi)
                 if date_time_holi == date:
+                    
+                    day_no.append(datetime.strptime(str(holi.date), '%Y-%m-%d'))
+
                     sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                     sheet.write('B'+str(row_num), holi.holiday_name	+ '(Holiday)', holiday_color)
                     sheet.write('C'+str(row_num), '-')
@@ -644,38 +682,113 @@ def export_excel(request):
                 remove_square_brackets = str(remove_single_quotes)[1:-1]
                 days_list = list(remove_square_brackets.split(","))
                 
-                day_no = []
-                
-                # print(date.strftime("%A"))
-
                 for days in days_list:
                     day_name = days.capitalize()
                     if date.strftime("%A") == day_name:
+
+                        day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+
                         sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                         sheet.write('B'+str(row_num), 'Weekend', weekend_color)
                         sheet.write('C'+str(row_num), '-')
                         sheet.write('D'+str(row_num), '-')
                         sheet.write('E'+str(row_num), '-')
+
+                        week_end_count += 1
             
+            if date not in day_no:
+                if date < current_date:
+                    sheet.write('B'+str(row_num), "Absent / LOP", lop_color)
+                    absent_days += 1
+                    lop_days += 1
 
             row_num += 1
 
         sheet.conditional_format('A7:E'+str(row_num), { 'type' : 'no_blanks' , 'format' : format1})
 
-        row_num +=3
-        
-        for i in range(2):
-            if i ==0:
-                sheet.write('B'+str(row_num), 'Present Days', format2)
-                sheet.write('C'+str(row_num), present_days, format2)
-            if i ==1:
-                sheet.write('B'+str(row_num), 'Absent Days', format2)
-                sheet.write('C'+str(row_num), absent_days, format2)
+        # print((len(dates) - (week_end_count + holidays.count())) - (present_days + (absent_days - lop_days)))
+        # print(present_days)
+        # print(absent_days)
+        # print(lop_days)
+
+        # print(day_no)
+
+        row_num +=2
+
+        if (current_date.month == date.month and current_date.year == date.year):
+            for i in range(4):
+                if i ==0:
+                    sheet.write('B'+str(row_num), 'Total Working Days', format2)
+                    sheet.write('C'+str(row_num), len(dates) - (week_end_count + holidays.count()), format2)
+                if i ==1:
+                    sheet.write('B'+str(row_num), 'Present Days', format2)
+                    sheet.write('C'+str(row_num), present_days, format2)
+                if i ==2:
+                    sheet.write('B'+str(row_num), 'Absent Days(including LOP)', format2)
+                    sheet.write('C'+str(row_num), absent_days, format2)
+                if i ==3:
+                    sheet.write('B'+str(row_num), 'Lop Days', format2)
+                    sheet.write('C'+str(row_num), lop_days, format2)
+
+                row_num += 1
+                
+        else:
+            for i in range(4):
+                if i ==0:
+                    sheet.write('B'+str(row_num), 'Total Working Days', format2)
+                    sheet.write('C'+str(row_num), len(dates) - (week_end_count + holidays.count()), format2)
+                if i ==1:
+                    sheet.write('B'+str(row_num), 'Present Days', format2)
+                    sheet.write('C'+str(row_num), present_days, format2)
+                if i ==2:
+                    sheet.write('B'+str(row_num), 'Absent Days(including LOP)', format2)
+                    sheet.write('C'+str(row_num), absent_days, format2)
+                if i ==3:
+                    sheet.write('B'+str(row_num), 'Lop Days', format2)
+                    sheet.write('C'+str(row_num), lop_days , format2)
+                    # (len(dates) - (week_end_count + holidays.count())) - (present_days + (absent_days - lop_days))
            
+                row_num += 1
+    
+        obj.append({'emp_name': emp.first_name +" "+emp.last_name, 'emp_id': emp.employee_id, 'present_days': present_days, 'absent_days': absent_days,
+                       'total_days': len(dates) - (week_end_count + holidays.count()),  'lop_days': lop_days
+                    })
+
+    
+    if request.POST.get('type') == "All":
+        sheet = book.add_worksheet('summary')
+        sheet.set_column(0, 5, 25)
+
+        sheet.write('B3', 'Month / Year', bold)
+        sheet.write('C3', date.strftime("%B")+ "/"+date.strftime("%Y"))  
+
+        sheet.conditional_format('B3:C3', { 'type' : 'no_blanks' , 'format' : format1})
+
+
+        sheet.write('A7', 'Name', bold)
+        sheet.write('B7', 'Emp ID', bold)
+        sheet.write('C7', 'Total Working Days', bold)
+        sheet.write('D7', 'Present Days', bold)
+        sheet.write('E7', 'Absent Days', bold)
+        sheet.write('F7', 'LOP Days', bold)
+
+        row_num = 8
+
+        for sum in obj:
+            # print(sum['emp_name'])
+            sheet.write('A'+str(row_num), sum['emp_name'])
+            sheet.write('B'+str(row_num), sum['emp_id'])
+            sheet.write('C'+str(row_num), sum['total_days'])
+            sheet.write('D'+str(row_num), sum['present_days'])
+            sheet.write('E'+str(row_num), sum['absent_days'])
+            sheet.write('F'+str(row_num), sum['lop_days'])
+
+            sheet.conditional_format('A7:F'+str(row_num), { 'type' : 'no_blanks' , 'format' : format1})
+
             row_num += 1
 
-        
-
+            
+  
     book.close()
 
     output.seek(0)
@@ -694,7 +807,6 @@ def export_excel(request):
 
     return response
 
-    # return HttpResponse('ok')
 
 def attn_calendarview(request):
 
