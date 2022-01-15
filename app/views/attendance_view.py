@@ -16,6 +16,8 @@ from app.models.reporting_to_model import Reporting
 from app.models.weekend_model import Weekend
 import datetime 
 from datetime import date, time, datetime, timedelta
+from django.utils.timesince import timesince
+from dateutil.relativedelta import relativedelta
 from django.db.models import Q
 import calendar
 from app.models.attendance_model import Attendance 
@@ -155,6 +157,7 @@ def attn_listview(request):
     current_year = datetime.now().strftime("%Y")
     current_month = datetime.now().strftime("%m")
     month_year = current_month+'-'+current_year
+    
     first_day = now.replace(day = 1)
     last_day = now.replace(day = calendar.monthrange(now.year, now.month)[1])
     # no_of_days = calendar.monthrange(current_year, current_month )
@@ -198,6 +201,14 @@ def attn_listview(request):
     zipped_data = zip(dates, date_no)
     # print(date_no)
 
+    day_no = []
+
+    for attn in month_atten:
+        date_time_attn = datetime.strftime(attn.date, '%Y-%m-%d')
+        day_no.append(date_time_attn)
+
+    # print(day_no)
+
     if role =="Admin":
         employees = Employee.objects.filter(is_active = 1)
     if role =="Manager":
@@ -210,8 +221,159 @@ def attn_listview(request):
     # print(weekend)
 
     num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+   
+    # print(num_days)
 
- 
+    html = ''
+
+    html +='<div class="table-responsive py-4">'
+    html +='<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
+    html +='<tr>'
+    html +='<th></th>'
+    html +='<th>First Check-in</th>'
+    html +='<th></th>'
+    html +='<th>Last Check-out</th>'
+    html +='<th>Total Hours</th>'
+                   
+    html +='</tr>'
+    html +='<tbody>'
+
+    day_no = []
+
+    current_date = datetime.now()
+    # print(current_date)
+
+    for date,date_no in zipped_data:
+        # print(date)
+        html +='<tr>'
+        html +='<td width="75" class="">' + str(datetime.strftime(date, '%A')[0:3]) +','+ str(datetime.strftime(date, '%d'))
+
+        for attn in month_atten:
+            date_time_attn = datetime.strptime(str(attn.date), '%Y-%m-%d')
+            
+            if datetime.strftime(attn.date, '%d') == date_no:
+
+                # day_no.append(date_time_attn)
+
+                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+
+                diff = relativedelta(attn.updated_at, attn.created_at)
+                # print(diff.hours)
+                # print(diff.minutes)
+                
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0:
+
+                    html +='<td width="145">'+ str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Present</span></div>'
+                    html +='</td>'
+                    if attn.checkout_time != None:
+                        html +='<td width="145"> '+ str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    else:
+                        html +='<td width="145"> - </td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                  
+
+                if attn.is_present == 2:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    
+                if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
+                    html +='<td width="145"></td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
+                    html +='</td>'
+                    html +='<td width="145"></td>'
+                           
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                        
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+
+
+        for holi in holidays:
+            if datetime.strftime(holi.date, '%d') == date_no:
+
+                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+
+                # print(date)
+                # print(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+    
+    
+        for week in weekend:
+            remove_single_quotes = week.week_off.replace("'", "")
+            remove_square_brackets = str(remove_single_quotes)[1:-1]
+            days_list = list(remove_square_brackets.split(","))
+
+            for days in days_list:
+                    day_name = days.capitalize()
+                    if date.strftime("%A") == day_name:
+
+                        # day_no.append(date)
+                        day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+
+                        # print(date)
+
+            if datetime.strftime(date, '%A').lower() in week.week_off:
+                
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+
+        # print(day_no)
+
+        if date not in day_no:
+            
+            if date < current_date:
+                # print(date)
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+                absent_days += 1
+                # lop_days += 1
+
+    html +='</tr>'
+
+                   
+    html +='</tbody>'
+    html +='</table>'
+    html +='</div>'
+
+
+
     context = {
         'month_atten':month_atten,
         'holidays':holidays,
@@ -226,6 +388,8 @@ def attn_listview(request):
         'weekend':weekend,
         'weekend_count':num_days,
         'comp_off':comp_off,
+        'day_no':day_no,
+        'html': html,
 
     }
 
@@ -257,6 +421,8 @@ def search_listview(request,pk,month):
     for i in range(delta.days + 1):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
+
+    # print(dates)
 
     month_atten = Attendance.objects.filter(is_active = 1,  employee_id = pk, date__range=[first_day, last_day])
     # print(month_atten)
@@ -294,9 +460,158 @@ def search_listview(request,pk,month):
     weekend = Weekend.objects.filter(is_active = 1)
     # print(weekend)
 
-    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year,datetime.now().month) if i[6] != 0])
+    num_days = len([1 for i in calendar.monthcalendar(date.year, date.month) if i[6] != 0])
+    # print(num_days)
 
- 
+    html = ''
+
+    html +='<div class="table-responsive py-4">'
+    html +='<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
+    html +='<tr>'
+    html +='<th></th>'
+    html +='<th>First Check-in</th>'
+    html +='<th></th>'
+    html +='<th>Last Check-out</th>'
+    html +='<th>Total Hours</th>'
+                   
+    html +='</tr>'
+    html +='<tbody>'
+
+    day_no = []
+
+    current_date = datetime.now()
+    # print(current_date)
+
+    for date,date_no in zipped_data:
+        # print(date)
+        html +='<tr>'
+        html +='<td width="75" class="">' + str(datetime.strftime(date, '%A')[0:3]) +','+ str(datetime.strftime(date, '%d'))
+
+        for attn in month_atten:
+            date_time_attn = datetime.strptime(str(attn.date), '%Y-%m-%d')
+            
+            if datetime.strftime(attn.date, '%d') == date_no:
+
+                # day_no.append(date_time_attn)
+
+                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+
+                diff = relativedelta(attn.updated_at, attn.created_at)
+                # print(diff.hours)
+                # print(diff.minutes)
+                
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0:
+
+                    html +='<td width="145">'+ str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Present</span></div>'
+                    html +='</td>'
+                    if attn.checkout_time != None:
+                        html +='<td width="145"> '+ str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    else:
+                        html +='<td width="145"> - </td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                  
+
+                if attn.is_present == 2:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    
+                if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
+                    html +='<td width="145"></td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
+                    html +='</td>'
+                    html +='<td width="145"></td>'
+                           
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                        
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
+                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td colspan="1" class="text-center">'
+                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='</td>'
+                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+
+
+        for holi in holidays:
+            if datetime.strftime(holi.date, '%d') == date_no:
+
+                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+
+                # print(date)
+                # print(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+    
+    
+        for week in weekend:
+            remove_single_quotes = week.week_off.replace("'", "")
+            remove_square_brackets = str(remove_single_quotes)[1:-1]
+            days_list = list(remove_square_brackets.split(","))
+
+            for days in days_list:
+                    day_name = days.capitalize()
+                    if date.strftime("%A") == day_name:
+
+                        # day_no.append(date)
+                        day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+
+                        # print(date)
+
+            if datetime.strftime(date, '%A').lower() in week.week_off:
+                
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+
+        # print(day_no)
+
+        if date not in day_no:
+            
+            if date < current_date:
+                # print(date)
+                html +='<td width="145"></td>'
+                html +='<td colspan="1" class="text-center">'
+                html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
+                html +='</td>'
+                html +='<td width="145"></td>'
+                absent_days += 1
+                # lop_days += 1
+
+    html +='</tr>'
+
+                   
+    html +='</tbody>'
+    html +='</table>'
+    html +='</div>'
+
+
     context = {
         'month_atten':month_atten,
         'holidays':holidays,
@@ -312,6 +627,8 @@ def search_listview(request,pk,month):
         'weekend':weekend,
         'weekend_count':num_days,
         'comp_off':comp_off,
+        'day_no':day_no,
+        'html': html,
     }
     
 
@@ -494,7 +811,7 @@ def export_excel(request):
     last_day = date.replace(day = calendar.monthrange(date.year, date.month)[1])
 
     dates = []
-    date_no = []
+    date_no = [] 
 
     delta = last_day - first_day
 
@@ -502,7 +819,7 @@ def export_excel(request):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
 
-    # print(dates)
+    print(dates)
 
     book = xlsxwriter.Workbook(output)
         
@@ -671,6 +988,9 @@ def export_excel(request):
                     
                     day_no.append(datetime.strptime(str(holi.date), '%Y-%m-%d'))
 
+                    # print(datetime.strptime(str(holi.date), '%Y-%m-%d'))
+
+
                     sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                     sheet.write('B'+str(row_num), holi.holiday_name	+ '(Holiday)', holiday_color)
                     sheet.write('C'+str(row_num), '-')
@@ -685,8 +1005,9 @@ def export_excel(request):
                 for days in days_list:
                     day_name = days.capitalize()
                     if date.strftime("%A") == day_name:
-
+                        
                         day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+                        # print(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
 
                         sheet.write('A'+str(row_num), (date).strftime("%d-%m-%Y"))
                         sheet.write('B'+str(row_num), 'Weekend', weekend_color)
@@ -695,6 +1016,8 @@ def export_excel(request):
                         sheet.write('E'+str(row_num), '-')
 
                         week_end_count += 1
+
+            # print(date)
             
             if date not in day_no:
                 if date < current_date:

@@ -311,7 +311,9 @@
 
             </div>
 
-          <div class="table-responsive py-4">
+            {{ html | safe }}
+             
+        <!-- <div class="table-responsive py-4">
             <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
                 <tr>
                     <th></th>
@@ -385,23 +387,7 @@
                                         <td width="145">{{ attn.updated_at|timeuntil:attn.created_at }}</td>
                                     {% endif %}
 
-                                    <!-- {% if attn.is_wfh_approved == 0 %}
-                                        <td width="145"></td>
-                                        <td colspan="1" class="text-center">
-                                            <div class="lingr wfh-bg"><span>WFH Requested</span></div>
-                                        </td>
-                                        <td width="145"></td>
-                                    {% endif %}
-
-                                    {% if attn.is_present == 0 and attn.is_wfh_approved == 1 %}
-                                        <td width="145"></td>
-                                        <td colspan="1" class="text-center">
-                                            <div class="lingr wfh-bg"><span>WFH Accepted</span></div>
-                                        </td>
-                                        <td width="145"></td>
-                                    {% endif %} -->
-
-
+                                 
                                 {% endif %}
 
 
@@ -443,7 +429,7 @@
                    
                  </tbody>
               </table>
-          </div>
+        </div> -->
 
             <div class="card-footer">
                 <div class="tab-content PL100">

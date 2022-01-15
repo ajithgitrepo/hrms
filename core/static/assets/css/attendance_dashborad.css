@@ -435,6 +435,15 @@ table {
     margin-top: 5px;
 }
 
+.absent-lop-bg{
+    background-color: #f20505 !important;
+    position: relative;
+    height: 2px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
 .weekend-border{
     border: 1px solid;
     border-color: #ff8700 !important;
@@ -458,4 +467,9 @@ table {
 .holyday-border{
     border: 1px solid;
     border-color: #0de2ffd9 !important;
+}
+
+.absent-lop-border{
+    border: 1px solid;
+    border-color: #f20505 !important;
 }
