@@ -243,6 +243,9 @@ def attn_listview(request):
     current_date = datetime.now()
     # print(current_date)
 
+    previous_Date = datetime.today() - timedelta(days=1)
+    # print(previous_Date)
+
     for date,date_no in zipped_data:
         # print(date)
         html +='<tr>'
@@ -288,6 +291,7 @@ def attn_listview(request):
                     html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
                     html +='</td>'
                     html +='<td width="145"></td>'
+                    html +='<td width="145"></td>'
                            
                 if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
                     html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
@@ -308,7 +312,7 @@ def attn_listview(request):
                 if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
                     html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
                     html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
                     html +='</td>'
                     html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
                     html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
@@ -326,6 +330,7 @@ def attn_listview(request):
                 html +='<td colspan="1" class="text-center">'
                 html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
                 html +='</td>'
+                html +='<td width="145"></td>'
                 html +='<td width="145"></td>'
     
     
@@ -350,17 +355,19 @@ def attn_listview(request):
                 html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
                 html +='</td>'
                 html +='<td width="145"></td>'
+                html +='<td width="145"></td>'
 
         # print(day_no)
 
         if date not in day_no:
             
-            if date < current_date:
+            if date < previous_Date:
                 # print(date)
                 html +='<td width="145"></td>'
                 html +='<td colspan="1" class="text-center">'
                 html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
                 html +='</td>'
+                html +='<td width="145"></td>'
                 html +='<td width="145"></td>'
                 absent_days += 1
                 # lop_days += 1
@@ -482,6 +489,9 @@ def search_listview(request,pk,month):
     current_date = datetime.now()
     # print(current_date)
 
+    previous_Date = datetime.today() - timedelta(days=1)
+    # print(previous_Date)
+
     for date,date_no in zipped_data:
         # print(date)
         html +='<tr>'
@@ -527,6 +537,7 @@ def search_listview(request,pk,month):
                     html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
                     html +='</td>'
                     html +='<td width="145"></td>'
+                    html +='<td width="145"></td>'
                            
                 if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
                     html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
@@ -547,7 +558,7 @@ def search_listview(request,pk,month):
                 if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
                     html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
                     html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html +='<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
                     html +='</td>'
                     html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
                     html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
@@ -565,6 +576,7 @@ def search_listview(request,pk,month):
                 html +='<td colspan="1" class="text-center">'
                 html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
                 html +='</td>'
+                html +='<td width="145"></td>'
                 html +='<td width="145"></td>'
     
     
@@ -589,17 +601,19 @@ def search_listview(request,pk,month):
                 html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
                 html +='</td>'
                 html +='<td width="145"></td>'
+                html +='<td width="145"></td>'
 
         # print(day_no)
 
         if date not in day_no:
             
-            if date < current_date:
+            if date < previous_Date:
                 # print(date)
                 html +='<td width="145"></td>'
                 html +='<td colspan="1" class="text-center">'
                 html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
                 html +='</td>'
+                html +='<td width="145"></td>'
                 html +='<td width="145"></td>'
                 absent_days += 1
                 # lop_days += 1
