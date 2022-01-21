@@ -228,6 +228,7 @@ def checkout():
             checkout_time = datetime.now().strftime('%H:%M:%S'),
             updated_at = datetime.now(),
             checkout_active=1, 
+            last_checkout = datetime.now(),
         )
     
     logger.warning('Attendance cron run at '+str(datetime.now())+' hours!')

@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 #from app.models import compensatory_request_model
 #from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
@@ -195,11 +191,11 @@ def compensatory_request_status(request):
 
     created_at = datetime.datetime.combine(data.compoensatory_date, data.from_time)
     updated_at = datetime.datetime.combine(data.compoensatory_date, data.to_time)
-    
+
     if attn:
         update = Attendance.objects.filter(date = data.compoensatory_date, employee_id = data.employee_id ).update(
             is_present = 2,
-            is_leave=0,
+            is_leave= 0,
             checkin_time=data.from_time.strftime('%H:%M:%S'), 
             checkout_time=data.to_time.strftime('%H:%M:%S'), 
             created_at = created_at,

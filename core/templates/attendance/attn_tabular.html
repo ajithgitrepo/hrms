@@ -348,7 +348,7 @@
                                         {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0  %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkout_time }}</td>
-                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
                                                     <div class="RTC1 present-bg">
@@ -363,7 +363,7 @@
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkin_time }}</td>
                                             <td>{{ attn.checkout_time }}</td>
-                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
                                                     <div class="RTC1 comp-bg">
@@ -390,7 +390,7 @@
                                         {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1 %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkout_time }}</td>
-                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / Present">
                                                     <div class="RTC1 present-bg">
@@ -405,7 +405,7 @@
                                         {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1 %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkout_time }}</td>
-                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / WFH">
                                                     <div class="RTC1 present-bg">
@@ -420,7 +420,7 @@
                                         {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0 %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkout_time }}</td>
-                                            <td>{{ attn.updated_at|timeuntil:attn.created_at }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
                                             <td>
                                                 <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present / WFH">
                                                     <div class="RTC1 present-bg">

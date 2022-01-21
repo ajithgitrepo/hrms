@@ -93,8 +93,7 @@ def attendance(request):
 
     # print(dates)
 
-    month_atten = Attendance.objects.filter(
-        is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])
+    month_atten = Attendance.objects.filter(is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
     full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
@@ -171,7 +170,7 @@ def attendance(request):
 
                 day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
-                diff = relativedelta(attn.updated_at, attn.created_at)
+                diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
                 
@@ -411,7 +410,7 @@ def filter_attendance(request, month):
 
                 day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
 
-                diff = relativedelta(attn.updated_at, attn.created_at)
+                diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
                 

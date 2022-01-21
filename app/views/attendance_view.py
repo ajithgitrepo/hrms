@@ -44,7 +44,7 @@ def check_in_attn(request):
 
         # Regular day check-in
         if not Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_active = 1)).exists():
-           
+            device  = getDevice(request)
             insert = Attendance.objects.create(
                 date=myDate, 
                 checkin_time=datetime.now().strftime('%H:%M:%S'), 
@@ -54,6 +54,8 @@ def check_in_attn(request):
                 employee_id= request.user.emp_id,
                 checkin_active=1, 
                 checkout_active=0, 
+                first_checkin=datetime.now(),
+                checkin_device=device,
             )
 
             request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
@@ -75,11 +77,11 @@ def check_in_attn(request):
                     checkin_location = request.POST.get('checkin_location'),
                     checkin_lat = request.POST.get('checkin_lat'),
                     checkin_lang = request.POST.get('checkin_lang'),
-                    created_at = datetime.now(),
-                    updated_at = datetime.now(),
                     is_present = 1,
+                    updated_at = datetime.now(),
                     checkin_active=1, 
                     checkout_active=0, 
+                    first_checkin=datetime.now(),
                 )
                 request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             else:
@@ -87,9 +89,8 @@ def check_in_attn(request):
                     checkin_location = request.POST.get('checkin_location'),
                     checkin_lat = request.POST.get('checkin_lat'),
                     checkin_lang = request.POST.get('checkin_lang'),
-                    updated_at = datetime.now(),
                     checkin_active=1, 
-                    checkout_active=0, 
+                    checkout_active=0,
                 )
                 request.session['checkin_session'] = datetime.now().strftime('%H:%M:%S')
             # print(request.session['checkin_session'])
@@ -126,6 +127,7 @@ def get_client_ip(request):
 def check_out_attn(request):
     if request.method == 'POST':
         myDate = datetime.now()
+        device  = getDevice(request)
         if Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_active = 1)).exists():
             update = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
                 checkout_time = datetime.now().strftime('%H:%M:%S'),
@@ -134,7 +136,8 @@ def check_out_attn(request):
                 checkout_lang = request.POST.get('checkout_lang'),
                 updated_at = datetime.now(),
                 checkout_active=1, 
-                
+                last_checkout = datetime.now(),
+                checkout_device=device,
             )
             if 'checkin_session' in request.session:
                 del request.session['checkin_session']
@@ -150,6 +153,17 @@ def check_out_attn(request):
             return redirect(request.META.get('HTTP_REFERER'))
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+def getDevice(request):
+    device = 'pc'  
+    if(request.user_agent.is_mobile):
+     device = 'mobile'
+    if(request.user_agent.is_tablet):
+     device = 'tab'
+    if(request.user_agent.is_pc):
+     device = 'pc'
+    return device
+
 
 def attn_listview(request):
 
@@ -260,7 +274,7 @@ def attn_listview(request):
 
                 day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
-                diff = relativedelta(attn.updated_at, attn.created_at)
+                diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
                 
@@ -506,7 +520,7 @@ def search_listview(request,pk,month):
 
                 day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
 
-                diff = relativedelta(attn.updated_at, attn.created_at)
+                diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
                 
@@ -833,7 +847,7 @@ def export_excel(request):
         dates.append( (first_day + timedelta(days=i)) )
         date_no.append( (first_day + timedelta(days=i)).strftime("%d") )
 
-    print(dates)
+    # print(dates)
 
     book = xlsxwriter.Workbook(output)
         
@@ -987,12 +1001,12 @@ def export_excel(request):
                         if date_time_attn < current_date:
                             sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
                             sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
-                            sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
+                            sheet.write('E'+str(row_num), "Vellore(India)" )
 
                     else:
                         sheet.write('C'+str(row_num), (row_data.checkin_time ).strftime("%I:%M%p") if row_data.checkin_time else "-" )
                         sheet.write('D'+str(row_num), (row_data.checkout_time).strftime("%I:%M%p") if row_data.checkout_time else "-" )
-                        sheet.write('E'+str(row_num), (row_data.checkin_location) if row_data.checkin_location else "-" )
+                        sheet.write('E'+str(row_num), "Vellore(India)" )
 
                
             for holi in holidays:

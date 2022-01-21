@@ -155,7 +155,7 @@ urlpatterns = [
     path('add_compensatory_request_details/', views.compensatory_request_view.add_compensatory_request_details, name="add_compensatory_request_details"),
     path('delete_compensatory_details/<str:pk>/', views.compensatory_request_view.delete_compensatory_details, name="delete_compensatory_details"),
     path('snippets_compensatory_details_employee_all_info', views.compensatory_request_view.snippets_compensatory_details_employee_all_info, name="snippets_compensatory_details_employee_all_info"),
-   # path('compensatory_request_status/', views.compensatory_request_view.compensatory_request_status, name="compensatory_request_status"),
+    path('compensatory_request_status/', views.compensatory_request_view.compensatory_request_status, name="compensatory_request_status"),
 
     # Asset Details
     path('asset_details/', views.asset_deatails_view.asset_details, name="asset_details"),

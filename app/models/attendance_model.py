@@ -18,8 +18,10 @@ class Attendance(models.Model):
     checkout_location = models.TextField(blank=True, null=True)
     checkin_lat = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
     checkin_lang = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
+    checkin_device = models.CharField(max_length=30,blank = True, null = True) 
     checkout_lat = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
     checkout_lang = models.DecimalField(max_digits=9,decimal_places=6,blank=True, null=True)
+    checkout_device = models.CharField(max_length=30,blank = True, null = True) 
     is_leave_approved = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     leave_approved_by = models.ForeignKey(Employee, blank=True, null=True, related_name='approved_by_attendance', on_delete= models.SET_NULL)
     is_active = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
@@ -28,6 +30,8 @@ class Attendance(models.Model):
     is_wfh_approved = models.PositiveSmallIntegerField(default=None, blank=True, null=True)
     checkin_active = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     checkout_active = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    first_checkin = models.DateTimeField(blank=True, null=True,)
+    last_checkout = models.DateTimeField(blank =True, null =True)
 
     class Meta:  
         db_table = "attendance" 
