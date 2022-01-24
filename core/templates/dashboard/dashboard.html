@@ -146,11 +146,11 @@
                 <span class="h3 mb-0">Attendance</span>
                 
                 <a onclick="Attendance_week(this);" id="remove_sel_week" class="IC-week float-right margin-right">
-                    <i class="fas fa-calendar-week" data-toggle="tooltip" data-original-title="Week View"></i>
+                    <i class="fas fa-calendar-week" data-toggle="tooltip" data-original-title="To Week View"></i>
                 </a>
                 
                 <a onclick="Attendance_today(this);" id="remove_sel_today" class="IC-today float-right margin-right sel">
-                    <i class="far fa-calendar-check" data-toggle="tooltip" data-original-title="Today View"></i>
+                    <i class="far fa-calendar-check" data-toggle="tooltip" data-original-title="To Day View"></i>
                 </a>
                
               </div>
@@ -405,9 +405,9 @@
         <div class="card">
           <div class="card-header bg-transparent">
             {% if role == "Admin" %}
-            <span class="h3 mb-0">Announcements</span>&nbsp;<a href="/add_announcements/" data-toggle="tooltip" data-original-title="Announcements"><i class="fas fa-plus-circle"></i></a>
+            <span class="h3 mb-0">Announcement</span>&nbsp;<a href="/add_announcements/" data-toggle="tooltip" data-original-title="Announcements"><i class="fas fa-plus-circle"></i></a>
             {% else %}
-            <span class="h3 mb-0">Announcements</span>&nbsp;<a href="#" data-toggle="tooltip" data-original-title="Announcements"></a>
+            <span class="h3 mb-0">Announcement</span>&nbsp;<a href="#" data-toggle="tooltip" data-original-title="Announcements"></a>
             {% endif %}
         </div>
           <div class="card-body">

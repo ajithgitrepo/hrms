@@ -43,7 +43,7 @@ urlpatterns = [
 	path('status_employee/<str:pk>/<str:val>/', admin_only(views.employee_view.status_employee), name="status_employee"),
 	path('snippets', admin_only(views.employee_view.snippets), name="snippets"),
 	path('filter_employee', admin_only(views.employee_view.filter_employee), name="filter_employee"),
-
+    path('view_more', views.employee_view.view_more, name="view_more"),
 	path('reporting/', views.employee_view.reporting, name="reporting"),
     
     

@@ -1521,6 +1521,7 @@ def update_employee_emp(request, pk):
                 date_of_exit = d3.strftime('%Y-%m-%d')
             else:
                 date_of_exit = None
+                
             gender = request.POST.get('gender')
             about_me = request.POST.get('about_me')
             expertise = request.POST.get('expertise')
@@ -1554,24 +1555,24 @@ def update_employee_emp(request, pk):
                 nick_name=nick_name,
                 profile=file_name,
 
-                # department=department,
-                # mobile_number = mobile_number,
-                # work_phone = work_phone,
-                # code_name=code_name,
-                # code_num=code_num,
-                # other_email=other_email,
-                # mobile_phone=mobile_phone,
-                # marital_status=marital_status,
-                # birth_date=birth_date,
-                # address=address,
-                # tags=tags,
-                # title=title,
-                # job_description=job_description,
-                # expertise=expertise,
-                # about_me=about_me,
+                mobile_number = mobile_number,
+                work_phone = work_phone,
+                code_name=code_name,
+                code_num=code_num,
+                other_email=other_email,
+                mobile_phone=mobile_phone,
+                marital_status=marital_status,
+                birth_date=birth_date,
+                address=address,
+                tags=tags,
+                title=title,
+                job_description=job_description,
+                expertise=expertise,
+                about_me=about_me,
+                signature=s_file_name,
+                gender=gender,
+
                 # date_of_exit=date_of_exit,
-                # gender=gender,
-                # signature=s_file_name,
                 # passport_num = passport_num,
                 # passport_exp_date = passport_expir_date,
                 # psssport_url = passport_file_name,
@@ -1745,3 +1746,34 @@ def filter_employee(request):
     department = Department.objects.filter(is_active=1)
     context = {'employees': obj, 'roles': roles, 'emp': employees, 'department': department}
     return render(request, 'employee/index.html', context)
+
+
+def view_more(request):
+    emp_id =    request.POST.get('id')
+    csrf =    request.POST.get('csrfmiddlewaretoken')
+    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type'))).annotate(test1=Subquery(Location.objects.filter(id = OuterRef('location_id')).values('location')))
+    test = final_list.values_list('role', flat=True)
+    loc_id = list(final_list.values_list('location_id', flat=False))
+    x = str(test)
+    y = int(x[11]) 
+    x1 = (loc_id[0])
+    if(x1 == "(None,)" ):
+     x1 = '53'
+     y1 = int(x1)
+    else:
+     y1 = (x1[0]) 
+    roles = Group.objects.filter(id = y) 
+    locs = Location.objects.filter(id = y1) 
+    final_list_arr = list(chain(final_list, roles, locs))
+    
+    jsondata = serializers.serialize('json', final_list_arr)
+   # return HttpResponse(y1)
+    return HttpResponse(jsondata, content_type='application/json')
+    # print(id)
+#     csrf =    request.POST.get('csrfmiddlewaretoken')
+#     employee = Employee.objects.select_related().filter(employee_id = id)
+#     reporting = Reporting.objects.select_related().filter(employee_id = id)
+#     # print(reporting[0].reporting.first_name)
+#     queryset = list(chain(employee, reporting ))
+#     jsondata = serializers.serialize('json', queryset)
+#     return HttpResponse(jsondata, content_type='application/json')

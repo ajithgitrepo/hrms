@@ -120,6 +120,7 @@ def timelog_checkin(request):
             request.session['timelogin_session'] = datetime.now().strftime('%H:%M:%S')
             request.session['time_project_session'] = request.POST.get('project_id')
             messages.success(request,' Timelog updated successfully ')
+            # print(request.session.get('time_project_session'))
             return redirect(request.META.get('HTTP_REFERER'))
 
         else:
@@ -130,15 +131,19 @@ def timelog_checkin(request):
             request.session['timelogin_session'] = datetime.now().strftime('%H:%M:%S')
             request.session['time_project_session'] = request.POST.get('project_id')
 
+            
+
     return redirect(request.META.get('HTTP_REFERER'))
 
 
 def timelog_checkout(request):
     if request.method == 'POST':
         myDate = datetime.now()
+
+        print(request.session.get('time_project_session'))
         
         if TimeLogs.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, project_id = request.session.get('time_project_session'), is_active = 1)).exists():
-            update = TimeLogs.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
+            update = TimeLogs.objects.filter(date=myDate, employee_id= request.user.emp_id, project_id = request.session.get('time_project_session') ).update(
                 end_time = datetime.now().strftime('%H:%M:%S'),
                 updated_at = datetime.now(),
                 

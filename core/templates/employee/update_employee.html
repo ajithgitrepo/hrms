@@ -366,7 +366,7 @@ input[type=number] {
         <hr class="my-4" />
 
             <select style="display: none;" id="address-country"></select>
-          {% if role == "Admin" %} 
+         
             <h6 class="heading-small text-muted mb-4">Personal</h6>
             <div class="pl-lg-4">
               <div class="row">
@@ -401,6 +401,7 @@ input[type=number] {
                   </div>
 
               </div>
+              
               
               <div class="row">
                 <div class="col-lg-4">
@@ -451,6 +452,8 @@ input[type=number] {
              
               </div>
 
+              {% if role == "Admin" %} 
+
               <div class="col-lg-4">
                   <div class="form-group">
                       <label class="form-control-label" for="input-email">Passport Number</label>
@@ -477,10 +480,26 @@ input[type=number] {
              
               </div>
 
+              {% endif %}
+
               <div class="col-lg-4">
                 <div class="form-group">
                   <label class="form-control-label" for="input-city">Work phone</label>
                   <input type="text" name="work_phone" value="{{ employee.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">Gender</label>
+                  <select class="form-control" name="gender">
+                      <option value="">select</option>
+                      <option value="Male"  {% if employee.gender == "Male" %} selected{% endif %}>Male</option>
+                      <option  value="Female"  {% if employee.gender == "Female" %} selected{% endif %}>Female</option>
+                      <option  value="Others" {% if employee.gender == "Others" %} selected{% endif %}>Others</option>
+                      
+                </select>
+                 
                 </div>
               </div>
 
@@ -514,7 +533,8 @@ input[type=number] {
          
         </div>
       </div>
-     
+      
+      {% if role == "Admin" %} 
       <div class="col-lg-4">
         <div class="form-group">
               <label class="form-control-label" for="input-username">Date of exit</label>
@@ -522,22 +542,8 @@ input[type=number] {
          
         </div>
       </div>
+      {% endif %}
    
-      <div class="col-lg-4">
-        <div class="form-group">
-          <label class="form-control-label" for="input-username">Gender</label>
-          <select class="form-control" name="gender">
-              <option value="">select</option>
-              <option value="Male"  {% if employee.gender == "Male" %} selected{% endif %}>Male</option>
-              <option  value="Female"  {% if employee.gender == "Female" %} selected{% endif %}>Female</option>
-              <option  value="Others" {% if employee.gender == "Others" %} selected{% endif %}>Others</option>
-              
-        </select>
-         
-        </div>
-      </div>
-
-       
       <div class="col-lg-4">
         <div class="form-group">
           <label class="form-control-label" for="input-email">About me</label>
@@ -555,8 +561,7 @@ input[type=number] {
           
         </div>
 
-    {% endif %}
-
+   
         </div>
 
 
