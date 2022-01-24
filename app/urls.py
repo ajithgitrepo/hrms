@@ -9,6 +9,8 @@ urlpatterns = [
     #Home page
     path('', views.dashborad_view.index, name='home'),
 	path('home/', views.dashborad_view.index, name='home'),
+
+    path('rediect_back/', views.dashborad_view.rediect_back, name='rediect_back'),
   
     #Self Service
     path('profile/', views.self_service_view.profile, name="profile"),
@@ -35,8 +37,8 @@ urlpatterns = [
     # Employee 
 	path('employees/', admin_only(views.employee_view.employees), name="employees"),
 	path('add_employee/', admin_only(views.employee_view.add_employee), name="add_employee"),
-	path('update_employee/<str:pk>/', admin_only(views.employee_view.update_employee), name="update_employee"),
-	path('update_employee_emp/<str:pk>/', admin_only(views.employee_view.update_employee_emp), name="update_employee_emp"),
+	path('update_employee/<str:pk>/', views.employee_view.update_employee, name="update_employee"),
+	path('update_employee_emp/<str:pk>/', views.employee_view.update_employee_emp, name="update_employee_emp"),
 	path('delete_employee/<str:pk>/', admin_only(views.employee_view.delete_employee), name="delete_employee"),
 	path('status_employee/<str:pk>/<str:val>/', admin_only(views.employee_view.status_employee), name="status_employee"),
 	path('snippets', admin_only(views.employee_view.snippets), name="snippets"),

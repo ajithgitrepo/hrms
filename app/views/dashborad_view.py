@@ -49,7 +49,7 @@ from app.models.leave_balance_model import Leave_Balance
 from app.models.project_model import Project
 from app.models.timelogs import TimeLogs
 from django.conf import settings
-
+import socket
 from django_seed import Seed
 
 import logging
@@ -61,6 +61,12 @@ logger = logging.getLogger(__name__)
 def index(request):
 
     # print(request.session['checkin_session'])
+
+    hostname = socket.gethostname()   
+    IPAddr = socket.gethostbyname(hostname)   
+    print("Your Computer Name is:" + hostname)   
+    print("Your Computer IP Address is:" + IPAddr)   
+    # 192.168.1.2
 
     dept_count = Department.objects.all().count()
     role_count = Group.objects.all().count()
@@ -305,3 +311,5 @@ def index(request):
     return render(request, "dashboard/dashboard.html", context)
 
     
+def rediect_back(request):
+    return redirect(request.META.get('HTTP_REFERER'))
