@@ -94,34 +94,44 @@ def add_manual_checkin_details(request):
             # if not Asset_Detail.objects.filter( Q(employee=employee)).exists():
             obj = Manual_Checkin_Detail.objects.create( 
 
-                  employee_id=employee, 
-                  worked_date=worked_date,
-                  from_time=from_time,to_time=to_time,
-                  reason=reason,created_by_id=request.user.emp_id,
-                  created_at=created_at, 
-                  updated_at=updated_at, 
-                  is_active=is_active,
+                employee_id=employee, 
+                worked_date=worked_date,
+                from_time=from_time,to_time=to_time,
+                reason=reason,created_by_id=request.user.emp_id,
+                created_at=created_at, 
+                updated_at=updated_at, 
+                is_active=is_active,
             ) 
             obj.save()
 
             if not Attendance.objects.filter(Q(employee_id=employee, date=worked_date, checkin_time__isnull=False)).exists():
-                insert = Attendance.objects.create(date=worked_date, 
-                checkin_time=from_time, employee_id= employee, 
-                checkout_time = to_time,is_present = 1,
-                last_checkout = updated, 
-                first_checkin=created,
-            )
+                insert = Attendance.objects.create(
+                    date=worked_date, 
+                    checkin_time=from_time, 
+                    employee_id= employee, 
+                    checkout_time = to_time,
+                    is_present = 1,
+                    last_checkout = updated, 
+                    first_checkin=created,
+                    checkin_active = 1,
+                    checkout_active = 1,
+                    checkin_device = 'pc',
+                    checkout_device = 'pc',
+                )
 
-            #     update1 = Attendance.objects.filter(date=worked_date, employee_id = employee ).update(
-            #     updated_at = updated, 
-            #     created_at=created
-            # )
             else:
                 update = Attendance.objects.filter(date=worked_date, employee_id = employee ).update(
-                checkin_time=from_time, 
-                checkout_time = to_time,
-                updated_at = updated, 
-                employee_id= employee)
+                    checkin_time=from_time, 
+                    checkout_time = to_time,
+                    updated_at = updated, 
+                    employee_id= employee,
+                    checkin_active = 1,
+                    checkout_active = 1,
+                    checkin_device = 'pc',
+                    checkout_device = 'pc',
+                    last_checkout = updated, 
+                    first_checkin=created,
+                )
 
             messages.success(request, 'Checked details was added ! ')
             return redirect('manual_checkin_details') 

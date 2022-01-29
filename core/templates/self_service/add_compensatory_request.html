@@ -128,141 +128,90 @@ button#button-addon2 {
               </div>
             </div>
             <div class="card-body">
-                <form method="POST" action=""   class="post-form" >  
-                {% csrf_token %}  
-                   
+            <form method="POST" name="form" class="post-form" >
+              {% csrf_token %}  
+              <div class="form-group row">
+                <input type="hidden" name="employee" id="employee" value="{{ request.user.emp_id }}" ></input>
 
-                <!-- <h6 class="heading-small text-muted mb-4">Add Exit Details</h6> -->
-                <div class="pl-lg-4">
-                  <div class="row">
-                
-                          <input type="hidden" name="employee" id="employee" value="{{ request.user.emp_id }}" ></input>
-                      
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Worked Date</label>
+                <div class="col-sm-4">
+                  <input type="text"   name="worked_date" value="{{ form.data.worked_date }}" autocomplete="off" class="form-control startdate" placeholder="" required >
+                  {{ form.errors.worked_date  }}
+                </div>
+              
+              </div>
 
-                      <div class="col-lg-4"> 
-                        <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Worked Date</label>
-                          <input type="text"   name="worked_date" value="{{ form.data.worked_date }}"  class="form-control startdate" placeholder="" >
-                          {{ form.errors.worked_date  }}
-                        </div>
-                      </div>
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Unit</label>
+                <div class="col-sm-4">
+                  <input type="radio" name="unit" id="nameA" value="Days" checked>
+                  <label for="nameA">Days</label>
+              
+                  <input type="radio" name="unit" id="nameB" value="Hours">
+                  <label for="nameB">Hours</label>
+                </div>
+                {{ form.errors.unit }}
+              </div>
 
-                      <div class="col-lg-4"> 
-                        <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Compoensatory Date</label>
-                          <input type="text"   name="compoensatory_date" value="{{ form.data.compoensatory_date }}"  class="form-control startdate" placeholder="" >
-                          {{ form.errors.compoensatory_date  }}
-                        </div>
-                      </div>
-
-                     
-                      <div class="col-lg-4">
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-city">Unit</label>
-                          <table>
-                                <tbody>
-                                  <tr>
-                                    <td> </td>
-                                    <td><div class="custom-control custom-radio mb-3">
-                                      <input  class="custom-control-input" name="unit" id="customRadio6" value="Days" type="radio">
-                                      <label class="custom-control-label" for="customRadio6">Days</label>&nbsp;&nbsp;&nbsp;
-                                    </div> 
-                                     {{ form.errors.unit }}
-                              </td>
-  
-                                 
-                                  </tr>
-                                </tbody>
-                              </table>
-                         
-                     
-                        </div>
-                      </div>
-
-                      <div class="col-lg-4">
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-email">Duration</label>
-                          <select name="duration" value="{{ form.data.duration }}" class="form-control" placeholder="" >
-                              <option value="">select</option>
-                              <option value="Full Day" {% if form.data.duration == "Full Day" %} selected{% endif %}>Full Day</option>
-                             <option value="Half Day" {% if form.data.duration == "Half Day" %} selected{% endif %}>Half Day</option>
-                          
-                          <!-- <option value=""></option> -->
-                          </select>
-                          {{ form.errors.duration }}
-                        </div>
-                      </div> 
-
-                      
-                      <div class="col-lg-4">
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-country">Worked From Time</label>
-                            <div class="input-group clockpicker" id="clockpicker1" data-autoclose="true">
-                              <input type="text"  class="form-control" name="from_time" value="{{ form.data.from_time }}">
-                              <span class="input-group-addon input-group-append">
-                                    <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
-                                  </span>
-                            </div>
-                            <input type="hidden" name="clockpicker_one" id="clockpicker_one" value="" ></input>
-                       
-                        </div>
-                      </div>
-
-                      <div class="col-lg-4">
-                        <div class="form-group">
-                          <label class="form-control-label" for="input-country">Worked To Time</label>
-                            <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
-                              <input type="text"   class="form-control" name="to_time"  value="{{ form.data.to_time }}">
-                              <span class="input-group-addon input-group-append">
-                                    <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
-                                  </span>
-                                  <!-- {{ form.errors.to_time }} -->
-                              <!-- <span class="input-group-addon">
-                                  <span class="fa fa-clock-o"></span>
-                              </span> -->
-                            </div>
-                            <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
-                           
-                       
-                        </div>
-                      </div>
-                    
-                   
+                <div class="form-group row">
+                  <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Duration</label>
+                  <div class="col-sm-4" id="days">
+                    <select name="duration" id="day_type" value="{{ form.data.duration }}" class="form-control" placeholder="" >
+                      <option value="Full Day" {% if form.data.duration == "Full Day" %} selected{% endif %}>Full Day</option>
+                      <option value="Half Day" {% if form.data.duration == "Half Day" %} selected{% endif %}>Half Day</option>
+                    </select>
+                    {{ form.errors.duration }}
+                  </div>
+                  <div class="col-sm-2" id="total_time">
+                    <input class="form-control" disabled id="time" name="duration" type="text" value="00:00" placeholder="00:00" required>
+                    {{ form.errors.duration }}
                   </div>
                   
-                  <div class="row">
-                     
-
-                            <div class="col-lg-8"> 
-                                <div class="form-group">
-                                  <label class="form-control-label" for="input-country">Reason</label>
-                                  <textarea  name="reason" value="{{ form.data.reason }}" class="form-control" placeholder="" ></textarea>
-                                </div>
-                              </div>
-                             
-
-          
+                </div>
+           
+               <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Worked Time</label>
+                <div class="col-sm-2">
+                  <div class="input-group clockpicker" id="clockpicker1" data-autoclose="true">
+                    <input type="text"  class="form-control" name="from_time" autocomplete="off" value="{{ form.data.from_time }}" placeholder="From" required>
+                    <span class="input-group-addon input-group-append">
+                      <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                    </span>
                   </div>
+                  <input type="hidden" name="clockpicker_one" id="clockpicker_one" value="" ></input>
+                  {{ form.errors.from_time }}
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
+                    <input type="text"  class="form-control" name="to_time"  autocomplete="off" value="{{ form.data.to_time }}" placeholder="To" required>
+                    <span class="input-group-addon input-group-append">
+                      <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                    </span>
+                  </div>
+                  <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
+                  {{ form.errors.to_time }}
+                </div>
+                
+              </div>
 
-
+                <div class="form-group row">
+                  <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Reason</label>
+                  <div class="col-sm-4">
+                  <textarea rows="3" cols="43" name="reason"></textarea>
+                  {{ form.errors.duration }}
+                  </div>
                 </div>
 
+              <div class="card-footer">
+
+                  <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
                 
-            </div>
-
-            <div class="card-footer">
-
-                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
-               
-                <a  href="{% url 'compensatory_request' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
-
-            </div>
-
-            <hr class="my-4" />
+                  <a  href="{% url 'compensatory_request' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
 
               </div>
-              
-              
+
+          
               
               </form>
             </div>
@@ -304,25 +253,28 @@ button#button-addon2 {
 
 <script>
 
+$( document ).ready(function() {
+  $("#total_time").hide();
+});
+
 $(function() {
 
-      $('#clockpicker1').find('input').change(function(){
-//  alert(this.value); 
-var hours = 00; var minutes = 00;
-var time_str = this.value;  //alert(time_str);
-var time = time_str.match(/(\d+):(\d+)(\w)/); //alert(time);
+  $('#clockpicker1').find('input').change(function(){
 
-    var hours = Number(time[1]);// alert(hours);
+    var hours = 00; var minutes = 00;
+    var time_str = this.value;  
+    var time = time_str.match(/(\d+):(\d+)(\w)/); 
+
+    var hours = Number(time[1]);
     
 
     var minutes = Number(time[2]);
     if(minutes.toString().length < 2)
     minutes= "0"+minutes;
 
-   // ; alert(minutes);
-    var seconds = "00" //Number(time[3]);
+    var seconds = "00";
     var meridian = time[3].toLowerCase();
-      // alert(time);
+    
     if (meridian == 'p' && hours < 12) {
       hours += 12;
     }
@@ -332,29 +284,61 @@ var time = time_str.match(/(\d+):(\d+)(\w)/); //alert(time);
 
     if(hours.toString().length < 2)
     hours= "0"+hours;
-   // alert( [hours, minutes]);
-    var res = hours + ":" + minutes + ":" + seconds;  //alert(res);
+    var res = hours + ":" + minutes + ":" + seconds;
     $('#clockpicker_one').val(res);
+    //alert(res)
+    radio = $('input[name="unit"]:checked').val();
+
+    if(radio == "Hours")
+    {
+        t_two = $('#clockpicker_two').val();
+        if(t_two != "")
+        {
+
+            var timeStart = new Date("01/01/2021 " + res).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + t_two).getTime();
+
+            // alert(today_end);
+            
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            if(hours < 10){
+            hours = "0"+hours;
+            }
+            if(minutes < 10){
+            minutes = "0"+minutes;
+            }
+            var duration = hours+":"+minutes;
+
+            $("#time").val(duration)
+
+        }
+      
+    }
 
 });
 
 $('#clockpicker2').find('input').change(function(){
- //alert(this.value);
-//  $('#clockpicker_two').val(this.value);
-var hours = 00; var minutes = 00;
-var time_str = this.value;  //alert(time_str);
-var time = time_str.match(/(\d+):(\d+)(\w)/); //alert(time);
+ 
+    var hours = 00; var minutes = 00;
+    var time_str = this.value;  
+    var time = time_str.match(/(\d+):(\d+)(\w)/); 
 
-    var hours = Number(time[1]);// alert(hours);
+    var hours = Number(time[1]);
     
     var minutes = Number(time[2]);
     if(minutes.toString().length < 2)
     minutes= "0"+minutes;
 
-   // ; alert(minutes);
-    var seconds = "00" //Number(time[3]);
+    var seconds = "00";
     var meridian = time[3].toLowerCase();
-      // alert(time);
     if (meridian == 'p' && hours < 12) {
       hours += 12;
     }
@@ -364,10 +348,50 @@ var time = time_str.match(/(\d+):(\d+)(\w)/); //alert(time);
 
     if(hours.toString().length < 2)
     hours= "0"+hours;
-   // alert( [hours, minutes]);
-    var res = hours + ":" + minutes + ":" + seconds;  //
-    $('#clockpicker_two').val(res);//alert(res);
+    var res = hours + ":" + minutes + ":" + seconds; 
+    $('#clockpicker_two').val(res);
+
+    radio = $('input[name="unit"]:checked').val();
+    alert(res)
+
+    if(radio == "Hours")
+    {
+      t_one = $('#clockpicker_one').val();
+      if(t_one != "")
+      {
+
+        var timeStart = new Date("01/01/2021 " + t_one).getTime();
+        var today_hour = new Date().getHours();
+        var today_min = new Date().getMinutes();
+        var today_sec = new Date().getSeconds();
+        var today_time = today_hour+":"+today_min+":"+today_sec;
+
+        var timeEnd = new Date("01/01/2021 " + res).getTime();
+
+        // alert(today_end);
+          
+        var diff = timeEnd - timeStart;
+        var hours   = Math.floor(diff / 3.6e6);
+        var minutes = Math.floor((diff % 3.6e6) / 6e4);
+        var seconds = Math.floor((diff % 6e4) / 1000);
+        if(hours < 10){
+          hours = "0"+hours;
+        }
+        if(minutes < 10){
+          minutes = "0"+minutes;
+        }
+        var duration = hours+":"+minutes;
+
+        $("#time").val(duration)
+
+      }
+      
+    }
+
+
 });
+
+
     
 $('.clockpicker').clockpicker({
   'default': DisplayCurrentTime(),
@@ -404,6 +428,30 @@ $(function () {
          
 });
 
+
+$('input[name=unit]').change(function(){
+    var value = $( 'input[name=unit]:checked' ).val();
+    // alert(value);
+    if(value == "Hours")
+    {
+      $("#time").prop('disabled', false);
+      $("#day_type").prop('disabled', true);
+
+      $("#days").hide();
+      $("#total_time").show();
+    }
+    if(value == "Days")
+    {
+      $("#day_type").prop('disabled', false);
+      $("#time").prop('disabled', true);
+
+      $("#total_time").hide();
+      $("#days").show();
+    }
+    
+    
+
+});
   
 
 </script>

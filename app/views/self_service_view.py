@@ -1126,7 +1126,7 @@ def delete_travel_request(request, pk):
 def self_travel_expense(request):
     requests = Travel_Request_Detail.objects.filter(is_active='1', employee_id = request.user.emp_id).order_by('-created_at')
     context = {'requests':requests}
-    return render(request, "self_service/self_travel_request.html", context)
+    return render(request, "self_service/self_travel_expense.html", context)
 
 
 def compensatory_request(request):
@@ -1137,20 +1137,20 @@ def compensatory_request(request):
 
 def add_compensatory_request(request):
     form = CompensatoryRequest_DetailForm()
+    # print(request.POST)
     if request.method == 'POST':
         form = CompensatoryRequest_DetailForm(request.POST)
-        if  form.is_valid(): 
-            # return HttpResponse('working.') 
+        if form.is_valid(): 
             employee = request.POST.get('employee')
             unit = request.POST.get('unit')
             duration = request.POST.get('duration')
             
-            compoensatory_date = request.POST.get('compoensatory_date')
-            if compoensatory_date != "":
-               d = datetime.strptime(compoensatory_date, '%d-%m-%Y')
-               compoensatory_date = d.strftime('%Y-%m-%d')
-            else:
-               compoensatory_date = None  
+            # compoensatory_date = request.POST.get('compoensatory_date')
+            # if compoensatory_date != "":
+            #    d = datetime.strptime(compoensatory_date, '%d-%m-%Y')
+            #    compoensatory_date = d.strftime('%Y-%m-%d')
+            # else:
+            #    compoensatory_date = None  
 
             worked_date = request.POST.get('worked_date')
             if worked_date != "":
@@ -1168,13 +1168,22 @@ def add_compensatory_request(request):
             created_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
             updated_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
 
+            # print(unit)
+
+            total_hours = duration
+
+            if duration == "Full Day":
+                total_hours = '08:00'
+            if duration == "Half Day":
+                total_hours = '04:00'
+
             obj = Compoensatory_Request_Detail.objects.create( 
 
                 employee_id=employee, 
                 worked_date=worked_date,
-                compoensatory_date=compoensatory_date,
                 unit=unit,
                 duration=duration,
+                total_hours = total_hours,
                 from_time=from_time,
                 to_time=to_time,
                 reason=reason,
@@ -1184,6 +1193,7 @@ def add_compensatory_request(request):
 
             ) 
             obj.save()
+
             messages.success(request, 'Compensatory request was requested ! ')
             return redirect('compensatory_request') 
 

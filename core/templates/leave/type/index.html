@@ -70,7 +70,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{types.name}}</td>
                     <td>{{types.type}}</td>
-                    <td>{{types.unit}}</td>
+                    <td>Days</td>
 
                     {% if types.is_active == 1 %}
                     <td>
@@ -93,12 +93,20 @@
                     
                         
                     {% endif %}
+                    
+                    
+                      <td>
+                        {% if types.name == "Compensatory Off" %}
+                          <a class="fas fa-edit" title="Edit" href="{% url 'edit_comp_off' types.id %}"></a>
+                        {% endif %}
 
-                    <td>
-                        <a class="fas fa-edit" title="Edit" href="{% url 'edit_leave_type' types.id %}"></a>
-                        <a class="confirm-delete fas fa-trash" title="Delete" href="#"></a>
-                
-                    </td>
+                        {% if types.name != "Compensatory Off" %}
+                          <a class="fas fa-edit" title="Edit" href="{% url 'edit_leave_type' types.id %}"></a>
+                          <a class="confirm-delete fas fa-trash" title="Delete" href="#"></a>
+                        {% endif %}
+                  
+                      </td>
+                   
                     
                    
                 </tr>

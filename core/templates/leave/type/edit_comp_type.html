@@ -1,0 +1,1181 @@
+{% extends "layouts/base.html" %}
+<title>HRMS</title>
+{% block title %} New Leave Type {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Page plugins -->
+    <link rel="stylesheet" href="/static/assets/vendor/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="/static/assets/vendor/quill/dist/quill.core.css">
+ 
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.color_picker{
+    max-width: 30px;
+    background-color: white !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
+    height: 30px;
+}
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: space-around;
+
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+    
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+table, td, th {
+  border: 0px solid black;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  text-align: center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.half {
+   float: left;
+   width: 49%;
+   margin: 2px;
+}
+
+.tab-applicable {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: space-around;
+}
+
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+  .error input, .error select {
+    border: 2px red solid;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #F1F1F1;
+}
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+table, td, th {
+  border: 0px solid black;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td {
+  text-align: center;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.half {
+   float: left;
+   width: 49%;
+   margin: 2px;
+}
+input[type="radio"]:checked+label { font-weight: bold; }
+input[type="radio"] {
+  margin-right: 10px;
+}
+.checkboxes label {
+  display: inline-block;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+.ZPLeaveType .innerContent .zpTabs_innerContainer .extended .zprt-label {
+    padding-left: 30px;
+    width: 100%;
+    margin-bottom: 10px;
+    float: left;
+    min-height: auto;
+}
+
+.ZPLeaveType .innerContent .zprt-label {
+    width: 300px;
+    padding-bottom: 0px;
+    padding-top: 0;
+    font-style: normal !important;
+}
+
+.zprt-label {
+    display: inline-block;
+    width: 67%;
+    word-wrap: break-word;
+    vertical-align: bottom;
+    position: relative;
+    white-space: normal;
+    min-height: 30px;
+    padding-bottom: 0;
+    padding-right: 0;
+    padding-top: 4px;
+}
+
+.ZPLeaveType .innerContent .zpTabs_contentInner .zprt-label .blkCheckbox {
+    display: inline-block;
+    width: 100%;
+}
+
+.ZPLeaveType .innerContent .zpTabs_contentInner .zprt-label .blkCheckbox label.checkbox {
+    display: inline-block;
+    margin-right: 30px;
+}
+
+checkbox{
+    margin-right: 5px;
+}
+
+.checkbox{
+    margin-right: 15px;
+}
+
+.blkCheckbox span {
+    margin-left: 5px;
+}
+
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      
+      <span class="mask bg-gradient-default opacity-8"></span>
+    
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
+            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-lg-12 order-xl-2">
+           
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Edit Leave Type </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <form method="POST" name="form" class="post-form" >
+                {% csrf_token %}  
+            <div class="card-body">
+           
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-4">
+                  <input type="text" name="name" value="{{ leave_type.name }}" readonly class="form-control" placeholder="" >
+                    {{ form.name.errors }}
+                </div>
+                <div class="col-sm-1">
+                    <input class="color_picker" name="color" type="color" value = '{{ leave_type.color }}' />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Code</label>
+                <div class="col-sm-4">
+                  <input type="text" name="code" value="{{ leave_type.code }}"  class="form-control" placeholder="" maxlength="3">
+                </div>
+              </div>
+
+                <div class="form-group row">
+                  <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Type</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="type" value="{{ leave_type.type }}" readonly class="form-control" placeholder="" >
+                    {{ form.type.errors }}
+                  </div>
+                </div>
+           
+               <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-4">
+                  <textarea name="description" value="{{ leave_type.description }}"  class="form-control" placeholder="">{{ leave_type.description }}</textarea> 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label"> Applicable for</label>
+                <div class="col-sm-4">
+                  <p>All Users</p>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label"> Duration(s) Allowed :</label>
+                <div class="col-sm-6">
+                  <div class="zprt-label">
+                    <div class="blkCheckbox">
+                        <label class="checkbox">
+                            <input type="checkbox" name="unit" value="fullday" {% if 'fullday' in leave_type.unit %} checked {% endif %} ><span>Full Day</span>
+                        </label> 
+                        <label class="checkbox">
+                            <input type="checkbox" name="unit" value="halfday" {% if 'halfday' in leave_type.unit %} checked {% endif %} ><span>Half Day</span>
+                        </label> 
+                        <!-- <label class="checkbox">
+                            <input type="checkbox" name="enable_quarterday"><span>Quarter Day</span>
+                        </label>  -->
+                        <label class="checkbox">
+                            <input type="checkbox" name="unit" value="hourly" {% if 'hourly' in leave_type.unit %} checked {% endif %} ><span>Hourly</span>
+                        </label>
+                    </div>
+                </div>   
+                </div>
+              </div>
+
+            </div>
+
+             <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <a href="/leave_types/" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+             </div>
+
+             </form>
+
+             
+            </div>
+
+
+            </div>
+             
+          </div>
+
+        </div>
+
+  
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+<script>
+
+  $(function () {
+    var dateToday = new Date();
+         // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+         $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+      todayBtn: "linked",
+      todayHighlight: true,});
+       
+});
+
+function openCity(evt, cityName) {
+    evt.preventDefault();
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tabcontents = document.getElementsByClassName("tabcontents");
+    for (i = 0; i < tabcontents.length; i++) {
+      tabcontents[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+  if(cityName =="Paris")
+      document.getElementById("defaultApplicable").click();
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+//document.getElementById("defaultApplicable").click();
+
+function openApplicable(evt, applicable) {
+  //alert(applicable);
+  evt.preventDefault();
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks_applicable");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(applicable).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+
+$( document ).ready(function() {
+        $('.maxibal').hide();
+        $('.openbal').hide();
+    });
+function valueChanged_accur(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();
+      if($('.accurcheck').is(":checked"))   
+          $(".accur").show();
+      else
+          $(".accur").hide();
+          return false;
+  }
+function valueChanged_reset(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();  
+      if($('.resetcheck').is(":checked"))   
+          $(".reset").show();
+      else
+          $(".reset").hide();
+          return false;
+  }
+function valueChanged_openbal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.openbalcheck').is(":checked"))   
+          $(".openbal").show();
+      else
+          $(".openbal").hide();
+          return false;
+  }
+  function valueChanged_maxibal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.maxibalcheck').is(":checked"))   
+          $(".maxibal").show();
+      else
+          $(".maxibal").hide();
+          return false;
+  }
+
+  $('.samefields').change(function(){
+
+     // $("#all_employees option:first").attr("selected", true);
+     // $("#all_employees").text($("#all_employees option:first").val()); 
+
+     $("#all_employees").prop("selectedIndex", 0);
+     
+  });
+
+
+  $(document).on("change", ".chkinput", function () {
+ // alert();
+       var id = ($(this).attr('id'));
+       var arr = id.split('_');
+          var inputid = "#myinputid_" + arr[1];
+          $(inputid).attr('disabled','disabled');
+     // alert(inputid);
+      if($(this).is(":checked")) {
+         $(inputid).removeAttr('disabled');
+      }
+  });
+  $(document).on("change", ".past_chkbox", function () {
+         $('#past_div').hide();
+      if($(this).is(":checked"))
+         $('#past_div').show();
+    });
+    $(document).on("change", ".future_chkbox", function () {
+        $('.future_div').hide();
+     if($(this).is(":checked"))
+        $('.future_div').show();
+    });
+    $( document ).ready(function() {
+        $('.maxibal').hide();
+        $('.openbal').hide();
+        $('#accur_in').show();
+      $('#accur_ddl_4th').show();
+       // $('#reset_ddl_carry_3rd_td').show();
+       // $('#reset_ddl_carry_4th_td').show();
+        $('#accur_ddl_2nd_td').show();
+                $('.chkinput').each(function(i) {
+          $(this).attr('id', 'mychkid_' + i);
+          });
+          $('.chkinput1').each(function(i) {
+          $(this).attr('id', 'myinputid_' + i);
+          $(this).attr('disabled','disabled');
+          });
+          $('#past_div').hide();
+          $('.future_div').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+    });
+    $('#ddl_accural_1st').on('change', function() {
+      // $('#ddl_accural_2nd').find('option:selected').remove();
+      var val = this.value;
+      $('#ddl_accural_2nd').removeAttr('selected');
+      $('#ddl_accural_3rd').removeAttr('selected');
+      $('#accur_ddl_2nd_td').show();
+      $('#accur_in').show();
+      $('#accur_ddl_4th').show();
+      $("#ddl_accural_3rd").find('option').each(function() {
+          $(this).remove();
+      });
+    $("#ddl_accural_3rd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+             });
+             $("#ddl_accural_2nd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+            // alert( $(this).val());
+                if($(this).val() == 1 && val == "00")
+                {
+                      $(this).remove();
+                      $('#ddl_accural_2nd').append($('<option>', { 
+                            value: '1',
+                            text : '1st' 
+                      }));
+                      $('#ddl_accural_2nd').append( $("#ddl_accural_2nd option[value='-1']").attr("selected","selected"));
+                }
+                else
+                {
+                      //$(this).remove();
+                      $('#ddl_accural_2nd option[value="1"]').remove();
+                      $('#ddl_accural_2nd').append($('<option>', { 
+                            value: '1',
+                            text : '1st' 
+                      }));
+                      $('#ddl_accural_2nd').append( $("#ddl_accural_2nd option[value='1']").attr("selected","selected"));
+                }
+             });
+       // alert( this.value );
+       var $id = "#ddl_accural_3rd";
+     if(val == "00")  // one time
+     {  
+          bind_yearly($id);
+         $('#ddl_accural_2nd').removeAttr('selected');
+      $("#ddl_accural_2nd option[value='-1']").attr("selected","selected");
+      $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accur_in').hide();
+      $('#accur_ddl_4th').hide();
+     }
+    // $('').show();
+  else if(val == "01")  //year
+     {  // alert('y');
+           bind_yearly($id);
+           $('#ddl_accural_3rd').removeAttr('selected');
+          $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+          $("#ddl_accural_3rd option[value='1']").attr("selected","selected");
+          $('#accur_in').show();
+          $('#accur_ddl_4th').show();
+     }
+  else if(val == "11") //month
+  {
+    bind_yearly($id);
+      $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accural_3rd_td').hide();
+      $('#accur_ddl_4th').show();
+  }
+  else if(val == "16") //half
+   {
+      $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#accural_3rd_td').show();
+      $('#accur_ddl_4th').show();
+    bind_monthly($id); 
+   }
+  else if(val == "14") //trianually
+     {
+          bind_triannually($id);
+     }
+  else if(val == "13") //quaterly
+     {
+          bind_quarterly($id);
+     } 
+  else if(val == "12") //bimonthly
+     {
+          bind_bimonthly($id);
+     }
+  else if(val == "315") //semi monthly
+     {
+          bind_semi_monthly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+  else if(val == "22") // bi weekly
+     {
+          bind_bi_weekly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+  else if(val == "21") //  weekly
+     {
+          bind_bi_weekly($id);
+          $('#accur_ddl_2nd_td').hide();
+     }
+});
+$('#reset_ddl_1st').on('change', function() {  //alert();
+      // $('#ddl_accural_2nd').find('option:selected').remove();
+      $('#reset_ddl_2nd').removeAttr('selected');
+      $('#reset_ddl_3rd').removeAttr('selected');
+      $("#reset_ddl_2nd").removeProp("selected");
+      $("#reset_ddl_3rd").removeProp("selected");
+      $("#reset_ddl_2nd option:selected").each(function () {
+             $(this).removeAttr('selected'); 
+             });
+     // $('#accur_ddl_2nd_td').show();
+     $('#reset_ddl_2nd_td').show();
+     $('#reset_ddl_1st_td').show();
+      $("#reset_ddl_3rd").find('option').each(function() {
+       $(this).remove();
+    });
+       // alert( this.value );
+       var $id = "#reset_ddl_3rd";
+     var val = this.value;
+     if(val == "00")  // one time
+     {
+         bind_yearly($id);
+         $('#reset_ddl_2nd').removeAttr('selected');
+      $("#reset_ddl_2nd option[value='-1']").attr("selected","selected");
+      $("#reset_ddl_3rd option[value='-1']").attr("selected","selected");
+     // $('#accur_in').hide();
+     // $('#accur_ddl_4th').hide();
+     }
+    // $('').show();
+  else if(val == "01")  //year
+     {  // alert('y');
+           bind_yearly($id);
+           $('#reset_ddl_3rd').removeAttr('selected');
+           $('#reset_ddl_2nd').removeAttr('selected');
+          $("#ddl_accural_2nd option[value='32']").attr("selected","selected");
+       //   $("#reset_ddl_3rd option[value='1']").attr("selected","selected");
+         // $('#accur_in').show();
+         // $('#accur_ddl_4th').show();
+     }
+  else if(val == "11") //month
+  {
+    bind_yearly($id);
+    $('#reset_ddl_2nd').removeAttr('selected');
+      $("#reset_ddl_2nd option[value='32']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+      $('#reset_ddl_2nd_td').hide();
+     // $('#accur_ddl_4th').show();
+  }
+  else if(val == "16") //half
+   {
+    $('#reset_ddl_2nd').removeAttr('selected');
+    $("#reset_ddl_2nd option[value='32']").attr("selected","selected");
+     // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
+    //  $('#accural_3rd_td').show();
+    //  $('#accur_ddl_4th').show();
+      bind_monthly($id); 
+   }
+  else if(val == "14") //trianually
+     {
+          bind_triannually($id);
+     }
+  else if(val == "13") //quaterly
+     {
+          bind_quarterly($id);
+     } 
+  else if(val == "12") //bimonthly
+     {
+          bind_bimonthly($id);
+     }
+  else if(val == "315") //semi monthly
+     {
+          bind_semi_monthly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='15']").attr("selected","selected");
+     }
+  else if(val == "22") // bi weekly
+     {
+          bind_bi_weekly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='6']").attr("selected","selected");
+     }
+  else if(val == "21") //  weekly
+     {
+          bind_bi_weekly($id);
+          $('#reset_ddl_1st_td').hide();
+          $('#reset_ddl_2nd').removeAttr('selected');
+          $("#reset_ddl_2nd option[value='6']").attr("selected","selected");
+     }
+});
+
+  $('#reset_ddl_carry_1st').on('change', function() {  //alert();
+    $('#reset_ddl_carry_1st_td').show();
+    $('#reset_ddl_carry_2nd_td').show();
+    $('#reset_ddl_carry_3rd_td').hide();
+    $('#reset_ddl_carry_4th_td').hide();
+    $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+    var $id = "#reset_ddl_3rd";
+     var val = this.value;
+     if(val == "1")  // one time
+     {
+          $('#reset_ddl_carry_1st_td').hide();
+    $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_3rd_td').show();
+           $('#reset_ddl_carry_4th_td').show();
+     } 
+     if(val == "2")  // one time 
+     {
+          $('#reset_ddl_carry_1st_td').hide();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_3rd_td').show();
+          $('#reset_ddl_carry_4th_td').show();
+          $('#reset_ddl_carry_5th_td').show();
+          $('#reset_ddl_carry_6th_td').show();
+          $('#reset_ddl_carry_7th_td').show();
+     } 
+     if(val == "3")  // one time 
+     {
+          $('#reset_ddl_carry_1st_td').show();
+          $('#reset_ddl_carry_2nd_td').show();
+          $('#reset_ddl_carry_3rd_td').hide();
+          $('#reset_ddl_carry_4th_td').hide();
+          $('#reset_ddl_carry_5th_td').hide();
+          $('#reset_ddl_carry_6th_td').hide();
+          $('#reset_ddl_carry_7th_td').hide();
+     } 
+    // $('').show(); reset_ddl_carry_1st
+ }); 
+
+ $('#reset_ddl_carry_units_1st').on('change', function() {  //alert();
+     $('#reset_ddl_carry_1st_td').show();
+     $('#reset_ddl_carry_2nd_td').show();
+     $('#reset_ddl_carry_3rd_td').hide();
+     $('#reset_ddl_carry_4th_td').hide();
+      //  alert(this.value)
+      var $id = "#reset_ddl_3rd";
+      var val = this.value;
+      if(val == "1")  // one time
+      {
+          $('#reset_ddl_carry_3rd_td').show();
+          $('#reset_ddl_carry_4th_td').show();
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+      }
+      if(val == "0")  // one time
+      {
+          $('#reset_ddl_carry_2nd_td').hide();
+          $('#reset_ddl_carry_1st_td').hide();
+          var carry = $('#reset_ddl_carry_1st').val();
+          if(carry == 2)
+          {
+                $('#reset_ddl_carry_1st_td').hide();
+                $('#reset_ddl_carry_2nd_td').hide();
+          }
+      }
+     // $('').show();
+  });
+
+   $('#reset_ddl_carry_last').on('change', function() {  //alert();
+     $('#reset_ddl_carry_last0_td').hide();
+     $('#reset_ddl_carry_last1_td').hide();
+     var $id = "#reset_ddl_3rd";
+      var val = this.value;
+      if(val == "1")  // one time
+      {
+           $('#reset_ddl_carry_last0_td').show();
+            $('#reset_ddl_carry_last1_td').show();
+      // $('#accur_in').hide();
+      // $('#accur_ddl_4th').hide();
+      }
+     // $('').show();
+  });
+
+
+function bind_yearly(id)
+{
+  var select = $(id);
+      var newOptions = {
+                  'Jan' : '1',
+                  'Feb' : '2',
+                  'Mar' : '3',
+                  'Apr' : '4',
+                  'May' : '5',
+                  'Jun' : '6',
+                  'Jul' : '7',
+                  'Aug' : '8',
+                  'Sep' : '9',
+                  'Oct' : '10',
+                  'Nov' : '11',
+                  'Dec' : '12',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+}
+function bind_one_time(id)
+{
+  var select = $(id);
+      var newOptions = {
+                  '1st' : '1',
+                  '2nd' : '2',
+                  '3rd' : '3',
+                  '4th' : '4',
+                  '5th' : '5',
+                  '6th' : '6',
+                  '7th' : '7',
+                  '8th' : '8',
+                  '9th' : '9',
+                  '10th' : '10',
+                  '11th' : '11',
+                  '12th' : '12',
+                  '13th' : '13',
+                  '14th' : '14',
+                  '15th' : '15',
+                  '16th' : '16',
+                  '17th' : '17',
+                  '18th' : '18',
+                  '19th' : '19',
+                  '20th' : '20',
+                  '21th' : '21',
+                  '22th' : '22',
+                  '23th' : '23',
+                  '24th' : '24',
+                  '25th' : '25',
+                  '26th' : '26',
+                  '27th' : '27',
+                  '28th' : '28',
+                  '29th' : '29',
+                  '30th' : '30',
+                  '31st' : '31',
+                  'Last Day' : '32',
+                  'Policy Date' : '-1',
+                  'Joining Date' : '-2',
+                  'Birth Date' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+}
+function bind_monthly(id)
+{
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Jul' : '1',
+                  'Feb & Aug' : '2',
+                  'Mar & Sep' : '3',
+                  'Apr & Oct' : '4',
+                  'May & Nov' : '5',
+                  'Jun & Dec' : '6',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_triannually(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & May & Sep' : '1',
+                  'Feb & Jun & Oct' : '2',
+                  'Mar & Jul & Nov' : '3',
+                  'Apr & Aug & Dec' : '4',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_quarterly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Apr & Jul & Oct' : '1',
+                  'Feb & May & Aug & Nov' : '2',
+                  'Mar & Jun & Sep & Dec' : '3',
+                   'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_bimonthly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Jan & Mar & May & Jul & Sep & Nov' : '1',
+                  'Feb & Apr & Jun & Aug & Oct & Dec' : '2',
+                  'Policy Month' : '-1',
+                  'Joining Month' : '-2',
+                  'Birth Month' : '-3',
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+  function bind_semi_monthly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  '1 & 16' : '1',
+                  '2 & 17' : '2',
+                  '3 & 18' : '3',
+                  '4 & 19' : '4',
+                  '5 & 20' : '5',
+                  '6 & 21' : '6',
+                  '7 & 22' : '7',
+                  '8 & 23' : '8',
+                  '9 & 24' : '9',
+                  '10 & 25' : '10',
+                  '11 & 26' : '11',
+                  '12 & 27' : '12',
+                  '13 & 28' : '13',
+                  '14 & 29' : '14',
+                  '15 & 30' : '15'
+              };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+
+
+  function bind_bi_weekly(id)
+  {
+    var select = $(id);
+      var newOptions = {
+                  'Sun' : '0',
+                  'Mon' : '1',
+                  'Tue' : '2',
+                  'Wed' : '3',
+                  'Thu' : '4',
+                  'Fri' : '5',
+                  'Sat' : '6',
+                 };
+      $('option', select).remove();
+      $.each(newOptions, function(text, key) {
+      var option = new Option(text, key);
+      select.append($(option));
+      });
+  }
+function valueChanged_accur(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();
+      if($('.accurcheck').is(":checked"))   
+          $(".accur").show();
+      else
+          $(".accur").hide();
+          return false;
+  }
+function valueChanged_reset(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault();  //alert('v');
+      if($('.resetcheck').is(":checked"))   
+          $(".reset").show();
+      else
+          $(".reset").hide();
+          return false;
+  }
+function valueChanged_openbal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.openbalcheck').is(":checked"))   
+          $(".openbal").show();
+      else
+          $(".openbal").hide();
+          return false;
+  }
+  function valueChanged_maxibal(evt)
+  {// alert($('.accurcheck').is(":checked"));
+  evt.preventDefault(); //alert('v');
+      if($('.maxibalcheck').is(":checked"))   
+          $(".maxibal").show();
+      else
+          $(".maxibal").hide();
+          return false;
+  }
+
+
+  $('#appli_department').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_department').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_department').show();
+      }
+
+  });
+
+  $('#appli_designation').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_designation').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_designation').show();
+      }
+
+  });
+
+
+   $('#appli_location').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exe_location').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exe_location').show();
+      }
+
+  });
+
+  $('#appli_role').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exe_role').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exe_role').show();
+      }
+
+  });
+
+   $('#appli_employee_type').on('change', function() {
+      
+      if(this.value !=="")
+      {
+          $('#exc_employee').hide();
+      }
+
+      if(this.value =="")
+      {
+          $('#exc_employee').show();
+      }
+
+  });
+
+
+</script>
+
+{% endblock javascripts %}
+ 

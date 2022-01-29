@@ -14,8 +14,6 @@ import random
 
 class Compoensatory_Request_Detail(models.Model): 
 
-    # Separation
-
     id = models.AutoField(primary_key=True,verbose_name ='ID')   
     employee = models.ForeignKey(Employee, blank=True, null=True, on_delete= models.SET_NULL)
     worked_date = models.DateField(blank = True, null = True) 
@@ -30,6 +28,8 @@ class Compoensatory_Request_Detail(models.Model):
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
     status = models.PositiveSmallIntegerField(default=0)
+    is_aproved = models.PositiveSmallIntegerField(default=0)
+    total_hours = models.CharField(max_length=30 , blank = True, null = True)
   
     class Meta:  
         db_table = "compensatory_request_details"  

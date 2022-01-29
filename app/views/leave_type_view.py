@@ -41,7 +41,7 @@ import datetime
 @login_required(login_url="/login/")
 def index(request):
     
-    leave_types = Leave_Type.objects.filter(is_active = 1)
+    leave_types = Leave_Type.objects.all()
 
     # print(leave_types)
 
@@ -438,7 +438,7 @@ def edit_leave_type(request, pk):
         'applicable': applicable,
         'resctrictions': resctrictions,
     }
-
+    
     return render(request, "leave/type/edit_leave_type.html",  context )
 
 
@@ -690,7 +690,45 @@ def edit_leave_type(request, pk):
 
     context.update({"form":form})
     # print(context_role)
+
     return render(request, "leave/type/edit_leave_type.html",  context )
+
+
+def edit_comp_off(request, pk): 
+    leave_type = Leave_Type.objects.get(id=pk)
+    form = LeaveTypeForm(instance=leave_type )
+    if request.method == 'POST':
+        form = LeaveTypeForm(request.POST, instance=leave_type)
+        # print(request.POST)
+        if form.is_valid():
+
+            name = request.POST.get('name')
+            color = request.POST.get('color')
+            code = request.POST.get('code')
+            types = request.POST.get('type')
+            unit = request.POST.getlist('unit')
+            # print(unit)
+            description = request.POST.get('description')
+
+            type = Leave_Type.objects.filter(id=pk).update(
+                name=name, 
+                color=color,
+                code=code, 
+                type=types,
+                unit=unit,
+                description=description,
+
+            )
+
+        return redirect('leave_types')
+
+
+    context = {
+        'leave_type': leave_type,
+        'form': form,
+    }
+
+    return render(request, "leave/type/edit_comp_type.html",  context )
 
 
 def conditional_gender(gender):

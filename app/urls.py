@@ -72,6 +72,7 @@ urlpatterns = [
     path('add_leave_type/', admin_only(views.leave_type_view.add_leave_type), name="add_leave_type"),
     path('edit_leave_type/<str:pk>/', admin_only(views.leave_type_view.edit_leave_type), name="edit_leave_type"),
     path('change_status/<str:pk>/<str:val>/', admin_only(views.leave_type_view.change_status), name="change_status"),
+    path('edit_comp_off/<str:pk>/', admin_only(views.leave_type_view.edit_comp_off), name="edit_comp_off"),
    
     #leave balance
     path('leave_balance/', views.leave_balance_view.index, name="leave_balance"),
