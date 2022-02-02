@@ -1,0 +1,228 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Roles {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+
+        <div class="col-xl-12 order-xl-1">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Update Weekend </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                  <form method="POST" class="post-form" action="">
+                    {% csrf_token %}
+                      <div class="pl-lg-4">
+                          <div class="col-lg-4">
+                              <div class="form-group">
+                                  <label class="form-control-label" >Week Starts On</label>
+
+                                  <select name="week_starts_on" id="week_start" class="form-control week_start"  >
+                                      <option value="" >select</option>
+                                      <option value="sunday" {% if weekend.week_starts_on == "sunday" %} selected{% endif %}>Sunday</option>
+                                      <option value="monday" {% if weekend.week_starts_on == "monday" %} selected{% endif %}>Monday</option>
+                                      <option value="tuesday" {% if weekend.week_starts_on == "tuesday" %} selected{% endif %}>Tuesday</option>
+                                      <option value="wednesday" {% if weekend.week_starts_on == "wednesday" %} selected{% endif %}>Wednesday</option>
+                                      <option value="thursday" {% if weekend.week_starts_on == "thursday" %} selected{% endif %}>Thursday</option>
+                                      <option value="friday" {% if weekend.week_starts_on == "friday" %} selected{% endif %}>Friday</option>
+                                      <option value="saturday" {% if weekend.week_starts_on == "saturday" %} selected{% endif %}>Saturday</option>
+                                  </select>
+                                  {{ form.errors.week_starts_on }}
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                              <div class="form-group">
+                                  <label class="form-control-label" >Week Ends On</label>
+                                  <select name="week_ends_on" class="form-control week_end" id="week_end"  >
+                                      <option value=""  >select</option>
+                                      <option value="sunday" {% if weekend.week_ends_on == "sunday" %} selected{% endif %}>Sunday</option>
+                                      <option value="monday" {% if weekend.week_ends_on == "monday" %} selected{% endif %}>Monday</option>
+                                      <option value="tuesday" {% if weekend.week_ends_on == "tuesday" %} selected{% endif %}>Tuesday</option>
+                                      <option value="wednesday" {% if weekend.week_ends_on == "wednesday" %} selected{% endif %}>Wednesday</option>
+                                      <option value="thursday" {% if weekend.week_ends_on == "thursday" %} selected{% endif %}>Thursday</option>
+                                      <option value="friday" {% if weekend.week_ends_on == "friday" %} selected{% endif %}>Friday</option>
+                                      <option value="saturday" {% if weekend.week_ends_on == "saturday" %} selected{% endif %}>Saturday</option>
+                                  </select>
+                                  {{ form.errors.week_ends_on }}
+                              </div>
+                          </div>
+                          <div class="col-lg-4">
+                              <div class="form-group">
+                                  <label class="form-control-label" >Week Off</label>
+                                  <select name="week_off[]" id="week_off"  class="js-example-basic-multiple positionTypes" multiple="multiple">
+                                      <option value="" disabled>select</option>
+                                      <option value="sunday"  {% if 'sunday' in weekend.week_off %} selected{% endif %}>Sunday</option>
+                                      <option value="monday" {% if 'monday' in weekend.week_off %} selected{% endif %}>Monday</option>
+                                      <option value="tuesday" {% if 'tuesday' in weekend.week_off %} selected{% endif %}>Tuesday</option>
+                                      <option value="wednesday" {% if 'wednesday' in weekend.week_off %} selected{% endif %}>Wednesday</option>
+                                      <option value="thursday" {% if 'thursday' in weekend.week_off %} selected{% endif %}>Thursday</option>
+                                      <option value="friday" {% if 'friday' in weekend.week_off %} selected{% endif %}>Friday</option>
+                                      <option value="saturday" {% if 'saturday' in weekend.week_off %} selected{% endif %}>Saturday</option>
+                                  </select>
+                                  {{ form.errors.week_off }}
+                              </div>
+                          </div>
+                      </div>
+                      <center> <button class="btn btn-primary" type="submit">Update</button>
+                          <a href="{% url 'weekends' %}" class="btn btn-primary">Back</a></center>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+    });
+    // alert('snji')
+    // $('#week_start').on('change', function() {
+    //     // after creating the option
+    //     // alert('dnkj')
+    //     var select=$(this).val()
+    //     alert(select)
+    //     if ($(this).prop('selected')) {
+    //         $("#week_off").prop("disabled", true);
+    //     } else {
+    //         $("#week_off").prop("disabled", false);
+    //     }
+
+    //     if($('#week_start option[value="'+$(this).val()+'"]').attr('disabled') == 'disabled'){
+    //     alert('Its disabled you cannot select this option');
+    // }
+    //     $("select option[value*='selected']").prop('disabled',true);
+    // });
+
+
+
+
+    $("select.week_start").change(function () {
+
+        $(this).data('index', this.value);
+        // alert(this.value)
+        $("select.positionTypes option[value='" + this.value + "']:not([value=''])").prop('disabled', true);
+        // $(this).find("option[value='" + this.value + "']:not([value=''])").prop('disabled', false);
+
+    });
+
+
+    $("select.week_end").change(function () {
+
+
+        $(this).data('index', this.value);
+        var end =$("#week_end")[0].selectedIndex
+        // alert(end)
+        var start=$("#week_start")[0].selectedIndex
+        // alert(start)
+        //$("select.positionTypes option[value='" + this.value + "']:not([value=''])").prop('disabled', true);
+
+        selectToArray(end,start)
+        // $('#week_off').prop('disabled', $(this).val() === indexArr);
+
+    });
+    function selectToArray(end,start,data) {
+        var target = $("select[id=week_off] option");
+        //alert((start))
+        var results = [];
+        target.each(function () {
+            var val = $(this).val();
+            // alert(val)
+            if (val !== '') results.push(val);
+        });
+        // alert(results.toString());
+
+        // alert(results.indexOf(start));
+        // alert(results.indexOf(end));
+
+        // let index = [start,end];
+        // alert(index)
+        let indexArr = [];
+        for(var i=start; i<end; i++) {
+            // alert(index[i])
+            indexArr.push(results[i]);
+            alert(indexArr)
+
+
+            $("select.positionTypes option[value='" + results[i] + "']:not([value=''])").prop('disabled', true);
+            //
+            // })
+
+
+
+        }
+
+
+        // alert(bvwjh)
+
+
+
+
+
+        return results;
+    }
+
+
+
+
+
+    // $('#week_off').on('click', function() {
+    //
+    //          $("select option[value*='thursday']").prop('disabled',true);
+    // });
+    // function day(value){
+    //
+    //     var start= document.getElementById("week_start").value
+    //     // var dkj=document.getElementById("week_start").text
+    //     // alert(dkj)
+    //
+    //     var end= document.getElementById("week_end").value
+    //     // alert(end)
+    //    var weekoff=[start,end]
+    //     alert(weekoff)
+    //
+    // }
+
+</script>
+
+{% endblock javascripts %}

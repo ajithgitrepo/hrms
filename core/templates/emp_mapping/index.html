@@ -1,0 +1,354 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Reporting to {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Organization</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Employee Mappings</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_emp_mapping' 0 %}" class="btn btn-sm btn-neutral">Add +</a> 
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <!--<div class="row" >
+                 
+                  <div class="col-lg-4" style="float:right;">
+                     
+                        <h3 class="mb-0">Reporting</h3><br>
+                  </div> 
+                  <div class="col-lg-4"><label ></label></div>
+                  <div class="col-lg-1" style="margin-top: 10px;"><label >Filter_by:</label></div>
+                  <div class="col-lg-3">
+                        <select class="form-control"  style="border: 1px solid;"  name="employee" id="employee_status_change" >
+                              <option value="all">All</option>
+                              <option selected value="act">Active</option>
+                              <option value="inact">In Active</option>
+                             
+                          </select>
+                  </div>
+                  
+           
+          </div>-->
+            <!-- <h3 class="mb-0">Reporting</h3> -->
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="datatable-basic">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Role</th>
+                  <th>Location</th>
+                  <th>Reporting</th>
+                  <th>Edit</th>
+                  <!-- <th>Action</th> -->
+                </tr>
+              </thead>
+             
+              <tbody>
+                {% for rept in employees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td >
+                        <a  href="javascript:void(0);" style="color: green;font-weight: 500;"  data-toggle="modal" data-target="#documentModal" style="color: #5E72E4;"  class="" class="btn btn-info" onclick="view_more('{{rept.employee_id}}')" title="View">
+                              {{rept.first_name }} {{rept.last_name }} ({{rept.employee_id }})
+                            </a>  
+                   </td>
+
+                    <td>{{rept.department}}</td>
+                    <td>{{rept.role}}</td>
+                    <td>{{rept.location}}</td>
+                   
+                   <td>
+                        <a  href="javascript:void(0);" style="color: red;font-weight: 500;"  data-toggle="modal" data-target="#documentModal" style="color: #5E72E4;"  class="" class="btn btn-info" onclick="view_more('{{rept.rpt_emp}}')" title="View">
+                              {{rept.test}} ({{rept.rpt_emp }})
+                            </a>  
+                   </td>
+                    <td><a class="fas fa-edit" href="{% url 'add_emp_mapping' rept.employee_id %}" title="Edit" ></a></td>
+                       
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="modal fade bd-example-modal-lg" id="documentModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel"><b>Employee Details</b></h4>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+        <div class="modal-body">
+          <div class="container">
+                <div id="accordion" class="accordion">
+                    <div class="card mb-0" id="documents">
+                    </div>
+                </div>
+          </div>
+           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           </div>
+         </div>
+        </div>
+      </div>
+    </div>
+ 
+  
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this department?');
+        })
+
+        $(document).on('click', '.confirm-change', function(){
+            return confirm('Are you sure you want to change the status?');
+        })
+
+
+      $(document).ready(function()
+      {
+
+      var base_url = window.location.origin;
+
+      var host = window.location.host;  
+
+      var pathArray = window.location.pathname.split( '/' );
+
+      if(pathArray[2] != "") 
+
+      $('#employee_status_change').val(pathArray[2]);
+
+      });
+
+      $('#employee_status_change').on('change', function () {  
+            var sat = $(this).val();
+            window.location = "/filter_reporting_employees/"+sat+"/"; // redirect
+      });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+
+
+ function view_more(id){
+  // alert(id);
+      var csrf = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+           url: '/view_more',
+          type: 'POST',
+          data: {id : id, "csrfmiddlewaretoken": csrftoken,},
+          dataType: 'json',
+          success: function( data ) {
+            console.log(data)
+            // alert(data[0])
+            var val= data[0]
+           //  alert(data[0].model);
+            // console.log(data[0])
+            var name= data[1];
+           // alert(data.fields.location);
+            // alert(name)
+            // console.log(data[1])
+           // alert(JSON.stringify(data ));
+           role1 = ""; location1 = "";
+            jQuery.each(data, function(index, item) { //alert(item.model);
+                  if(item.model == "app.location")
+                  location1 = (item.fields.location)
+                  if(item.model == "auth.group")
+                  role1 = (item.fields.name)
+                 
+                  });
+           
+
+            var html = '';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapsetwo">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Basic Information</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapsetwo" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    if(data[0].model=="app.employee"){
+                        
+                         //alert(JSON.stringify(data ))
+                      $.each(data[0], function (key, val)
+                        {
+                          // alert(key)
+                          if(key == "fields"){
+                            // alert(data[0].fields.first_name)
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">First Name : </span>'+data[0].fields.first_name+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Last Name : </span>'+data[0].fields.last_name+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Nick Name : </span>'+data[0].fields.nick_name+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;"> Email Id : </span>'+data[0].fields.email_id+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Mobile : </span>'+data[0].fields.work_phone+'</div>';
+                          }
+                        });
+                    }
+                  html += '</div>';
+                  html += '</div>';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Work Information</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapseOne" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    if(data[0].model=="app.employee"){
+                      // alert("works")
+                      $.each(data[0], function (key, val)
+                        {
+                           if(key == "fields"){
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Designation : </span>'+data[0].fields.title+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Employement Type : </span>'+data[0].fields.employee_type+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Employee Status : </span>'+data[0].fields.employee_status+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Date Of Joining : </span>'+data[0].fields.date_of_joining+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Experience : </span>'+data[0].fields.experience+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Source Of Hire : </span>'+data[0].fields.source_of_hire+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Role : </span>'+ role1 +'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Location : </span>'+ location1 +'</div>';
+                           }
+                            });
+                    }
+                  html += '</div>';
+                  html += '</div>';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapsethree">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Personal Info</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapsethree" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    if(data[0].model=="app.employee"){
+                      // alert(data[1].model)
+                      $.each(data[0], function (key, val)
+                        {
+                          if(key == "fields"){
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Personal Mobile : </span>'+data[0].fields.mobile_phone+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Personal Email : </span>'+data[0].fields.other_email+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;"> Address : </span>'+data[0].fields.address+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Date of Birth : </span>'+data[0].fields.birth_date+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Gender : </span>'+data[0].fields.gender+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Marital Status : </span>'+data[0].fields.marital_status+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">About Me : </span>'+data[0].fields.about_me+'</div>';
+                          }
+                            });
+                      }
+                  html += '</div>';
+                  html += '</div>';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapsefour">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Passport Info</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapsefour" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    if(data[0].model=="app.employee"){
+                      // alert(data[1].model)
+                      $.each(data[0], function (key, val)
+                        {
+                          if(key == "fields"){
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Passport Number : </span>'+data[0].fields.passport_num+'</div>';
+                              html+='<div class="col-lg-6"><span style="font-weight: 700;">Passport Expiry Date : </span>'+data[0].fields.passport_exp_date+'</div>';
+                              html+='<div class="col-lg-4"><span id="psssport_url_other" style="font-weight: 700;">Passport Document : </span></div>';      
+                              if(data[0].fields.psssport_url != "" && data[0].fields.psssport_url != null)
+                              {
+                                   
+                                  var url = '/static/passport_images/' + data[0].fields.psssport_url;
+                                 // alert(url);
+                                 // html+= "<a href= "+ url +" id='psssport_url_other' class='float-left' target='_blank' data-toggle='tooltip' data-original-title='Download File'><i style='color: blue;font-size: x-large;' class='fas fa-file'></i></a>";
+                                 html+= "<div class='col-lg-2'><a href='/static/passport_images/"+data[0].fields.psssport_url+"' id='psssport_url_other' class='float-left' target='_blank' data-toggle='tooltip' data-original-title='Download File'><i style='color: blue;font-size: x-large;' class='fas fa-file'></i></a></div>"; 
+                                   
+                              }
+                              else
+                              {  
+                                   
+                                html+='<div class="col-lg-4"><span id="psssport_url_other">Document Not Uploaded</span></div>';
+                                  
+                              }
+
+                              html+="</div>";
+                             
+                          }
+                            });
+                      }
+                  html += '</div>';
+                  html += '</div>';
+             $("#documents").html(html);
+            $('#documentModal').modal('show');
+           }
+      })
+    }    
+
+
+
+
+    </script>
+
+{% endblock javascripts %}
+
+

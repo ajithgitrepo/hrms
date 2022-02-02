@@ -1,0 +1,259 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Files {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+#tab1, #tab2, #tab3{
+  /* background-color:grey; */
+  color:grey;
+  padding:10px 20px;
+  display:block;
+  /* width:200px; */
+  /* border-bottom:1px solid; */
+}
+
+hr {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important
+}
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Self-service</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-file"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Files</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_files' %}" class="btn btn-sm btn-neutral">Add</a>
+            <!-- <a href="" class="btn btn-sm btn-neutral">Add</a>add_employees -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Files</h3>
+          </div>
+
+         
+
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+               
+              </thead>
+
+                <tbody>
+                {% for fold in folders %}
+                    
+                        <div id="nav-mobile">
+                            <a href="#" id="tab1"><i class="fas fa-folder fa-2x" style="color: #FFC107;"></i> <span> {{ fold.folder }} - <small>{{ fold.dcount }} File(s)</small> </span> </td></a>
+                            <ul style="display: none;">
+                                {% for file in files %}
+                                    {% if file.folder == fold.folder %}
+                                        <li style="padding: 10px;"><i class="fas fa-file fa-1x"></i>&nbsp;&nbsp;
+                                            <a class="link" style="cursor: pointer;" href="{% static '' %}files/employee/{{file.folder}}/{{file.file}}" target="_blank" data-toggle="tooltip" data-original-title="View File">{{ file.name }} </a>
+                                            
+                                            <a class="confirm-delete float-right float-right" href="{% url 'delete_emp_file' file.pk %}"  data-toggle="tooltip" data-original-title="Delete File">
+                                                <i class="fas fa-trash"></i></i>&nbsp;&nbsp;
+                                            </a>&nbsp;&nbsp;
+                                            <a class="float-right" href="{% static '' %}files/employee/{{file.folder}}/{{file.file}}" download data-toggle="tooltip" data-original-title="Download File">
+                                                <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                                            </a>
+                                            <hr>
+                                        </li>
+
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                           
+                        </div>
+
+                  {% empty %}
+                    <h3 class="text-center">No files found..</h3>
+                {% endfor %}
+                </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    
+  </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+<script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+  
+<script type="text/javascript">
+
+
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Are you sure you want to delete this file?');
+    }) 
+
+  
+
+    $(document).ready(function()
+    {
+        $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+            todayBtn: "linked",
+            todayHighlight: true,
+            });
+
+    });
+
+    $(document).ready(function() {
+        $('#nav-mobile ul').hide();
+        $('#nav-mobile a').click(function(e) {
+            // e.preventDefault();
+            var $menuItem = $(this).next('ul');
+            $menuItem.slideToggle();
+            $('#nav-mobile ul').not($menuItem).slideUp();
+        });
+    });
+
+  
+
+     
+// var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+ 
+    </script>
+
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        //dom: 'Bfrtip',
+        buttons: [
+          
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+           
+            'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+
