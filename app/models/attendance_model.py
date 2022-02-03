@@ -9,6 +9,7 @@ class Attendance(models.Model):
     date = models.DateField(blank=True, null=True)
     employee = models.ForeignKey(Employee, blank=True, null=True, related_name='employee_id_attendance', on_delete= models.SET_NULL)
     is_present = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    comp_off = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     is_leave = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     is_half = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     checkin_time = models.TimeField(blank=True, null=True)

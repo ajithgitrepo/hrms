@@ -24,7 +24,6 @@ from django.conf.urls import url
 from django.shortcuts import render
 # from django.template import RequestContext
 from django.db.models import Q
-from datetime import datetime
 
 from app.models.reporting_to_model import Reporting 
 # from django.contrib.auth.models import Group
@@ -34,6 +33,7 @@ from django.db import connection
 from django.db.models import F
 
 import datetime
+from datetime import datetime, date
 
 from django.utils import timezone
 
@@ -186,8 +186,7 @@ def compensatory_request_status(request):
     value = request.POST.get('value')
 
     data = Compoensatory_Request_Detail.objects.get(id = id)
-
-    # print(data.unit)
+    
     employee=Leave_Balance.objects.get(is_active=1,employee_id=data.employee_id,leave_type_id=3)
 
     update = Compoensatory_Request_Detail.objects.filter(id=id).update(
@@ -210,7 +209,13 @@ def compensatory_request_status(request):
                 if data.duration=="Half Day":
                     comp=0.5          
             if data.unit=="Hours":
-                    comp=data.duration
+                    from_time=data.from_time 
+                    to_time=data.to_time
+                    # print(datetime.combine(date.today(),to_time)-datetime.combine(date.today(),from_time))
+                    duration=datetime.combine(date.today(),to_time)-datetime.combine(date.today(),from_time)
+                    diff=duration.total_seconds() / 36000
+                    comp=diff
+                    # print(comp)
             if employee.employee_id==data.employee_id:
                 # print('cn')
                 comp = Leave_Balance.objects.filter(employee_id= data.employee_id,leave_type_id=3).update(balance=F('balance') +comp,

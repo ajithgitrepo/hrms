@@ -143,14 +143,40 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <td>{{emp.duration}}</td>
                     <td>{{emp.from_time}}</td>
                     <td>{{emp.to_time}}</td>
-                    <td>
-                      <select class="form-control change_status" id="{{ emp.id }}" name="change_status">
-                        <option value="0" {% if emp.status == 0 %} selected{% endif %} >Pending</option>
-                        <option value="1" {% if emp.status == 1 %} selected{% endif %} >Approve</option>
-                        <option value="2" {% if emp.status == 2 %} selected{% endif %} >Reject</option>
-                      </select>
-                    
-                    </td>
+                    {% if role == "Manager" %}
+                      {% if emp.status == 0  %}
+                        <td>
+                          <select class="form-control change_status" id="{{ emp.id }}" name="change_status">
+                            <option value="0" {% if emp.status == 0 %} selected{% endif %} >Pending</option>
+                            <option value="1" {% if emp.status == 1 %} selected{% endif %} >Approve</option>
+                            <option value="2" {% if emp.status == 2 %} selected{% endif %} >Reject</option>
+                          </select>
+                        </td>
+                      {% endif %}
+                    {% endif %}  
+                    {% if role == "Admin" %}
+                      {% if emp.status == 0  %}
+                        <td align="center" >
+                          <a class="" style="color: orange;font-weight: 700;text-align: center;" data-toggle="tooltip" data-original-title="Pending">
+                            Pending
+                          </a>
+                        </td>
+                      {% endif %}
+                    {% endif %}
+                    {% if  emp.status == 1  %}
+                      <td align="center" >
+                        <a class="" style="color: green;font-weight: 700;text-align: center;" data-toggle="tooltip" data-original-title="Approved">
+                          Approved
+                        </a>
+                      </td>
+                    {% endif %}
+                    {% if  emp.status == 2  %}
+                      <td align="center" >
+                          <a class="" style="color: red;font-weight: 700;text-align: center;" data-toggle="tooltip" data-original-title="Rejected">
+                           Rejected   
+                          </a>
+                      </td>
+                    {% endif %}
                     <td> 
                         <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
                         &nbsp; &nbsp;

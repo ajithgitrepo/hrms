@@ -435,7 +435,15 @@ def change_leave_status(request):
     
     type_mode = LeaveRequest.objects.values_list('leave_mode', flat=True).get(id=id)
 
+    
+
+
     data = LeaveRequest.objects.get(id = id)
+
+    leave=LeaveRequest.objects.filter(leave_type_id__in=Leave_Type.objects.filter(id=data.leave_type_id))
+    # print(leave[0].leave_type.name)
+    comp=leave[0].leave_type.name
+    # print(comp)
 
     update = LeaveRequest.objects.filter(id=id).update(
         is_approved=is_approved, 
@@ -463,6 +471,19 @@ def change_leave_status(request):
                     leave_approved_by_id = request.user.emp_id,
                     updated_at=timezone.now()
                 )
+                if comp=='Compensatory Off':
+                    off=1
+                    comp=Attendance.objects.filter(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= data.employee_id).update(
+                        is_present=2,
+                        leave_approved_by_id = request.user.emp_id,
+                        updated_at=timezone.now()
+                    )
+
+                    comp_off=Leave_Balance.objects.filter(employee_id=data.employee_id, leave_type_id=data.leave_type_id ).update(
+                              balance=F('balance') - off,
+                              updated_at=timezone.now()
+                    )       
+
                 if first:
                     first = False
                     if (type_mode == 'half'):
@@ -471,7 +492,7 @@ def change_leave_status(request):
                         decr = Leave_Balance.objects.filter(employee_id=data.employee_id, leave_type_id=data.leave_type_id ).update(
                               balance=F('balance') - diff,
                               updated_at=timezone.now()
-                        )
+                        )       
 
             if value == '0' or value == '2':
                 attn = Attendance.objects.filter(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= data.employee_id).update(

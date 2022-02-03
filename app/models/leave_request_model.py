@@ -22,6 +22,8 @@ class LeaveRequest(models.Model):
     reason = models.TextField (blank = False, null = True)  
     is_approved = models.PositiveSmallIntegerField(default=0)
     is_rejected = models.PositiveSmallIntegerField(default=0) 
+    from_time = models.TimeField(blank = True, null = True)  
+    to_time = models.TimeField(blank = True, null = True)  
 
     team_mailid = models.CharField(max_length=250 , blank = False, null = True)
 
