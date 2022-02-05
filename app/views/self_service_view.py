@@ -1,3 +1,4 @@
+from cgi import test
 from app.models import exit_details_model
 from app.models import leave_type_model
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
@@ -61,11 +62,13 @@ from app.models.employee_model import Employee
 @login_required(login_url="/login/")
 def profile(request):
 
-    employee = Employee.objects.select_related().get(is_active='1', employee_id=request.user.emp_id)
+    employee = Employee.objects.select_related().get(
+        is_active='1', employee_id=request.user.emp_id)
     # print(employee.department.name)
-    reporting = Reporting.objects.filter(is_active = 1, employee_id = request.user.emp_id, reporting_id__is_active = 1)
+    reporting = Reporting.objects.filter(
+        is_active=1, employee_id=request.user.emp_id, reporting_id__is_active=1)
     # print(reporting[0].reporting.first_name)
-    context = {'employee': employee, 'reporting':reporting}
+    context = {'employee': employee, 'reporting': reporting}
 
     return render(request, "self_service/profile.html", context)
 
@@ -93,24 +96,30 @@ def attendance(request):
 
     # print(dates)
 
-    month_atten = Attendance.objects.filter(is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])
+    month_atten = Attendance.objects.filter(
+        is_active=1, employee_id=request.user.emp_id, date__range=[first_day, last_day])
     # print(month_atten)
 
-    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
-    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
+    full_present_days = Attendance.objects.filter(
+        is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
+    half_present_days = Attendance.objects.filter(
+        is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
     present_days = full_present_days + (half_present_days * 0.5)
     # print(present_days)
 
-    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
-    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-   
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved=1,
+                                                 is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved=1,
+                                                 is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
     absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
-    comp_off = Attendance.objects.filter(is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+    comp_off = Attendance.objects.filter(
+        is_active=1, comp_off=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(comp_off)
 
     zipped_data = zip(dates, date_no)
@@ -123,30 +132,33 @@ def attendance(request):
     weekend = Weekend.objects.filter(is_active=1)
     # print(weekend)
 
-    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    check_leave = Attendance.objects.filter(
+        is_active=1, date=myDate, is_leave=1, is_leave_approved=1, employee_id=request.user.emp_id)
     # print(check_leave)
 
     try:
-        today_attn = Attendance.objects.get(is_active = 1, date = myDate, employee_id = request.user.emp_id)
+        today_attn = Attendance.objects.get(
+            is_active=1, date=myDate, employee_id=request.user.emp_id)
         # print(today_attn.checkout_time)
     except Attendance.DoesNotExist:
         today_attn = None
 
-    num_days = len([1 for i in calendar.monthcalendar(datetime.now().year, datetime.now().month) if i[6] != 0])
+    num_days = len([1 for i in calendar.monthcalendar(
+        datetime.now().year, datetime.now().month) if i[6] != 0])
 
     html = ''
 
-    html +='<div class="table-responsive py-4">'
-    html +='<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
-    html +='<tr>'
-    html +='<th></th>'
-    html +='<th>First Check-in</th>'
-    html +='<th></th>'
-    html +='<th>Last Check-out</th>'
-    html +='<th>Total Hours</th>'
-                   
-    html +='</tr>'
-    html +='<tbody>'
+    html += '<div class="table-responsive py-4">'
+    html += '<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
+    html += '<tr>'
+    html += '<th></th>'
+    html += '<th>First Check-in</th>'
+    html += '<th></th>'
+    html += '<th>Last Check-out</th>'
+    html += '<th>Total Hours</th>'
+
+    html += '</tr>'
+    html += '<tbody>'
 
     day_no = []
 
@@ -156,94 +168,113 @@ def attendance(request):
     previous_Date = datetime.today() - timedelta(days=1)
     # print(previous_Date)
 
-    for date,date_no in zipped_data:
+    for date, date_no in zipped_data:
         # print(date)
-        html +='<tr>'
-        html +='<td width="75" class="">' + str(datetime.strftime(date, '%A')[0:3]) +','+ str(datetime.strftime(date, '%d'))
+        html += '<tr>'
+        html += '<td width="75" class="">' + \
+            str(datetime.strftime(date, '%A')[
+                0:3]) + ',' + str(datetime.strftime(date, '%d'))
 
         for attn in month_atten:
             date_time_attn = datetime.strptime(str(attn.date), '%Y-%m-%d')
-            
+
             if datetime.strftime(attn.date, '%d') == date_no:
 
                 # day_no.append(date_time_attn)
 
-                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+                day_no.append(datetime.strptime(
+                    str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
                 diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
-                
+
                 if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0:
 
-                    html +='<td width="145">'+ str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Present</span></div>'
-                    html +='</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Present</span></div>'
+                    html += '</td>'
                     if attn.checkout_time != None:
-                        html +='<td width="145"> '+ str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                        html += '<td width="145"> ' + \
+                            str(attn.checkout_time.strftime(
+                                "%I:%M %p")) + '</td>'
                     else:
-                        html +='<td width="145"> - </td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                  
+                        html += '<td width="145"> - </td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
 
-                if attn.is_present == 2:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                    
+                if attn.comp_off == 1:
+                    html += '<td width="145"></td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
+                    html += '</td>'
+                    html += '<td width="145"></td>' 
+                    html +='<td width="145"> </td>'
+
                 if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
-                    html +='<td width="145"></td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
-                    html +='</td>'
-                    html +='<td width="145"></td>'
-                    html +='<td width="145"></td>'
-                           
-                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                        
-                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                    
-                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    html += '<td width="145"></td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
+                    html += '</td>'
+                    html += '<td width="145"></td>'
+                    html += '<td width="145"></td>'
 
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
+
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
+
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
 
         for holi in holidays:
             if datetime.strftime(holi.date, '%d') == date_no:
 
-                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+                day_no.append(datetime.strptime(
+                    str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
                 # print(date)
                 # print(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
-    
-    
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr holyday-bg"><span class="holyday-border">' + \
+                    str(holi.holiday_name) + ' </span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
+
         for week in weekend:
             remove_single_quotes = week.week_off.replace("'", "")
             remove_square_brackets = str(remove_single_quotes)[1:-1]
@@ -254,41 +285,40 @@ def attendance(request):
                     if date.strftime("%A") == day_name:
 
                         # day_no.append(date)
-                        day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
+                        day_no.append(datetime.strptime(
+                            str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
                         # print(date)
 
             if datetime.strftime(date, '%A').lower() in week.week_off:
-                
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
+
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
 
         # print(day_no)
 
         if date not in day_no:
-            
+
             if date < previous_Date:
                 # print(date)
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
                 absent_days += 1
                 # lop_days += 1
 
-    html +='</tr>'
+    html += '</tr>'
 
-                   
-    html +='</tbody>'
-    html +='</table>'
-    html +='</div>'
-
+    html += '</tbody>'
+    html += '</table>'
+    html += '</div>'
 
     context = {
         'month_atten': month_atten,
@@ -303,11 +333,11 @@ def attendance(request):
         'emp_id': request.user.emp_id,
         'weekend': weekend,
         'weekend_count': num_days,
-        'check_leave':check_leave,
-        'comp_off':comp_off,
+        'check_leave': check_leave,
+        'comp_off': comp_off,
         'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
-        'today_attn':today_attn,
-        'day_no':day_no,
+        'today_attn': today_attn,
+        'day_no': day_no,
         'html': html,
 
     }
@@ -346,47 +376,54 @@ def filter_attendance(request, month):
 #    print(zipped_data)
     employees = Employee.objects.filter(is_active=1)
 
-   
-    full_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
-    half_present_days = Attendance.objects.filter(is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
+    full_present_days = Attendance.objects.filter(
+        is_active=1, is_present=1, is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
+    half_present_days = Attendance.objects.filter(
+        is_active=1, is_present=1, is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
     present_days = full_present_days + (half_present_days * 0.5)
 
     # print(present_days)
 
-    comp_off = Attendance.objects.filter(is_active=1, is_present=2, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
-    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-    
-    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved = 1, is_half = 1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
-   
+    comp_off = Attendance.objects.filter(
+        is_active=1, comp_off=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
+    full_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved=1,
+                                                 is_half=0, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
+    half_absent_days = Attendance.objects.filter(is_active=1, is_leave=1, is_leave_approved=1,
+                                                 is_half=1, employee_id=request.user.emp_id, date__range=[first_day, last_day]).count()
+
     absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
-    holidays = Holiday_Detail.objects.filter(is_active=1, date__range=[first_day, last_day])
+    holidays = Holiday_Detail.objects.filter(
+        is_active=1, date__range=[first_day, last_day])
 
     weekend = Weekend.objects.filter(is_active=1)
     # print(weekend)
 
-    check_leave = Attendance.objects.filter(is_active = 1, date = myDate, is_leave = 1, is_leave_approved = 1, employee_id = request.user.emp_id)
+    check_leave = Attendance.objects.filter(
+        is_active=1, date=myDate, is_leave=1, is_leave_approved=1, employee_id=request.user.emp_id)
     # print(check_leave)
 
-    num_days = len([1 for i in calendar.monthcalendar(date.year, date.month) if i[6] != 0])
+    num_days = len([1 for i in calendar.monthcalendar(
+        date.year, date.month) if i[6] != 0])
 
     html = ''
 
-    html +='<div class="table-responsive py-4">'
-    html +='<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
-    html +='<tr>'
-    html +='<th></th>'
-    html +='<th>First Check-in</th>'
-    html +='<th></th>'
-    html +='<th>Last Check-out</th>'
-    html +='<th>Total Hours</th>'
-                   
-    html +='</tr>'
-    html +='<tbody>'
+    html += '<div class="table-responsive py-4">'
+    html += '<table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">'
+    html += '<tr>'
+    html += '<th></th>'
+    html += '<th>First Check-in</th>'
+    html += '<th></th>'
+    html += '<th>Last Check-out</th>'
+    html += '<th>Total Hours</th>'
+
+    html += '</tr>'
+    html += '<tbody>'
 
     day_no = []
 
@@ -396,94 +433,117 @@ def filter_attendance(request, month):
     previous_Date = datetime.today() - timedelta(days=1)
     # print(previous_Date)
 
-    for date,date_no in zipped_data:
+    for date, date_no in zipped_data:
         # print(date)
-        html +='<tr>'
-        html +='<td width="75" class="">' + str(datetime.strftime(date, '%A')[0:3]) +','+ str(datetime.strftime(date, '%d'))
+        html += '<tr>'
+        html += '<td width="75" class="">' + \
+            str(datetime.strftime(date, '%A')[
+                0:3]) + ',' + str(datetime.strftime(date, '%d'))
 
         for attn in month_atten:
             date_time_attn = datetime.strptime(str(attn.date), '%Y-%m-%d')
-            
+
             if datetime.strftime(attn.date, '%d') == date_no:
 
                 # day_no.append(date_time_attn)
 
-                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+                day_no.append(datetime.strptime(
+                    str(date), '%Y-%m-%d %H:%M:%S'))
 
                 diff = relativedelta(attn.last_checkout, attn.first_checkin)
                 # print(diff.hours)
                 # print(diff.minutes)
-                
+
                 if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0:
 
-                    html +='<td width="145">'+ str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Present</span></div>'
-                    html +='</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Present</span></div>'
+                    html += '</td>'
                     if attn.checkout_time != None:
-                        html +='<td width="145"> '+ str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
+                        html += '<td width="145"> ' + \
+                            str(attn.checkout_time.strftime(
+                                "%I:%M %p")) + '</td>'
                     else:
-                        html +='<td width="145"> - </td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                  
+                        html += '<td width="145"> - </td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
 
-                if attn.is_present == 2:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                    
+                if attn.comp_off == 1:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
+
                 if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
-                    html +='<td width="145"></td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
-                    html +='</td>'
-                    html +='<td width="145"></td>'
-                    html +='<td width="145"></td>'
-                           
-                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                        
-                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
-                    
-                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td colspan="1" class="text-center">'
-                    html +='<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
-                    html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    html += '<td width="145"></td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr absent-bg"><span class="absent-border">Absent</span></div>'
+                    html += '</td>'
+                    html += '<td width="145"></td>'
+                    html += '<td width="145"></td>'
 
+                if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / Present</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
+
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Absent - HalfDay / WFH</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
+
+                if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0:
+                    html += '<td width="145">' + \
+                        str(attn.checkin_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td colspan="1" class="text-center">'
+                    html += '<div class="lingr present-bg"><span class="present-border">Present / WFH</span></div>'
+                    html += '</td>'
+                    html += '<td width="145">' + \
+                        str(attn.checkout_time.strftime("%I:%M %p")) + '</td>'
+                    html += '<td width="145"> ' + \
+                        str(diff.hours) + ' hours, ' + \
+                            str(diff.minutes) + ' minutes' + '</td>'
 
         for holi in holidays:
             if datetime.strftime(holi.date, '%d') == date_no:
 
-                day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+                day_no.append(datetime.strptime(
+                    str(date), '%Y-%m-%d %H:%M:%S'))
 
                 # print(date)
                 # print(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S.%f'))
 
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr holyday-bg"><span class="holyday-border">' + str(holi.holiday_name) +' </span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
-    
-    
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr holyday-bg"><span class="holyday-border">' + \
+                    str(holi.holiday_name) + ' </span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
+
         for week in weekend:
             remove_single_quotes = week.week_off.replace("'", "")
             remove_square_brackets = str(remove_single_quotes)[1:-1]
@@ -494,40 +554,40 @@ def filter_attendance(request, month):
                     if date.strftime("%A") == day_name:
 
                         # day_no.append(date)
-                        day_no.append(datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S'))
+                        day_no.append(datetime.strptime(
+                            str(date), '%Y-%m-%d %H:%M:%S'))
 
                         # print(date)
 
             if datetime.strftime(date, '%A').lower() in week.week_off:
-                
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
+
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr weekend-bg"><span class="weekend-border" >Weekend</span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
 
         # print(day_no)
 
         if date not in day_no:
-            
+
             if date < previous_Date:
                 # print(date)
-                html +='<td width="145"></td>'
-                html +='<td colspan="1" class="text-center">'
-                html +='<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
-                html +='</td>'
-                html +='<td width="145"></td>'
-                html +='<td width="145"></td>'
+                html += '<td width="145"></td>'
+                html += '<td colspan="1" class="text-center">'
+                html += '<div class="lingr absent-bg"><span class="absent-border">Absent / LOP</span></div>'
+                html += '</td>'
+                html += '<td width="145"></td>'
+                html += '<td width="145"></td>'
                 absent_days += 1
                 # lop_days += 1
 
-    html +='</tr>'
+    html += '</tr>'
 
-                   
-    html +='</tbody>'
-    html +='</table>'
-    html +='</div>'
+    html += '</tbody>'
+    html += '</table>'
+    html += '</div>'
 
     context = {
         'month_atten': month_atten,
@@ -543,21 +603,23 @@ def filter_attendance(request, month):
         'emp_id': request.user.emp_id,
         'weekend': weekend,
         'weekend_count': num_days,
-        'check_leave':check_leave,
-        'comp_off':comp_off,
-        'day_no':day_no,
+        'check_leave': check_leave,
+        'comp_off': comp_off,
+        'day_no': day_no,
         'html': html,
     }
 
     return render(request, "self_service/attendance.html", context)
 
+
 def files(request):
-    
-    queryset = Employee_Files.objects.filter(is_active = 1, employee__is_active = 1, employee_id = request.user.emp_id)
+
+    queryset = Employee_Files.objects.filter(
+        is_active=1, employee__is_active=1, employee_id=request.user.emp_id)
     # folders = Employee_Files.objects.filter(is_active = 1, employee_id = request.user.emp_id).values_list('folder').annotate(count=Count('folder')).order_by('folder')
-    
-    folders = (Employee_Files.objects.filter(is_active = 1, employee_id = request.user.emp_id).values('folder').annotate(dcount=Count('folder')).order_by('folder'))
-    
+
+    folders = (Employee_Files.objects.filter(is_active=1, employee_id=request.user.emp_id).values(
+        'folder').annotate(dcount=Count('folder')).order_by('folder'))
 
     context = {
         'files': queryset,
@@ -567,7 +629,7 @@ def files(request):
     return render(request, "self_service/files.html", context)
 
 
-def add_files(request):  
+def add_files(request):
 
     form = Employee_Files_Form()
 
@@ -575,50 +637,54 @@ def add_files(request):
         form = Employee_Files_Form(request.POST, request.FILES)
 
         if form.is_valid():
-            
-            current_date_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')  
-            handle_uploaded_file(request.FILES['file'], request.POST.get('name'), request.POST.get('folder'), current_date_time)
+
+            current_date_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+            handle_uploaded_file(request.FILES['file'], request.POST.get(
+                'name'), request.POST.get('folder'), current_date_time)
             extesion = os.path.splitext(str(request.FILES['file']))[1]
             if request.POST.get('date_until'):
-                date = datetime.strptime(request.POST.get('date_until'), "%d-%m-%Y")
+                date = datetime.strptime(
+                    request.POST.get('date_until'), "%d-%m-%Y")
                 db_date = date.strftime('%Y-%m-%d')
             else:
                 db_date = None
-            
 
-            obj = Employee_Files.objects.create( 
-                file = request.POST.get('name')+"-"+current_date_time+""+extesion,
-                name = request.POST.get('name'),
-                description = request.POST.get('description'),
-                device = 'web',
-                employee_id= request.user.emp_id,
-                added_by_id= request.user.emp_id,
-                updated_by_id= request.user.emp_id,
-                valid_until= db_date, 
-                folder = request.POST.get('folder'),
-               
+            obj = Employee_Files.objects.create(
+                file=request.POST.get('name')+"-" +
+                                      current_date_time+""+extesion,
+                name=request.POST.get('name'),
+                description=request.POST.get('description'),
+                device='web',
+                employee_id=request.user.emp_id,
+                added_by_id=request.user.emp_id,
+                updated_by_id=request.user.emp_id,
+                valid_until=db_date,
+                folder=request.POST.get('folder'),
+
             )
 
-            return redirect('files') 
+            return redirect('files')
 
-    folders = Folder.objects.filter(is_active = 1)
-   
+    folders = Folder.objects.filter(is_active=1)
+
     context = {
-        'form' : form,
-        'folders' : folders,
+        'form': form,
+        'folders': folders,
     }
 
-    return render(request, "self_service/add_files.html",  context )
+    return render(request, "self_service/add_files.html",  context)
 
 
 def handle_uploaded_file(f, name, folder, current_date_time):
-    
+
     extesion = os.path.splitext(str(f))[1]
     file_name = name+"-"+current_date_time+""+extesion
-    if folder !=None:
+    if folder != None:
         directory = folder
-        os.makedirs(os.path.join(settings.MEDIA_ROOT, 'files/employee/'+directory), exist_ok=True)
-        file_upload_dir = os.path.join(settings.MEDIA_ROOT, 'files/employee/'+directory)
+        os.makedirs(os.path.join(settings.MEDIA_ROOT,
+                    'files/employee/'+directory), exist_ok=True)
+        file_upload_dir = os.path.join(
+            settings.MEDIA_ROOT, 'files/employee/'+directory)
 
     else:
         file_upload_dir = os.path.join(settings.MEDIA_ROOT, 'files/employee')
@@ -629,88 +695,90 @@ def handle_uploaded_file(f, name, folder, current_date_time):
 
 
 def assets(request):
-    
-    assets = Asset_Detail.objects.filter(is_active='1',employee_id = request.user.emp_id)
+
+    assets = Asset_Detail.objects.filter(
+        is_active='1', employee_id=request.user.emp_id)
     context = {
-        'assets':assets
+        'assets': assets
     }
     return render(request, "self_service/assets.html", context)
 
 
-
-def add_asset(request):  
+def add_asset(request):
     form = Asset_DetailForm()
     if request.method == 'POST':
-       
+
         form = Asset_DetailForm(request.POST)
-        if  form.is_valid():
+        if form.is_valid():
             # print('enter')
             employee = request.user.emp_id
-           
+
             type_of_asset = request.POST.get('type_of_asset')
-        
+
             asset_details = request.POST.get('asset_details')
-            
+
             given_date = request.POST.get('given_date')
             if given_date != "":
-               #return HttpResponse(date)   
+               # return HttpResponse(date)
                d = datetime.strptime(given_date, '%d-%m-%Y')
                given_date = d.strftime('%Y-%m-%d')
             else:
-               given_date = None  
+               given_date = None
 
             return_date = request.POST.get('return_date')
             if return_date != "":
-               #return HttpResponse(date)   
+               # return HttpResponse(date)
                d = datetime.strptime(return_date, '%d-%m-%Y')
                return_date = d.strftime('%Y-%m-%d')
             else:
-               return_date = None    
-            
-            created_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
-            updated_at =  timezone.now()#.strftime('%Y-%m-%d %H:%M:%S')
+               return_date = None
+
+            created_at = timezone.now()  # .strftime('%Y-%m-%d %H:%M:%S')
+            updated_at = timezone.now()  # .strftime('%Y-%m-%d %H:%M:%S')
             is_active = '1'
             # if not Asset_Detail.objects.filter( Q(employee=employee)).exists():
-            obj = Asset_Detail.objects.create( 
-                employee_id=employee, 
+            obj = Asset_Detail.objects.create(
+                employee_id=employee,
                 type_of_asset=type_of_asset,
                 given_date=given_date,
                 return_date=return_date,
                 asset_details=asset_details,
                 created_at=created_at,
-                updated_at=updated_at, 
+                updated_at=updated_at,
                 is_active=is_active,
 
-            ) 
-              
+            )
+
             obj.save()
             messages.success(request, 'Asset details was added ! ')
-            return redirect('assets') 
-       
+            return redirect('assets')
+
     employee = Employee.objects.all()
     context_role = {
         'employees': employee,
-       
+
     }
-   
-    context_role.update({"form":form})
-  
-    return render(request, "self_service/add_asset.html",  context_role )
-   
+
+    context_role.update({"form": form})
+
+    return render(request, "self_service/add_asset.html",  context_role)
+
 
 def leave_tracker(request):
 
     employee = Employee.objects.get(employee_id=request.user.emp_id)
     # print(employee.date_of_joining)
-    leaves = Leave_Balance.objects.filter(is_active = 1, leave_type__is_active = 1, employee_id=request.user.emp_id) 
+    leaves = Leave_Balance.objects.filter(
+        is_active=1, leave_type__is_active=1, employee_id=request.user.emp_id)
     # print(leaves[0].leave_type.name)
 
-    requested = LeaveRequest.objects.filter(to_date__gte=datetime.now(), employee_id=request.user.emp_id)
+    requested = LeaveRequest.objects.filter(
+        to_date__gte=datetime.now(), employee_id=request.user.emp_id)
     # print(requested)
 
-    all_requestes = LeaveRequest.objects.filter(leave_type__is_active = 1, employee_id=request.user.emp_id).order_by('-created_at')
+    all_requestes = LeaveRequest.objects.filter(
+        leave_type__is_active=1, employee_id=request.user.emp_id).order_by('-created_at')
     # print(all_requestes)
-
 
     obj = []
     ids = []
@@ -719,7 +787,7 @@ def leave_tracker(request):
     myDict = {}
 
     # for index, data in enumerate(requested):
-        
+
     #     if data.leave_type_id in ids:
 
     #         print(index)
@@ -743,25 +811,30 @@ def leave_tracker(request):
         'employee': employee,
     }
 
-    return render(request, "self_service/leave_tracker.html",  context )
+    return render(request, "self_service/leave_tracker.html",  context)
 
 
 def apply_leave(request):
     form = Apply_Leave_Form()
-    employee = Employee.objects.get(is_active = 1, employee_id = request.user.emp_id)
-    
-    leaves = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 1).exclude(exception_dept = employee.department_id, exception_role = employee.role_id, exception_location = employee.location )
-    
-    leave_condition = Leave_Applicable.objects.filter(is_active = 1, leave_type__is_active = 1, all_employees = 0, gender = employee.gender, marital_status = employee.marital_status, department = employee.department_id, role = employee.role_id, location = employee.location, employment_type = employee.employee_type )
-   
+    employee = Employee.objects.get(
+        is_active=1, employee_id=request.user.emp_id)
+
+    leaves = Leave_Applicable.objects.filter(is_active=1, leave_type__is_active=1, all_employees=1).exclude(
+        exception_dept=employee.department_id, exception_role=employee.role_id, exception_location=employee.location)
+
+    leave_condition = Leave_Applicable.objects.filter(is_active=1, leave_type__is_active=1, all_employees=0, gender=employee.gender, marital_status=employee.marital_status,
+                                                      department=employee.department_id, role=employee.role_id, location=employee.location, employment_type=employee.employee_type)
+
     if request.method == 'POST':
-       
+
         form = Apply_Leave_Form(request.POST)
-        #return HttpResponse('ve')
+        # print('dcvh')
+        # return HttpResponse('ve')
         if form.is_valid():
-           #return HttpResponse('ve')   
+        #    return HttpResponse('ve')
+        #    print('cdnj')
            leave = request.POST.get('leave_type')
-           #return HttpResponse(leave)
+           # return HttpResponse(leave)
            for each in Leave_Type.objects.filter(is_active='1', id = leave):
                 leave_type = each.type
                 leave_name = each.name
@@ -804,15 +877,44 @@ def apply_leave(request):
                     start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
                     end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
                     diff = abs((end_date-start_date).days)+1
-                    #total_days = diff
+                    # total_days = diff
 
                     delta = end_date - start_date
                     total_days = delta.days + 1
                     
                     leave_mode = request.POST.get('leave_mode')
+                    # print(leave_mode)
                     leave_part = request.POST.get('leave_part')
+                    from_time=None
+                    to_time=None
+                    if leave_mode=='hours':
+                    # print(leave_mode)
+                        ftime =datetime.strptime( request.POST.get('from_time'),"%I:%M%p")
+                        # print(ftime)
+                        
+                        from_time = datetime.strftime(ftime, '%H:%M:%S')
+                        # print(from_time)
+                        ttime = datetime.strptime(request.POST.get('to_time'),"%I:%M%p")
+                        # print(ttime)
+                        to_time = datetime.strftime(ttime, '%H:%M:%S')
+                        # print(to_time)
+                        # test=ttime-ftime
+                        # print(test)
+                        # print(str(test))
+                        # dt = datetime.combine(datetime.today(), datetime.strptime(str(test), '%H:%M:%S').time())
+                        # print(dt)
+                        # ts = dt.timestamp()
+                        # print(ts)
+                        # print(ts/36000)
+                        duration = datetime.combine(
+                        date.today(), ttime.time())-datetime.combine(date.today(), ftime.time())
+                        diff = duration.total_seconds() / 36000
+                        comp = diff
+                        # print(comp)
+                        # print(test[0])
 
-                    #return HttpResponse(diff)
+                    # return HttpResponse(diff)
+                    
                    
                     message = "";
                     if (leave_name.strip() == "Sick Leave") and (total_days > 3):
@@ -820,7 +922,7 @@ def apply_leave(request):
                     if (str(total_days) < str(minimum_leave_apply))   and (minimum_leave_apply != None):
                          # if total_days != 0:
                            message = "Minimum " + minimum_leave_apply  + " leave that can be availed per application";
-                          #return HttpResponse(message)
+                          # return HttpResponse(message)
                     if (message == "") and (maximum_leave_apply != None):
                          if(int(total_days) >  int(maximum_leave_apply)):
                           message = "Maximum " + maximum_leave_apply  + " leave that can be availed per application";
@@ -839,20 +941,20 @@ def apply_leave(request):
                             
                             date_format = "%Y-%m-%d"
                             last_leave_d = (str(last_applied_leave_date))
-                            #return HttpResponse(datetime_object)
+                            # return HttpResponse(datetime_object)
                         
                             datetime_object = datetime.strptime(last_leave_d, '%Y-%m-%d').date()
                             from_date1 = from_date.strftime('%Y-%m-%d')
                             datetime_object1 = datetime.strptime(from_date1, '%Y-%m-%d').date()
-                            #return HttpResponse(datetime_object1)
+                            # return HttpResponse(datetime_object1)
                             delta = datetime_object1 - datetime_object
                             total_days1 = delta.days
-                        #return HttpResponse(total_days1) 
+                        # return HttpResponse(total_days1) 
                         
                             if(int(minimum_gap_apply) >= int(total_days1)):
                                     applic = "ok" 
                                     message = "Require minimum " + minimum_gap_apply + " days gap  between two applications ! "
-                                #return HttpResponse(message)
+                                # return HttpResponse(message)
                     if message == "":
                     
                         delta = end_date - start_date       # as timedelta
@@ -866,7 +968,7 @@ def apply_leave(request):
                             if upload != None: 
                                 logoRoot = os.path.join(settings.MEDIA_ROOT, 'leave_documents/')
                             
-                                #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
+                                # logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
                                 logoRoot=logoRoot.replace("\\","/")
                                 Photo_name = upload.name
                                 realVar = Photo_name.replace(" ", '')
@@ -875,87 +977,98 @@ def apply_leave(request):
                                 fs = FileSystemStorage(location=logoRoot)
                                 file_name = fs.save(Photo_name, upload)
                                 file_url = fs.url(file_name)   
-                                #return HttpResponse(file_url) 
-                        #return HttpResponse(Photo_name)
+                                # return HttpResponse(file_url) 
+                        # return HttpResponse(Photo_name)
                         is_half = 0
                         if(leave_mode == "half"):
                               is_half = 1
                               diff = 0.5
+                        count=Leave_Balance.objects.get(leave_type_id=leave,employee_id=request.user.emp_id)
+                        remaining_balance=count.balance
 
-                        obj = LeaveRequest.objects.create( 
-                        employee=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
-                        leave_type=Leave_Type.objects.get(id = leave) if leave else None,
-                        from_date=from_date.strftime('%Y-%m-%d'),
-                        to_date=to_date.strftime('%Y-%m-%d'),
-                        total_days = diff,
-                        reason=reason,
-                        created_at=created_at,
-                        updated_at=updated_at, 
-                        is_active=1,
-                        added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
-                        device = 'web',
-                        document_url=Photo_name,
-                        leave_mode=leave_mode,
-                        leave_part=leave_part
+                        if float(remaining_balance) >= float(diff):      
 
-                        ) 
-                        obj.save()
+                            obj = LeaveRequest.objects.create( 
+                            employee=Employee.objects.get(employee_id = emp_id) if emp_id else None, 
+                            leave_type=Leave_Type.objects.get(id = leave) if leave else None,
+                            from_date=from_date.strftime('%Y-%m-%d'),
+                            to_date=to_date.strftime('%Y-%m-%d'),
+                            total_days = diff,
+                            reason=reason,
+                            created_at=created_at,
+                            updated_at=updated_at, 
+                            is_active=1,
+                            added_by = Employee.objects.get(employee_id = request.user.emp_id) if request.user.emp_id else None, 
+                            device = 'web',
+                            document_url=Photo_name,
+                            leave_mode=leave_mode,
+                            leave_part=leave_part,
+                            from_time=from_time,
+                            to_time=to_time,
 
-                        for i in range(delta.days + 1):
-                         day = start_date + timedelta(days=i)
+                            ) 
+
+                            # print(obj)
+                            obj.save()
+
+                            for i in range(delta.days + 1):
+                                day = start_date + timedelta(days=i)
+                                
+                                # insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half)
+                                if not Attendance.objects.filter(Q(employee_id=emp_id, date = datetime.strftime(day, "%Y-%m-%d"))).exists():
+                                    insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half )
+                                else:
+                                    update = Attendance.objects.filter(date = datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id ).update(
+                                        is_leave = 1, is_half = is_half,
+                                        updated_at = datetime.now(),
+                                    )   
+
+                            my_host = 'smtp.gmail.com'
+                            my_port = 587
+                            my_username = settings.EMAIL_HOST_USER
+                            my_password = settings.EMAIL_HOST_PASSWORD
+                            my_use_tls = True
+
+                            connection = get_connection(host=my_host, 
+                            port=my_port, 
+                            username=my_username,  
+                            password=my_password, 
+                            use_tls=my_use_tls
+                            ) 
+                            from_date1 = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y').date()
+                            to_date1 = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y').date()
+                            employee_id  = request.user.emp_id
+                            emp_dtl = list(Employee.objects.values_list('first_name','last_name', 'employee_id',flat=False).get(employee_id = employee_id))
+                            emp_full = emp_dtl[0] +  emp_dtl[1] + " ( " +  emp_dtl[2] + " )"
+
+                            user_employee_id  = request.user.emp_id
+                            report_id = list(Reporting.objects.values_list('reporting_id',flat=False).get(employee_id= user_employee_id))
                         
-                        #insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half)
-                         if not Attendance.objects.filter(Q(employee_id=emp_id, date = datetime.strftime(day, "%Y-%m-%d"))).exists():
-                          insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half )
-                         else:
-                          update = Attendance.objects.filter(date = datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id ).update(
-                          is_leave = 1, is_half = is_half,
-                          updated_at = datetime.now(),
-                         )   
+                            report_emp_dtl = list(Employee.objects.values_list('first_name','last_name', 'employee_id','email_id',flat=False).get(employee_id = report_id[0]))
+                            #return HttpResponse((name[1]))
+                            reason1 = request.POST.get('reason')
+                            #return HttpResponse(reason)
+                            subject = 'Leave Request'
+                            html_message = render_to_string('mail_templates/leave_request_format.html', {'fname': report_emp_dtl[0], 'lname': report_emp_dtl[1], 'lv_type': leave_name,'f_date': from_date1,'t_date': to_date1,'reason': reason1,'emp_name': emp_full })
+                            plain_message = strip_tags(html_message)
+                            email_from = settings.EMAIL_HOST_USER
+                            recipient_list = [report_emp_dtl[3]]
 
-                        my_host = 'smtp.gmail.com'
-                        my_port = 587
-                        my_username = settings.EMAIL_HOST_USER
-                        my_password = settings.EMAIL_HOST_PASSWORD
-                        my_use_tls = True
+                            email = EmailMultiAlternatives(
+                            subject,
+                            plain_message,
+                            email_from,
+                            recipient_list,
+                            )
 
-                        connection = get_connection(host=my_host, 
-                        port=my_port, 
-                        username=my_username,  
-                        password=my_password, 
-                        use_tls=my_use_tls
-                        ) 
-                        from_date1 = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y').date()
-                        to_date1 = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y').date()
-                        employee_id  = request.user.emp_id
-                        emp_dtl = list(Employee.objects.values_list('first_name','last_name', 'employee_id',flat=False).get(employee_id = employee_id))
-                        emp_full = emp_dtl[0] +  emp_dtl[1] + " ( " +  emp_dtl[2] + " )"
-
-                        user_employee_id  = request.user.emp_id
-                        report_id = list(Reporting.objects.values_list('reporting_id',flat=False).get(employee_id= user_employee_id))
-                    
-                        report_emp_dtl = list(Employee.objects.values_list('first_name','last_name', 'employee_id','email_id',flat=False).get(employee_id = report_id[0]))
-                        #return HttpResponse((name[1]))
-                        reason1 = request.POST.get('reason')
-                        #return HttpResponse(reason)
-                        subject = 'Leave Request'
-                        html_message = render_to_string('mail_templates/leave_request_format.html', {'fname': report_emp_dtl[0], 'lname': report_emp_dtl[1], 'lv_type': leave_name,'f_date': from_date1,'t_date': to_date1,'reason': reason1,'emp_name': emp_full })
-                        plain_message = strip_tags(html_message)
-                        email_from = settings.EMAIL_HOST_USER
-                        recipient_list = [report_emp_dtl[3]]
-
-                        email = EmailMultiAlternatives(
-                        subject,
-                        plain_message,
-                        email_from,
-                        recipient_list,
-                        )
-
-                        email.attach_alternative(html_message, 'text/html')
-                        email.send()    
+                            email.attach_alternative(html_message, 'text/html')
+                            email.send()    
                        
-                        messages.success(request, 'Leave Requested Successfully ! ')
-                        return redirect('leave_tracker') 
+                            messages.success(request, 'Leave Requested Successfully ! ')
+                            return redirect('leave_tracker') 
+
+                        else:
+                            messages.error(request, ' You have Less Leave Balance')
 
                     context = {
                     'form' : form,
@@ -1060,7 +1173,7 @@ def add_self_travel_request(request):
             
             expected_date_of_arrival = request.POST.get('expected_date_of_arrival')
             if expected_date_of_arrival != "":
-               #return HttpResponse(date)   
+               # return HttpResponse(date)   
                d = datetime.strptime(expected_date_of_arrival, '%d-%m-%Y')
                expected_date_of_arrival = d.strftime('%Y-%m-%d')
             else:
@@ -1068,7 +1181,7 @@ def add_self_travel_request(request):
 
             expected_date_of_depature = request.POST.get('expected_date_of_depature')
             if expected_date_of_depature != "":
-               #return HttpResponse(date)   
+               # return HttpResponse(date)   
                d = datetime.strptime(expected_date_of_depature, '%d-%m-%Y')
                expected_date_of_depature = d.strftime('%Y-%m-%d')
             else:

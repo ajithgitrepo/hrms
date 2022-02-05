@@ -210,7 +210,7 @@ def attn_listview(request):
     absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
-    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    comp_off = Attendance.objects.filter(is_active = 1, comp_off = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(comp_off)
 
     zipped_data = zip(dates, date_no)
@@ -292,13 +292,13 @@ def attn_listview(request):
                     html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
                   
 
-                if attn.is_present == 2:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                if attn.comp_off == 1:
+                    html +='<td width="145"></td>'
                     html +='<td colspan="1" class="text-center">'
                     html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
                     html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    html +='<td width="145"></td>'
+                    html +='<td width="145"></td>'
                     
                 if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
                     html +='<td width="145"></td>'
@@ -474,7 +474,7 @@ def search_listview(request,pk,month):
     # print(absent_days)
 
 
-    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = pk, date__range=[first_day, last_day]).count()
+    comp_off = Attendance.objects.filter(is_active = 1, comp_off = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(comp_off)
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
@@ -538,13 +538,13 @@ def search_listview(request,pk,month):
                     html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
                   
 
-                if attn.is_present == 2:
-                    html +='<td width="145">' +str(attn.checkin_time.strftime("%I:%M %p")) +'</td>'
+                if attn.comp_off == 1:
+                    html +='<td width="145"></td>'
                     html +='<td colspan="1" class="text-center">'
                     html +='<div class="lingr comp-bg"><span class="comp-border">Comp Off</span></div>'
                     html +='</td>'
-                    html +='<td width="145">' +str(attn.checkout_time.strftime("%I:%M %p")) +'</td>'
-                    html +='<td width="145"> '+ str(diff.hours) +' hours, '+ str(diff.minutes) + ' minutes' +'</td>'
+                    html +='<td width="145"></td>'
+                    html +='<td width="145"> </td>'
                     
                 if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0:
                     html +='<td width="145"></td>'
@@ -701,7 +701,7 @@ def attn_tableview(request):
     absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
-    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
+    comp_off = Attendance.objects.filter(is_active = 1, comp_off = 1, employee_id = request.user.emp_id, date__range=[first_day, last_day]).count()
     # print(comp_off)
 
     zipped_data = zip(dates, date_no)
@@ -795,7 +795,7 @@ def search_tableview(request,pk,month):
     absent_days = full_absent_days + (half_absent_days * 0.5)
     # print(absent_days)
 
-    comp_off = Attendance.objects.filter(is_active = 1, is_present = 2, employee_id = pk, date__range=[first_day, last_day]).count()
+    comp_off = Attendance.objects.filter(is_active = 1, comp_off = 1, employee_id = pk, date__range=[first_day, last_day]).count()
     # print(comp_off)
 
     holidays = Holiday_Detail.objects.filter(is_active = 1, date__range=[first_day, last_day]) 
@@ -946,6 +946,7 @@ def export_excel(request):
         row_num = 8
         present_days = 0
         absent_days = 0
+        comp_off_days=0
         lop_days = 0
         week_end_count = 0
         day_no = []
@@ -967,9 +968,9 @@ def export_excel(request):
                         sheet.write('B'+str(row_num), "Present", present_color)
                         present_days += 1
 
-                    if row_data.is_present == 2:
+                    if row_data.comp_off == 1:
                         sheet.write('B'+str(row_num), "Comp Off", comp_off_color)
-                        present_days += 1
+                        comp_off_days += 1
 
                     if row_data.is_present == 0 and row_data.is_leave == 1 and row_data.is_leave_approved == 1 and row_data.is_half == 0:
                         sheet.write('B'+str(row_num), "Absent / Paid", absent_color)
@@ -1070,7 +1071,7 @@ def export_excel(request):
         row_num +=2
 
         if (current_date.month == date.month and current_date.year == date.year):
-            for i in range(4):
+            for i in range(5):
                 if i ==0:
                     sheet.write('B'+str(row_num), 'Total Working Days', format2)
                     sheet.write('C'+str(row_num), len(dates) - (week_end_count + holidays.count()), format2)
@@ -1078,16 +1079,19 @@ def export_excel(request):
                     sheet.write('B'+str(row_num), 'Present Days', format2)
                     sheet.write('C'+str(row_num), present_days, format2)
                 if i ==2:
+                    sheet.write('B'+str(row_num), 'Comp_off Days', format2)
+                    sheet.write('C'+str(row_num), comp_off_days, format2)    
+                if i ==3:
                     sheet.write('B'+str(row_num), 'Absent Days(including LOP)', format2)
                     sheet.write('C'+str(row_num), absent_days, format2)
-                if i ==3:
+                if i ==4:
                     sheet.write('B'+str(row_num), 'Lop Days', format2)
                     sheet.write('C'+str(row_num), lop_days, format2)
 
                 row_num += 1
                 
         else:
-            for i in range(4):
+            for i in range(5):
                 if i ==0:
                     sheet.write('B'+str(row_num), 'Total Working Days', format2)
                     sheet.write('C'+str(row_num), len(dates) - (week_end_count + holidays.count()), format2)
@@ -1095,16 +1099,19 @@ def export_excel(request):
                     sheet.write('B'+str(row_num), 'Present Days', format2)
                     sheet.write('C'+str(row_num), present_days, format2)
                 if i ==2:
+                    sheet.write('B'+str(row_num), 'Comp_off Days', format2)
+                    sheet.write('C'+str(row_num), comp_off_days, format2)    
+                if i ==3:
                     sheet.write('B'+str(row_num), 'Absent Days(including LOP)', format2)
                     sheet.write('C'+str(row_num), absent_days, format2)
-                if i ==3:
+                if i ==4:
                     sheet.write('B'+str(row_num), 'Lop Days', format2)
-                    sheet.write('C'+str(row_num), lop_days , format2)
+                    sheet.write('C'+str(row_num), lop_days, format2)    
                     # (len(dates) - (week_end_count + holidays.count())) - (present_days + (absent_days - lop_days))
            
                 row_num += 1
     
-        obj.append({'emp_name': emp.first_name +" "+emp.last_name, 'emp_id': emp.employee_id, 'present_days': present_days, 'absent_days': absent_days,
+        obj.append({'emp_name': emp.first_name +" "+emp.last_name, 'emp_id': emp.employee_id, 'present_days': present_days, 'absent_days': absent_days,'comp_off_days': comp_off_days,
                        'total_days': len(dates) - (week_end_count + holidays.count()),  'lop_days': lop_days
                     })
 
@@ -1123,8 +1130,9 @@ def export_excel(request):
         sheet.write('B7', 'Emp ID', bold)
         sheet.write('C7', 'Total Working Days', bold)
         sheet.write('D7', 'Total Present Days', bold)
-        sheet.write('E7', 'Paid Leave Days', bold)
-        sheet.write('F7', 'LOP Days', bold)
+        sheet.write('E7', 'Comp_off Days', bold)
+        sheet.write('F7', 'Paid Leave Days', bold)
+        sheet.write('G7', 'LOP Days', bold)
 
         row_num = 8
 
@@ -1134,8 +1142,9 @@ def export_excel(request):
             sheet.write('B'+str(row_num), sum['emp_id'],format1)
             sheet.write('C'+str(row_num), sum['total_days'],format1)
             sheet.write('D'+str(row_num), sum['present_days'],format1)
-            sheet.write('E'+str(row_num), sum['absent_days'],format1)
-            sheet.write('F'+str(row_num), sum['lop_days'],format1)
+            sheet.write('E'+str(row_num), sum['comp_off_days'],format1)
+            sheet.write('F'+str(row_num), sum['absent_days'],format1)
+            sheet.write('G'+str(row_num), sum['lop_days'],format1)
 
             sheet.conditional_format('A7:F'+str(row_num), { 'type' : 'no_blanks' , 'format' : format1})
 
@@ -1237,7 +1246,7 @@ def show_cal_view(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_present == 2:
+        elif attn.comp_off == 1:
             out.append({                                                                                                     
                 'title': 'Comp Off',                                                                                         
                 'id': attn.id,                                                                                              
@@ -1395,7 +1404,7 @@ def search_attn_time(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_present == 2:
+        elif attn.comp_off == 1:
             out.append({                                                                                                     
                 'title': 'Comp Off',                                                                                         
                 'id': attn.id,                                                                                              
@@ -1515,7 +1524,7 @@ def search_attn_date(request):
                 'color': '#3dce4cd9',                                                           
             })
 
-        elif attn.is_present == 2:
+        elif attn.comp_off == 1:
             out.append({                                                                                                     
                 'title': 'Comp Off',                                                                                         
                 'id': attn.id,                                                                                              

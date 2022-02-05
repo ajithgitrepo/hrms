@@ -359,7 +359,7 @@
                                             <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
                                         {% endif %}
 
-                                        {% if attn.is_present == 2 %}
+                                        {% if attn.comp_off == 1 %}
                                             <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
                                             <td >{{ attn.checkin_time }}</td>
                                             <td>{{ attn.checkout_time }}</td>

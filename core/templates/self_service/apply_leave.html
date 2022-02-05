@@ -190,16 +190,23 @@ input[type=number] {
                                     <table>
                                           <tbody>
                                             <tr>
-                                              <td> </td>
-                                              <td><div class="custom-control custom-radio mb-3">
-                                                <input  class="custom-control-input" checked name="leave_mode" id="customRadio6" value="full" type="radio">
-                                                <label class="custom-control-label" for="customRadio6">Full Day</label>&nbsp;&nbsp;&nbsp;
-                                              </div></td>
+                                              <td>
+                                                  <div class="custom-control custom-radio mb-3">
+                                                    <input  class="custom-control-input" checked name="leave_mode" id="customRadio6" value="full" type="radio">
+                                                    <label class="custom-control-label" for="customRadio6">Full Day</label>
+                                                </div>
+                                              </td>
             
                                               <td>
                                                 <div class="custom-control custom-radio mb-3">
                                                       <input name="leave_mode" class="custom-control-input"  value="half" id="customRadio7"  type="radio">
                                                       <label class="custom-control-label" for="customRadio7"> Half Day</label>
+                                                    </div>
+                                              </td>
+                                              <td>
+                                                <div class="custom-control custom-radio mb-3">
+                                                      <input name="leave_mode" class="custom-control-input"  value="hours" id="customRadio8"  type="radio">
+                                                      <label class="custom-control-label" for="customRadio8"> Hours</label>
                                                     </div>
                                               </td>
                                             
@@ -212,6 +219,7 @@ input[type=number] {
                               
                           </div>
 
+                          
                           <div class="col-lg-3">
                               <div class="form-group" id="part_div">
                                   
@@ -222,6 +230,34 @@ input[type=number] {
 
                               </div>
                           </div>
+                          <div class="row col-lg-8 form-group" id="part_div1">
+                            <div class="col-lg-6  " >
+                                
+                              <div class="input-group clockpicker" id="clockpicker1" data-autoclose="true">
+                                <input type="text"  class="form-control" name="from_time" autocomplete="off" value="{{ form.data.from_time }}" placeholder="From Time HH:MM" >
+                                {% comment %} <span class="input-group-addon input-group-append">
+                                  <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                                </span> {% endcomment %}
+                              </div>
+                              <input type="hidden" name="clockpicker_one" id="clockpicker_one" value="" ></input>
+                              
+                            </div>
+
+                            <div class="col-lg-6" >
+                                
+                              <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
+                                <input type="text"  class="form-control" name="to_time"  autocomplete="off" value="{{ form.data.to_time }}" placeholder="To Time HH:MM" >
+                                {% comment %} <span class="input-group-addon input-group-append">
+                                  <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                                </span> {% endcomment %}
+                              </div>
+                              <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
+                              
+                            </div>
+                            
+                            
+                        </div>
+                          
 
                     </div>
 
@@ -322,6 +358,9 @@ input[type=number] {
 <!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<link href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet" />
+<script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+
 
 
 <script src="/static/build/js/intlTelInput.js"></script>
@@ -332,6 +371,7 @@ input[type=number] {
 <script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script src="/static/assets/vendor/moment.min.js"></script>
 <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
 
 <script>
 
@@ -346,6 +386,22 @@ input[type=number] {
 //     });
          
 // });
+$('.clockpicker').clockpicker({
+  'default': DisplayCurrentTime(),
+  twelvehour: true,
+}).find('input').val(DisplayCurrentTime())
+
+function DisplayCurrentTime() {
+  var date = new Date();
+  var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+  var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+  hours = hours < 10 ? "0" + hours : hours;
+  var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+  var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+  time = hours + ":" + minutes + ":" + am_pm;
+  //time = hours + ":" + minutes + am_pm;
+  return "";
+};
 
 $(function () {
       var dateToday = new Date();
@@ -356,7 +412,7 @@ $(function () {
            $("#from_date").datepicker({format: 'dd-mm-yyyy', startDate: "-7d" ,autoclose: true,
         //todayBtn: "linked",
         todayHighlight: true,}); 
-        $('#mode_div').hide(); $('#part_div').hide();
+        $('#mode_div').hide(); $('#part_div1').hide();$('#part_div').hide();
         });
 
  $("#to_date").change(function () {
@@ -376,15 +432,21 @@ $("#from_date").change(function () {
 })
 
 $('input[type=radio][name=leave_mode]').change(function() {
+      $('#part_div1').hide();
       $('#part_div').hide();
     if (this.value == 'full') {
        // alert("Allot Thai Gayo Bhai");
+        $('#part_div1').hide();
         $('#part_div').hide();
     }
     else if (this.value == 'half') {
       $('#part_div').show();
       //  alert("Transfer Thai Gayo");
     }
+    if (this.value == 'hours') {
+       $('#part_div1').show();
+       $('#part_div').hide();
+   }
 });
 
  
