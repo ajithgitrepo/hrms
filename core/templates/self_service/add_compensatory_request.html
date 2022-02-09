@@ -1,0 +1,460 @@
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+{% block title %} Compensatory Details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    /*margin-bottom: 30px;*/
+    background-color: #ffffff;
+}
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+button#button-addon2 {
+    border: 1px solid !important;
+}
+.popover.clockpicker-popover.bottom.clockpicker-align-left {
+    display: block;
+    top: 415px !important;
+    left: 631.771px;
+}
+
+</style>
+<link rel="stylesheet" href="/static/assets/vendor/select2/dist/css/select2.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+   
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+        
+        </div>
+        <div class="col-xl-12 order-xl-1">
+        
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Add Compensatory Request Details </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+            <form method="POST" name="form" class="post-form" >
+              {% csrf_token %}  
+              <div class="form-group row">
+                <input type="hidden" name="employee" id="employee" value="{{ request.user.emp_id }}" ></input>
+
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Worked Date</label>
+                <div class="col-sm-4">
+                  <input type="text"   name="worked_date" value="{{ form.data.worked_date }}" autocomplete="off" class="form-control startdate" placeholder="" required >
+                  {{ form.errors.worked_date  }}
+                </div>
+              
+              </div>
+
+              <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Unit</label>
+                <div class="col-sm-4">
+                  <input type="radio" name="unit" id="nameA" value="Days" checked>
+                  <label for="nameA">Days</label>
+              
+                  <input type="radio" name="unit" id="nameB" value="Hours">
+                  <label for="nameB">Hours</label>
+                </div>
+                {{ form.errors.unit }}
+              </div>
+
+                <div class="form-group row">
+                  <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Duration</label>
+                  <div class="col-sm-4" id="days">
+                    <select name="duration" id="day_type" value="{{ form.data.duration }}" class="form-control" placeholder="" >
+                      <option value="Full Day" {% if form.data.duration == "Full Day" %} selected{% endif %}>Full Day</option>
+                      <option value="Half Day" {% if form.data.duration == "Half Day" %} selected{% endif %}>Half Day</option>
+                    </select>
+                    {{ form.errors.duration }}
+                  </div>
+                  <div class="col-sm-2" id="total_time">
+                    <input class="form-control" disabled id="time" name="duration" type="text" value="00:00" placeholder="00:00" required>
+                    {{ form.errors.duration }}
+                  </div>
+                  
+                </div>
+           
+               <div class="form-group row">
+                <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Worked Time</label>
+                <div class="col-sm-2">
+                  <div class="input-group clockpicker" id="clockpicker1" data-autoclose="true">
+                    <input type="text"  class="form-control" name="from_time" autocomplete="off" value="{{ form.data.from_time }}" placeholder="From" required>
+                    <span class="input-group-addon input-group-append">
+                      <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                    </span>
+                  </div>
+                  <input type="hidden" name="clockpicker_one" id="clockpicker_one" value="" ></input>
+                  {{ form.errors.from_time }}
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="input-group clockpicker" id="clockpicker2" data-autoclose="true">
+                    <input type="text"  class="form-control" name="to_time"  autocomplete="off" value="{{ form.data.to_time }}" placeholder="To" required>
+                    <span class="input-group-addon input-group-append">
+                      <button class="btn btn-outline-primary" type="button" id="button-addon2"> <span class="fa fa-clock"></span></button>
+                    </span>
+                  </div>
+                  <input type="hidden" name="clockpicker_two" id="clockpicker_two" value="" ></input>
+                  {{ form.errors.to_time }}
+                </div>
+                
+              </div>
+
+                <div class="form-group row">
+                  <label for="inputPassword" class=" form-control-label col-sm-2 col-form-label">Reason</label>
+                  <div class="col-sm-4">
+                  <textarea rows="3" cols="43" name="reason"></textarea>
+                  {{ form.errors.duration }}
+                  </div>
+                </div>
+
+              <div class="card-footer">
+
+                  <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+                
+                  <a  href="{% url 'compensatory_request' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+              </div>
+
+          
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<script src="/static/assets/vendor/select2/dist/js/select2.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script> -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet" /> -->
+<link href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet" />
+<script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+
+<script>
+
+$( document ).ready(function() {
+  $("#total_time").hide();
+});
+
+$(function() {
+
+  $('#clockpicker1').find('input').change(function(){
+
+    var hours = 00; var minutes = 00;
+    var time_str = this.value;  
+    var time = time_str.match(/(\d+):(\d+)(\w)/); 
+
+    var hours = Number(time[1]);
+    
+
+    var minutes = Number(time[2]);
+    if(minutes.toString().length < 2)
+    minutes= "0"+minutes;
+
+    var seconds = "00";
+    var meridian = time[3].toLowerCase();
+    
+    if (meridian == 'p' && hours < 12) {
+      hours += 12;
+    }
+    else if (meridian == 'a' && hours == 12) {
+      hours -= 12;
+    }
+
+    if(hours.toString().length < 2)
+    hours= "0"+hours;
+    var res = hours + ":" + minutes + ":" + seconds;
+    $('#clockpicker_one').val(res);
+    //alert(res)
+    radio = $('input[name="unit"]:checked').val();
+
+    if(radio == "Hours")
+    {
+        t_two = $('#clockpicker_two').val();
+        if(t_two != "")
+        {
+
+            var timeStart = new Date("01/01/2021 " + res).getTime();
+            var today_hour = new Date().getHours();
+            var today_min = new Date().getMinutes();
+            var today_sec = new Date().getSeconds();
+            var today_time = today_hour+":"+today_min+":"+today_sec;
+
+            var timeEnd = new Date("01/01/2021 " + t_two).getTime();
+
+            // alert(today_end);
+            
+            var diff = timeEnd - timeStart;
+            var hours   = Math.floor(diff / 3.6e6);
+            var minutes = Math.floor((diff % 3.6e6) / 6e4);
+            var seconds = Math.floor((diff % 6e4) / 1000);
+            if(hours < 10){
+            hours = "0"+hours;
+            }
+            if(minutes < 10){
+            minutes = "0"+minutes;
+            }
+            var duration = hours+":"+minutes;
+
+            $("#time").val(duration)
+
+        }
+      
+    }
+
+});
+
+$('#clockpicker2').find('input').change(function(){
+ 
+    var hours = 00; var minutes = 00;
+    var time_str = this.value;  
+    var time = time_str.match(/(\d+):(\d+)(\w)/); 
+
+    var hours = Number(time[1]);
+    
+    var minutes = Number(time[2]);
+    if(minutes.toString().length < 2)
+    minutes= "0"+minutes;
+
+    var seconds = "00";
+    var meridian = time[3].toLowerCase();
+    if (meridian == 'p' && hours < 12) {
+      hours += 12;
+    }
+    else if (meridian == 'a' && hours == 12) {
+      hours -= 12;
+    }
+
+    if(hours.toString().length < 2)
+    hours= "0"+hours;
+    var res = hours + ":" + minutes + ":" + seconds; 
+    $('#clockpicker_two').val(res);
+
+    radio = $('input[name="unit"]:checked').val();
+    // alert(res)
+
+    if(radio == "Hours")
+    {
+      t_one = $('#clockpicker_one').val();
+      if(t_one != "")
+      {
+
+        var timeStart = new Date("01/01/2021 " + t_one).getTime();
+        var today_hour = new Date().getHours();
+        var today_min = new Date().getMinutes();
+        var today_sec = new Date().getSeconds();
+        var today_time = today_hour+":"+today_min+":"+today_sec;
+
+        var timeEnd = new Date("01/01/2021 " + res).getTime();
+
+        // alert(today_end);
+          
+        var diff = timeEnd - timeStart;
+        var hours   = Math.floor(diff / 3.6e6);
+        var minutes = Math.floor((diff % 3.6e6) / 6e4);
+        var seconds = Math.floor((diff % 6e4) / 1000);
+        if(hours < 10){
+          hours = "0"+hours;
+        }
+        if(minutes < 10){
+          minutes = "0"+minutes;
+        }
+        var duration = hours+":"+minutes;
+
+        $("#time").val(duration)
+
+      }
+      
+    }
+
+
+});
+
+
+    
+$('.clockpicker').clockpicker({
+  'default': DisplayCurrentTime(),
+  twelvehour: true,
+}).find('input').val(DisplayCurrentTime())
+
+function DisplayCurrentTime() {
+  var date = new Date();
+  var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+  var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+  hours = hours < 10 ? "0" + hours : hours;
+  var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+  var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+  time = hours + ":" + minutes + ":" + am_pm;
+  //time = hours + ":" + minutes + am_pm;
+  return "";
+};
+
+     
+
+});
+
+$(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+$(function () {
+      var dateToday = new Date();
+           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+           $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,});
+         
+});
+
+
+$('input[name=unit]').change(function(){
+    var value = $( 'input[name=unit]:checked' ).val();
+    // alert(value);
+    if(value == "Hours")
+    {
+      $("#time").prop('disabled', false);
+      $("#day_type").prop('disabled', true);
+
+      $("#days").hide();
+      $("#total_time").show();
+    }
+    if(value == "Days")
+    {
+      $("#day_type").prop('disabled', false);
+      $("#time").prop('disabled', true);
+
+      $("#total_time").hide();
+      $("#days").show();
+    }
+    
+    
+
+});
+  
+
+</script>
+
+{% endblock javascripts %}
+ 

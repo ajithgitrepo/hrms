@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<document pagesize='letter'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+      
+        @page {
+
+            size: a4 portrait;
+            
+            @frame header_frame    /* Header Frame */
+            {         
+                -pdf-frame-content: header_content;
+                left: 450pt; width: 300pt; top: 10pt; height: 200pt;
+            }
+
+            @frame content_frame {          /* Page count Frame */
+                -pdf-frame-content: pagecount_content;
+                left: 50; width: 100pt; top: 50pt; height: 100pt;
+            }
+
+           
+            @frame footer_frame {           /* Footer Frame */
+                -pdf-frame-content: footer_content;
+                left: 325pt; width: 512pt; bottom: 0pt; height: 100pt;
+            }
+
+            @frame content_frame {          /* Content Frame */
+                left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+                /* -pdf-frame-border: 1; 
+                padding: 30px; */
+            }
+
+        }
+
+        h1 { 
+            text-align: middle;
+            font-size: 18px;
+         }
+
+      
+       
+    </style>
+    
+
+</head>
+
+<body >
+    <div class="container">
+
+            
+            <div class="company_logo" id="header_content">
+                <img src="https://rms2.rhapsody.ae/product_image/ttf_logo.jpg"><br/>
+
+            </div>
+
+            <div class="company_logo" id="footer_content">
+                <p>PO. Box 340805 | Office 26C, Silver Tower | Cluster -1,<br> Jumeirah Lake Towers | Dubai,United Arab Emirates <br> Tel: +971 4438 7026 | Fax: +971 4432 7297 | www.thethoughtfactory.ae </p>
+                <br>
+
+            </div>
+
+            <div id="pagecount_content">
+                page <pdf:pagenumber>of <pdf:pagecount>
+
+            </div>
+
+           
+            <p>Name : {{ fname }} {{ lname }}<br> Adhaar Card Number : {{ aadhar }} <br> Nationality : {{ nationality }} <br> Mobile Number : {{ mobile }} <br> Email : {{ email }} </p>
+           
+            <p>Dear Mr. <b>{{ fname }} {{ lname }},</b></p>
+            <p> On behalf of The Thought Factory, I am very pleased to offer you the position of <b>{{ position }}</b>. I 
+                am confident  that you will find working with The Thought Factory a rewarding and educational
+                experience and an opportunity to grow your career. This offer letter clarifies and confirms  the 
+                employment  with the company </p>
+
+            <p> <b>Start Date & Salary:</b> </p>
+            <p>Your joining date will be the<b> {{ joining_date }} </b>& the starting salary wil! be {{ currency }} <b>{{ salary }} </b>per month.</p>
+
+            <p> <b>Probation  Period: </b> </p>
+            <p>You are requireci to undergo a probationary period of six months. During the probationary period, 
+                the notice period required to terminate employment by either parties shall not be applicable. Upon 
+                your succssfull completion of probattoi  period, the notice period shall be 30 days. Your 
+                compensation shall be reviewed upon successful completion of your probation period.</p>
+                
+            <p><b>Hours Of Work:</b></p>
+            <p>Your official working hours are 09:30 am to 06:30 pm, from Monday to Friday & from 11:00 am to 
+                04:00 pm on Saturdays. You may take one or more break times during working hours for rest, meals, 
+                smoke breaks or prayer purposes provided that all breaks combined shalt not exceed 1 hour.</p>
+
+            <p><b>Code of Conduct:</b></p>
+            <p><b>Confidentiality of Information:</b></p>
+            <p>You have a contractual responsibility to safeguard any confidential or sensitive information to which
+                you will have access during your employment. You should not, during or after termination of your
+                employment, disclose such information to any person within or outside The Thought Factory. accept in
+                a handover to colleagues who require such information in the proper course of their duties.</p>
+
+            <p>You should not make personal use of any confidential information which you have acquired in the
+                course of your duties relating to client data, contracts, price calculations, designs etc. Also any
+                confidential information should not be used for the self-benefit or any other person.</p>
+
+            <p><b>Outside Business I Employment I Services:</b></p>
+            <p>You are not permitted to engage in any outside business employment / committee membership/service
+                during your employment with The "I bought Factory irrespective of whether there is any reward or not.</p>
+
+            <p><b>Additional Proivisions:</b></p>
+            <p>The terms of your employment, if you accept this offer, will be defined by this offer letter. This
+                contract supersedes any previous discussions or offers. Any additions or modifications would have to be
+                in writing and signed by you and the Managing Director of The Thought Factory.</p>
+            
+            <p><b>General:</b></p>
+            <p>Please affirm your acceptance to the above by signing this coner c and returning it to The Thought
+                Factory, on or before the 19th November 2020, upon which date this offer will expire.</p>
+            <p>We are very excited about your joining The Thought Factory. I hope that you will accept this offer and l
+                look forward to a productive and mutually beneficial working relationship. Please let me know if i can
+                answer any questions for you about any of the matters outlined in this letter.</p>
+            
+            <br><br><br><br>
+            <p>Welcome aboard The Thought Factory</p>
+            <p>Sincerely,</p>
+
+            <img src="https://rms2.rhapsody.ae/product_image/signature.jpg" width="100" height="50"><img src="https://rms2.rhapsody.ae/product_image/company_seal.jpg"><br/>
+        _____________________
+
+        <p>Hr {{hr_name}},<br>Human Resources<br>The Thought Factory</p>
+        
+       
+        <hr><br>
+
+        <h5>ACCEPTANCE</h5>
+
+            <p>I accept employment with The Thought Factory under the terms and conditions set forth in this letter:</p>
+        
+            <p>Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; __________________________________________</p>           
+
+         
+            <p>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  __________________________________________</p> 
+
+            
+            <p>Printed Name&nbsp;&nbsp;&nbsp;&nbsp; __________________________________________ </p> 
+
+
+        </div>
+        </p>
+        
+        </p>
+        
+    </div>
+   
+</body>
+
+</html>
