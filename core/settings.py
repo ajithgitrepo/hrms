@@ -198,6 +198,9 @@ from django.core.cache import cache
 cache.clear()
 
 CRONJOBS = [
+    # every minute cron run
+    # ('* * * * *', 'app.cron.my_scheduled_job'),
+	# ('* * * * *', 'app.cron.checkout'),
     ('1 0 1 * *', 'app.cron.my_scheduled_job'),
 	('1 22 1-31 * *', 'app.cron.checkout'),
 ]

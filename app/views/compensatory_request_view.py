@@ -188,6 +188,8 @@ def compensatory_request_status(request):
 
     id = request.POST.get('id')
     value = request.POST.get('value')
+    reason=request.POST.get('reason')
+    # print(reason)
 
     data = Compoensatory_Request_Detail.objects.get(id=id)
 
@@ -197,6 +199,7 @@ def compensatory_request_status(request):
     update = Compoensatory_Request_Detail.objects.filter(id=id).update(
         status=value,
         is_aproved=value,
+        reject_reason=reason,
         updated_at=timezone.now()
     )
     # return HttpResponse(1)

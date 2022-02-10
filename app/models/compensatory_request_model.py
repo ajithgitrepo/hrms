@@ -30,6 +30,7 @@ class Compoensatory_Request_Detail(models.Model):
     status = models.PositiveSmallIntegerField(default=0)
     is_aproved = models.PositiveSmallIntegerField(default=0)
     total_hours = models.CharField(max_length=30 , blank = True, null = True)
+    reject_reason = models.CharField(max_length=450 , blank = True, null = True)
   
     class Meta:  
         db_table = "compensatory_request_details"  

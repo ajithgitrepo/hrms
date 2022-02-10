@@ -188,18 +188,18 @@ def my_scheduled_job():
                                         employee_id=each.employee_id,
                                         leave_type_id=leave_id,
                                         device='web',
-                                        modified_by_id=request.user.emp_id,
+                                        modified_by_id='Emp001',
                                     )
                                 else:
                                    # return HttpResponse('dd')
                                     tot = Leave_Balance.objects.filter(
                                         employee_id=each.employee_id, leave_type_id=leave_id, is_active=1)
                                     tot_month = tot[0].total_month
-
                                     date1 = datetime.strptime(str(date_of_joing), '%Y-%m-%d')
-                                    dat = datetime.now()
+                                    dat = datetime.now().date()
                                     date2 = datetime.strptime(
                                         str(dat), '%Y-%m-%d')
+
                                     month_count = date2.month - date1.month
                                    # return HttpResponse(month_count) 
                                     if month_count < 0:
@@ -216,7 +216,7 @@ def my_scheduled_job():
                                                 updated_at=timezone.now()
 
                                             )
-
+    logger.warning('Leave Balance cron  run at '+str(datetime.now())+' hours!')
 
 def checkout():
     myDate = datetime.now()

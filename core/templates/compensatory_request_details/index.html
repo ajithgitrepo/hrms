@@ -122,7 +122,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <th>#</th>
                   <th >Employee Name</th>
                   <th>Worked Date</th>
-                  <th>Compensatory Date</th>
                   <th>Unit</th>
                   <th>Duration</th>
                   <th>From Time</th>
@@ -138,7 +137,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                     <td>{{ forloop.counter }}</td>
                     <td style="color: blue;" class="nr" data-queryid="{{ emp.id  }}"> {{emp.employee.first_name}} {{emp.employee.last_name}} ( {{emp.employee_id }} )</td>
                     <td>{{emp.worked_date |date:"d-m-Y" }}</td>
-                    <td>{{emp.compoensatory_date |date:"d-m-Y" }}</td>
                     <td>{{emp.unit}}</td>
                     <td>{{emp.duration}}</td>
                     <td>{{emp.from_time}}</td>
@@ -245,6 +243,35 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
         </div>
       </div>
   </div>
+
+<div class="modal fade" id="bsModal3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="modal-title-default">Reason For Rejection</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <form id="form" method="post" class="contact" action="" enctype="multipart/form-data" data-parsley-validate>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <textarea class="form-control-contact" name="reject_reason" id="reject_reason" placeholder="reject_reason"></textarea>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+      <center>  <button type="button" id='ok' class="btn btn-default">OK</button></center>
+      </div>
+    </div>
+  </div>
+</div>  
 
 
 {% endblock content %}
@@ -398,12 +425,78 @@ function csrfSafeMethod(method) {
 
 });
 
+    flag=false
 
+    $('#ok').click(function(){
+      reason=$('#reject_reason').val();
+      if(reason !== ""){
+        $('#bsModal3').modal('hide');
+        swal({
+          title: 'Are you sure?',
+          text: "You want to change status!",
+          type: 'warning',
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonClass: 'btn btn-danger',
+          confirmButtonText: 'Yes, change it!',
+          cancelButtonClass: 'btn btn-secondary'
+      }).then((result) => {
+          if (result.value) {
+              // Show confirmation
+              $.ajax({  
+              type: "POST",  
+              url: "/compensatory_request_status/",  
+              data: {value : value, id : id, csrfmiddlewaretoken : csrftoken, reason:reason},
+              success: $.proxy(function(data) {
+                
+                //alert(data)
+                 
+                  if(data == 1){
+                      
+                      swal({
+                          title: 'Changed!',
+                          text: 'Status has been updated.',
+                          type: 'success',
+                          buttonsStyling: false,
+                          confirmButtonClass: 'btn btn-primary'
+                      });
+                  }
+                
+                 
+                  if(data == 0){
+                   
+                      swal({
+                          title: 'Error!',
+                          text: 'Someting went wrong.',
+                          type: 'error',
+                          buttonsStyling: false,
+                          confirmButtonClass: 'btn btn-primary'
+                      });
+                  }
+                 
+      
+              })
+              });
+
+          }
+      })
+        
+
+      }
+      else{
+        alert('Please enter the reason ')
+      }
+
+    });
 
     $('.change_status').on('change', function() {
         value = this.value;
         id = $(this).attr("id");
-     //   alert(id)
+        if(value==2){
+        $('#bsModal3').modal('show');
+
+        return flag;
+        }
 
         swal({
             title: 'Are you sure?',
@@ -422,10 +515,11 @@ function csrfSafeMethod(method) {
                 url: "/compensatory_request_status/",  
                 data: {value : value, id : id, csrfmiddlewaretoken : csrftoken},
                 success: $.proxy(function(data) {
+                  
                   //alert(data)
-                    
+                   
                     if(data == 1){
-                     
+                        
                         swal({
                             title: 'Changed!',
                             text: 'Status has been updated.',
@@ -434,7 +528,8 @@ function csrfSafeMethod(method) {
                             confirmButtonClass: 'btn btn-primary'
                         });
                     }
-
+                  
+                   
                     if(data == 0){
                      
                         swal({
@@ -455,7 +550,7 @@ function csrfSafeMethod(method) {
 
     });
 
-    </script>
+</script>
 
 
   <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>

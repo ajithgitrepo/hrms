@@ -198,6 +198,13 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
                   <div class="col-lg-3"> <span style="font-weight: 700;" id="reason_other"></span></div>
                </div>
               <hr class="my-3" />
+
+                 <div class="row">
+                    
+               <div class="col-lg-3"><span style="color: blue;">Reason For Rejection :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="reject_reason" ></span></div>
+               </div>
+              <hr class="my-3" />
                  
                 </div>
                 <div id="section-3"></div>
@@ -316,14 +323,16 @@ function csrfSafeMethod(method) {
             var check = false;
             jQuery.each(data, function(index, item) {
                 $('#role_other').html(item.fields.name);
+                var reject_reason=item.fields.reject_reason
                 //  alert(item.fields.name);
-                if(check == false)
+                $('#reason_other').html(item.fields.reason);
+                if(reject_reason)
                 {
                     check = true;
-                        
-                    $('#reason_other').html(item.fields.reason);
-                        
-                    
+                    $('#reject_reason').html(item.fields.reject_reason);                   
+                }
+                else{
+                  $('#reject_reason').html('-');
                 }
                 //now you can access properties using dot expected_duration_days
                 });

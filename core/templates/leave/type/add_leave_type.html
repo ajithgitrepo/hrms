@@ -1260,7 +1260,7 @@ function valueChanged_openbal(evt)
         $('.maxibal').hide();
         $('.openbal').hide();
         $('#accur_in').show();
-      $('#accur_ddl_4th').show();
+      //$('#accur_ddl_4th').show();
        // $('#reset_ddl_carry_3rd_td').show();
        // $('#reset_ddl_carry_4th_td').show();
         $('#accur_ddl_2nd_td').show();
@@ -1285,8 +1285,8 @@ function valueChanged_openbal(evt)
       $('#ddl_accural_2nd').removeAttr('selected');
       $('#ddl_accural_3rd').removeAttr('selected');
       $('#accur_ddl_2nd_td').show();
-      $('#accur_in').show();
-      $('#accur_ddl_4th').show();
+      //$('#accur_in').show();
+      //$('#accur_ddl_4th').show();
       $("#ddl_accural_3rd").find('option').each(function() {
           $(this).remove();
       });
@@ -1324,8 +1324,8 @@ function valueChanged_openbal(evt)
          $('#ddl_accural_2nd').removeAttr('selected');
       $("#ddl_accural_2nd option[value='-1']").attr("selected","selected");
       $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
-      $('#accur_in').hide();
-      $('#accur_ddl_4th').hide();
+     // $('#accur_in').hide();
+     // $('#accur_ddl_4th').hide();
      }
     // $('').show();
   else if(val == "01")  //year
@@ -1334,8 +1334,9 @@ function valueChanged_openbal(evt)
            $('#ddl_accural_3rd').removeAttr('selected');
           $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
           $("#ddl_accural_3rd option[value='1']").attr("selected","selected");
-          $('#accur_in').show();
-          $('#accur_ddl_4th').show();
+          $('#accural_3rd_td').show();
+        //  $('#accur_in').show();
+         // $('#accur_ddl_4th').show();
      }
   else if(val == "11") //month
   {
@@ -1343,7 +1344,7 @@ function valueChanged_openbal(evt)
       $("#ddl_accural_2nd option[value='1']").attr("selected","selected");
      // $("#ddl_accural_3rd option[value='-1']").attr("selected","selected");
       $('#accural_3rd_td').hide();
-      $('#accur_ddl_4th').show();
+    //  $('#accur_ddl_4th').show();
   }
   else if(val == "16") //half
    {
@@ -1399,6 +1400,7 @@ $('#reset_ddl_1st').on('change', function() {  //alert();
        // alert( this.value );
        var $id = "#reset_ddl_3rd";
      var val = this.value;
+     alert(val)
      if(val == "00")  // one time
      {
          bind_yearly($id);
