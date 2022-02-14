@@ -459,14 +459,14 @@ input[type="radio"] {
                                     <td class="accur"><select id="ddl_accural_1st" name="accrual_period" class="form-control">
                                           <option unit="0" value="01" {% if  form.data.accrual_period == "01" %} selected{% endif %}>Yearly</option>
                                           <option unit="1" value="11" {% if  form.data.accrual_period == "11" %} selected{% endif %}>Monthly</option>
-                                          <!-- <option unit="0" value="00" {% if  form.data.accrual_period == "00" %} selected{% endif %}>One Time</option>
-                                          <option unit="1" value="16" {% if  form.data.accrual_period == "16" %} selected{% endif %}>Half Yearly</option>
+                                          <option unit="0" value="00" {% if  form.data.accrual_period == "00" %} selected{% endif %}>One Time</option>
+                                          {% comment %} <option unit="1" value="16" {% if  form.data.accrual_period == "16" %} selected{% endif %}>Half Yearly</option>
                                           <option unit="1" value="14" {% if  form.data.accrual_period == "14" %} selected{% endif %}>Triannually</option>
                                           <option unit="1" value="13" {% if  form.data.accrual_period == "13" %} selected{% endif %}>Quarterly</option>
                                           <option unit="1" value="12" {% if  form.data.accrual_period == "12" %} selected{% endif %}>Bi Monthly</option>
                                           <option unit="3" value="315" {% if  form.data.accrual_period == "315" %} selected{% endif %}>Semi Monthly</option>
                                           <option unit="2" value="22" {% if  form.data.accrual_period == "22" %} selected{% endif %}>Bi Weekly</option>
-                                          <option unit="2" value="21" {% if  form.data.accrual_period == "21" %} selected{% endif %}>Weekly</option>  -->
+                                          <option unit="2" value="21" {% if  form.data.accrual_period == "21" %} selected{% endif %}>Weekly</option>  {% endcomment %}
                                         </select>
                                     </td>
                                     <td class="accur"><label class="form-control-label" for="input-email">on</label></td>
@@ -812,7 +812,7 @@ input[type="radio"] {
                             <label for="staticEmail" class="form-control-label col-sm-2 col-form-label">Employees</label>
                                 <div class="col-sm-4">
                                   <select name="all_employees" id="all_employees" class="form-control" data-toggle="select" multiple="">
-                                    <option value="1" selected="">All Employees</option>
+                                    <option value="1" ="">All Employees</option>
                                   </select>
                                 </div>
                         </div>
@@ -1103,7 +1103,7 @@ input[type="radio"] {
 
                 <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
                
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a  href="{% url 'leave_types' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
 
              </div>
 

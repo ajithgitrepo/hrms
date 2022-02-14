@@ -1,3 +1,4 @@
+from bdb import effective
 from cgi import test
 from app.models import exit_details_model
 from app.models import leave_type_model
@@ -769,8 +770,9 @@ def leave_tracker(request):
     employee = Employee.objects.get(employee_id=request.user.emp_id)
     # print(employee.date_of_joining)
     leaves = Leave_Balance.objects.filter(
-        is_active=1, leave_type__is_active=1, employee_id=request.user.emp_id)
-    # print(leaves[0].leave_type.name)
+        is_active=1, leave_type__is_active=1, employee_id=request.user.emp_id,leave_type_id__type='paid')
+    print(leaves)    
+     # print(leaves[3].leave_type.type)
 
     requested = LeaveRequest.objects.filter(
         to_date__gte=datetime.now(), employee_id=request.user.emp_id)
@@ -818,13 +820,39 @@ def apply_leave(request):
     form = Apply_Leave_Form()
     employee = Employee.objects.get(
         is_active=1, employee_id=request.user.emp_id)
+    date_of_joining=employee.date_of_joining    
+    date1 = datetime.strptime(str(date_of_joining), '%Y-%m-%d')
+    dat = datetime.now().date()
+    date2 = datetime.strptime(
+        str(dat), '%Y-%m-%d')
 
-    leaves = Leave_Applicable.objects.filter(is_active=1, leave_type__is_active=1, all_employees=1).exclude(
-        exception_dept=employee.department_id, exception_role=employee.role_id, exception_location=employee.location)
+    month_count = (date2.year - date1.year)*12 +(date2.month - date1.month)
+    # print(month_count)
+    leave_effective=Leave_Effective.objects.filter(is_active=1)
+    
+    # print(leave_effective)
+    type_id=[] 
+    for  leave in leave_effective:
+        leaves=int(leave.effective_after)
+               
+        if month_count >= leaves:
+            id=leave.leave_type_id
+            type_id.append(id)
 
-    leave_condition = Leave_Applicable.objects.filter(is_active=1, leave_type__is_active=1, all_employees=0, gender=employee.gender, marital_status=employee.marital_status,
-                                                      department=employee.department_id, role=employee.role_id, location=employee.location, employment_type=employee.employee_type)
+            # lsit=[id]
+            # print(lsit)
+            # print('cn')
+    print(type_id)    
 
+
+        
+
+    leaves = Leave_Applicable.objects.filter(leave_type_id__in=type_id,is_active=1,all_employees=1, leave_type__is_active=1).exclude(
+        exception_dept=employee.department_id, exception_role=employee.role_id, exception_location=employee.location,gender=employee.gender)
+    # print(leaves)    
+
+    leave_condition = Leave_Applicable.objects.filter(is_active=1,gender=employee.gender)
+    print(leave_condition) 
     if request.method == 'POST':
 
         form = Apply_Leave_Form(request.POST)

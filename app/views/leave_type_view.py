@@ -376,6 +376,8 @@ def add_leave_type(request):
                                 
                             if accrual_period == "01":
                                 balance_count = years_count * effective_no_of_days
+                            if accrual_period == "00":
+                                balance_count = effective_no_of_days
 
                             
                             obj = Leave_Balance.objects.create(
@@ -394,7 +396,7 @@ def add_leave_type(request):
                 html_template = loader.get_template( 'leave/type/add_leave_type.html' )
                 #return HttpResponse(html_template.render(request))
                 #return render(request, "employees")
-                return redirect('add_leave_type') 
+                return redirect('leave_types') 
             else: 
                 dept = Department.objects.filter(is_active = '1')
                 roles = Group.objects.filter(is_active = '1')
