@@ -82,6 +82,7 @@
                       </label> 
                     </td>
                     {% else %}
+                    
                     <td>
                         <label class="custom-toggle">
                         <a title="Edit" href="{% url 'change_status' types.id 1 %}" value="1">
@@ -91,13 +92,12 @@
                       </label> 
                     </td>
                     
-                        
                     {% endif %}
 
                     <td>
-                      {% if types.name == "Compensatory Off" %}
+                      <!-- {% if types.name == "Compensatory Off" %}
                         <a class="fas fa-edit" title="Edit" href="{% url 'edit_comp_off' types.id %}"></a>
-                      {% endif %}
+                      {% endif %} -->
 
                       {% if types.name != "Compensatory Off" %}
                         <a class="fas fa-edit" title="Edit" href="{% url 'edit_leave_type' types.id %}"></a>

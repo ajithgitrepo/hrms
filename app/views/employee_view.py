@@ -42,6 +42,9 @@ import os
 from django.conf import settings
 from app.views.restriction_view import admin_only,role_name
 from app.models.location_model import Location
+import pandas as pd
+from django.core.files.storage import FileSystemStorage
+import uuid
 
 
 @login_required(login_url="/login/")
@@ -1407,6 +1410,64 @@ def update_employee(request, pk):
   #  context_role = {'form':form,'employee':employee}
     return render(request, "employee/update_employee.html", context_role)
 
+
+def import_employee(request):
+    try:
+        if request.method == 'POST' and request.FILES['file']:
+
+            myfile = request.FILES['file']        
+            path = myfile.file
+
+            df = pd.read_excel(path)
+            # print(f'{settings.BASE_DIR}/{path}')
+            # print(df)
+
+            for d in df.index:
+
+                # print(d)
+
+                obj = Employee.objects.create(
+                    employee_id = df['employee_id'][d],
+                    first_name = df['first_name'][d],
+                    last_name = df['last_name'][d],
+                    email_id = df['email'][d],
+                    nick_name = None,
+                    department = Department.objects.get(name = df['department'][d]),
+                    # location = Location.objects.get(name = df['location'][d]), 
+                    role = Group.objects.get(name = df['role'][d]), 
+                    gender = df['gender'][d],
+                    is_active = 1,
+                   
+                )
+
+                latest_id = df['employee_id'][d]
+
+                hashed_pwd = make_password("secret")
+
+                obj = User(
+                    password=hashed_pwd,
+                    is_superuser=1,
+                    username= df['first_name'][d],
+                    first_name= df['last_name'][d],
+                    last_name= df['last_name'][d],
+                    email= df['email'][d],
+                    role= Group.objects.get(name = df['role'][d]), 
+                    emp_id=df['employee_id'][d],
+                    is_staff=1,
+                    is_active=1,
+                    date_joined=datetime.datetime.now(),
+
+                )
+
+                obj.save()
+
+
+            return redirect('employees')
+
+    except Exception as identifier:            
+        print(identifier)
+
+    return render(request, "employee/import_employee.html")
 
 def update_employee_emp(request, pk):
    

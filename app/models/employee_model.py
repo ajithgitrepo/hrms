@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-""" 
-Copyright (c) 2019 - present AppSeed.us 
-"""
 
 from django.db import models
 from django.contrib.auth.models import User 
@@ -24,13 +20,13 @@ class Employee(models.Model):
 #     )
 #    user = models.ForeignKey(Group, related_name='role', on_delete=models.CASCADE)
 
-    employee_id = models.CharField(primary_key=True,max_length=35, blank = False, null = False)  
+    employee_id = models.CharField(primary_key=True, max_length=35, blank = False, null = False)  
     first_name = models.CharField(max_length=30 , blank = False, null = False)
     last_name = models.CharField(max_length=30)  
     email_id = models.EmailField(max_length=50)  
     mobile_number = models.CharField(max_length=15) 
     created_at = models.DateTimeField(auto_now_add = True)
-    nick_name = models.CharField(max_length=30) 
+    nick_name = models.CharField(max_length=30, null=True, blank=True) 
     emirate_id = models.CharField(max_length=30, blank = True, null = True) 
     department = models.ForeignKey(Department, max_length=50, blank=True, related_name='department_emp', null=True, on_delete= models.SET_NULL)
     # reporting_to = models.CharField(max_length=20, blank = True, null = True)  
@@ -72,7 +68,7 @@ class Employee(models.Model):
     #added_time = models.DateTimeField() 
     #modified_by = models.CharField(max_length=30)
     #modified_time = models.TimeField()
-    #created_at = models.DateTimeField()
+    
     updated_at = models.DateTimeField(auto_now_add = True)
     is_active = models.PositiveSmallIntegerField(default=1)
     profile = models.ImageField(blank = True, null = True)

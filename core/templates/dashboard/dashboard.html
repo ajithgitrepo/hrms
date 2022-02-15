@@ -252,8 +252,8 @@
               <form method="POST" class="post-form" action="check_out_attn/">  
                 {% csrf_token %}  
                
-                <input type="hidden" name="checkout_lat" id="Hid_checkoutlat"></input>
-                <input type="hidden" name="checkout_lang" id="Hid_checkoutlang"></input>
+                <input type="hidden" name="checkout_lat" id="Hid_checkoutlat" value="00.0000000"></input>
+                <input type="hidden" name="checkout_lang" id="Hid_checkoutlang" value="00.0000000"></input>
                 <input type="hidden" name="checkout_location" id="Hid_outinlocation"></input>
 
                 <div class="row">
@@ -854,7 +854,7 @@ $(document).ready(function() {
       //alert('v');
           geo_loc = processGeolocationResult(position);
           currLatLong = geo_loc.split(",");
-          //alert(currLatLong);
+          // alert(currLatLong);
           initializeCurrent(currLatLong[0], currLatLong[1]);
  
      });

@@ -1085,7 +1085,7 @@ $("#add_form").submit(function(e) {
 
   f_name = $("#first_name").val();
   l_name = $("#last_name").val();
-  n_name = $("#nick_name").val();
+  // n_name = $("#nick_name").val();
 
   if (!/^[a-zA-Z\s]+$/g.test(f_name)) {
     alert("First Name should be only alphabatics..");
@@ -1095,10 +1095,10 @@ $("#add_form").submit(function(e) {
     alert("Last Name should be only alphabatics..");
     return false;
   }
-  if (!/^[a-zA-Z\s]+$/g.test(n_name)) {
-    alert("Nick Name should be only alphabatics..");
-    return false;
-  }
+  // if (!/^[a-zA-Z\s]+$/g.test(n_name)) {
+  //   alert("Nick Name should be only alphabatics..");
+  //   return false;
+  // }
 
 
 });

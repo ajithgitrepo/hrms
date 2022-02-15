@@ -1,0 +1,202 @@
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+{% block title %} Import Employees {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+   
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+       
+        <div class="col-xl-12 order-xl-1">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Import Employees </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                {% csrf_token %}  
+              
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">File *</label>
+                          <input type="file" name="file"  class="form-control" id="file_select">
+                          {{ form.file.errors }}<br>
+                          <a href="#">Download Sample format</a>
+                        </div>
+                       
+                    </div>
+                    
+                  
+                </div>
+            </div>
+
+            <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+            </div>
+
+            <hr class="my-4" />
+
+              </div>
+              
+              
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+
+$(function () {
+    var dateToday = new Date();
+        // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+    $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+    todayBtn: "linked",
+    todayHighlight: true,});
+         
+});
+
+ 
+$(document).ready(function() {
+    // initialise Datetimepicker and Sliders
+    md.initFormExtendedDatetimepickers();
+});
+
+$("#file_select").change(function () {
+    var file = $('#file_select')[0].files[0]
+    if (file){
+        $("#file_name").val(file.name.split('.').shift());
+    }
+})
+
+
+
+
+
+</script>
+
+{% endblock javascripts %}
+ 
