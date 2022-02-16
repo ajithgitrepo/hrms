@@ -451,7 +451,7 @@ px
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Nick Name</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.nick_name }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.nick_name|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
@@ -509,7 +509,7 @@ px
                     <div class="zpC_body ">
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Date of Birth</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.birth_date }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.birth_date|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Age</div>
@@ -517,21 +517,21 @@ px
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Gender</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.gender }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.gender|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Marital Status</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.marital_status }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.marital_status|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">About Me</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.about_me }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.about_me|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Ask me about/Expertise</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.expertise }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.expertise|default_if_none:'-' }}</div>
                         </div>
                         
                     </div>
@@ -559,29 +559,29 @@ px
                     <div class="zpC_body ">
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Work Phone Number</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.work_phone }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.work_phone|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Extension</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.extension }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.extension|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Seating Location</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.seating_location }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.seating_location|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Personal Mobile Number</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.mobile_number }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.mobile_number|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Personal Email Address</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.other_email }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.other_email|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Address</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.address }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.address|default_if_none:'-' }}</div>
                         </div>
                         
                     </div>
@@ -606,41 +606,41 @@ px
                     <div class="zpC_body ">
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Department</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.department.name }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.department.name|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Location</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.location.location }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.location.location|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Designation</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.title }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.title|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Employment Type</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_type }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_type|default_if_none:'-' }}</div>
                         </div>
 
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Employee Status</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_status }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.employee_status|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Source of Hire</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.source_of_hire }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.source_of_hire|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Date of Joining</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Current Experience</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince|default_if_none:'-' }}</div>
                         </div>
                         <div class="zp_lst_wrpr">
                             <div class="zplt_lbl ">Total Experience</div>
-                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince }}</div>
+                            <div class="zprt_lbl " labelname="EmployeeID">{{ employee.date_of_joining|timesince|default_if_none:'-' }}</div>
                         </div>
                         
                     </div>
@@ -664,7 +664,7 @@ px
                            
                             <div class="zp_lst_wrpr">
                                 <div class="zplt_lbl ">Emirate ID / Aadhaar No.</div>
-                                <div class="zprt_lbl " labelname="EmployeeID">{{ employee.emirate_id }}</div>
+                                <div class="zprt_lbl " labelname="EmployeeID">{{ employee.emirate_id|default_if_none:'-' }}</div>
                             </div>
                         </div>
                     </div>

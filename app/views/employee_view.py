@@ -1448,7 +1448,7 @@ def import_employee(request):
                     
                     )
 
-                    latest_id = df['employee_id'][d]
+                    latest_id = df['employee_id'][d].strip()
 
                     hashed_pwd = make_password("secret")
 

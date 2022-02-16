@@ -382,7 +382,7 @@
                       <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
                       <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
                       <div class="usr_cl">
-                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
+                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone|default_if_none:'-'}}</small> 
                       </div> 
                       <hr style="margin-top: 1rem;margin-bottom: 1rem;">
                   </div>
