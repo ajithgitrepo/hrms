@@ -256,12 +256,11 @@ urlpatterns = [
      # Reporting To 
     path('reporting_to/', views.reportingto_view.reporting_to, name="reporting_to"),
     path('add_reporting_to/', views.reportingto_view.add_reporting_to, name="add_reporting_to"),
-  #  path('update_department/<str:pk>/', views.department_view.update_department, name="update_department"),
     path('delete_reportingto/<str:pk>/', views.reportingto_view.delete_reportingto, name="delete_reportingto"),
     path('status_reporting_employee/<str:emp_id>/<str:pk>/<str:val>/', views.reportingto_view.status_reporting_employee, name="status_reporting_employee"),
     path('filter_reporting_employees/<str:status>/', views.reportingto_view.filter_reporting_employees, name="filter_reporting_employees"),
     
-  # Emp Mapping
+    # Employee Mapping
     path('add_emp_mapping/', views.emp_mapping_view.add_emp_mapping, name="add_emp_mapping"),
     path('emp_mapping/', views.emp_mapping_view.emp_mapping, name="emp_mapping"),
     path('add_emp_mapping/<str:pk>/', views.emp_mapping_view.add_emp_mapping, name="add_emp_mapping"),

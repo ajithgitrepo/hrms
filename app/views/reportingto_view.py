@@ -63,7 +63,7 @@ def add_reporting_to(request):
 
 def emp_res_data(request):                                                          
 
-    emp_roles = Group.objects.filter(is_active='1',name='associate').values_list('id')
+    emp_roles = Group.objects.filter(is_active='1',name='Associate').values_list('id')
     employee = Employee.objects.filter(is_active='1',role_id__in=emp_roles)
     
     return employee 
