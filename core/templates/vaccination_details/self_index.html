@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Vaccination Details {% endblock %}
@@ -595,3 +596,602 @@ $('#ddl_vaccinate').on('change', function () {
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Vaccination Details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+
+
+.LockOn {
+    
+}
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css"> -->
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Oraganization</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Vaccination</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <!-- <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_vaccination_details' %}" class="btn btn-sm btn-neutral">Add</a>
+           
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          
+             <!-- Card header -->
+          <div class="card-header" style="margin-bottom: -25px;">
+            <div class="row" >
+                 
+                  <div class="col-lg-4" style="float:right;">
+                     
+                        <h3 class="mb-0">Vaccination Dateils</h3><br>
+                  </div> 
+                  <div class="col-lg-4"><label ></label></div>
+                  <div class="col-lg-1" style="margin-top: 10px;"><label >Filter_by:</label></div>
+                  <div class="col-lg-3">
+                        <select id="ddl_vaccinate"  class="form-control"  value="{{ form.data.vaccinated_status }}"  style="border: 1px solid;"  name="employee" id="employee_status_change" >
+                              <option value="all">All</option> 
+                              <option value="Partially" >Partially</option>
+                          <option value="Fully" >Fully</option>
+                          <option value="Do not want to disclose" >Do not want to disclose</option>
+                          <option value="Not vaccinated">Not vaccinated</option>
+                             
+                          </select>
+                  </div>
+                  
+           
+          </div>
+            <!-- <h3 class="mb-0">Onboarding</h3> -->
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+         
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="example">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee ID</th>
+                  <th>vaccinated?</th>
+                  <th>Date of vaccination</th>
+                  <th>vaccination Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for emp in employees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="nr" style="font-weight: 900;" data-queryid="{{ emp.employee_id  }}"> {{emp.employee.first_name}} {{emp.employee.last_name}} - ({{emp.employee_id }})</td>
+                   
+                      
+               {% if emp.vaccinated_status == "Partially" %}
+                     <td style="color: orange;font-weight: 800;">{{emp.vaccinated_status }}</td>
+                    <td>{{emp.partial_vacci_date |date:"d-m-Y" }}</td>
+                {% elif emp.vaccinated_status == "Fully" %}
+                    <td style="color: green;font-weight: 800;">{{emp.vaccinated_status }}</td>
+                    <td>{{emp.date_of_vaccination |date:"d-m-Y" }}</td>
+                {% else %}
+                      <td> <td style="color: red;font-weight: 800;">{{emp.vaccinated_status }}</td>   </td>
+                {% endif %}
+                    
+                    
+                    <td style="font-weight: 800;">{{emp.vaccin_name}}</td>
+                   
+                    <td> 
+                        <!-- <a class="fas fas fa-edit" data-toggle="tooltip" data-original-title="Edit" title="Edit" href="{% url 'update_vaccination_details' emp.pk %}"></a>
+                        &nbsp; &nbsp;   -->
+                        <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
+                        &nbsp; &nbsp;
+                       
+                        <!-- <a href="{% url 'delete_vaccine_details' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
+                              <i class="fas fa-trash-alt"></i>
+                            </a>  -->
+                      
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    
+  </div>
+
+
+  {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Vaccination more Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;">Employee ID :</span></div> <div class="col-lg-3"><span style="font-weight: 700;" id="employee_id_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Name : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="first_name_other"></span></div>
+                 </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Vaccinated status :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="vaccinated_status_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Vaccin Name : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="vaccin_name_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Partial vaccination date :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="partial_vacci_date_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Date of vaccination : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="date_of_vaccination_other"></span></div>
+              </div>
+             
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Partial document :</span></div> 
+                    <div class="col-lg-3">  
+                        <a id="partial_url_other" class="float-left" target="_blank" data-toggle="tooltip" data-original-title="Download File">
+                        <i style="color: red;font-size: x-large;" class="fas fa-file"></i>&nbsp;&nbsp;
+                  </a>
+                     </div>
+                  <div class="col-lg-3"><span style="color: blue;">Vacciantion document: </span></div> <div class="col-lg-3">  <a id="vaccine_url_other" class="float-left" target="_blank" data-toggle="tooltip" data-original-title="Download File">
+                        <i style="color: red;font-size: x-large;" class="fas fa-download"></i>&nbsp;&nbsp;
+                  </a></div>
+                  <div class="col-lg-6"></div>
+
+                
+              </div>
+              
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Additional comments:</span> </div> <div class="col-lg-9"><span style="font-weight: 700;" id="commends_other"></span></div>
+                  
+              </div>
+
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+  <script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+
+  
+<script type="text/javascript">
+
+// $(window).on('load', function () {
+// // $("#coverScreen").hide();
+// });
+
+$('[data-type="adhaar-number"]').keyup(function() {
+  var value = $(this).val(); //alert(value);
+  value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
+  $(this).val(value);
+});
+
+$('[data-type="adhaar-number"]').on("change, blur", function() {
+  var value = $(this).val(); // alert(value);
+  var maxLength = $(this).attr("maxLength");
+  if (value.length != maxLength) {
+    $(this).addClass("highlight-error"); 
+  } else {
+    $(this).removeClass("highlight-error");
+  }
+});
+
+
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this vaccination details?');
+        }) 
+
+           $(document).ready(function()
+            {
+               $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+                  todayBtn: "linked",
+                  todayHighlight: true,
+                  });
+
+            });
+
+     
+
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+$(".use-mail").click(function() { //alert('n');  
+           $('#my_email_Modal').modal('show');
+
+
+});
+
+//         $.ajaxSetup({
+//   headers: { "X-CSRFToken": '{{csrf_token}}' }
+// });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//         }
+//     }
+// });
+
+// $(window).load(function() {
+//       $('#myModal').modal('show');
+// });
+
+
+
+ $(".use-address").click(function() { //alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+          var base_url = window.location.origin;
+        // "http://stackoverflow.com"
+
+           var host = window.location.host;
+        // stackoverflow.com
+
+      var pathArray = window.location.pathname.split( '/' );
+    //  alert(base_url);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");  
+      $.ajax({  
+            type: "POST",  
+            url: "/snippets_vaccinae_employee_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
+            success: function(data) { // alert(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                       //  alert(item.model);
+                       
+
+                             if(item.model == "app.employee") 
+                             {
+                                    var name = item.fields.first_name + " " + item.fields.last_name; 
+                                    var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                                    $('#employee_id_other').html(item.pk);
+                                    $('#first_name_other').html(name);
+                             }
+                             if(item.model == "app.vaccination_detail") 
+                             {
+                               if(check == false)
+                                 {
+                                    check = true;
+                                    $('#vaccinated_status_other').html(item.fields.vaccinated_status);
+                                    $('#vaccin_name_other').html(item.fields.vaccin_name);
+                                    $('#partial_vacci_date_other').html(item.fields.partial_vacci_date);
+                                    $('#date_of_vaccination_other').html(item.fields.date_of_vaccination);
+                                    $('#commends_other').html(item.fields.commends);
+                                    $('#partial_vacci_date_other').html(item.fields.partial_vacci_date);
+
+                                    if(item.fields.partial_url != "" && item.fields.partial_url != null)
+                                    { // alert(item.fields.partial_url);
+                                         var url = '/static/vaccination_documents/' + item.fields.partial_url;
+                                          $("#partial_url_other").replaceWith(function(){
+                                                return $('<a href='+ url +' id="partial_url_other" class="float-left" target="_blank" data-toggle="tooltip" data-original-title="Download File"><i style="color: blue;font-size: x-large;" class="fas fa-download"></i>&nbsp;&nbsp;' + "</a>");
+                                          });
+                                    }
+                                    else
+                                    {  
+                                          $("#partial_url_other").replaceWith(function(){
+                                                return $("<span id=partial_url_other></span>");
+                                          });
+                                          $('#partial_url_other').text('Document Not Uploaded');
+                                    }
+
+                                    if(item.fields.vaccine_url != "" && item.fields.vaccine_url != null)
+                                    {
+                                       var url = '/static/vaccination_documents/' + item.fields.vaccine_url;
+                                          $("#vaccine_url_other").replaceWith(function(){
+                                                return $('<a href='+ url +' id="vaccine_url_other" class="float-left" target="_blank" data-toggle="tooltip" data-original-title="Download File"><i style="color: blue;font-size: x-large;" class="fas fa-download"></i>&nbsp;&nbsp;' + "</a>");
+                                          });
+                                    }
+                                    else
+                                    {  
+                                          $("#vaccine_url_other").replaceWith(function(){
+                                                return $("<span id=vaccine_url_other></span>");
+                                          });
+                                          $('#vaccine_url_other').text('Document Not Uploaded');
+                                    }
+                             
+                                 }
+
+                             }
+                   //now you can access properties using dot notation
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+});
+
+
+$(document).ready(function()
+ {
+
+        var base_url = window.location.origin;
+       
+        var host = window.location.host;  
+      
+        var pathArray = window.location.pathname.split( '/' );
+
+        if(pathArray[2] != "") 
+         var str = pathArray[2]
+         var res = str.replace(/%20/g, " ");
+        $('#ddl_vaccinate').val(res);
+
+ });
+$('#ddl_vaccinate').on('change', function () {  
+            var sat = $(this).val();
+            window.location = "/filter_vacciate_employees/"+sat+"/"; // redirect
+      });
+
+
+        // $(document).ready(function() {
+        //     $('#datatable').DataTable( {
+        //         dom: 'Bfrtip',
+        //         buttons: [
+        //             'copy', 'csv', 'excel', 'pdf', 'print'
+        //         ],
+        //         language: {
+        //         paginate: {
+        //             previous: "<i class='fas fa-angle-left'>",
+        //             next: "<i class='fas fa-angle-right'>"
+        //         }
+        //     }
+        //     } );
+        // } );
+
+
+     
+
+    </script>
+
+     <!-- Optional JS -->
+  <!-- <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script> -->
+  <!-- <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script> -->
+
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+
+  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+
+
+
+  <script>
+   
+   $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            // {
+            //     extend: 'copyHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, ':visible' ]
+            //     }
+          //  },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            // {
+            //     extend: 'pdfHtml5',
+            //     exportOptions: {
+            //         columns: [ 0, 1 ]
+            //     }
+           // },
+            'colvis'
+        ]
+    } );
+    
+} );
+
+  </script>
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

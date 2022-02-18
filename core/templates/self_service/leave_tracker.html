@@ -365,11 +365,14 @@ hr {
                   <div class="col-lg-3"><span style="color: blue;">Requested  Date : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="request_date_other"></span></div>
               </div>
               <hr class="my-3" />
+<<<<<<< HEAD
                  <div class="row">
                   <div class="col-lg-3"><span style="color: blue;">Reject Reason :</span></div> <div class="col-lg-9"> <span style="font-weight: 700;" id="reject_reason"></span></div>
                  
               </div>
               <hr class="my-3" />
+=======
+>>>>>>> origin/hrms-09-02-2022
               <!-- <div class="row">
                   <div class="col-lg-3"><span style="color: blue;">Reporting To :</span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="department_other"></span></div>
                   <div class="col-lg-3"><span style="color: blue;">Source Of Hire : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="source_of_hire_other"></span></div>
@@ -540,13 +543,17 @@ function csrfSafeMethod(method) {
                                 var result = day + "-" + month + "-" + year + " " + time;
                                 var tot = parseInt(item.fields.total_days) + 1
                                 check = true;
+<<<<<<< HEAD
                                 var reject_reason=item.fields.reject_reason
+=======
+>>>>>>> origin/hrms-09-02-2022
                                 if(item.fields.leave_mode == "half")
                                  tot = 0.5;
                                 $('#total_days_other').html(tot);
                                 $('#team_mailid_other').html(item.fields.reason);
                                 $('#reason_other').html(item.fields.reason);
                                 $('#request_date_other').html(result);
+<<<<<<< HEAD
                                 if(reject_reason)
                                 {
                                     $('#reject_reason').html(item.fields.reject_reason);                   
@@ -554,6 +561,8 @@ function csrfSafeMethod(method) {
                                 else{
                                   $('#reject_reason').html('-');
                                 }
+=======
+>>>>>>> origin/hrms-09-02-2022
                                     
                                     
                             }

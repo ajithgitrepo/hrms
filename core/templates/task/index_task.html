@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Datatables {% endblock %}
@@ -550,3 +551,557 @@
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Datatables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>  .table-responsive {
+    overflow-x: auto;
+    min-height: 0.01%;
+}  .list_cont {
+       padding-left: 0 !important;
+   }  .ZP-announcetable ul, .ZP-announcetable ol, .ZPFwig ul, .ZPFwig ol {
+          list-style: inherit;
+          padding-left: 25px;
+      }  .list_cont .list_item:first-child {
+             border-top: 0;
+         }  .list_cont .list_item {
+                background-color: #FFFFFF
+            ;
+                box-sizing: border-box;
+                cursor: pointer;
+                width: 100%;
+                padding: 13px 40px;
+                transition: all .3s ease;
+                margin: 0;
+                border-top: 1px solid #F9FCFD
+            ;
+            }  .zp_flex {
+                   display: flex;
+                   flex-wrap: nowrap;
+                   align-items: center;
+                   justify-content: space-between;
+               }
+.list_cont .list_content {
+    box-sizing: border-box;
+    width: 75%;
+    padding-right: 25px;
+}  .zp_flex .zp_flexItem {
+       display: flex;
+       align-items: center;
+   }
+.list_cont .list_img .zp-uimg {
+    border: 0;
+    margin-right: 20px;
+    position: relative;
+    width: 42px;
+    height: 42px;
+}
+.zp-uimg {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    border: 1px solid #BFC0C0
+;
+}  .list_cont .list_detail {
+       text-overflow: ellipsis;
+       white-space: nowrap;
+       overflow: hidden;
+   }
+.list_cont .list_detail .meta_primary {
+    font-size: 15px;
+    color: #000000
+;
+    line-height: 23px;
+    cursor: pointer;
+}
+.list_cont .list_detail .meta_secondary {
+    line-height: 14px;
+    margin: 0;
+    font-size: 12px;
+}
+.ZP-announcetable ul, .ZP-announcetable ol, .ZPFwig ul, .ZPFwig ol {
+    list-style: inherit;
+}
+.ann_category {
+    position: relative;
+    list-style-type: none;
+    padding-left: 0;
+    padding-left: 0 !important;
+    line-height: 14px;
+    margin-top: 4px;
+}
+.list_cont .list_detail {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.reviewIconInfo {
+    width: 170px;
+    text-align: right;
+}
+.list_cont .reviewIconInfo {
+    padding-right: 2px;
+}
+.list_cont .reviewIconInfo label {
+    padding-left: 16px;
+}
+.reviewIconInfo label {
+    margin: 0 0 0 10px;
+    font-size: 16px;
+}
+.list_cont .reviewIconInfo label span {
+    color: #111111
+    !important;
+    margin-right: 3px;
+}
+.reviewIconInfo label span {
+    display: inline-block;
+    text-align: right;
+    color: #999 !important;
+    font-size: 14px;
+    min-width: 24px;
+}
+.list_cont .reviewIconInfo .IC-like {
+    color: #6D6D6D
+;
+}  .modal.fade.modal-right .modal-dialog {
+       transform: translate(125%, 0px);
+   }
+     .modal.show.modal-right
+       .modal-dialog {
+        transform: none;
+    }
+    .modal-dialog {
+         position: fixed !important;
+         margin: auto;
+         width: 1500px !important;
+         height: 100%;
+         right: 0px;
+     }
+   .pagination {
+    display: flex;
+    padding-left: 40% !important;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+    /*.modal-open .container-fluid, .modal-open  .container {*/
+    /*    -webkit-filter: blur(1px);*/
+    /*    -moz-filter: blur(1px);*/
+    /*    -o-filter: blur(1px);*/
+    /*    -ms-filter: blur(1px);*/
+    /*    filter: blur(1px);*/
+    /*}*/
+
+    /*.modal-backdrop*/
+    /*{*/
+    /*    opacity:0.7 !important;*/
+    /*}*/
+
+    /*.modal-lg {*/
+    /*    max-width: 60% !important;*/
+    /*}*/
+    /*.modal {*/
+    /*    overflow-y:auto;*/
+    /*}*/
+
+    div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+        margin: 2px 0;
+        white-space: nowrap;
+        justify-content: flex-end;
+    }
+
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: .375rem;
+    }
+
+
+
+    .LockOn {
+
+    }
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+
+
+
+  <!-- Header -->
+  <div class="header bg-primary pb-4">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Organisations</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Tasks</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_task' %}" class="btn btn-sm btn-neutral">Add</a>
+          </div>
+            <div class="col-lg-12 col-5 text-right">
+                <form method='GET' action="{% url 'search' %}" >
+                    <input type="text" name="search" placeholder="Search Task Name"/>
+                    <button class="btn-default"   type="submit">Submit</button>
+                </form>
+
+
+
+            </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page content -->
+
+<div class="container">
+    <div id="zp_announcement_list_div">
+        <div id="anno-list" class="table-responsive">
+            <ul class="list_cont" id="zp_announcement_list">
+                {% for task in users %}
+
+                    <li class="list_item zp_flex " rel="ann_navig" id="zp_ann_row_57753000000234097">
+                        <div >
+                            {{ forloop.counter }}
+                        </div>
+                        <div class="list_content zp_flexItem">
+<!--                            <div class="list_img">-->
+<!--                                    <img class="zp-uimg" src="/static/images/admin.png">-->
+<!--                            </div>-->
+                            <div class="list_detail">
+
+                                {{task.employee.first_name}} ({{task.employee_id }})
+                                <p class="meta_secondary">
+                                    <a>Task Name:{{task.task_name}}</a>
+
+                                    <span class="ann_time">  | Priority: {{task.priority}}</span>
+                                    <span class="ann_time">  | Start Date: {{task.start_date|date:"d-m-Y"}}</span>
+                                    <span class="ann_time">  | End Date: {{task.end_date|date:"d-m-Y"}}</span>
+                                    <span class="ann_time">  | Status: {{task.status}}</span>
+                                </p>
+                                <ul class="ann_category"></ul>
+                            </div>
+                        </div>
+                                 <a class="fas fa-edit" data-toggle="tooltip" data-original-title="Edit" title="Edit" href="{% url 'update_task' task.id %}"></a>
+
+                                    <a href="{% url 'delete_task' task.id %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Request">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                    </li>
+                {% empty %}
+                <tr><h1 colspan="6">Search Not Found</h1></tr>
+                {% endfor %}
+
+
+
+
+
+<!--                <div class="pagination">-->
+<!--                        <span class="step-links">-->
+<!--                            {% if page_obj.has_previous %}-->
+<!--                                <a href="?page=1">&laquo; first</a>-->
+<!--                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>-->
+<!--                            {% endif %}-->
+
+<!--                            <span class="current">-->
+<!--                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.-->
+<!--                            </span>-->
+
+<!--                            {% if page_obj.has_next %}-->
+<!--                                <a href="?page={{ page_obj.next_page_number }}">next</a>-->
+<!--                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>-->
+<!--                            {% endif %}-->
+<!--                        </span>-->
+<!--                </div>-->
+            </ul>
+            {% if users.has_other_pages %}
+            <ul class="pagination">
+                {% if users.has_previous %}
+                <li ><a href="?page={{ users.previous_page_number }}" class="btn btn-primary btn-xs">&laquo;</a></li>
+                {% else %}
+                <li class="disabled"><span class="btn">&laquo;</span></li>
+                {% endif %}
+                {% for i in users.paginator.page_range %}
+                {% if users.number == i %}
+                <li class="active" ><span class="btn">{{ i }} <span  class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a class="btn btn-default" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if users.has_next %}
+                <li><a href="?page={{ users.next_page_number }}" class="btn btn-primary btn-xs">&raquo;</a></li>
+                {% else %}
+                <li class="disabled"><span class="btn">&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <!-- Next/Prev page links  -->
+<!--        {% if posts.object_list and posts.paginator.num_pages > 1 %}-->
+<!--        <div class="pagination" style="margin-top: 20px; margin-left: -20px; ">-->
+<!--            <span class="step-links">-->
+<!--                {% if posts.has_previous %}-->
+<!--                        <a href= "?page={{ posts.previous_page_number }}"> &lt;&lt; </a>-->
+<!--                {% endif %}-->
+
+<!--                    <span class="current">-->
+<!--                     {{ posts.number }} of {{ posts.paginator.num_pages }}-->
+<!--                </span>-->
+
+<!--            {% if posts.has_next %}-->
+<!--                    <a href="?page={{ posts.next_page_number }}"> &gt;&gt;</a>-->
+<!--            {% endif %}-->
+<!--        </span>-->
+<!--        </div>-->
+<!--        {% endif %}-->
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+                        <!--  <div class="container-fluid mt&#45;&#45;6">-->
+
+<!--    &lt;!&ndash; Table &ndash;&gt;-->
+<!--    <div class="row">-->
+<!--      <div class="col">-->
+
+<!--        <div class="card">-->
+<!--          &lt;!&ndash; Card header &ndash;&gt;-->
+<!--          <div class="card-header">-->
+<!--            <h3 class="mb-0">Tasks</h3>-->
+
+<!--            &lt;!&ndash; <p class="text-sm mb-0">-->
+<!--              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.-->
+<!--            </p> &ndash;&gt;-->
+<!--          </div>-->
+
+<!--          <div class="list-group">-->
+<!--            <div class="list-group-item" >-->
+<!--&lt;!&ndash;              <thead class="thead-light">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="list-group-heading">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <th>#</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Employee</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Task</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Description</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Priority</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Start Date</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>End Date</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Reminder</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Status</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Action</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </thead>&ndash;&gt;-->
+
+<!--&lt;!&ndash;              <tbody>&ndash;&gt;-->
+<!--                <div class="list">-->
+<!--                    <ol>-->
+<!--                {% for task in tasks %}-->
+<!--                        <li>-->
+
+<!--&lt;!&ndash;                    <td>{{ forloop.counter }}</td>&ndash;&gt;-->
+<!--                    <td id="{{ task.employee  }}"> {{task.employee.first_name}} ({{task.employee_id }})</td>-->
+<!--                    <td>{{task.task_name}}</td>-->
+<!--&lt;!&ndash;                    <td>{{task.description}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td>{{task.priority}} </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td>{{task.start_date|date:"d-m-Y"}} </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td>{{task.end_date|date:"d-m-Y"}} </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td>{{task.reminder|date:"d-m-Y"}} </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td>{{task.status}} </td>&ndash;&gt;-->
+<!--                        </li>-->
+<!--                    <td>-->
+<!--                        &nbsp;&nbsp;-->
+<!--                        <a class="fas fa-edit" data-toggle="tooltip" data-original-title="Edit" title="Edit" href="{% url 'update_task' task.id %}"></a>-->
+
+<!--                        <a href="{% url 'delete_task' task.id %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Request">-->
+<!--                            <i class="fas fa-trash"></i>-->
+<!--                        </a>-->
+
+
+<!--                    </td>-->
+
+
+
+
+<!--                {% endfor %}-->
+<!--                    </ol>-->
+<!--                </div>-->
+<!--&lt;!&ndash;              </tbody>&ndash;&gt;-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
+
+
+
+<!--{% if books %}-->
+<!--{% for each_book in books %} // books is list here so pick each element using for loop-->
+<!--<a href="{% url 'buy_book' pk=each_book.pk %}">-->
+<!--    &lt;!&ndash;Upon successful search book image with hyperlink appears &ndash;&gt;-->
+<!--    <img src="{{each_book.image.url}}" alt="No Image"></a>-->
+<!--<p>{{each_book.bookname}}</p>-->
+<!--<p>Rs.{{each_book.price}}</p>-->
+<!--{% endfor %}-->
+<!--{% endif %}-->
+
+{% if messages %}
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+
+
+                <script type=text/javascript>
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        // "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+
+
+<script type="text/javascript">
+</script>
+  <!-- Optional JS -->s
+   <!-- Optional JS -->
+<script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script> --> -->
+<script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+   <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script>  -->
+<!--<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>-->
+
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
+
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this task?');
+        })
+      //we use  above 2 script instead of using the below code
+
+      //   $(document).ready(function() {
+          
+      //       $('#datatable-basic').dataTable({
+      //       "bDestroy": true
+      //   }).fnDestroy();
+
+      //   $('#datatable-basic').dataTable({
+      //       "aoColumnDefs": [{
+      //           "bSortable": false,
+      //           "aTargets": ["sorting_disabled"]
+      //       }],
+      //       "bDestroy": true
+      //   }).fnDestroy();
+
+      //      /* $('#datatable-basic').DataTable( {
+      //           dom: 'Bfrtip',
+               
+      //           buttons: [
+      //               'copy', 'csv', 'excel', 'pdf', 'print'
+      //           ],
+                
+      //       //     language: {
+      //       //     paginate: {
+      //       //         previous: "<i class='fas fa-angle-left'>",
+      //       //         next: "<i class='fas fa-angle-right'>"
+      //       //     }
+      //       // }
+            
+             
+      //       } );  */
+      //   } );
+
+
+    </script>
+<script>
+    document.getElementById("search-form").submit();
+</script>
+
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

@@ -42,6 +42,15 @@ import os
 from django.conf import settings
 from app.views.restriction_view import admin_only,role_name
 from app.models.location_model import Location
+<<<<<<< HEAD
+=======
+import pandas as pd
+from django.core.files.storage import FileSystemStorage
+import uuid
+
+import logging
+logger = logging.getLogger(__name__)
+>>>>>>> origin/hrms-09-02-2022
 
 
 @login_required(login_url="/login/")
@@ -1407,6 +1416,71 @@ def update_employee(request, pk):
   #  context_role = {'form':form,'employee':employee}
     return render(request, "employee/update_employee.html", context_role)
 
+
+def import_employee(request):
+    try:
+        if request.method == 'POST' and request.FILES['file']:
+
+            myfile = request.FILES['file']        
+            path = myfile.file
+
+            df = pd.read_excel(path)
+            # print(f'{settings.BASE_DIR}/{path}')
+            # print(df)
+            # logger.warning(f'{settings.BASE_DIR}/{path}')
+
+            for d in df.index:
+
+                # print(d)
+
+                # logger.warning(df['department'][d])
+                
+                if not Employee.objects.filter(employee_id = df['employee_id'][d]).exists():
+
+                    obj = Employee.objects.create(
+                        employee_id = df['employee_id'][d].strip(),
+                        first_name = df['first_name'][d].strip(),
+                        last_name = df['last_name'][d].strip(),
+                        email_id = df['email'][d].strip(),
+                        nick_name = None,
+                        department = Department.objects.get(name = df['department'][d].strip()),
+                        # location = Location.objects.get(name = df['location'][d]), 
+                        role = Group.objects.get(name = df['role'][d].strip()), 
+                        gender = df['gender'][d].strip(),
+                        is_active = 1,
+                    
+                    )
+
+                    latest_id = df['employee_id'][d].strip()
+
+                    hashed_pwd = make_password("secret")
+
+                    obj = User(
+                        password=hashed_pwd,
+                        is_superuser=1,
+                        username= df['first_name'][d].strip(),
+                        first_name= df['last_name'][d].strip(),
+                        last_name= df['last_name'][d].strip(),
+                        email= df['email'][d].strip(),
+                        role= Group.objects.get(name = df['role'][d].strip()), 
+                        emp_id=df['employee_id'][d].strip(),
+                        is_staff=1,
+                        is_active=1,
+                        date_joined=datetime.datetime.now(),
+
+                    )
+
+                    obj.save()
+
+            messages.success(request, ' Employees imported successfully..! ')
+            return redirect('employees')
+
+    except Exception as error:   
+        messages.error(request, ' Please check you excel file.. ')         
+        print(error)
+        logger.warning(error)
+
+    return render(request, "employee/import_employee.html")
 
 def update_employee_emp(request, pk):
    

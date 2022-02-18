@@ -154,7 +154,10 @@ input[type=number] {
                             <label class="form-control-label" for="input-city">Leave Type</label>
                             <select class="form-control select2" data-toggle="select" value="{{ form.data.leave_type }}" name="leave_type" id="leave_type">
                                 <option value="" selected >Select</option>
+<<<<<<< HEAD
                                 
+=======
+>>>>>>> origin/hrms-09-02-2022
                                 {% for leave in leaves %}
                                     <option value="{{ leave.leave_type.id }}" {% if leave.leave_type.id|stringformat:"i" == form.data.leave_type %} selected {% endif %}> {{ leave.leave_type.name }} </option>
                                 {% endfor %} 

@@ -6,7 +6,11 @@ urlpatterns = [
    
     #Home page
     path('', views.dashborad_view.index, name='home'),
+<<<<<<< HEAD
 	path('home/', views.dashborad_view.index, name='home'),
+=======
+	  path('home/', views.dashborad_view.index, name='home'),
+>>>>>>> origin/hrms-09-02-2022
   
     #Self Service
     path('profile/', views.self_service_view.profile, name="profile"),
@@ -33,6 +37,10 @@ urlpatterns = [
     # Employee 
 	path('employees/', views.employee_view.employees, name="employees"),
 	path('add_employee/', views.employee_view.add_employee, name="add_employee"),
+<<<<<<< HEAD
+=======
+  path('import_employee/', views.employee_view.import_employee, name="import_employee"),
+>>>>>>> origin/hrms-09-02-2022
 	path('update_employee/<str:pk>/', views.employee_view.update_employee, name="update_employee"),
 	path('update_employee_emp/<str:pk>/', views.employee_view.update_employee_emp, name="update_employee_emp"),
 	path('delete_employee/<str:pk>/', views.employee_view.delete_employee, name="delete_employee"),
@@ -40,7 +48,11 @@ urlpatterns = [
 	path('snippets', views.employee_view.snippets, name="snippets"),
 	path('reporting/', views.employee_view.reporting, name="reporting"),
 	path('filter_employee', views.employee_view.filter_employee, name="filter_employee"),
+<<<<<<< HEAD
     path('view_more', views.employee_view.view_more, name="view_more"),
+=======
+  path('view_more', views.employee_view.view_more, name="view_more"),
+>>>>>>> origin/hrms-09-02-2022
     
     
     # Roles 
@@ -68,6 +80,11 @@ urlpatterns = [
     path('add_leave_type/', views.leave_type_view.add_leave_type, name="add_leave_type"),
     path('edit_leave_type/<str:pk>/', views.leave_type_view.edit_leave_type, name="edit_leave_type"),
     path('change_status/<str:pk>/<str:val>/', views.leave_type_view.change_status, name="change_status"),
+<<<<<<< HEAD
+=======
+    path('edit_comp_off/<str:pk>/', admin_only(views.leave_type_view.edit_comp_off), name="edit_comp_off"),
+   
+>>>>>>> origin/hrms-09-02-2022
    
     #leave balance
     path('leave_balance/', views.leave_balance_view.index, name="leave_balance"),
@@ -253,12 +270,19 @@ urlpatterns = [
      # Reporting To 
     path('reporting_to/', views.reportingto_view.reporting_to, name="reporting_to"),
     path('add_reporting_to/', views.reportingto_view.add_reporting_to, name="add_reporting_to"),
+<<<<<<< HEAD
   #  path('update_department/<str:pk>/', views.department_view.update_department, name="update_department"),
+=======
+>>>>>>> origin/hrms-09-02-2022
     path('delete_reportingto/<str:pk>/', views.reportingto_view.delete_reportingto, name="delete_reportingto"),
     path('status_reporting_employee/<str:emp_id>/<str:pk>/<str:val>/', views.reportingto_view.status_reporting_employee, name="status_reporting_employee"),
     path('filter_reporting_employees/<str:status>/', views.reportingto_view.filter_reporting_employees, name="filter_reporting_employees"),
     
+<<<<<<< HEAD
   # Emp Mapping
+=======
+    # Employee Mapping
+>>>>>>> origin/hrms-09-02-2022
     path('add_emp_mapping/', views.emp_mapping_view.add_emp_mapping, name="add_emp_mapping"),
     path('emp_mapping/', views.emp_mapping_view.emp_mapping, name="emp_mapping"),
     path('add_emp_mapping/<str:pk>/', views.emp_mapping_view.add_emp_mapping, name="add_emp_mapping"),

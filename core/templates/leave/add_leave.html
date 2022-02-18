@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 <title>asdsd</title>
 {% block title %} User Profile {% endblock %}
@@ -753,4 +754,761 @@ $(function() {
 </script>
 
 {% endblock javascripts %}
+=======
+{% extends "layouts/base.html" %}
+<title>asdsd</title>
+{% block title %} User Profile {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+  <link rel="stylesheet" href="/static/build/css/demo.css">
+ 
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+        </div>
+        <div class="col-xl-12 order-xl-1">
+        
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Add Profile </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                  <form method="POST" name="form" class="post-form" >  
+                        {% csrf_token %}  
+                        
+
+                <h6 class="heading-small text-muted mb-4">Basic Info</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                            <span>{{ request.message }}</span>
+                           <!-- {{ form.data }} -->
+                        <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                        <input type="text" name="employee_id" value="{{ form.data.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
+                        <!-- {{ form.employee_id }} -->
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div>
+                    <div class="col-lg-4"> 
+                      <div class="form-group"> 
+                        <label class="form-control-label" for="input-email">First Name</label>
+                        <input type="text" name="first_name" value="{{ form.data.first_name }}"  class="form-control" placeholder="Enter First Name" >
+                        {{ form.first_name.errors }}
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Last Name</label>
+                        <input type="text" name="last_name" value="{{ form.data.last_name }}" class="form-control" placeholder="Enter Last Name" >
+                        {{ form.last_name.errors }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Email ID</label>
+                        <input type="text" name="email_id" value="{{ form.data.email_id }}" class="form-control" placeholder="Enter Email ID" >
+                        {{ form.email_id.errors }}
+                      </div>
+                    </div>
+
+                    <!-- <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Mobile Number</label>
+                          <input type="text" name="mobile_number" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Enter Mobile Number" >
+                          {{ form.mobile_number.errors }}
+                        </div>
+                      </div> -->
+                     
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Nick Name</label>
+                        <input type="text" name="nick_name" value="{{ form.data.nick_name }}" class="form-control" placeholder="Enter Nick Name" >
+                        <!-- {{ form.nick_name.errors }} -->
+                      </div>
+                    </div>
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Added By</label>
+                        <input type="text" name="input-addedby" class="form-control" placeholder="Enter Added By" >
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div> -->
+                  </div>
+
+                  <div class="row">
+                    
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Nick Name</label>
+                        <input type="email" id="input-email" class="form-control" placeholder="{{ request.user.email }}">
+                      </div>
+                    </div> -->
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Added By</label>
+                        <input type="text" name="input-email" class="form-control"  placeholder="Enter Added By">
+                      </div>
+                    </div>-->
+                   
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-first-name">Added time</label>
+                        <input type="text" name="input-addedtime" class="form-control" placeholder="Enter Added time" >
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div>    -->
+
+                  </div>
+
+                  <div class="row">
+                   
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-last-name">Modified By</label>
+                        <input type="text" name="input-modifiedby" class="form-control" placeholder="Enter Modified By" >
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div> -->
+                    <!-- <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-last-name">Modified time</label>
+                        <input type="text" name="input-modifiedtime" class="form-control" placeholder="Enter Modified time" >
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+                <hr class="my-4" />
+              
+                <!-- Address -->
+                <!-- <button type="submit" class="btn btn-primary">Submit</button>  -->
+                <h6 class="heading-small text-muted mb-4">Work</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-address">Department</label>
+                        <!-- <input name="department" value="{{ form.data.department }}" class="form-control" placeholder="Enter Department"  type="text"> -->
+                        <select name="department" class="form-control" placeholder="Enter Department">
+                              <option value="">select</option>
+                              <option value="HR" {% if form.data.department == "HR" %} selected{% endif %}>HR</option>
+                              <option value="Accounts and Finance" {% if employee.department == "Accounts and Finance" %} selected{% endif %}>Accounts and Finance</option>
+                          <option value="Sales and marketing" {% if employee.department == "Sales and marketing" %} selected{% endif %}>Sales and marketing</option>
+                          <option value="Technical Publications and Training" {% if employee.department == "Technical Publications and Training" %} selected{% endif %}>Technical Publications and Training</option>
+                          <option value="Technical (or Customer) Support" {% if employee.department == "Technical (or Customer) Support" %} selected{% endif %}>Technical (or Customer) Support</option>
+                        </select>
+                      
+                        {{ form.department.errors }}
+                  </div>
+                    </div>
+                     
+                    <div class="col-md-4"> 
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-address">Reporting To</label>
+                          <input name="reporting_to" value="{{ form.data.reporting_to }}" class="form-control" placeholder="Enter Reporting To"  type="text">
+                          {{ form.reporting_to.errors }}
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-address">Source of hire</label>
+                          <!-- <input name="source_of_hire" value="{{ form.data.source_of_hire }}" class="form-control" placeholder="Enter Source of hire"  type="text"> -->
+                          <select name="source_of_hire" class="form-control" placeholder="Enter Department">
+                              <option value="">select</option>
+                              <option value="Direct" {% if form.data.source_of_hire == "Direct" %} selected{% endif %}>Direct</option>
+                              <option value="Referral" {% if form.data.source_of_hire == "Referral" %} selected{% endif %}>Referral</option>
+                              <option value="Web" {% if form.data.source_of_hire == "Web" %} selected{% endif %}>Web</option>
+                              <option value="Newspaper" {% if form.data.source_of_hire == "Newspaper" %} selected{% endif %}>Newspaper</option>
+                              <option value="Advertisment" {% if form.data.source_of_hire == "Advertisment" %} selected{% endif %}>Advertisment</option>
+                        </select>
+                        </div>
+                      </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-city">Seating Location</label>
+                        <input type="text" name="seating_location" value="{{ form.data.seating_location }}" class="form-control" placeholder="Enter Seating Location" >
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Location</label>
+                        <input type="text" name="location" value="{{ form.data.location }}" class="form-control" placeholder="Enter Location" >
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Title</label>
+                        <input type="text" value="{{ form.data.title }}" name="title" class="form-control" placeholder="Enter Title">
+                      </div>
+                    </div>
+                  </div>
+                
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-city">Date of joining</label>
+                      <!-- <input type="text" name="input-city" value="{{ form.data.date_of_joining }}" class="form-control" placeholder="Enter Date of joining" > -->
+                      <!-- <input class="form-control datepicker" id="date_of_joining1" name="date_of_joining" placeholder="Select date" type="text" value="{{ form.data.date_of_joining }}"> -->
+                      <input type="text" class="form-control startdate" id="date_of_joining1" placeholder="dd-mm-yyyy" name="date_of_joining" size="25" value="{{ form.data.date_of_joining }}"/>
+                      {{ form.date_of_joining.errors }}
+                  </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Employee status</label>
+                      <!-- <input type="text" name="employee_status" value="{{ form.data.employee_status }}" class="form-control" placeholder="Enter Employee status" > -->
+                      <select name="employee_status" class="form-control" placeholder="Enter Department">
+                        <option value="">select</option> 
+                        <option value="Active" {% if form.data.employee_status == "Active" %} selected{% endif %}>Active</option>
+                        <option value="Terminated" {% if form.data.employee_status == "Terminated" %} selected{% endif %}>Terminated</option>
+                        <option value="Deceased" {% if form.data.employee_status == "Deceased" %} selected{% endif %}>Deceased</option>
+                        <option value="Resigned" {% if form.data.employee_status == "Resigned" %} selected{% endif %}>Resigned</option>
+                        </select>
+                  
+                  </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Employee type</label>
+                      <!-- <input type="text" name="employee_type" value="{{ form.data.employee_type }}" class="form-control" placeholder="Enter Employee type"> -->
+                      <select name="employee_type" class="form-control" placeholder="Enter Department">
+                        <option value="">select</option>
+                        <option value="Permanant"  {% if form.data.employee_type == "Permanant" %} selected{% endif %}>Permanant</option>
+                        <option value="On Contract"  {% if form.data.employee_type == "On Contract" %} selected{% endif %}>On Contract</option>
+                        <option value="Temporary"  {% if form.data.employee_type == "Temporary" %} selected{% endif %}>Temporary</option>
+                        <option value="Trainee"  {% if form.data.employee_type == "Trainee" %} selected{% endif %}>Trainee</option>
+                        
+                  </select>
+                  
+                  </div>
+                  </div>
+                </div>
+              
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-city">Work phone</label>
+                      <input type="text" name="work_phone" value="{{ form.data.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Extension</label>
+                      <input type="text" name="extension" value="{{ form.data.extension }}" class="form-control" placeholder="Enter Extension" >
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Role</label>
+                     
+                       <select class="form-control" value="{{ form.data.role }}" name="role">
+                             <option value="">select</option>
+                             {% for role in roles %}
+                                 <option value="{{ role.id }}" {% if form.data.role == "{{ role.id }}" %} selected{% endif %}>  {{ role.name }}</option>
+                             {% endfor %} 
+                       </select>
+                       {{ form.role.errors }}
+                       
+                      <!-- <input type="number" name="role" value="{{ form.data.role }}" class="form-control" placeholder="Enter Role"> -->
+                      
+                  </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-city">Total experience</label>
+                      <input type="number" name="total_experience" value="{{ form.data.total_experience }}" class="form-control" placeholder="Enter Total experience" >
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Experience</label>
+                      <input type="number" name="experience" value="{{ form.data.experience }}" class="form-control" placeholder="Enter Experience" >
+                    </div>
+                  </div>
+                  <!-- <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Role</label>
+                      <input type="number" name="input-postal-code" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Postal code">
+                    </div>
+                  </div> -->
+                </div>
+            </div>
+
+            <hr class="my-4" />
+           
+                  <select style="display: none;" id="address-country"></select>
+                
+                <!-- Address -->
+                <!-- <button type="submit" class="btn btn-primary">Submit</button>  -->
+                <h6 class="heading-small text-muted mb-4">Personal</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                            <!-- <select name="country"></select> -->
+                            <label class="form-control-label" for="input-address">Mobile Phone</label>
+                            <input type="hidden"  id="Hid_code_name" name ="code_name"  >
+                            <input id="mobile_phone" name="mobile_phone" value="{{ form.data.mobile_phone }}" placeholder="Enter Mobile Phone" type="tel">
+                            <input type="hidden" id="Hid_code_num" name="code_num" ></input>
+                            <!-- <select id="address-country"></select> -->
+                       
+                        <!-- <input name="mobile_phone" value="{{ form.data.mobile_phone }}" class="form-control" placeholder="Enter Mobile Phone"  type="text"> -->
+                        {{ form.mobile_phone.errors }}
+                  </div>
+                    </div>
+                     
+                    <div class="col-md-4"> 
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-address">Other Email</label>
+                          <input name="other_email" value="{{ form.data.other_email }}" class="form-control" placeholder="Enter Other Email"  type="text">
+                          {{ form.other_email.errors }}
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-address">Birth Date</label>
+                          <input name="birth_date" value="{{ form.data.birth_date }}" class="form-control startdate" placeholder="dd-mm-yyyy"  type="text">
+                        </div>
+                      </div>
+
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-city">Marital status</label>
+                        <table>
+                              <tbody>
+                                <tr>
+                                  <td> </td>
+                                  <td><div class="custom-control custom-radio mb-3">
+                                    <input  class="custom-control-input" name="marital_status" id="customRadio6" value="Single" type="radio">
+                                    <label class="custom-control-label" for="customRadio6">Single</label>&nbsp;&nbsp;&nbsp;
+                                  </div></td>
+
+                                  <td>
+                                    <div class="custom-control custom-radio mb-3">
+                                          <input name="marital_status" class="custom-control-input"  value="Married" id="customRadio7"  type="radio">
+                                          <label class="custom-control-label" for="customRadio7"> Married</label>
+                                        </div>
+                                  </td>
+                                  <!-- <td><input type="radio" name="marital_status"  value="Single"><label for="html">Single</label></td> -->
+                                  
+                                  <!-- <td><input type="radio" name="marital_status"  value="Married">Married</td> -->
+                                  
+                          
+                                </tr>
+                              </tbody>
+                            </table>
+                       
+                            
+                         
+                        <!-- <input type="text" name="marital_status" value="{{ form.data.marital_status }}" class="form-control" placeholder="Enter Marital status " > -->
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Address</label>
+                        <input type="text" name="address" value="{{ form.data.address }}" class="form-control" placeholder="Enter Address" >
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Tags</label>
+                        <input type="text" value="{{ form.data.tags }}" name="tags" class="form-control" placeholder="Enter Tags">
+                      </div>
+                    </div>
+                  </div>
+                
+              
+                <!-- <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-city">Work phone</label>
+                      <input type="text" name="work_phone" value="{{ form.data.work_phone }}" class="form-control" placeholder="Enter Work phone" >
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Extension</label>
+                      <input type="text" name="extension" value="{{ form.data.extension }}" class="form-control" placeholder="Enter Extension" >
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Role</label>
+                     
+                       <select class="form-control" value="{{ form.data.role }}" name="role">
+                             <option value="">select</option>
+                             {% for role in roles %}
+                                 <option value="{{ role.id }}">  {{ role.name }}</option>
+                             {% endfor %}
+                       </select>
+                       {{ form.role.errors }} 
+                       
+                      
+                      
+                  </div>
+            </div>
+      </div> -->
+
+
+      <h6 class="heading-small text-muted mb-4">Summary</h6>
+      <div class="pl-lg-4">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-group">
+                  <span>{{ request.message }}</span>
+                 <!-- {{ form.data }} -->
+              <label  class="form-control-label" for="input-employeeid">Job Description</label>
+              <input type="text" name="job_description" value="{{ form.data.job_description }}"   class="form-control" placeholder="Enter job description" >
+              <!-- {{ form.employee_id }} -->
+             
+            </div>
+          </div>
+          <div class="col-lg-4"> 
+            <div class="form-group"> 
+             
+              <label class="form-control-label" for="input-email">Ask me about/Expertise</label>
+              <input type="text" name="expertise" value="{{ form.data.expertise }}"  class="form-control" placeholder="Enter Ask me about/Expertise" >
+             
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+                  <label class="form-control-label" for="input-username">Date of exit</label>
+                  <input type="text" name="date_of_exit" value="{{ form.data.date_of_exit }}" class="form-control startdate" placeholder="dd-mm-yyyy" >
+             
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-control-label" for="input-username">Gender</label>
+              <select class="form-control" name="gender">
+                  <option value="">select</option>
+                  <option value="Male"  {% if form.data.gender == "Male" %} selected{% endif %}>Male</option>
+                  <option  value="Female"  {% if form.data.gender == "Female" %} selected{% endif %}>Female</option>
+                  <option  value="Others" {% if form.data.gender == "Others" %} selected{% endif %}>Others</option>
+                  
+            </select>
+             
+            </div>
+          </div>
+
+          <!-- <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label" for="input-username">Mobile Number</label>
+                <input type="text" name="mobile_number" value="{{ form.data.mobile_number }}" class="form-control" placeholder="Enter Mobile Number" >
+                {{ form.mobile_number.errors }}
+              </div>
+            </div> -->
+           
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-control-label" for="input-email">About me</label>
+              <input type="text" name="about_me" value="{{ form.data.about_me }}" class="form-control" placeholder="Enter About Me" >
+              <!-- {{ form.nick_name.errors }} -->
+            </div>
+          </div>
+          <!-- <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-control-label" for="input-email">Added By</label>
+              <input type="text" name="input-addedby" class="form-control" placeholder="Enter Added By" >
+              {{ form.employee_id.errors }}
+            </div>
+          </div> -->
+        </div>
+
+                </div>
+
+                  
+                </div>
+            </div>
+            <center> <button class="btn btn-primary"  name="submit_button" name="submit_button" type="submit">Submit</button></center>
+            <hr class="my-4" />
+
+              </div>
+              
+              
+                <!-- Description onclick="emp" -->
+                <!-- <h6 class="heading-small text-muted mb-4">About me</h6>
+                <div class="pl-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label">About Me</label>
+                    <textarea rows="4" class="form-control" placeholder="A few words about you ...">A beautiful premium dashboard for Bootstrap 4.</textarea>
+                  </div>
+                </div> -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include 'includes/footer.html' %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.js" data-modules="effect effect-bounce effect-blind effect-bounce effect-clip effect-drop effect-fold effect-slide"></script> -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+<script>
+
+      // get the country data from the plugin
+var countryData = window.intlTelInputGlobals.getCountryData(),
+  input = document.querySelector("#mobile_phone"),
+  addressDropdown = document.querySelector("#address-country");
+
+// init plugin
+var iti = window.intlTelInput(input, {
+  utilsScript: "../../build/js/utils.js?1613236686837", // just for formatting/placeholders etc
+   // allowDropdown: false,
+     // autoHideDialCode: false,
+     autoPlaceholder: "off",
+      dropdownContainer: document.body,
+    //  excludeCountries: ["us"],
+     // formatOnDisplay: false,
+      geoIpLookup: function(callback) {
+        $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+          var countryCode = (resp && resp.country) ? resp.country : "";
+        //  alert(countryCode);
+          callback(countryCode);
+        });
+      },
+      hiddenInput: "full_number",
+      initialCountry: "auto",
+      localizedCountries: { 'de': 'Deutschland' },
+     // nationalMode: false,
+     // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+      placeholderNumberType: "MOBILE",
+     // preferredCountries: ['cn', 'jp'],
+      separateDialCode: true,
+      utilsScript: "build/js/utils.js",
+});
+
+// populate the country dropdown
+for (var i = 0; i < countryData.length; i++) {
+  var country = countryData[i];
+  var optionNode = document.createElement("option");
+  optionNode.value = country.iso2;
+  var textNode = document.createTextNode(country.name);
+  optionNode.appendChild(textNode);
+  addressDropdown.appendChild(optionNode);
+}
+// set it's initial value
+addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// listen to the telephone input for changes
+input.addEventListener('countrychange', function(e) {
+  addressDropdown.value = iti.getSelectedCountryData().iso2;
+  $('#Hid_code_name').val(iti.getSelectedCountryData().iso2);
+ //// alert(iti.getSelectedCountryData().iso2);
+  var titleStr    = $('.iti__selected-flag').attr("title");
+             var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+             $('#Hid_code_num').val(titleStr);
+          ///  alert(titleStr);
+});
+
+// listen to the address dropdown for changes
+addressDropdown.addEventListener('change', function() {
+  iti.setCountry(this.value);
+});
+//       $('.iti iti--container').on('click','li', function(event){
+//             alert("sr");
+//     event.preventDefault();
+//     console.log(event.currentTarget);
+// });
+ 
+
+// $(".iti iti--allow-dropdown iti--separate-dial-code").click( function() {  
+//       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+           
+//     // this will fire when you click edit
+//     // hide the view button here and upon submit, show it again
+//     // like $("#viewclick").hide() or $("#viewclick").fadeOut()
+//   });
+
+      // $('#phone').change(function(e) {  
+      //       var titleStr    = $('.iti__selected-flag').attr("title");
+      //       var tag    = $('.iti__selected-flag').attr("aria-activedescendant");
+      //       alert(titleStr);
+      //        });
+// $('#phone').on('input',function(e){
+//  alert('Changed!')
+// });
+
+
+$(function() {
+
+      $( ".startdate" ).datepicker({
+  dateFormat: 'dd-mm-yy',//check change
+  changeMonth: true,
+  changeYear: true
+});
+      // $('#date_of_joining1').datetimepicker({
+      //   icons: {
+      //       dateFormat: 'DD-MM-YYYY',
+      //      useCurrent: false
+      // //    time: "fa fa-clock",
+      // //     date: "fa fa-calendar-day",
+      // //     up: "fa fa-chevron-up",
+      // //     down: "fa fa-chevron-down",
+      // //     previous: 'fa fa-chevron-left',
+      // //     next: 'fa fa-chevron-right',
+      // //     today: 'fa fa-screenshot',
+      // //     clear: 'fa fa-trash',
+      // //     close: 'fa fa-remove'
+      //   }
+      // });
+    });
+
+//     // get the country data from the plugin
+// var countryData = window.intlTelInputGlobals.getCountryData(),
+//   input = document.querySelector("#mobile_phone"),
+//   addressDropdown = document.querySelector("#address-country");
+
+// // init plugin
+// var iti = window.intlTelInput(input, {
+//   utilsScript: "../../build/js/utils.js?1613236686837" // just for formatting/placeholders etc
+// });
+
+// // populate the country dropdown
+// for (var i = 0; i < countryData.length; i++) {
+//   var country = countryData[i];
+//   var optionNode = document.createElement("option");
+//   optionNode.value = country.iso2;
+//   var textNode = document.createTextNode(country.name);
+//   optionNode.appendChild(textNode);
+//   addressDropdown.appendChild(optionNode);
+// }
+// // set it's initial value
+// addressDropdown.value = iti.getSelectedCountryData().iso2;
+
+// // listen to the telephone input for changes
+// input.addEventListener('countrychange', function(e) {
+//   addressDropdown.value = iti.getSelectedCountryData().iso2;
+ 
+// });
+
+// // listen to the address dropdown for changes
+// addressDropdown.addEventListener('change', function() {
+//       alert(this.value);
+//   iti.setCountry(this.value);
+// });
+
+//     var input = document.querySelector("#phone");
+//     window.intlTelInput(input, {
+//      // allowDropdown: false,
+//      // autoHideDialCode: false,
+//       autoPlaceholder: "off",
+//       dropdownContainer: document.body,
+//     //  excludeCountries: ["us"],
+//      // formatOnDisplay: false,
+//       geoIpLookup: function(callback) {
+//         $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+//           var countryCode = (resp && resp.country) ? resp.country : "";
+//         //  alert(countryCode);
+//           callback(countryCode);
+//         });
+//       },
+//       hiddenInput: "full_number",
+//       initialCountry: "auto",
+//       localizedCountries: { 'de': 'Deutschland' },
+//      // nationalMode: false,
+//      // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+//       placeholderNumberType: "MOBILE",
+//      // preferredCountries: ['cn', 'jp'],
+//       separateDialCode: true,
+//       utilsScript: "build/js/utils.js",
+//     });
+
+    $(document).ready(function() {
+      // initialise Datetimepicker and Sliders
+      md.initFormExtendedDatetimepickers();
+
+     
+    });
+
+</script>
+
+{% endblock javascripts %}
+>>>>>>> origin/hrms-09-02-2022
  

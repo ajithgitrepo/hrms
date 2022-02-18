@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Datatables {% endblock %}
@@ -199,3 +200,206 @@
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Datatables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Locations</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Locations</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_location' %}" class="btn btn-sm btn-neutral">Add</a>
+            <a class="btn btn-sm btn-neutral"  data-toggle="modal" data-target="#filter" >Filter</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Locations</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="datatable-basic">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Location</th>
+                  <!-- <th>Type</th> -->
+                  <th>Description</th>
+<!--                  <th>Created Date</th>-->
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for location in locations %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{location.location}}</td>
+                    <!-- <td>{{role.role_type}}</td> -->
+                    <td>{{location.description}}</td>
+<!--                    <td>{{department.created_at|date:"Y-m-d H:i a"}} </td>-->
+                    <td><a class="fas fa-edit" title="Edit" href="{% url 'update_location' location.id %}"></a>
+                        <a class="confirm-delete fas fa-trash" title="Delete" href="{% url 'delete_location' location.id %}"></a>
+                    </td>
+                   
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+      <div id="filter" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-title-default">Filter</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="get" action="{% url 'filter_location' %}"  enctype="multipart/form-data" autocomplete="off" >
+
+
+
+                  <div class="row">
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" >Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="Location" >
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+                <center>  <button type="submit"  class="btn btn-primary" name="Filter" value="Filter">Filter</button>
+                </center>
+              </form>
+
+
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+<!--                <button type="submit" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+   <!-- Optional JS -->
+   <script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script> --> -->
+  <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+   <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script>  -->
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this location?');
+        })
+      //we use  above 2 script instead of using the below code
+
+      //   $(document).ready(function() {
+          
+      //       $('#datatable-basic').dataTable({
+      //       "bDestroy": true
+      //   }).fnDestroy();
+
+      //   $('#datatable-basic').dataTable({
+      //       "aoColumnDefs": [{
+      //           "bSortable": false,
+      //           "aTargets": ["sorting_disabled"]
+      //       }],
+      //       "bDestroy": true
+      //   }).fnDestroy();
+
+      //      /* $('#datatable-basic').DataTable( {
+      //           dom: 'Bfrtip',
+               
+      //           buttons: [
+      //               'copy', 'csv', 'excel', 'pdf', 'print'
+      //           ],
+                
+      //       //     language: {
+      //       //     paginate: {
+      //       //         previous: "<i class='fas fa-angle-left'>",
+      //       //         next: "<i class='fas fa-angle-right'>"
+      //       //     }
+      //       // }
+            
+             
+      //       } );  */
+      //   } );
+
+
+    </script>
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

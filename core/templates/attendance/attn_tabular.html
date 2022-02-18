@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Attendance {% endblock %}
@@ -775,3 +776,782 @@ function tConv24(time24) {
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Attendance {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+    
+<style>
+
+    .tab-content>.active {
+        display: contents !important;
+    }
+
+    .Dtyps {
+        border-left: 4px solid;
+        max-width: 150px;
+        height: 40px;
+        margin-right: 20px;
+        float: left;
+        padding-left: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .Dtyps span {
+        width: 100%;
+        float: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding-bottom: 0px;
+        line-height: 14px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .Dtyps .Avadat, .Dtyps .digit-type {
+        margin-top: 2px;
+        line-height: 14px;
+    }
+
+    .comp-present {
+        border-color: #3dce4cd9 !important;
+    }
+    .comp-comp {
+        border-color: #3d81ced9 !important;
+    }
+    .comp-absent {
+        border-color: #f0989a !important;
+    }
+
+    .comp-holyday {
+        border-color: #0de2ffd9 !important;
+    }
+
+    .comp-weekend {
+        border-color: #ff8700 !important;
+    }
+
+    .showLeft{
+                    /* background-color: #0d77b6 !important;
+                    border:1px solid #0d77b6 !important; */
+                    text-shadow: none !important;
+                    color:#fff !important;
+                    padding:10px;
+                    transform: rotate(90deg);
+                }
+
+                .icons li {
+                    background: none repeat scroll 0 0 #a09d9d;;
+                    height: 7px;
+                    width: 7px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    right: 0.4em;
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 0.24em;
+                }
+
+                .dropbtn {
+                    /* background-color: #4CAF50; */
+                    position: absolute;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+               
+
+                .drop{
+                    width: 100%;
+                    /* background-color: #0d77b6 !important; */
+                    height: 60px;
+                }
+
+                .dropdown-dot {
+                    position: absolute !important;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: relative;
+                    margin-top: 60px;
+                    background-color: #f9f9f9;
+                    min-width: 230px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                .dropdown-dot a:hover {background-color: #f1f1f1}
+
+                .show {display:block;}
+
+                .lingr span{
+                    color: #fff;
+                }
+
+                .ellipsis {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    width: 200px;
+                    display: block;
+                    padding-bottom: 1px;
+                }
+
+                .RTC1 {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    float: left;
+                    margin: 3px 8px 0 0;
+                }
+ 
+
+                .modal-open .container-fluid, .modal-open  .container {
+                -webkit-filter: blur(1px);
+                -moz-filter: blur(1px);
+                -o-filter: blur(1px);
+                    -ms-filter: blur(1px);
+                    filter: blur(1px);
+                }
+
+                .modal-backdrop
+                {
+                    opacity:0.7 !important;
+                }
+
+                .ellipsis {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: none !important;
+                    width: 200px;
+                    display: block;
+                    padding-bottom: 1px;
+                }
+
+                .present-bg {
+                    background-color: #3dce4cd9 !important;
+                    position: relative;
+                    height: 10px !important;
+                    width: 10px !important;
+                    text-align: center;
+                    margin-top: 5px;
+                }
+
+                .comp-bg{
+                    background-color: #3d81ced9 !important;
+                    position: relative;
+                    height: 10px !important;
+                    width: 10px !important;
+                    text-align: center;
+                    margin-top: 5px;
+                }
+
+                .absent-bg{
+                    background-color: #f0989a !important;
+                    position: relative;
+                    height: 10px !important;
+                    width: 10px !important;
+                    text-align: center;
+                    margin-top: 5px;
+                }
+
+                .holyday-bg{
+                    background-color: #0de2ffd9 !important;
+                    position: relative;
+                    height: 10px !important;
+                    width: 10px !important;
+                    text-align: center;
+                    margin-top: 5px;
+                }
+
+                .weekend-bg{
+                    background-color: #ff8700 !important;
+                    position: relative;
+                    height: 10px !important;
+                    width: 10px !important;
+                    text-align: center;
+                    margin-top: 5px;
+                }
+                
+
+</style>
+
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Attendance</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-table"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Table View</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a>  -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row" >
+                <div class="col-lg-5">
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                        <option value="general" selected disabled>Select employee</option>
+                        {% for emp in employees %}
+                            <option value="{{ emp.employee_id }}" {% if emp.employee_id == search_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                        {% endfor %} 
+                    </select>
+                </div> 
+
+                <div class="col-lg-5">
+                    <div class="form-group">
+                      <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
+                      
+                  </div>
+                </div>
+
+
+                <div class="col-lg-2 drop">
+
+                    <form name="form" class="post-form" id="submit_export_form" action=" {% url 'export_excel' %} " method="POST">
+                        {% csrf_token %}  
+                        <input type="hidden" value="{{ emp_id }}" name="employee_id">
+                        <input type="hidden" value="{{ month_no }}-{{ year }}" name="month">
+                        <input type="hidden" id="type" value="" name="type">
+
+                        <button type="submit" hidden></button>
+                    </form>
+
+                    <div class="dropdown-dot">
+                        <!-- three dots -->
+                        <ul class="dropbtn icons btn-right showLeft" data-toggle="tooltip" data-original-title="More Options" onclick="showDropdown()">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <!-- menu -->
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#export"  class="export" value="All">Export All Employees</a>
+                            <a href="#export"  class="export" value="Selected">Export Selected Employee</a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>  
+           
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                <tr>
+                    <th>Date</th>
+                    <th>First Check-in</th>
+                    <th>Last Check-out</th>
+                    <th>Total Hours</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                   
+                </tr>
+                <tbody>
+
+                    {% for date,date_no in zipped_data %}
+
+                        <tr >
+                            <td >{{ date|date:'l'|slice:"0:3"  }}, <span> {{  date|date:'d-m-Y' }} </span></td>
+
+                            {% for attn in month_atten %}
+
+                                {% if attn.date|date:"d" == date_no %}
+
+
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 0 or attn.is_wfh_approved == 0  %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                    <div class="RTC1 present-bg">
+
+                                                    </div>Present
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+                                        {% endif %}
+
+                                        {% if attn.comp_off == 1 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkin_time }}</td>
+                                            <td>{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present">
+                                                    <div class="RTC1 comp-bg">
+
+                                                    </div>Comp Off
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+                                        {% endif %}
+
+                                        {% if attn.is_present == 0 and attn.is_leave == 1 and attn.is_leave_approved == 1 and attn.is_half == 0 %}
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                                    <div class="RTC1 absent-bg">
+
+                                                    </div>Absent
+                                                </span>
+                                            </td>
+                                        {% endif %}
+
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == None and attn.is_half == 1 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / Present">
+                                                    <div class="RTC1 present-bg">
+
+                                                    </div>Absent - HalfDay / Present
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
+                                        {% endif %}
+
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 1 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent - HalfDay / WFH">
+                                                    <div class="RTC1 present-bg">
+
+                                                    </div>Absent - HalfDay / WFH
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
+                                        {% endif %}
+
+                                        {% if attn.is_present == 1 and attn.is_wfh_approved == 1 and attn.is_half == 0 %}
+                                            <td class="nr" data-queryid="{{ attn.id }}">{{ attn.checkin_time }}</td>
+                                            <td >{{ attn.checkout_time }}</td>
+                                            <td>{{ attn.last_checkout|timeuntil:attn.first_checkin }}</td>
+                                            <td>
+                                                <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Present / WFH">
+                                                    <div class="RTC1 present-bg">
+
+                                                    </div>Present / WFH
+                                                </span>
+                                            </td>
+                                            <td> <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a></td>
+
+                                        {% endif %}
+
+                                     
+                                {% endif %}
+
+                            {% endfor %}
+
+                            {% for holi in holidays %}
+                                {% if holi.date|date:"d" == date_no %}
+
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                            <div class="RTC1 holyday-bg">
+
+                                            </div>Holiday
+                                        </span>
+                                    </td>
+
+                                {% endif %}
+                            
+                            {% endfor %}
+
+                            {% for week in weekend %}
+                               
+                                {% if date|date:'l'|lower in week.week_off %}
+
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>
+                                    <span class="ellipsis W200" data-toggle="tooltip" data-placement="left" title="" data-original-title="Absent">
+                                        <div class="RTC1 weekend-bg">
+
+                                        </div>Weekend
+                                    </span>
+                                </td>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                        </tr>
+
+                    {% endfor %}
+
+                    <!-- <tr>
+                       <td width="75" class="">Sun<span> 03 </span></td>
+                       <td width="145">01:10 PM</td>
+                       <td colspan="1" class="text-center">
+                          <div class="lingr wkend-bg"><span>Weekend</span></div>
+                       </td>
+                       <td width="145">01:10 PM</td>
+                       <td width="145">9 Hrs</td>
+                    </tr> -->
+                   
+                 </tbody>
+              </table>
+          </div>
+
+            <div class="card-footer">
+                <div class="tab-content PL100">
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-present">
+                            <span>Present Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ present_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-comp">
+                            <span>Comp Off</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ comp_off }} Day(s)</div>
+                        </div>
+                    </div>
+
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-absent">
+                            <span>Absent Days</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ absent_days }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-holyday">
+                            <span>Holidays</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ holidays.count }} Day(s)</div>
+                        </div>
+                    </div>
+
+                    <div id="ZPAttView_Days" class="FL tab-pane fade MT8 active in">
+                        <div class="Dtyps comp-weekend">
+                            <span>Weekend</span> 
+                            <div class="Avadat" id="ZPAtt_payDaysCount">{{ weekend_count }} Day(s)</div>
+                        </div>
+                    </div>
+         
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Attendance Other Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                 <div class="row">
+                     <div class="col-lg-3"><span style="color: blue;">Employee ID :</span></div> <div class="col-lg-3"><span style="font-weight: 700;" id="employee_id_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Name : </span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="first_name_other"></span></div>
+                 </div>
+                
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Date :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="date_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Check in & out time : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="checkin_out_time_other"></span></div>
+              </div>
+
+              <hr class="my-3" />
+              <div class="row"> 
+                  
+                  <div class="col-lg-3"><span style="color: blue;">Check in lat & lang  : </span> </div> <div class="col-lg-3"><span style="font-weight: 700;" id="checkin_lat_lang_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Check out lat & lang :</span></div> <div class="col-lg-3"> <span style="font-weight: 700;" id="checkout_lat_lang_other"></span></div>
+            </div>
+              <hr class="my-3" />
+              <div class="row"> 
+                  
+                  <div class="col-lg-3"><span style="color: blue;">Check_in location  : </span> </div> <div class="col-lg-9"><span style="font-weight: 700;" id="checkin_location_other"></span></div>
+              </div>.
+              
+              <hr class="my-3" />
+              <div class="row"> 
+                  <div class="col-lg-3"><span style="color: blue;">Check_out location :</span></div> <div class="col-lg-9"> <span style="font-weight: 700;" id="checkout_location_other"></span></div>
+                  
+              </div>
+              
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+    <script type="text/javascript">
+
+                function changeLanguage(language) {
+                    var element = document.getElementById("url");
+                    element.value = language;
+                    element.innerHTML = language;
+                }
+
+                function showDropdown() {
+                    document.getElementById("myDropdown").classList.toggle("show");
+                }
+
+                // Close the dropdown if the user clicks outside of it
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropbtn')) {
+                        var dropdowns = document.getElementsByClassName("dropdown-content");
+                        var i;
+                        for (i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.classList.contains('show')) {
+                                openDropdown.classList.remove('show');
+                            }
+                        }
+                    }
+                }
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                todayHighlight: false,
+                // defaultDate: new Date(dateToday.getMonth()+1,year)
+            });
+                
+        });
+
+
+        $('#employee_change').on('change', function () {
+            var url = $(this).val();
+            month = $("#month_year").val();
+            if (url) { 
+                window.location = "/search_tableview/"+url+"/"+month+"/"; // redirect
+            }
+            return false;
+        });
+        
+        $('#month_year').on('change', function () {
+            var month = $(this).val(); 
+            url = $("#employee_change").val();
+            if (url) {
+                window.location = "/search_tableview/"+url+"/"+month+"/"; // redirect
+            }
+            return false;
+        });
+
+        $('.export').on('click', function () {
+
+            month = $("#month_year").val();
+            employee = $("#employee_change").val();
+
+            $("#type").val($(this).attr('value'))
+
+            $("#submit_export_form").submit();
+
+        });
+
+
+
+  $(".use-address").click(function() { //alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid");  //alert($id);
+      $.ajax({  
+            type: "POST",  
+            url: "/attn_more_info/",  
+            data: {"csrfmiddlewaretoken": csrftoken,"att_id": $id},
+            success: function(data) {  
+                 // console.log(JSON.stringify(data)); alert(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) { //alert(data)
+                      
+                    
+                        if(check == false)
+                        {
+                              check = true;
+                              var name = item.fields.first_name + " " + item.fields.last_name; 
+                              var chk_in_la = item.fields.checkin_lat  + ", " + item.fields.checkin_lang;
+                              var chk_out_la = item.fields.checkout_lat + ", " +  item.fields.checkout_lang;;;
+                                 
+                              var mydate = new Date(item.fields.date);
+                              
+                              var time1 = tConv24(item.fields.checkin_time);
+                              var time2 = tConv24(item.fields.checkout_time);
+                              var chk_out_time = time1  + ", " + time2;
+                              
+                              if(item.fields.checkout_lang == null)
+                               chk_out_la =  "Nil";
+                             
+                             
+                              $('#employee_id_other').html(item.fields.employee );
+                              $('#date_other').html(mydate.toDateString());
+
+                              $('#first_name_other').html($('#employee_change :selected').text());
+                              $('#checkin_out_time_other').html(chk_out_time);
+                             // $('#checkout_time_other').html(item.fields.checkout_time);
+                              $('#checkin_lat_lang_other').html(chk_in_la);
+                              $('#checkout_lat_lang_other').html(chk_out_la);
+                              $('#checkin_location_other').html(item.fields.checkin_location);
+                              $('#checkout_location_other').html(item.fields.checkout_location);
+                             
+                        }
+                   //now you can access properties using dot notation
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+});        
+
+function tConv24(time24) {
+  var ts = time24;
+  var H = +ts.substr(0, 2);
+  var h = (H % 12) || 12;
+  h = (h < 10)?("0"+h):h;  // leading 0 at the left for 1 digit hours
+  var ampm = H < 12 ? " AM" : " PM";
+  ts = h + ts.substr(2, 3) + ampm;
+  return ts;
+};
+
+        
+    </script>
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

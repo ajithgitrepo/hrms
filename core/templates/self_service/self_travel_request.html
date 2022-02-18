@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Travel Request {% endblock %}
@@ -421,3 +422,428 @@ function csrfSafeMethod(method) {
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Travel Request {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+
+.modal-open .container-fluid, .modal-open  .container {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.modal-backdrop
+{
+    opacity:0.7 !important;
+}
+
+.modal-lg {
+    max-width: 60% !important;
+}
+.modal {
+  overflow-y:auto;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .375rem;
+}
+
+
+.content {display:none;}
+
+.preload { width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;}
+
+
+
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Page plugins -->
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Self - Service</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#"> Travel Request</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+             <a href="{% url 'add_self_travel_request' %}" class="btn btn-sm btn-neutral">Request</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="preload"><img src="http://i.imgur.com/KUJoe.gif">
+      <!-- <img style="height: 350px;width: 350px;" src="/static/Spin-Preloader.gif"> -->
+      <!-- src="http://i.imgur.com/KUJoe.gif" -->
+  </div>
+  <div class="content"> 
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+   
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Travel Requests</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div  class="table-responsive py-4">
+            <table  class="table table-flush" id="datatable-basic">
+              <thead style="color: blue;" class="thead-light" >
+                <tr>
+                  <th>#</th>
+                  <!-- <th >Employee ID</th> -->
+                  <th >Travel ID</th>
+                  <!-- <th>Department</th> -->
+                  <th>Place of visit</th>
+                  <th>Depature Date</th>
+                  <th>Arrival Date</th>
+                  <!-- <th>Purpose of visit</th>
+                  <th>Duration in days</th>
+                  <th>Is billable</th>-->
+                  <th>Customer Name</th> 
+                  <th>Action</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for emp in requests %}
+                <tr> 
+                    <td>{{ forloop.counter }}</td>
+                    <!-- <td style="color: blue;" class="nr" data-queryid="{{ emp.id  }}">{{emp.employee_id }} {{emp.employee.first_name}} {{emp.employee.last_name}}</td> -->
+                    <td style="color: brown;">{{emp.travel_id}}</td>
+                    <!-- <td>{{emp.employee_department}}</td> -->
+                    <td>{{emp.place_of_visit}}</td>
+                   
+                    <td>{{emp.expected_date_of_arrival |date:"d-m-Y" }}</td>
+                    <td>{{emp.expected_date_of_depature |date:"d-m-Y" }}</td>
+                     <td>{{emp.customer_name}}</td>
+                    <!--<td>{{emp.purpose_of_visit}}</td>
+                    
+                    <td>{{emp.billable_to_customer}}</td>
+                    <td>{{emp.customer_name}}</td> -->
+                  
+                    <td> 
+                         <!-- <a class="fas fa-eye use-address" style="color: #5e72e4;" data-toggle="tooltip" data-original-title="Edit" title="View More Info"></a> 
+                        &nbsp; &nbsp;
+                        -->
+                        <a href="{% url 'delete_travel_request' emp.pk %}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="Delete Details">
+                              <i class="fas fa-trash"></i>
+                            </a> 
+                      
+                    </td>
+                 </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+    
+  </div>
+
+
+
+
+
+  <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <button type="button" class="btn btn-block btn-primary mb-3" data-toggle="modal" data-target="#modal-default">Default</button> -->
+          <div id="myModal" class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal- modal-dialog-centered modal-" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-title-default">Travel Request More Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="section-1" >
+                      
+                 <div class="row">
+                     <!-- <div class="col-lg-3"><span style="color: blue;">Employee:</span></div> 
+                     <div class="col-lg-3"><span style="font-weight: 700;" id="employee_id_other"></span></div> -->
+                     <div class="col-lg-3"><span style="color: blue;">Department : </span></div> 
+                     <div class="col-lg-3"> <span style="font-weight: 700;" id="employee_department_other"></span></div>
+                     <div class="col-lg-3"><span style="color: blue;">Place of visit :</span></div> 
+                     <div class="col-lg-3"> <span style="font-weight: 700;" id="place_of_visit_other"></span></div>
+                  </div>
+                 <hr class="my-3" />
+                 <div class="row">
+                 
+                  <div class="col-lg-3"><span style="color: blue;">Depature Date : </span></div>
+                   <div class="col-lg-3"> <span style="font-weight: 700;" id="expected_date_of_depature_other"></span></div>
+                   <div class="col-lg-3"><span style="color: blue;">Arrival Date :</span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="expected_date_of_arrival_other"></span></div>
+             
+            </div>
+              <hr class="my-3" />
+              <div class="row">
+
+                  <div class="col-lg-3"><span style="color: blue;">Duration in days :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="expected_duration_days_other"></span></div>
+                  
+                  <div class="col-lg-3"><span style="color: blue;">Customer Name : </span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="customer_name_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                  <div class="col-lg-3"><span style="color: blue;">Purpose of visit :</span></div> 
+                  <div class="col-lg-3"> <span style="font-weight: 700;" id="purpose_of_visit_other"></span></div>
+                  <div class="col-lg-3"><span style="color: blue;">Billable to customer : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="billable_to_customer_other"></span></div>
+              </div>
+              <hr class="my-3" />
+              <div class="row">
+                 
+                  <!-- <div class="col-lg-3"><span style="color: blue;">Security : </span> </div> 
+                  <div class="col-lg-3"><span style="font-weight: 700;" id="security_other"></span></div> -->
+              </div>
+              
+              <hr class="my-3" />
+                </div>
+                <div id="section-3"></div>
+                <div class="modal-footer">
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- Optional JS -->
+  
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+  <script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+
+  
+<script type="text/javascript">
+
+
+$(function() {
+    $(".preload").fadeOut(1500, function() {
+        $(".content").fadeIn(750);        
+    });
+});
+// $(window).on('load', function () {
+// // $("#coverScreen").hide();
+// });
+
+$('[data-type="adhaar-number"]').keyup(function() {
+  var value = $(this).val(); //alert(value);
+  value = value.replace(/\D/g, "").split(/(?:([\d]{4}))/g).filter(s => s.length > 0).join("-");
+  $(this).val(value);
+});
+
+$('[data-type="adhaar-number"]').on("change, blur", function() {
+  var value = $(this).val(); // alert(value);
+  var maxLength = $(this).attr("maxLength");
+  if (value.length != maxLength) {
+    $(this).addClass("highlight-error"); 
+  } else {
+    $(this).removeClass("highlight-error");
+  }
+});
+
+
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this travel request?');
+        }) 
+
+           $(document).ready(function()
+            {
+               $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+                  todayBtn: "linked",
+                  todayHighlight: true,
+                  });
+
+            });
+
+
+$(document).ready(function(){
+
+$('#myModal').on('shown.bs.modal', function (event) { 
+  $target = $('#section-3');
+  $('.modal-body').animate({
+    scrollTop: $target.offset().top + 'px'
+  }, 'fast');
+  
+});
+});
+
+$(".use-mail").click(function() { //alert('n');  
+           $('#my_email_Modal').modal('show');
+
+
+});
+
+//         $.ajaxSetup({
+//   headers: { "X-CSRFToken": '{{csrf_token}}' }
+// });
+
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+ $(".use-address").click(function() { //alert('n');  
+           $('#myModal').modal('show');
+            var csrftoken = getCookie('csrftoken');
+          //  alert(csrftoken);
+
+          var base_url = window.location.origin;
+        // "http://stackoverflow.com"
+
+           var host = window.location.host;
+        // stackoverflow.com
+
+      var pathArray = window.location.pathname.split( '/' );
+    //  alert(base_url);
+
+      var $id = $(this).closest("tr")   // Finds the closest row <tr> 
+                       .find(".nr")     // Gets a descendent with class="nr"
+                       .data("queryid"); // alert($id);
+      $.ajax({  
+            type: "POST",  
+            url: "/snippets_travel_details_employee_all_info",  
+            data: {"csrfmiddlewaretoken": csrftoken,"emp_id": $id},
+            success: function(data) {  console.log(JSON.stringify(data));
+                  var check = false;
+                  jQuery.each(data, function(index, item) {
+                        $('#role_other').html(item.fields.name);
+                       //  alert(item.fields.name);
+                        if(check == false)
+                        {
+                              check = true;
+                             // var name = item.fields.first_name + " " + item.fields.last_name; 
+                            //  var mobi = item.fields.code_num  + " " + item.fields.mobile_phone; 
+                            //  $('#employee_id_other').html(item.pk);
+                            //  $('#first_name_other').html(name);
+                              $('#place_of_visit_other').html(item.fields.place_of_visit);
+                              $('#employee_department_other').html(item.fields.employee_department);
+                              $('#expected_date_of_arrival_other').html(item.fields.expected_date_of_arrival);
+                              $('#expected_date_of_depature_other').html(item.fields.expected_date_of_depature);
+                              $('#expected_duration_days_other').html(item.fields.expected_duration_days);
+                              $('#purpose_of_visit_other').html(item.fields.purpose_of_visit);
+                              $('#customer_name_other').html(item.fields.customer_name);
+                              $('#billable_to_customer_other').html(item.fields.billable_to_customer);
+                              
+                             
+                         
+                        }
+                   //now you can access properties using dot expected_duration_days
+                 });
+                 // alert(data);
+                 // $('#query-focus').html(data);
+            }
+            });
+
+});
+
+        $('td.query-main').live('click', function() { //alert();
+  var queryid = $(this).data("queryid");
+  
+ 
+});
+
+
+    </script>
+
+
+<script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

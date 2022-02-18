@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Datatables {% endblock %}
@@ -174,3 +175,181 @@
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Datatables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+
+
+
+  <!-- Header -->
+  <div class="header bg-primary pb-4">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Leave Tracker</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Weekend</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_weekend' %}" class="btn btn-sm btn-neutral">Add</a>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page content -->
+
+<div class="container-fluid mt--4">
+
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">
+                    <h3 class="mb-0">Weekend</h3>
+                    <!-- <p class="text-sm mb-0">
+                      This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+                    </p> -->
+                </div>
+                <div class="table-responsive py-4">
+                    <table class="table table-flush" id="datatable-basic">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Week Starts On</th>
+                            <th>Week Ends On</th>
+                            <th>Week Off</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for weekend in weekends %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{weekend.week_starts_on}}</td>
+                            <td>{{weekend.week_ends_on}}</td>
+                            <td>{{weekend.week_off}}</td>
+                            <td>
+                                <a class="fas fa-edit" title="Edit" href="{% url 'update_weekend' weekend.id %}"></a>
+                                <a class="confirm-delete fas fa-trash" title="Delete" href="{% url 'delete_weekend' weekend.id %}"></a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% if messages %}
+    {% for message in messages %}
+            {% if message.tags == 'success'%}
+
+
+                <script type=text/javascript>
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        // "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script src="/static/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script> --> -->
+<script src="/static/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+   <!-- <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+   <script src="/static/assets/vendor/datatables.net-select/js/dataTables.select.min.js"></script>  -->
+<!--<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>-->
+
+<!--<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>-->
+
+<!--<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>-->
+
+<!--<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>-->
+
+
+  
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this weekend?');
+        })
+      //we use  above 2 script instead of using the below code
+    </script>
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

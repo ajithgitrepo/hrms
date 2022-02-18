@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% load custom_tags %}
@@ -385,3 +386,392 @@ $(document).ready(function() {
 {% endblock javascripts %}
 
 
+=======
+{% extends "layouts/base.html" %}
+
+{% load custom_tags %}
+
+{% block title %} Timelogs {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+    
+<style>
+
+    .tab-content>.active {
+        display: contents !important;
+    }
+
+    .Dtyps {
+        border-left: 4px solid;
+        max-width: 150px;
+        height: 40px;
+        margin-right: 20px;
+        float: left;
+        padding-left: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .Dtyps span {
+        width: 100%;
+        float: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding-bottom: 0px;
+        line-height: 14px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .Dtyps .Avadat, .Dtyps .digit-type {
+        margin-top: 2px;
+        line-height: 14px;
+    }
+
+    .comp-present {
+        border-color: #3dce4cd9 !important;
+    }
+    .comp-comp {
+        border-color: #3d81ced9 !important;
+    }
+    .comp-absent {
+        border-color: #f0989a !important;
+    }
+
+    .comp-holyday {
+        border-color: #0de2ffd9 !important;
+    }
+
+    .comp-weekend {
+        border-color: #ff8700 !important;
+    }
+
+    .wfh-bg {
+        border-color: #0e8c5b !important;
+    }
+
+    .showLeft{
+                    /* background-color: #0d77b6 !important;
+                    border:1px solid #0d77b6 !important; */
+                    text-shadow: none !important;
+                    color:#fff !important;
+                    padding:10px;
+                    transform: rotate(90deg);
+                }
+
+                .icons li {
+                    background: none repeat scroll 0 0 #a09d9d;;
+                    height: 7px;
+                    width: 7px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    right: 0.4em;
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 0.24em;
+                }
+
+                .dropbtn {
+                    /* background-color: #4CAF50; */
+                    position: absolute;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+               
+                .drop{
+                    width: 100%;
+                    /* background-color: #0d77b6 !important; */
+                    height: 60px;
+                }
+
+                .dropdown-dot {
+                    position: absolute !important;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: relative;
+                    margin-top: 60px;
+                    background-color: #f9f9f9;
+                    min-width: 160px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+
+                .dropdown-dot a:hover {background-color: #f1f1f1}
+
+                .show {display:block;}
+
+                .lingr span{
+                    color: #fff;
+                }
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+{% role_name as role %}
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Time Tracker</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-clock"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Timelogs</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="{% url 'add_roles' %}" class="btn btn-sm btn-neutral">Add</a>  -->
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <div class="row" >
+               
+                <div class="col-lg-5">
+                    <select class="form-control select2" data-toggle="select" value="{{ form.data.employee }}" name="employee" id="employee_change" >
+                        <option value="general" selected disabled>Select employee</option>
+                        {% if role == "Admin" %}
+                            {% for emp in employees %}
+                                <option value="{{ emp.employee_id }}" {% if emp.employee_id == emp_id %} selected{% endif %} {% if emp.employee_id == user.emp_id %} selected{% endif %} > {{ emp.first_name }} {{ emp.last_name }} </option>
+                            {% endfor %} 
+                        {% endif %}
+
+                        {% if role == "Manager" %}
+                            <option value="{{ request.user.emp_id }}" {% if request.user.emp_id == emp_id %} selected{% endif %} {% if request.user.emp_id == user.emp_id %} selected{% endif %} > {{ request.user.first_name }} {{ request.user.last_name }}</option>
+                            {% for emp in employees %}
+                                <option value="{{ emp.employee.employee_id }}" {% if emp.employee.employee_id == emp_id %} selected{% endif %} {% if emp.employee.employee_id == user.emp_id %} selected{% endif %} > {{ emp.employee.first_name }} {{ emp.employee.last_name }} </option>
+                            {% endfor %} 
+                        {% endif %}
+                    </select>
+                </div> 
+
+                <div class="col-lg-5">
+                    <div class="form-group">
+                      <input class="form-control startdate" id="month_year" placeholder="mm-yyyy" name="month_year" value="{{ month_no }}-{{ year }}"  autocomplete="off"/>
+                      
+                  </div>
+                </div>
+
+            </div>  
+           
+          </div>
+
+
+          <div class="table-responsive py-4">
+            <table class="table table-hover atlist" id="ZPAtt_dashboard_weekCont">
+                <tr>
+                    <th>Date</th>
+                    <th>Project</th>
+                    <th>What Did?</th>
+                    <th>Total Hours</th>
+                   
+                </tr>
+                <tbody>
+
+                    {% for time in timelogs %}
+
+                        <tr>
+                            <td>{{ time.date|date:"d-m-Y" }} </td>
+                            <td>{{ time.project.project_name }}</td>
+                            <td>{{ time.working_on }}</td>
+                            <td><span data-toggle="tooltip" data-original-title="{{ time.start_time }} - {{ time.end_time }}">{{ time.updated_at|timeuntil:time.created_at }}</span></td>
+                          
+                        </tr>
+
+                    {% empty %}
+                    <tr class="text-right">   
+                        <td></td>
+                       <td> <h3>No Timelogs Found..</h3></td>
+                    </tr>
+
+                    {% endfor %}
+
+                   
+                   
+                 </tbody>
+              </table>
+          </div>
+
+            <div class="card-footer">
+              
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script async defer src="https://maps.google.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    $('.select2').select2(); 
+
+
+});
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                'setDate': date_selected
+            });
+                
+        });
+
+    var api_key = '{{GOOGLE_MAPS_API_KEY}}';
+
+    $("#atte_absent").click(function(){
+        alert("You won't able to check-in because you are in leave today..")
+    });
+
+        var date_selected = ' {{ month_no }}-{{ year }} ';
+
+        setInterval(function(){ 
+
+            // var start = new Date;
+            // var dt = new Date();
+            // var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+            // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + ampm;
+
+            var dt = new Date();
+            var h =  dt.getHours(), m = dt.getMinutes();
+            var time = (h >= 12) ? (h-12 + ':' + m + ":" + dt.getSeconds() +' PM') : (h + ':' + m + ":" + dt.getSeconds() +' AM') ;
+
+            $('.Timer').text(time); 
+
+        }, 1000);
+
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+        $(function () {
+            var dateToday = new Date();
+            var year = dateToday.getFullYear();
+            // $(".startdate").val( (dateToday.getMonth()+1) +'-'+year);
+
+            $(".startdate").datepicker({
+                autoclose: true,
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months",
+                'setDate': date_selected
+                // todayHighlight: true,
+                // defaultDate: new Date(dateToday.getMonth()+1,year)
+            });
+                
+        });
+
+
+        $('#employee_change').on('change', function () {
+            var url = $(this).val();
+            month = $("#month_year").val();
+            if (url) { 
+                window.location = "/search_timelog/"+url+"/"+month+"/"; // redirect
+            }
+            return false;
+        });
+        
+        $('#month_year').on('change', function () {
+            var month = $(this).val(); 
+            url = $("#employee_change").val();
+            if (url) {
+                window.location = "/search_timelog/"+url+"/"+month+"/"; // redirect
+            }
+            return false;
+        });
+        
+    </script>
+
+{% endblock javascripts %}
+
+
+>>>>>>> origin/hrms-09-02-2022

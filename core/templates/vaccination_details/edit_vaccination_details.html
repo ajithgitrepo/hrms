@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %}Update Vaccination Details {% endblock %}
@@ -793,4 +794,801 @@ $('body').append('<div>' +
 </script>
 
 {% endblock javascripts %}
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %}Update Vaccination Details {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+ 
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" media="all">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="/static/build/css/intlTelInput.css">
+
+
+
+<style>
+ul.errorlist {
+      list-style-type: none; 
+      font-size: 14px ;
+      color: red ;
+  }
+
+  .error input, .error select {
+    border: 2px red solid;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.zpcont-title{
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 35px;
+    position: relative;
+}
+
+.zpcont-title .IC-plus-big {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+}   
+
+.card-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 60px;
+    /*margin-bottom: 30px;*/
+    background-color: #ffffff;
+}
+
+#mobile_number{
+    padding-left: 85px;
+    width: 360px;
+    height: 46px;
+    /* border-color: #f3f3f3; */
+    color: #8898aa;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 3px 2px rgb(233 236 239 / 5%);
+}
+
+#mobile_number:focus {
+    outline: none !important;
+    border:1px solid #0000ff;
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <!-- <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      
+      <span class="mask bg-gradient-default opacity-8"></span>
+    
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Hello asdas {{ request.user.email }} </h1>
+            <p class="text-white mt-0 mb-5">Thisasd sfis your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+        <div class="col-xl-4 order-xl-2">
+           
+            
+          <!-- <div class="card card-profile">
+            <img src="/static/assets/img/theme/img-1-1000x600.jpg" alt="Image placeholder" class="card-img-top">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <a href="#">
+                    <img src="/static/assets/img/theme/team-4.jpg" class="rounded-circle">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+              <div class="d-flex justify-content-between">
+                <a href="#" class="btn btn-sm btn-info  mr-4 ">Connect</a>
+                <a href="#" class="btn btn-sm btn-default float-right">Message</a>
+              </div>
+            </div>
+            <div class="card-body pt-0">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center">
+                    <div>
+                      <span class="heading">22</span>
+                      <span class="description">Friends</span>
+                    </div>
+                    <div>
+                      <span class="heading">10</span>
+                      <span class="description">Photos</span>
+                    </div>
+                    <div>
+                      <span class="heading">89</span>
+                      <span class="description">Comments</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h5 class="h3">
+                  Jessica Jones<span class="font-weight-light">, 27</span>
+                </h5>
+                <div class="h5 font-weight-300">
+                  <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                </div>
+                <div class="h5 mt-4">
+                  <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+                </div>
+                <div>
+                  <i class="ni education_hat mr-2"></i>University of Computer Science
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <!-- Progress track -->
+          <!--<div class="card">
+           
+            <div class="card-header">
+             
+              <h5 class="h3 mb-0">Progress track</h5>
+            </div> 
+            
+            <div class="card-body">
+              
+              <ul class="list-group list-group-flush list my--3">
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                    
+                      <a href="#" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>Argon Design System</h5>
+                      <div class="progress progress-xs mb-0">
+                        <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                    
+                      <a href="#" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/angular.jpg">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>Angular Now UI Kit PRO</h5>
+                      <div class="progress progress-xs mb-0">
+                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                     
+                      <a href="#" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/sketch.jpg">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>Black Dashboard</h5>
+                      <div class="progress progress-xs mb-0">
+                        <div class="progress-bar bg-red" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                     
+                      <a href="#" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/react.jpg">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>React Material Dashboard</h5>
+                      <div class="progress progress-xs mb-0">
+                        <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                     
+                      <a href="#" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/vue.jpg">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>Vue Paper UI Kit PRO</h5>
+                      <div class="progress progress-xs mb-0">
+                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>-->
+        </div>
+        <div class="col-xl-12 order-xl-1">
+         <!-- <div class="row">
+            <div class="col-lg-6">
+              <div class="card bg-gradient-info border-0">
+               
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0 text-white">Total traffic</h5>
+                      <span class="h2 font-weight-bold mb-0 text-white">350,897</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                        <i class="ni ni-active-40"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap text-light">Since last month</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="card bg-gradient-danger border-0">
+               
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0 text-white">Performance</h5>
+                      <span class="h2 font-weight-bold mb-0 text-white">49,65%</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                        <i class="ni ni-spaceship"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap text-light">Since last month</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>-->
+
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success'%}
+
+               
+                    <script type=text/javascript>
+                     toastr.options = {
+                  "closeButton": true,
+                  "debug": false,
+                  "newestOnTop": true,
+                  "progressBar": true,
+                  "positionClass": "toast-top-right",
+                  "preventDuplicates": true,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                }
+                    
+                    toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'info' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'warning' %} 
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% elif message.tags == 'error' %}
+                    <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Update Vaccination Details </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <form id="vaccine_form" method="POST" enctype="multipart/form-data" name="form" class="post-form" >  
+                {% csrf_token %}  
+                   
+
+                <!-- <h6 class="heading-small text-muted mb-4">Add Exit Details</h6> -->
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <!--<div class="col-lg-4">
+                      <div class="form-group">
+                            <span>{{ request.message }}</span>
+                           
+                        <label  class="form-control-label" for="input-employeeid">EmployeeID</label>
+                        <input type="text" name="employee_id" value="{{ form.data.employee_id }}"   class="form-control" placeholder="Enter EmployeeID" >
+                     
+                        {{ form.employee_id.errors }}
+                      </div>
+                    </div>-->
+                    
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Employee ID</label>
+                          <select  class="form-control"   id="ddl_employee" value="{{ vaccina.employee_id }}" >
+                              <option value="">select</option>
+                              {% for emp in employees_bk %}
+                                  <option   value="{{ emp.employee_id  }}" {% if emp.employee_id == vaccina.employee_id %} selected{% endif %}>  {{ emp.first_name }} {{ emp.last_name }}  ({{ emp.employee_id }})</option>
+                              {% endfor %} 
+                        </select>
+                        <input type="hidden" name="employee" value="{{ vaccina.employee_id }}"></input>
+                        <!-- {{ form.errors.employee  }} -->
+                        </div>
+                      </div>
+                 
+                      <div class="col-lg-1"></div>
+
+                      <div class="col-lg-5">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-email">Have you been vaccinated?</label>
+                          <select id="ddl_vaccinate"  name="vaccinated_status" value="{{ vaccina.vaccinated_status }}" class="form-control" placeholder="" >
+                              <option value="">select</option>
+                              <option value="Partially" {% if vaccina.vaccinated_status == "Partially" %} selected{% endif %}>Partially</option>
+                          <option value="Fully" {% if vaccina.vaccinated_status == "Fully" %} selected{% endif %}>Fully</option>
+                          <option value="Do not want to disclose" {% if vaccina.vaccinated_status == "Do not want to disclose" %} selected{% endif %}>Do not want to disclose</option>
+                          <option value="Not vaccinated" {% if vaccina.vaccinated_status == "Not vaccinated" %} selected{% endif %}>Not vaccinated</option>
+                          <!-- <option value=""></option> -->
+                          </select>
+                          {{ form.errors.vaccinated_status }}
+                        </div>
+                      </div> 
+
+                      <div class="col-lg-1"></div> 
+                  </div>
+                  
+               
+            <div class="row" id="Partially_div">
+
+                  
+                  <div class="col-lg-3"> 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Date of partial vaccination</label>
+                          <input type="text"   name="partial_vacci_date" value="{{ vaccina.partial_vacci_date |date:'d-m-Y'  }}"  class="form-control startdate" placeholder="" >
+                          <ul class="errorlist"><li id="partial_vacci_date_error"></li></ul>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-3"> 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">vaccination name </label>
+                         
+                          <select id="ddl_vaccinate"  name="vaccin_name" value="{{ vaccina.vaccin_name }}" class="form-control" placeholder="" >
+                              <option value="">select</option>
+                         
+                          <option value="ZyCoV-D" {% if vaccina.vaccin_name == "ZyCoV-D" %} selected{% endif %}>ZyCoV-D</option>
+                          <option value="mRNA-1273" {% if vaccina.vaccin_name == "mRNA-1273" %} selected{% endif %}>mRNA-1273</option>
+                          <option value="Sputnik V" {% if vaccina.vaccin_name == "Sputnik V" %} selected{% endif %}>Sputnik V</option>
+                          <option value="Sputnik Light" {% if vaccina.vaccin_name == "Sputnik Light" %} selected{% endif %}>Sputnik Light</option>
+                          <option value="BNT162b2" {% if vaccina.vaccin_name == "BNT162b2" %} selected{% endif %}>BNT162b2</option>
+                          <option value="AZD1222" {% if vaccina.vaccin_name == "AZD1222" %} selected{% endif %}>AZD1222</option>
+                          <option value="Covishield" {% if vaccina.vaccin_name == "Covishield" %} selected{% endif %}>Covishield</option>
+                          <option value="Covaxin" {% if vaccina.vaccin_name == "Covaxin" %} selected{% endif %}>Covaxin</option>
+                        
+                          <option value="ZyCoV-D" {% if vaccina.vaccin_name == "ZyCoV-D" %} selected{% endif %}>ZyCoV-D</option>
+                          <option value="CoronaVac" {% if vaccina.vaccin_name == "CoronaVac" %} selected{% endif %}>CoronaVac</option>
+                          <option value="COVAX-19" {% if vaccina.vaccin_name == "COVAX-19" %} selected{% endif %}>COVAX-19</option>
+                          <option value="ZF2001" {% if vaccina.vaccin_name == "ZF2001" %} selected{% endif %}>ZF2001</option>
+
+                          <!-- <option value=""></option> -->
+                          </select>
+                          <ul class="errorlist"><li id="vaccin_name_error"></li></ul>
+                        </div>
+                      </div>
+                     
+                      <div class="col-lg-5"> 
+                          <div class="form-group"> 
+                           
+                            <div class="card">
+                                
+                                  <!-- Card body -->
+                                  <div class="card-body">
+                                        <label class="form-control-label" for="input-employeeid">Partial vaccination documents</label>
+                                  
+                                      <div class="custom-file">
+                                        <input type="file"  id="customFileLang" accept="image/jpeg, image/png, application/pdf" value="{{ vaccina.partial_url }}" name="partial_url" class="custom-file-input" lang="en"></input>
+                                        <label class="custom-file-label" for="customFileLang"></label>
+                                      </div>
+                                      <a target="_blank" id="view_link1" href="/static/vaccination_documents/{{ vaccina.partial_url }}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="click to view document">
+                                         view
+                                        </a> 
+                                      <ul class="errorlist"><li id="partial_url_error"></li></ul>
+                                  </div>
+                                </div>
+    
+                          </div>
+    
+                        </div>
+                        <div class="col-lg-1"></div> 
+
+                        </div>   
+           
+        <div class="row" id="fully_div">
+                     
+                        <div class="col-lg-5"> 
+                              <div class="form-group"> 
+                                <label class="form-control-label" for="input-email">Date of vaccination</label>
+                                <input type="text"   name="date_of_vaccination" value="{{ vaccina.date_of_vaccination |date:'d-m-Y' }}"  class="form-control startdate" placeholder="" >
+                                <ul class="errorlist"><li id="date_of_vaccination_error"></li></ul>
+                              </div>
+                            </div>
+                       
+                            <div class="col-lg-1"></div> 
+
+                            <div class="col-lg-5"> 
+                              <div class="form-group"> 
+                               
+                                <div class="card">
+                                    
+                                      <!-- Card body -->
+                                      <div class="card-body">
+                                            <label class="form-control-label" for="input-employeeid">Documents</label>
+                                      
+                                          <div class="custom-file">
+                                            <input type="file" accept="image/jpeg, image/png, application/pdf" value="{{ vaccina.vaccine_url }}" name="vaccine_url" class="custom-file-input" id="customFileLang1" lang="en"></input>
+                                            <label class="custom-file-label" for="customFileLang1"></label>
+                                          </div>
+                                          <a target="_blank" id="view_link2" href="/static/vaccination_documents/{{ vaccina.vaccine_url }}" class="confirm-delete fas  table-action-delete" data-toggle="tooltip" data-original-title="click to view document">
+                                                view
+                                               </a> 
+                                          <ul class="errorlist"><li id="vaccine_url_error"></li></ul>
+                                      </div>
+                                    </div>
+        
+                              </div>
+        
+                            </div>
+
+                            <div class="col-lg-1"></div> 
+
+                  </div>
+             
+            <div class="row">
+                    
+                  <!-- <div class="col-lg-1"></div>  -->
+
+                  <div class="col-lg-11">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-country">Additional comments</label>
+                          <textarea rows="4" name="commends"  class="form-control" placeholder="" >{{vaccina.commends}}</textarea>
+                        </div>
+                      </div>
+                      <div class="col-lg-1"></div> 
+
+            </div>      
+             
+
+                </div>
+
+                <!-- <div class="row">
+                  
+                  
+        </div> -->
+               
+                
+            </div>
+
+            <div class="card-footer">
+
+                <button type="submit" name="submit_button" id="zp_modal_blubtn" class="btn btn-primary">Submit<i class="IC-sync S12 ML8 DIB rotate-animate" id="submitRotateIcon" style="display:none;"></i></button>
+               
+                <a  href="{% url 'vaccination_details' %}" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+
+            </div>
+
+            <hr class="my-4" />
+
+              </div>
+              
+              
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- <script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/moment.min.js"></script> -->
+<!-- <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script> -->
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
+<script src="/static/build/js/intlTelInput.js"></script>
+
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+
+<script>
+
+$(".startdate").datepicker({
+      endDate: new Date(),
+       format: 'dd-mm-yyyy',  
+       autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+      });
+
+    
+
+$(function () {
+      var dateToday = new Date();
+           // $("#date_of_joining1").datepicker({ dateFormat: "dd/mm/dd", changeMonth: true, changeYear: true });
+           $(".startdate").datepicker({format: 'dd-mm-yyyy',  autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,});
+
+        $('div#fully_div').hide();
+        $('div#Partially_div').hide();
+       // $("#ddl_employee option:not(:selected)").prop("disabled", true); 
+         $('#ddl_employee').attr('disabled',true);
+         $('view_link1').hide();
+         $('view_link2').hide();
+
+         var vall = ($('#ddl_vaccinate').val());
+
+         if(vall == "Partially")
+        {
+            $('div#fully_div').hide();
+            $('div#Partially_div').show();
+            $('view_link1').hide();
+         $('view_link2').show();
+        }
+        if(vall == "Fully")
+        {
+            $('div#fully_div').show();
+            $('div#Partially_div').show();
+            $('view_link1').show();
+         $('view_link2').show();
+        }
+     
+         
+}); 
+
+
+
+// $("#container").on("click", "buttonid", function () {
+//   alert("Hi");
+// });
+
+//$('#zp_modal_blubtn').click(function(e) {
+//       $("#container").on("click", "buttonid", function () {
+//   alert("Hi");
+// });
+
+
+
+
+   
+
+
+var myEl = document.getElementById('zp_modal_blubtn');
+  
+      myEl.addEventListener('click', function(e) {
+    //  alert(); return false;
+      $status = $('#ddl_vaccinate').val();
+      $('#partial_url_error').html('');
+      $('#partial_vacci_date_error').html('');
+      $('#vaccin_name_error').html('');
+      $('#date_of_vaccination_error').html('');
+      $('#vaccine_url_error').html('');
+      if($status == "Partially" || $status == "Fully")
+      {    // alert($("input[name=ddl_vaccinate]").val());
+             e.preventDefault();
+             var count = 5; checed = true;  //alert($('#view_link1').attr('href'))
+            // if( document.getElementById("customFileLang").files.length == 0 ){  count--; checed = false; 
+            //       $('#partial_url_error').html('Partial vaccination documents is required');
+            // }
+            if($('#view_link1').attr('href') == "/static/vaccination_documents/" &&  $status != "Fully")
+            {  
+                  count--; checed = false; 
+                  $('#partial_url_error').html('Partial vaccination documents is required');
+            }
+            if( $("input[name=partial_vacci_date]").val() == "" ){   count--; checed = false;
+                  $('#partial_vacci_date_error').html('Date of partial vaccination is required');
+            }
+            if( $("select[name=vaccin_name]").val() == "" ){ count--; checed = false;
+                  $('#vaccin_name_error').html('Vaccination name is required');
+            }
+           //alert(checed);
+           
+           if(count == 3 && checed == true)
+           $("#vaccine_form").submit();
+            
+           if($status == "Fully")
+           { 
+                  // if( document.getElementById("customFileLang1").files.length == 0 ){  count--; checed = false; 
+                  //       $('#vaccine_url_error').html('vaccination documents is required');
+                  // }
+                  if( $("input[name=date_of_vaccination]").val() == "" ){   count--; checed = false;
+                        $('#date_of_vaccination_error').html('Date of vaccination is required');
+                  }
+                  if($('#view_link2').attr('href') == "/static/vaccination_documents/")
+                  {  
+                        count--; checed = false; 
+                        $('#vaccine_url_error').html('vaccination documents is required');
+                  }
+
+           }
+           if($status == "Fully")
+              $('#partial_url_error').html('');
+          // alert(checed); alert(count);
+           if(count == 5 && checed == true)
+             $("#vaccine_form").submit();
+           
+      }
+      // else if($status == "Partially")
+      // {    // alert($("input[name=ddl_vaccinate]").val());
+      //        e.preventDefault();
+            
+           
+      // }
+      
+      else
+      {
+        $("#vaccine_form").submit();
+      }
+
+}, false);
+
+$('#ddl_vaccinate').change(function() {
+    // alert($(this).val()); // will work here
+     $('div#fully_div').hide();
+        $('div#Partially_div').hide();
+        if($(this).val() == "Partially")
+        {
+            $('div#fully_div').hide();
+            $('div#Partially_div').show();
+        }
+        if($(this).val() == "Fully")
+        {
+            $('div#fully_div').show();
+            $('div#Partially_div').show();
+        }
+});
+
+// $(function() {
+//      $("#customFileLang").bind("change", function(){
+//        var fileName = $(this).val(); alert(fileName);
+//        $(".filename").html(fileName); 
+//      });
+// //      pdffile=document.getElementById("customFileLang").files[0];
+// //     pdffile_url=URL.createObjectURL(pdffile);
+// //     alert(pdffile_url);
+// //     $('#view_link1').attr('href',pdffile_url);
+//   });
+
+$("#customFileLang").change(function() { // bCheck is a input type button
+
+      var files = this.files;
+      $('#view_link1').hide();
+  $(files).each(function(index, file) { 
+    // Still don't know why you want this...
+    $('#view_link1').show();
+    var fakepath = 'C:\\fakepath\\';
+     var ul =  URL.createObjectURL(file);
+    $('#view_link1').attr('href',ul);
+    $('body').append('<div>' +
+      // build  a fake path string for each File
+      '<p class="path">'+ fakepath + file.name + '</p>' +
+      // all that is really needed to display the image
+      '<img  style="dislay:none;height:10px;width:11px;" src="'+URL.createObjectURL(file)+'">' +
+     '</div>');
+  });
+
+});
+
+$("#customFileLang1").change(function() { // bCheck is a input type button
+
+var files = this.files;
+$('#view_link2').hide();
+$(files).each(function(index, file) { 
+// Still don't know why you want this...
+$('#view_link2').show();
+var fakepath = 'C:\\fakepath\\';
+var ul =  URL.createObjectURL(file);
+$('#view_link2').attr('href',ul);
+$('body').append('<div>' +
+// build  a fake path string for each File
+'<p class="path">'+ fakepath + file.name + '</p>' +
+// all that is really needed to display the image
+'<img style="dislay:none;height:10px;width:11px;" src="'+URL.createObjectURL(file)+'">' +
+'</div>');
+});
+
+});
+
+
+
+  
+
+</script>
+
+{% endblock javascripts %}
+>>>>>>> origin/hrms-09-02-2022
  

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layouts/base.html" %}
 
 {% block title %} Roles {% endblock %}
@@ -206,4 +207,214 @@
 </script>
 
 {% endblock javascripts %}
+=======
+{% extends "layouts/base.html" %}
+
+{% block title %} Roles {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<!-- <link rel="stylesheet" href="/static/assets/vendor/animate.css/animate.min.css">
+<link rel="stylesheet" href="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.css"> -->
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+   <!-- Header -->
+<!--  <div class="header bg-primary pb-6">-->
+<!--    <div class="container-fluid">-->
+<!--      <div class="header-body">-->
+<!--        <div class="row align-items-center py-4">-->
+<!--          <div class="col-lg-6 col-7">-->
+<!--            <h6 class="h2 text-white d-inline-block mb-0">Task</h6>-->
+<!--            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">-->
+<!--              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">-->
+<!--&lt;!&ndash;                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                <li class="breadcrumb-item"><a href="#">Add Locations</a></li>&ndash;&gt;-->
+<!--                &lt;!&ndash; <li class="breadcrumb-item active" aria-current="page">Datatables</li> &ndash;&gt;-->
+<!--              </ol>-->
+<!--            </nav>-->
+<!--          </div>-->
+<!--          <div class="col-lg-6 col-5 text-right">-->
+<!--            <a href="{% url 'tasks' %}" class="btn btn-sm btn-neutral">Back</a>-->
+<!--            &lt;!&ndash; <a href="#" class="btn btn-sm btn-neutral">Filters</a> &ndash;&gt;-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+   
+
+    <!-- Page content -->
+    <div class="container-fluid mt-6">
+
+      <div class="row">
+       
+        <div class="col-xl-12 order-xl-1">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Update Task </h3>
+                </div>
+                <div class="col-4 text-right">
+                  <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                  <form method="POST" class="post-form" action="">  
+                    {% csrf_token %}  
+               <!--  <h6 class="heading-small text-muted mb-4">Basic Info</h6> -->
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" >Employee Name</label>
+                          <select class="form-control"  name="employee_id">
+                              <option value="">select</option>
+                              {% for employee in employees %}
+                              <option value="{{ employee.employee_id  }}" {% if task.employee_id ==  employee.employee_id  %} selected {% endif %}>  {{ employee.first_name }} ({{ employee.employee_id }})</option>
+                              {% endfor %}
+                          </select>
+                          {{ form.errors.employee_id }}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" >Task Name</label>
+                        <input type="text" name="task_name" value="{{ task.task_name }}" class="form-control" placeholder="task_name" >
+                        {{ form.errors.task_name }}
+                      </div>
+                    </div>
+
+
+
+
+
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label" >Description</label>
+                            <input type="text" name="description" value="{{ task.description }}" class="form-control" placeholder="Description" >
+                            {{ form.errors.description }}
+                        </div>
+                    </div>
+                  </div>
+
+
+                    <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label" >Priority</label>
+
+                            <select name="priority" class="form-control">
+                                <option value="">select</option>
+                                <option value="high" {% if task.priority == "high" %} selected{% endif %}>High</option>
+                                <option value="moderate" {% if task.priority == "moderate" %} selected{% endif %}>Moderate</option>
+                                <option value="low" {% if task.priority == "low" %} selected{% endif %}>Low</option>
+                            </select>
+                            {{ form.errors.priority }}
+                        </div>
+
+                    </div>
+
+
+
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label" >Start Date</label>
+                                    <input type="text" name="start_date" id="start_date" value="{{ task.start_date|date:'d-m-Y' }}" class="form-control"  placeholder="dd-mm-yyyy" >
+                                    {{ form.errors.start_date }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-email">End Date</label>
+                                    <input type="text" id="end_date" name="end_date" value="{{ task.end_date|date:'d-m-Y' }}" class="form-control" placeholder="dd-mm-yyyy" >
+                                    {{ form.errors.end_date }}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" >Reminder</label>
+                                <input type="text" name="reminder" id="reminder" value="{{ task.reminder|date:'d-m-Y' }}" class="form-control"  placeholder="dd-mm-yyyy" >
+                                {{ form.errors.reminder }}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" >Status</label>
+
+                                <select name="status" class="form-control">
+                                    <option value="">select</option>
+                                    <option value="open" {% if task.status == "open" %} selected{% endif %}>Open</option>
+                                    <option value="completed" {% if task.status == "completed" %} selected{% endif %}>Completed</option>
+                                </select>
+                                {{ form.errors.status }}
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+
+                    </div>
+               <center> <button class="btn btn-primary" type="submit">Update</button>
+                   <a href="{% url 'tasks' %}" class="btn btn-primary">Back</a></center>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+   
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+<script src="/static/assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendor/moment.min.js"></script>
+<script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
+<script>
+
+    $(function () {
+        var dateToday = new Date();
+        $("#start_date").datepicker({format: 'dd-mm-yyyy', autoclose: true,
+            // todayBtn: "linked",
+            todayHighlight: true,});
+        $("#end_date").datepicker({format: 'dd-mm-yyyy',autoclose: true,
+            //todayBtn: "linked",
+            todayHighlight: true,});
+        $("#reminder").datepicker({format: 'dd-mm-yyyy', autoclose: true,
+            //todayBtn: "linked",
+            todayHighlight: true,});
+    });
+
+
+</script>
+
+{% endblock javascripts %}
+>>>>>>> origin/hrms-09-02-2022
  
