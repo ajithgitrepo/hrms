@@ -128,8 +128,9 @@ def get_client_ip(request):
 def check_out_attn(request):
     if request.method == 'POST':
         myDate = datetime.now()
-        device  = getDevice(request)
+        
         if Attendance.objects.filter(Q(employee_id=request.user.emp_id, date=myDate, is_active = 1)).exists():
+            device  = getDevice(request)
             update = Attendance.objects.filter(date=myDate, employee_id= request.user.emp_id ).update(
                 checkout_time = datetime.now().strftime('%H:%M:%S'),
                 checkout_location = request.POST.get('checkout_location'),

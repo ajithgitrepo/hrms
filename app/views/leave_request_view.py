@@ -38,6 +38,8 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from app.models.employee_model import Employee
+from app.models.holiday_details_model import Holiday_Detail
+from app.models.weekend_model import Weekend
 
 
 def leave_request(request):
@@ -446,6 +448,7 @@ def change_leave_status(request):
 
     id = request.POST.get('id')
     value = request.POST.get('value')
+    reason=request.POST.get('reason')
     is_approved = 0
     is_rejected = 0
     if(value == "1"):
@@ -463,16 +466,23 @@ def change_leave_status(request):
 
     data = LeaveRequest.objects.get(id=id)
     # print(data.to_time-data.from_time)
+    day_name= ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday','sunday']
 
     leave = LeaveRequest.objects.filter(
         leave_type_id__in=Leave_Type.objects.filter(id=data.leave_type_id))
-    # print(leave[0].leave_type.name)
+    
+    restriction = Leave_Restrictions.objects.filter(
+        leave_type_id__in=Leave_Type.objects.filter(id=data.leave_type_id))    
+    holiday=restriction[0].holydays_bw_leave_days  
+    # print(holiday)  
+    weekend_bw_leave_days=restriction[0].weekend_bw_leave_days  
     comp = leave[0].leave_type.name
     # print(comp)
 
     update = LeaveRequest.objects.filter(id=id).update(
         is_approved=is_approved,
         is_rejected=is_rejected,
+        reject_reason=reason,
         action_by_id=request.user.emp_id,
         updated_by_id=request.user.emp_id,
         updated_at=timezone.now()
@@ -484,14 +494,25 @@ def change_leave_status(request):
         diff = abs((end_date-start_date).days)+1
 
         delta = end_date - start_date
+        total_days=delta.days + 1
+        nxt_date=end_date+timedelta(days=1)
         # print(value)
         first = True
+        end=[]
         for i in range(delta.days + 1):
             day = start_date + timedelta(days=i)
+            day = start_date + timedelta(days=i)
+            weekday=(start_date+ timedelta(days=i)).weekday()
+            weekend=day_name[weekday]
+            
+            end.append(weekend)
+            # print(end)
+            nxt_week=day_name[(end_date+ timedelta(days=1)).weekday()]
+            # print(nxt_week)
             # print(datetime.strftime(day, "%d-%m-%Y"))
 
             if value == '1':
-
+   
                 if comp == 'Compensatory Off':
 
                     
@@ -562,7 +583,43 @@ def change_leave_status(request):
                         is_leave_approved=1,
                         leave_approved_by_id=request.user.emp_id,
                         updated_at=timezone.now()
-                    )    
+                    )
+                    if i==  range(delta.days + 1)[-1] :
+                        end.append(nxt_week)
+                        list_days=end
+                        weekoff=Weekend.objects.filter(is_active=1)
+                        off=weekoff[0].week_off
+                        
+                        # print(off)
+                        if any(x in off for x in list_days):
+                            if str(total_days) >= str(weekend_bw_leave_days):
+                                off = 1
+                                restrict_holi = Leave_Balance.objects.filter(employee_id=data.employee_id, leave_type_id=data.leave_type_id).update(
+                                balance=F('balance') - off,
+                                updated_at=timezone.now()
+                            )
+                                attn = Attendance.objects.filter(date=datetime.strftime(nxt_date, "%Y-%m-%d"), employee_id=data.employee_id).update(
+                                is_leave_approved=1,
+                                leave_approved_by_id=request.user.emp_id,
+                                updated_at=timezone.now()
+                            ) 
+                        # print(i) 
+                        nxt_holi=Holiday_Detail.objects.filter(is_active=1,date=nxt_date)
+                        # print(nxt_holi)
+                        if nxt_holi: 
+                            if str(total_days) >= str(holiday):
+                                # print('dfy')
+                                off = 1
+                                restrict_holi = Leave_Balance.objects.filter(employee_id=data.employee_id, leave_type_id=data.leave_type_id).update(
+                                balance=F('balance') - off,
+                                updated_at=timezone.now()
+                            )
+                                attn = Attendance.objects.filter(date=datetime.strftime(nxt_date, "%Y-%m-%d"), employee_id=data.employee_id).update(
+                                is_leave_approved=1,
+                                leave_approved_by_id=request.user.emp_id,
+                                updated_at=timezone.now()
+                            ) 
+
 
             if value == '0' or value == '2':
                 attn = Attendance.objects.filter(date=datetime.strftime(day, "%Y-%m-%d"), employee_id=data.employee_id).update(
@@ -570,6 +627,12 @@ def change_leave_status(request):
                     leave_approved_by_id=None,
                     updated_at=timezone.now()
                 )
+                restrict = Attendance.objects.filter(date=datetime.strftime(nxt_date, "%Y-%m-%d"), employee_id=data.employee_id).update(
+                                is_leave_approved=0,
+                                leave_approved_by_id=request.user.emp_id,
+                                updated_at=timezone.now()
+                            ) 
+
 
         if (value != '0'):
             my_host = 'smtp.gmail.com'

@@ -1,5 +1,7 @@
 from bdb import effective
 from cgi import test
+from queue import Empty
+from turtle import st
 from app.models import exit_details_model
 from app.models import leave_type_model
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
@@ -771,7 +773,7 @@ def leave_tracker(request):
     # print(employee.date_of_joining)
     leaves = Leave_Balance.objects.filter(
         is_active=1, leave_type__is_active=1, employee_id=request.user.emp_id,leave_type_id__type='paid')
-    print(leaves)    
+    # print(leaves)    
      # print(leaves[3].leave_type.type)
 
     requested = LeaveRequest.objects.filter(
@@ -830,6 +832,14 @@ def apply_leave(request):
     # print(month_count)
     leave_effective=Leave_Effective.objects.filter(is_active=1)
     
+    # print(str(weekoff[0].week_off))
+    # print(off)
+    date_day=datetime.now()
+    # day=date_day.strftime("%A")
+    # print(day)
+    # if day != off:
+    #     print('bhj')
+    
     # print(leave_effective)
     type_id=[] 
     for  leave in leave_effective:
@@ -842,7 +852,7 @@ def apply_leave(request):
             # lsit=[id]
             # print(lsit)
             # print('cn')
-    print(type_id)    
+    # print(type_id)    
 
 
         
@@ -852,18 +862,21 @@ def apply_leave(request):
     # print(leaves)    
 
     leave_condition = Leave_Applicable.objects.filter(is_active=1,gender=employee.gender)
-    print(leave_condition) 
+    day_name= ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday','sunday']
+    # print(leave_condition) 
     if request.method == 'POST':
 
         form = Apply_Leave_Form(request.POST)
         # print('dcvh')
         # return HttpResponse('ve')
         if form.is_valid():
+            
+           
         #    return HttpResponse('ve')
         #    print('cdnj')
-           leave = request.POST.get('leave_type')
+            leave = request.POST.get('leave_type')
            # return HttpResponse(leave)
-           for each in Leave_Type.objects.filter(is_active='1', id = leave):
+            for each in Leave_Type.objects.filter(is_active='1', id = leave):
                 leave_type = each.type
                 leave_name = each.name
                 leave_unit = each.unit
@@ -898,16 +911,22 @@ def apply_leave(request):
                     
                     from_date = datetime.strptime(request.POST.get('from_date'), '%d-%m-%Y')
                     to_date = datetime.strptime(request.POST.get('to_date'), '%d-%m-%Y')
+                    nxt_date=to_date+timedelta(days=1)
+                    # print(nxt_date)
                     reason = request.POST.get('reason')
                     created_at = timezone.now()
                     updated_at = timezone.now()
-
+                   
                     start_date = datetime.strptime(request.POST.get('from_date'), "%d-%m-%Y")
                     end_date = datetime.strptime(request.POST.get('to_date'), "%d-%m-%Y")
                     diff = abs((end_date-start_date).days)+1
                     # total_days = diff
+                    # day=start_date.weekday()
+                    # print(day)
 
                     delta = end_date - start_date
+                   
+
                     total_days = delta.days + 1
                     
                     leave_mode = request.POST.get('leave_mode')
@@ -1039,17 +1058,69 @@ def apply_leave(request):
                             # print(obj)
                             obj.save()
 
+                               
+                            end=[]
                             for i in range(delta.days + 1):
                                 day = start_date + timedelta(days=i)
+                                weekday=(start_date+ timedelta(days=i)).weekday()
+                                weekend=day_name[weekday]
+                               
+                                end.append(weekend)
+                                # print(end)
+                                nxt_week=day_name[(end_date+ timedelta(days=1)).weekday()]
+                                # print(nxt_week)
+                               
+                               
+                               
+                                # if off != day_name[day]:
+                                holiday=Holiday_Detail.objects.filter(is_active=1,date=day)
                                 
-                                # insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half)
+                                # print(holiday)
+                                # holidate=holiday.date
+                                # print(holidate)
                                 if not Attendance.objects.filter(Q(employee_id=emp_id, date = datetime.strftime(day, "%Y-%m-%d"))).exists():
+                                    # print('ndc')
                                     insert = Attendance.objects.create(date=datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half )
                                 else:
                                     update = Attendance.objects.filter(date = datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id ).update(
                                         is_leave = 1, is_half = is_half,
                                         updated_at = datetime.now(),
-                                    )   
+                                    )
+                                if holiday:  
+                                    # print(weekend_bw_leave)
+                                    # print('ert')  
+                                    if holydays_bw_leave == '0':
+                                        # print('hc')
+                                        update = Attendance.objects.filter(date = datetime.strftime(day, "%Y-%m-%d"), employee_id= emp_id ).update(
+                                            is_active = 0,
+                                            updated_at = datetime.now(),
+                                        )
+                                        # last iteration
+                                if i==  range(delta.days + 1)[-1] :
+                                    end.append(nxt_week)
+                                    list_days=end
+                                    weekoff=Weekend.objects.filter(is_active=1)
+                                    off=weekoff[0].week_off
+                                    
+                                    # print(off)
+                                    if any(x in off for x in list_days):
+                                        if str(total_days) >= str(weekend_bw_leave_days):
+                                            insert = Attendance.objects.create(date=datetime.strftime(nxt_date, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half )
+
+                                    # print("inserted")  
+                                    nxt_holi=Holiday_Detail.objects.filter(is_active=1,date=nxt_date)
+                                    if nxt_holi:  
+                                        # print(holydays_bw_leave_days) 
+                                        # print('h') 
+                                        if str(total_days) >= str(holydays_bw_leave_days):
+                                            # print(total_days)
+                                            # print("ftyui")
+                                            insert = Attendance.objects.create(date=datetime.strftime(nxt_date, "%Y-%m-%d"), employee_id= emp_id, is_leave = 1, is_half = is_half )
+
+
+                                     
+                                   
+                                       
 
                             my_host = 'smtp.gmail.com'
                             my_port = 587

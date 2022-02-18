@@ -38,6 +38,8 @@ class LeaveRequest(models.Model):
     document_url = models.FileField(max_length=500, blank = True, null = True)  
     leave_mode = models.CharField(max_length=20, blank = True, null = True)
     leave_part = models.CharField(max_length=20, blank = True, null = True)  
+    reject_reason = models.CharField(max_length=450 , blank = True, null = True)
+
 
       
     class Meta:  
