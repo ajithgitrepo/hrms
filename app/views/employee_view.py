@@ -42,16 +42,12 @@ import os
 from django.conf import settings
 from app.views.restriction_view import admin_only,role_name
 from app.models.location_model import Location
-<<<<<<< HEAD
-=======
 import pandas as pd
 from django.core.files.storage import FileSystemStorage
 import uuid
 
 import logging
 logger = logging.getLogger(__name__)
->>>>>>> origin/hrms-09-02-2022
-
 
 @login_required(login_url="/login/")
 def roles(request):
@@ -1416,7 +1412,6 @@ def update_employee(request, pk):
   #  context_role = {'form':form,'employee':employee}
     return render(request, "employee/update_employee.html", context_role)
 
-
 def import_employee(request):
     try:
         if request.method == 'POST' and request.FILES['file']:
@@ -1481,6 +1476,7 @@ def import_employee(request):
         logger.warning(error)
 
     return render(request, "employee/import_employee.html")
+
 
 def update_employee_emp(request, pk):
    

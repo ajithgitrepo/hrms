@@ -10,19 +10,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='attendance',
-            name='comp_off',
-            field=models.PositiveSmallIntegerField(blank=True, default=0, null=True),
-        ),
-        migrations.AddField(
-            model_name='leaverequest',
-            name='from_time',
-            field=models.TimeField(blank=True, null=True),
-        ),
-        migrations.AddField(
-            model_name='leaverequest',
-            name='to_time',
-            field=models.TimeField(blank=True, null=True),
-        ),
+        # migrations.AddField(
+        #     model_name='attendance',
+        #     name='comp_off',
+        #     field=models.PositiveSmallIntegerField(blank=True, default=0, null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='leaverequest',
+        #     name='from_time',
+        #     field=models.TimeField(blank=True, null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='leaverequest',
+        #     name='to_time',
+        #     field=models.TimeField(blank=True, null=True),
+        # ),
     ]
