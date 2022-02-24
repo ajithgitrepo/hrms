@@ -87,6 +87,19 @@ urlpatterns = [
     path('convert_to_emp/<str:pk>/', views.onboard_employee_view.convert_to_emp, name="convert_to_emp"),
     path('status_onboard_employees/<str:pk>/<str:val>/', views.onboard_employee_view.status_onboard_employees, name="status_onboard_employees"),
     path('filter_onboard_employees/<str:status>/', views.onboard_employee_view.filter_onboard_employees, name="filter_onboard_employees"),
+    path('enroll_info/', views.onboard_employee_view.enroll_info, name="enroll_info"),
+    path('approve/', views.onboard_employee_view.approve, name="approve"),
+    path('business_approve/', views.onboard_employee_view.business_approve, name="business_approve"),
+    path('approve_status/', views.onboard_employee_view.approve_status, name="approve_status"),
+    path('update_enroll_info/', views.onboard_employee_view.update_enroll_info, name="update_enroll_info"),
+    path('update_enroll/', views.onboard_employee_view.update_enroll, name="update_enroll"),
+    path('enroll_more_info/', views.onboard_employee_view.enroll_more_info, name="enroll_more_info"),
+
+
+
+
+
+
 
     #Attendance
     path('check_in_attn/', views.attendance_view.check_in_attn, name="check_in_attn"),

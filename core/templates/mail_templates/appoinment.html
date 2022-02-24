@@ -54,95 +54,147 @@
 <body >
     <div class="container">
 
-            
+        {% if company == "Rhapsody Merchandising Services L.L.C" or company == "Rhapsody Advertising L.L.C"  %}
             <div class="company_logo" id="header_content">
-                <img src="https://rms2.rhapsody.ae/product_image/ttf_logo.jpg"><br/>
-
+                <img src="https://hrms.thethoughtfactory.ae/static/images/rms_logo.jpg" width="150"><br/>
             </div>
+            <div class="company_logo" id="footer_content">
+                <p>PO. Box 124304 | , The Greens, Dubai, U.A.E. <br> Tel: +971 4 294 1932 / 4 438 7026 | https://www.rhapsody.ae/ </p>
+                <br>
+            </div>
+        {% endif %}
 
+        {% if company == "The Thought Factory DMCC" %}
+            <div class="company_logo" id="header_content">
+                <img src="https://hrms.thethoughtfactory.ae/static/images/ttf_logo.jpg" width="150"><br/>
+            </div>
             <div class="company_logo" id="footer_content">
                 <p>PO. Box 340805 | Office 26C, Silver Tower | Cluster -1,<br> Jumeirah Lake Towers | Dubai,United Arab Emirates <br> Tel: +971 4438 7026 | Fax: +971 4432 7297 | www.thethoughtfactory.ae </p>
                 <br>
-
             </div>
+        {% endif %}
+
 
             <div id="pagecount_content">
                 page <pdf:pagenumber>of <pdf:pagecount>
-
             </div>
 
            
-            <p>Name : {{ fname }} {{ lname }}<br> Adhaar Card Number : {{ aadhar }} <br> Nationality : {{ nationality }} <br> Mobile Number : {{ mobile }} <br> Email : {{ email }} </p>
+            <p>Name : {{ fname }} {{ lname }} <br> Passport Number : {{ passport }} <br> Nationality : {{ nationality }} <br> Mobile Number : {{ mobile }} <br> Email : {{ email }} </p>
            
-            <p>Dear Mr. <b>{{ fname }} {{ lname }},</b></p>
-            <p> On behalf of The Thought Factory, I am very pleased to offer you the position of <b>{{ position }}</b>. I 
-                am confident  that you will find working with The Thought Factory a rewarding and educational
-                experience and an opportunity to grow your career. This offer letter clarifies and confirms  the 
-                employment  with the company </p>
+            <p>Dear <b>{{ fname }},</b></p>
+           
+            <p> On behalf of <b>{{ company }}</b>, I am very pleased to offer you the position of a <b>{{ position }}</b> in United Arab Emirates I am confident that you will find working with
+                <b>{{ company }}</b> a rewarding and educational experience and an opportunity to grow your career.
+                This offer letter clarifies and confirms the employment with the company.</p>
 
             <p> <b>Start Date & Salary:</b> </p>
-            <p>Your joining date will be the<b> {{ joining_date }} </b>& the starting salary wil! be {{ currency }} <b>{{ salary }} </b>per month.</p>
+            <p>Your employment with <b>{{ company }}</b> shall commence on <b> {{ joining_date|date:"d F Y" }} </b> unless otherwise mutually agreed & shall continue in full 
+                force & effect for an indefinite period subject to approval of the Labor & immigration department and/or any other government authority as required. 
+                The starting salary will be <b> {{ currency }} {{ salary }} </b> per month as per the following structure:</p>
+            
+            <p>Basic Salary {{ currency }} {{ basic_saraly }} ({{ basic_text }} only)<br>Accommodation Allowance {{ currency }} {{ accomodation }} ({{ accomodation_text }} only)<br>Other Allowance {{ currency }} {{ allowance }} ({{ allowance_text }} only) </p>
+
+            <p>Over & above your salary your entitled to:</p>
+          
+                <li>Sim card subscribed to a corporate mobile plan. </li>
+                <li>Company car to execute assigned official duties. </li>
+                <li>An allowance of {{ currency }} XXX.XX towards fuel, salik & parking expenses. </li>
+                <li>An allowance of {{ currency }} XXX.XX towards car maintenance.</li>
+                <li>An allowance of {{ currency }} XXX.XX towards transportation expenses.</li>
+                <li>Transport allowance applicable as per company policy.</li>
+                <li>Shall be entitled to incentives on achieving sales target.</li>
+                <li>(Customized Condition)</li>
+
+            </ul> 
+
+            <p><b>Incentives:</b></p>
+            <p>Based on your performance on the job, you shall be eligible for monthly incentives, in according with the company policy</p>
+
+            <p><b>Job Responsibilities:</b></p>
+            {% if position == "Merchandiser" %}
+                <ul>
+                    <li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>
+                    <li>Creating and organizing promotions and advertising campaigns.</li>
+                    <li>Managing layout plans of store and maintain inventory of products.</li>
+                    <li>Present at the designated outlet, during stock receiving.  </li>
+                    <li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>
+                    <li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>
+                    <li>Compliance with execution guidelines & journey plan adherence.</li>
+                    <li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>
+                    <li>Gathering information on market trends and customers’ reactions to products.</li>
+                    <li>Perform other duties as assigned.</li>
+                </ul>
+            {% endif %}
+            <br><br>
+            <p>Employee Initials: ________</p> <br>
+
+            {% if job_type == "Permanent" %}
+                <p><b>Visa:</b></p>
+                <p>All charges related to Visa, Medical, Emirates Identity Card will be paid by <b> {{ company }}</b></p>
+            {% endif %}
+
+            <p><b>Over Time: </b></p>
+            <p>You would be employed in a professional capacity, and as such shall be expected to accomplish all tasks reasonably assigned, in whatever time as may be required for the performance of such tasks, without any additional remuneration for overtime.</p>
 
             <p> <b>Probation  Period: </b> </p>
-            <p>You are requireci to undergo a probationary period of six months. During the probationary period, 
-                the notice period required to terminate employment by either parties shall not be applicable. Upon 
-                your succssfull completion of probattoi  period, the notice period shall be 30 days. Your 
-                compensation shall be reviewed upon successful completion of your probation period.</p>
-                
-            <p><b>Hours Of Work:</b></p>
-            <p>Your official working hours are 09:30 am to 06:30 pm, from Monday to Friday & from 11:00 am to 
-                04:00 pm on Saturdays. You may take one or more break times during working hours for rest, meals, 
-                smoke breaks or prayer purposes provided that all breaks combined shalt not exceed 1 hour.</p>
+            <p>You are required to undergo a probationary period of six months, excluding period of unauthorize absence and/or sickness.  During the probationary period, the notice period required to terminate employment by either party shall be 14 days (minimum 14 calendar days’ notice) and without reason. Should the Employee wish to serve notice to terminate the Contract during the Probation in order to join another company in the UAE, the Employee will give the Employer at least 30 calendar days written notice. </p>
+            
+            {% if job_type == "Permanent" %}
+                <p><b>Return Air ticket:</b></p>
+                <p>Upon completion of every two years’ continuous service, you will be entitled to an air ticket between the UAE and your home country for self only, which shall be in accordance with the company policy guidelines.</p>
+            {% endif %}
 
-            <p><b>Code of Conduct:</b></p>
+            {% if job_type == "Permanent" %}
+                <p><b>Medical Insurance:</b></p>
+                <p>You shall be entitled to medical insurance in line with the Company’s group medical insurance policy.</p>
+            {% endif %}
+
+            <p><b>Termination/Dismissal:</b></p>
+            <p>{{ company }} has the right at any time to immediately dismiss the Employee without notice or in lieu notice and without any benefits of whatsoever upon the occurrence of any of the following events:</p>
+            <ul>
+                <li>After Employee receives written notice of conduct, which is in violation of policies, standards and regulations of {{ company }} as established from time to time, and after a reasonable period to correct the conduct, the Employee wilfully fails or refuses to comply, in a material manner, with the policies, standards, and regulations of {{ company }} </li>
+            </ul>
+            <ul>
+                <li>Employee engages in fraud, dishonesty, or any other act of material misconduct in the performance of Employee's duties behalf of the Firm. </li>
+            </ul>
+            <p>Upon your successful completion of probation period, the notice period shall be 30 days. However, if Employee decides to terminate his employment with {{ company }}, at his sole discretion, before the completion of one years of continuous service, Employee agrees to pay back the value of the training (Estimated amount of AED 6000.00) </p>
+
+            <p><b>Code of Conduct: </b></p>
             <p><b>Confidentiality of Information:</b></p>
-            <p>You have a contractual responsibility to safeguard any confidential or sensitive information to which
-                you will have access during your employment. You should not, during or after termination of your
-                employment, disclose such information to any person within or outside The Thought Factory. accept in
-                a handover to colleagues who require such information in the proper course of their duties.</p>
+            <p>You have a contractual responsibility to safeguard any confidential or sensitive information to which you will have access during your employment. You should not, during or after termination of your employment, disclose such information to any person within or outside {{ company }}, except in a handover to colleagues who require such information in the proper course of their duties. </p>
+            <p>You should not make personal use of any confidential information which you have acquired in the course of your duties relating to client data, contracts, price calculations, designs etc. Also, any confidential information should not be used for the self-benefit or any other person.  </p> <br><br>
 
-            <p>You should not make personal use of any confidential information which you have acquired in the
-                course of your duties relating to client data, contracts, price calculations, designs etc. Also any
-                confidential information should not be used for the self-benefit or any other person.</p>
+            <p>Employee Initials: ________</p><br><br><br>
 
-            <p><b>Outside Business I Employment I Services:</b></p>
-            <p>You are not permitted to engage in any outside business employment / committee membership/service
-                during your employment with The "I bought Factory irrespective of whether there is any reward or not.</p>
-
-            <p><b>Additional Proivisions:</b></p>
-            <p>The terms of your employment, if you accept this offer, will be defined by this offer letter. This
-                contract supersedes any previous discussions or offers. Any additions or modifications would have to be
-                in writing and signed by you and the Managing Director of The Thought Factory.</p>
+            <p><b>Outside Business / Employment / Services:</b></p>
+            <p>You are not permitted to engage in any outside business/employment/committee membership/service during your employment with {{ company }} irrespective of whether there is any reward or not.</p>
+            <p>It is a required to use either a bike/car to execute the work assigned & the employee agrees to use his own bike/car to carry out the assigned duties</p>
             
+            <p><b>Additional Provision</b></p>
+            <p>The terms of your employment, if you accept this offer, will be defined by this offer letter. This contract supersedes any previous discussions or offers. Any additions or modifications would have to be in writing and signed by you and the Managing Director Sukaina Jagad of {{ company }}. Your work location is transferable across the United Arab Emirates, based on business needs & requirements. </p>
+            
+            {% if position == "Merchandiser" %}
+                <p>It is a required to use either a bike/car to execute the work assigned & the employee agrees to use his own bike/car to carry out the assigned duties</p>
+            {% endif %}
+           
             <p><b>General:</b></p>
-            <p>Please affirm your acceptance to the above by signing this coner c and returning it to The Thought
-                Factory, on or before the 19th November 2020, upon which date this offer will expire.</p>
-            <p>We are very excited about your joining The Thought Factory. I hope that you will accept this offer and l
-                look forward to a productive and mutually beneficial working relationship. Please let me know if i can
-                answer any questions for you about any of the matters outlined in this letter.</p>
-            
-            <br><br><br><br>
-            <p>Welcome aboard The Thought Factory</p>
-            <p>Sincerely,</p>
+            <p>Please affirm your acceptance to the above by signing this contract and returning it to <b>{{ company }}</b>, on or before the <b>{{ joining_date|date:"d F Y" }}</b> upon which date this offer will expire. </p>
+            <p>We are very excited about your joining <b>{{ company }}</b>. I hope that you will accept this offer and I look forward to a productive and mutually beneficial working relationship. Please let me know if I can answer any questions for you about any of the matters outlined in this letter. </p>
+            <p>Welcome aboard <b> {{ company }} </b>  </p>
+            <p>Sincerely,  </p><br><br>
 
-            <img src="https://rms2.rhapsody.ae/product_image/signature.jpg" width="100" height="50"><img src="https://rms2.rhapsody.ae/product_image/company_seal.jpg"><br/>
-        _____________________
 
-        <p>Hr {{hr_name}},<br>Human Resources<br>The Thought Factory</p>
-        
-       
-        <hr><br>
+            <p>________________<br> Benito Seelan <br> Human Resources <br>{{ company }}</p>
+            <hr>
 
-        <h5>ACCEPTANCE</h5>
+            <p><b>ACCEPTANCE</b></p>
+            <P>I,  <b>{{ fname }} {{ lname }}</b>  acknowledge I have read and agree to the terms and conditions set out in this Offer of Employment and accept this offer of a <b>{{ position }}</b>  with <b>{{ company }}</b>. Upon execution of this Offer of Employment, I understand and agree that this Offer of Employment shall constitute a formal contract of employment.</P>
 
-            <p>I accept employment with The Thought Factory under the terms and conditions set forth in this letter:</p>
-        
             <p>Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; __________________________________________</p>           
 
-         
             <p>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  __________________________________________</p> 
 
-            
             <p>Printed Name&nbsp;&nbsp;&nbsp;&nbsp; __________________________________________ </p> 
 
 

@@ -252,13 +252,8 @@
               <form method="POST" class="post-form" action="check_out_attn/">  
                 {% csrf_token %}  
                
-<<<<<<< HEAD
                 <input type="hidden" name="checkout_lat" id="Hid_checkoutlat"  value="00.0000000"></input>
                 <input type="hidden" name="checkout_lang" id="Hid_checkoutlang"  value="00.0000000"></input>
-=======
-                <input type="hidden" name="checkout_lat" id="Hid_checkoutlat" value="00.0000000"></input>
-                <input type="hidden" name="checkout_lang" id="Hid_checkoutlang" value="00.0000000"></input>
->>>>>>> origin/hrms-09-02-2022
                 <input type="hidden" name="checkout_location" id="Hid_outinlocation"></input>
 
                 <div class="row">
@@ -387,11 +382,7 @@
                       <span class="CP"><span>{{ new.employee_id}} &nbsp;-&nbsp;</span><b>{{ new.first_name}} {{ new.last_name}}</b> </span><br>
                       <small>{{ new.department.name}}&nbsp;-&nbsp;{{ new.role.name}}</small> 
                       <div class="usr_cl">
-<<<<<<< HEAD
-                          <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone}}</small> 
-=======
                           <small><i class="fas fa-mobile"></i>&nbsp; {{ new.work_phone|default_if_none:'-'}}</small> 
->>>>>>> origin/hrms-09-02-2022
                       </div> 
                       <hr style="margin-top: 1rem;margin-bottom: 1rem;">
                   </div>
@@ -863,11 +854,7 @@ $(document).ready(function() {
       //alert('v');
           geo_loc = processGeolocationResult(position);
           currLatLong = geo_loc.split(",");
-<<<<<<< HEAD
           //alert(currLatLong);
-=======
-          // alert(currLatLong);
->>>>>>> origin/hrms-09-02-2022
           initializeCurrent(currLatLong[0], currLatLong[1]);
  
      });

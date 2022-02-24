@@ -40,7 +40,7 @@ from app.models.leave_balance_model import Leave_Balance
 from dateutil import relativedelta
 import os
 from django.conf import settings
-from app.views.restriction_view import admin_only,role_name
+from app.views.restriction_view import admin_only, role_name
 from app.models.location_model import Location
 import pandas as pd
 from django.core.files.storage import FileSystemStorage
@@ -48,6 +48,7 @@ import uuid
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 @login_required(login_url="/login/")
 def roles(request):
@@ -97,38 +98,40 @@ def employees(request):
             # print(reporting_name.first_name)
             obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'email': data.email_id, 'is_active': data.is_active, 'reportee': reporting_name.first_name +
                        ' '+reporting_name.last_name, 'role': data.role.name if data.role else None, 'dept': data.department.name if data.department else None})
-        else: 
+        else:
             obj.append({'employee_id': data.employee_id, 'name': data.first_name+' '+data.last_name, 'is_active': data.is_active, 'email': data.email_id,
                        'reportee': None,  'role': data.role.name if data.role else None, 'dept': data.department.name if data.department else None})
 
-    # print(obj) 
+    # print(obj)
     employees = Employee.objects.filter(is_active='1')
     department = Department.objects.filter(is_active=1)
     roles = Group.objects.all()
-    
-    context = {'employees': obj, 'emp':employees, 'roles': roles, 'department': department,}
+
+    context = {'employees': obj, 'emp': employees,
+               'roles': roles, 'department': department, }
     return render(request, "employee/index.html", context)
 
 
 def snippets(request):
     roles = Group.objects.filter(is_active='1')
-    emp_id =    request.POST.get('emp_id')
-    csrf =    request.POST.get('csrfmiddlewaretoken')
-    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type'))).annotate(test1=Subquery(Location.objects.filter(id = OuterRef('location_id')).values('location')))
+    emp_id = request.POST.get('emp_id')
+    csrf = request.POST.get('csrfmiddlewaretoken')
+    final_list = Employee.objects.filter(employee_id=emp_id).annotate(test=Subquery(Group.objects.filter(id=OuterRef('role')).values(
+        'role_type'))).annotate(test1=Subquery(Location.objects.filter(id=OuterRef('location_id')).values('location')))
     test = final_list.values_list('role', flat=True)
     loc_id = final_list.values_list('location_id', flat=True)
     x = str(test)
-    y = int(x[11]) 
+    y = int(x[11])
     x1 = str(loc_id)
-    if(x1 == "None" or x1 == None or x1 == "<QuerySet [None]>" ):
-     x1 = '53'
-     y1 = int(x1)
+    if(x1 == "None" or x1 == None or x1 == "<QuerySet [None]>"):
+        x1 = '53'
+        y1 = int(x1)
     else:
-     y1 = int(x1[11]) 
-    roles = Group.objects.filter(id = y) 
-    locs = Location.objects.filter(id = y1) 
+        y1 = int(x1[11])
+    roles = Group.objects.filter(id=y)
+    locs = Location.objects.filter(id=y1)
     final_list_arr = list(chain(final_list, roles, locs))
-    
+
     jsondata = serializers.serialize('json', final_list_arr)
    # return HttpResponse(y1)
     return HttpResponse(jsondata, content_type='application/json')
@@ -155,27 +158,27 @@ def add_employee(request):
             if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                handle_uploaded_file(
+                    request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
             else:
                 file_name = None
-            
 
             if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_extesion = os.path.splitext(
+                    str(request.FILES['signature']))[1]
+                handle_uploaded_file(
+                    request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 s_file_name = None
-            
-         
 
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
             seating_location = request.POST.get('seating_location')
             location1 = request.POST.get('location')
-            #return HttpResponse(location)
+            # return HttpResponse(location)
             title = request.POST.get('title')
 
             date_of_joining = request.POST.get('date_of_joining')
@@ -251,14 +254,17 @@ def add_employee(request):
                 passport_expir_date = None
 
             if request.FILES.get('psssport_url', False):
-                s_name = os.path.splitext(str(request.FILES['psssport_url']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['psssport_url']))[1]
-                handle_uploaded_file(request.FILES['psssport_url'], current_date_time, 'passport_images')
+                s_name = os.path.splitext(
+                    str(request.FILES['psssport_url']))[0]
+                s_extesion = os.path.splitext(
+                    str(request.FILES['psssport_url']))[1]
+                handle_uploaded_file(
+                    request.FILES['psssport_url'], current_date_time, 'passport_images')
                 passport_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 passport_file_name = None
 
-            passport_num = request.POST.get('passport_num')    
+            passport_num = request.POST.get('passport_num')
 
             #created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             #updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -289,11 +295,11 @@ def add_employee(request):
 
                                               job_description=job_description, expertise=expertise,
                                               about_me=about_me, date_of_exit=date_of_exit, gender=gender,
-                                              profile = file_name,
-                                              signature = s_file_name,
-                                              passport_num = passport_num,
-                                              passport_exp_date = passport_expir_date,
-                                              psssport_url = passport_file_name,
+                                              profile=file_name,
+                                              signature=s_file_name,
+                                              passport_num=passport_num,
+                                              passport_exp_date=passport_expir_date,
+                                              psssport_url=passport_file_name,
 
                                               )
                 # obj.save()
@@ -455,7 +461,7 @@ def add_employee(request):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id ):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None), is_active='1', leave_type_id=leave_id):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -771,33 +777,33 @@ def add_employee(request):
                                             # return HttpResponse(each_effect.accrual_period)
                                             if each_effect.accrual_period == "01":  # Yearly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * years)
+                                                    float(each_effect.effective_no_of_days) * years)
                                             elif each_effect.accrual_period == "00":  # One Time
                                                 leave_no_of_days = each_effect.effective_no_of_days
                                             # float(float(each_effect.effective_no_of_days) * years)
                                             elif each_effect.accrual_period == "11":  # monthly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * months)
+                                                    float(each_effect.effective_no_of_days) * months)
                                             #leave_no_of_days = 1
                                             elif each_effect.accrual_period == "16":  # half yearly
                                                 total_month = float(months / 2)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "14":  # Tri annualy
                                                 total_month = float(months / 4)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "13":  # Quaterly
                                                 total_month = float(months / 3)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "12":  # Bi Monthly
                                                 total_month = float(months / 2)
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * total_month)
+                                                    float(each_effect.effective_no_of_days) * total_month)
                                             elif each_effect.accrual_period == "315":  # Semi Monthly
                                                 leave_no_of_days = float(
-                                                float(each_effect.effective_no_of_days) * months)
+                                                    float(each_effect.effective_no_of_days) * months)
                                             # bi Weekly
                                             elif (each_effect.accrual_period == "22") or (each_effect.accrual_period == "21"):
                                                 leave_no_of_days = 1
@@ -805,7 +811,8 @@ def add_employee(request):
                                                     date1 - timedelta(days=date1.weekday()))
                                                 monday2 = (
                                                     date2 - timedelta(days=date2.weekday()))
-                                                week = (monday2 - monday1).days / 7
+                                                week = (
+                                                    monday2 - monday1).days / 7
                                                 leave_no_of_days = float(
                                                     float(each_effect.effective_no_of_days) * week)
                                             # return HttpResponse(leave_no_of_days)
@@ -851,25 +858,25 @@ def add_employee(request):
                                                 # return HttpResponse(Forward_leave_cont)
                                             elif each_effect.reset_period == "00":  # One Time
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * years)
+                                                    float(Forward_leave_cont) * years)
                                             elif each_effect.reset_period == "11":  # monthly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
+                                                    float(Forward_leave_cont) * months)
                                             elif each_effect.reset_period == "16":  # Halfly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 2)
+                                                    float(Forward_leave_cont) * months / 2)
                                             elif each_effect.reset_period == "14":  # Triannually
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 3)
+                                                    float(Forward_leave_cont) * months / 3)
                                             elif each_effect.reset_period == "13":  # Quarterly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months / 4)
+                                                    float(Forward_leave_cont) * months / 4)
                                             elif each_effect.reset_period == "12":  # Bi Monthly
                                                 leave_no_of_days = float(
-                                                float(Forward_leave_cont) * months)
+                                                    float(Forward_leave_cont) * months)
                                             elif each_effect.reset_period == "315":  # Semi Monthly
                                                 monday1 = (
-                                                date1 - timedelta(days=date1.weekday()))
+                                                    date1 - timedelta(days=date1.weekday()))
                                             monday2 = (
                                                 date2 - timedelta(days=date2.weekday()))
                                             week = (monday2 - monday1).days / 7
@@ -892,7 +899,8 @@ def add_employee(request):
                                             )
                                             balance_leave.save()
 
-                    messages.success(request, first_name +' Employee was created! ')
+                    messages.success(request, first_name +
+                                     ' Employee was created! ')
                     html_template = loader.get_template('employee/index.html')
                     # return HttpResponse(html_template.render(request))
                     # return render(request, "employees")
@@ -905,7 +913,7 @@ def add_employee(request):
 
                 context_role.update({"form": form})
                 messages.error(
-                    request, ' Employee or EmailID Already Exists! ', context_role)
+                    request, ' Employee or EmailID Already Exists! ')
                 context = {'form': form}
                 return render(request, "employee/add_employee.html", context)
 
@@ -913,7 +921,7 @@ def add_employee(request):
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(
         is_active=1).exclude(employee_id=request.user.emp_id)
-    loc = Location.objects.filter(is_active=1)    
+    loc = Location.objects.filter(is_active=1)
     context_role = {
         'roles': role,
         'reporting': reporting,
@@ -938,9 +946,8 @@ def handle_uploaded_file(f, current_date_time, folder):
             destination.write(chunk)
 
 
-
 def update_employee(request, pk):
-   
+
     employee = Employee.objects.get(employee_id=pk)
     form = EmployeeForm(instance=employee)
     # print(role)
@@ -959,13 +966,14 @@ def update_employee(request, pk):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            employee = Employee.objects.get(employee_id = pk)            
+            employee = Employee.objects.get(employee_id=pk)
 
             # if len(request.FILES) != 0:
             if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                handle_uploaded_file(
+                    request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
             else:
                 if employee.profile == None:
@@ -975,8 +983,10 @@ def update_employee(request, pk):
 
             if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_extesion = os.path.splitext(
+                    str(request.FILES['signature']))[1]
+                handle_uploaded_file(
+                    request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 if employee.signature == None:
@@ -984,7 +994,6 @@ def update_employee(request, pk):
                 else:
                     s_file_name = employee.signature
 
-         
             reporting_to = request.POST.get('reporting_to')
             source_of_hire = request.POST.get('source_of_hire')
             seating_location = request.POST.get('seating_location')
@@ -1045,16 +1054,19 @@ def update_employee(request, pk):
 
             date = request.POST.get('passport_exp_date')
             if date != "" and date != None:
-                #return HttpResponse(date)
+                # return HttpResponse(date)
                 d4 = datetime.datetime.strptime(date, '%d-%m-%Y')
                 passport_expir_date = d4.strftime('%Y-%m-%d')
             else:
                 passport_expir_date = None
 
             if request.FILES.get('psssport_url', False):
-                s_name = os.path.splitext(str(request.FILES['psssport_url']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['psssport_url']))[1]
-                handle_uploaded_file(request.FILES['psssport_url'], current_date_time, 'passport_images')
+                s_name = os.path.splitext(
+                    str(request.FILES['psssport_url']))[0]
+                s_extesion = os.path.splitext(
+                    str(request.FILES['psssport_url']))[1]
+                handle_uploaded_file(
+                    request.FILES['psssport_url'], current_date_time, 'passport_images')
                 passport_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 passport_file_name = None
@@ -1062,10 +1074,10 @@ def update_employee(request, pk):
             passport_num = request.POST.get('passport_num')
 
             obj = Employee.objects.filter(employee_id=pk).update(
-                employee_id=employee_id, 
+                employee_id=employee_id,
                 first_name=first_name,
-                last_name=last_name, 
-                email_id=email_id, 
+                last_name=last_name,
+                email_id=email_id,
                 nick_name=nick_name,
                 department=department,
                 # reporting_to=reporting_to,
@@ -1096,9 +1108,9 @@ def update_employee(request, pk):
                 gender=gender,
                 profile=file_name,
                 signature=s_file_name,
-                passport_num = passport_num,
-                passport_exp_date = passport_expir_date,
-                psssport_url = passport_file_name,
+                passport_num=passport_num,
+                passport_exp_date=passport_expir_date,
+                psssport_url=passport_file_name,
 
             )
 
@@ -1131,7 +1143,7 @@ def update_employee(request, pk):
 
             if date_of_joining != None:
 
-                if not Leave_Balance.objects.filter(employee_id=employee_id, is_active = 1).exists():
+                if not Leave_Balance.objects.filter(employee_id=employee_id, is_active=1).exists():
 
                     for each in Employee.objects.filter(is_active='1', employee_id=employee_id):
 
@@ -1141,7 +1153,8 @@ def update_employee(request, pk):
                         gender = each.gender
                         # print(gender)
                         if not gender:
-                            messages.error(request,'Please Update your gender! ')
+                            messages.error(
+                                request, 'Please Update your gender! ')
                             return redirect('profile')
                         marital_status = each.marital_status
                         department = each.department
@@ -1187,7 +1200,7 @@ def update_employee(request, pk):
                                 reset_carry_forward_overall_limit = each_effect.reset_carry_forward_overall_limit
                                 reset_carry_forward_expiry_in = each_effect.reset_carry_forward_expiry_in
                                 reset_carry_forward_expiry_month = each_effect.reset_carry_forward_expiry_month
-                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None) , is_active='1', leave_type_id=leave_id):
+                                for each_applic in Leave_Applicable.objects.filter(Q(gender=gender) | Q(gender=None), is_active='1', leave_type_id=leave_id):
 
                                     exception_dept = each_applic.exception_dept
                                     exception_desgn = each_applic.exception_desgn
@@ -1376,17 +1389,17 @@ def update_employee(request, pk):
                                     )
                                     balance_leave.save()
 
-                    messages.success(request, first_name + ' Employee profile was updated! ')
+                    messages.success(request, first_name +
+                                     ' Employee profile was updated! ')
                     if role == 'Admin':
                         return redirect('employees')
                     else:
                         return redirect('profile')
 
-
             role = role_name(request)
 
             messages.success(request, ' Employee was updated! ')
-            
+
             if role == 'Admin':
                 return redirect('employees')
             else:
@@ -1395,7 +1408,8 @@ def update_employee(request, pk):
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
-    reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
+    reporting_to = Reporting.objects.filter(
+        is_active=1, employee_id=request.user.emp_id)
     loc = Location.objects.filter(is_active=1)
     # print(reporting_to)
     context_role = {
@@ -1403,7 +1417,7 @@ def update_employee(request, pk):
         'reporting': reporting,
         'department': department,
         'reporting_to': reporting_to,
-         'location': loc,
+        'location': loc,
     }
 
    # tes = Group.objects.all()
@@ -1412,11 +1426,12 @@ def update_employee(request, pk):
   #  context_role = {'form':form,'employee':employee}
     return render(request, "employee/update_employee.html", context_role)
 
+
 def import_employee(request):
     try:
         if request.method == 'POST' and request.FILES['file']:
 
-            myfile = request.FILES['file']        
+            myfile = request.FILES['file']
             path = myfile.file
 
             df = pd.read_excel(path)
@@ -1429,21 +1444,22 @@ def import_employee(request):
                 # print(d)
 
                 # logger.warning(df['department'][d])
-                
-                if not Employee.objects.filter(employee_id = df['employee_id'][d]).exists():
+
+                if not Employee.objects.filter(employee_id=df['employee_id'][d]).exists():
 
                     obj = Employee.objects.create(
-                        employee_id = df['employee_id'][d].strip(),
-                        first_name = df['first_name'][d].strip(),
-                        last_name = df['last_name'][d].strip(),
-                        email_id = df['email'][d].strip(),
-                        nick_name = None,
-                        department = Department.objects.get(name = df['department'][d].strip()),
-                        # location = Location.objects.get(name = df['location'][d]), 
-                        role = Group.objects.get(name = df['role'][d].strip()), 
-                        gender = df['gender'][d].strip(),
-                        is_active = 1,
-                    
+                        employee_id=df['employee_id'][d].strip(),
+                        first_name=df['first_name'][d].strip(),
+                        last_name=df['last_name'][d].strip(),
+                        email_id=df['email'][d].strip(),
+                        nick_name=None,
+                        department=Department.objects.get(
+                            name=df['department'][d].strip()),
+                        # location = Location.objects.get(name = df['location'][d]),
+                        role=Group.objects.get(name=df['role'][d].strip()),
+                        gender=df['gender'][d].strip(),
+                        is_active=1,
+
                     )
 
                     latest_id = df['employee_id'][d].strip()
@@ -1453,11 +1469,11 @@ def import_employee(request):
                     obj = User(
                         password=hashed_pwd,
                         is_superuser=1,
-                        username= df['first_name'][d].strip(),
-                        first_name= df['last_name'][d].strip(),
-                        last_name= df['last_name'][d].strip(),
-                        email= df['email'][d].strip(),
-                        role= Group.objects.get(name = df['role'][d].strip()), 
+                        username=df['first_name'][d].strip(),
+                        first_name=df['last_name'][d].strip(),
+                        last_name=df['last_name'][d].strip(),
+                        email=df['email'][d].strip(),
+                        role=Group.objects.get(name=df['role'][d].strip()),
                         emp_id=df['employee_id'][d].strip(),
                         is_staff=1,
                         is_active=1,
@@ -1470,16 +1486,16 @@ def import_employee(request):
             messages.success(request, ' Employees imported successfully..! ')
             return redirect('employees')
 
-    except Exception as error:   
-        messages.error(request, ' Please check you excel file.. ')         
-        print(error)
+    except Exception as error:
+        messages.error(request, ' Please check you excel file.. ')
+        # print(error)
         logger.warning(error)
 
     return render(request, "employee/import_employee.html")
 
 
 def update_employee_emp(request, pk):
-   
+
     employee = Employee.objects.get(employee_id=pk)
     form = EmployeeForm(instance=employee)
     # print(role)
@@ -1500,13 +1516,14 @@ def update_employee_emp(request, pk):
 
             current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-            employee = Employee.objects.get(employee_id = pk)            
+            employee = Employee.objects.get(employee_id=pk)
 
             # if len(request.FILES) != 0:
             if request.FILES.get('profile', False):
                 name = os.path.splitext(str(request.FILES['profile']))[0]
                 extesion = os.path.splitext(str(request.FILES['profile']))[1]
-                handle_uploaded_file(request.FILES['profile'], current_date_time, 'profile_images')
+                handle_uploaded_file(
+                    request.FILES['profile'], current_date_time, 'profile_images')
                 file_name = name+"-"+current_date_time+""+extesion
             else:
                 if employee.profile == None:
@@ -1516,8 +1533,10 @@ def update_employee_emp(request, pk):
 
             if request.FILES.get('signature', False):
                 s_name = os.path.splitext(str(request.FILES['signature']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['signature']))[1]
-                handle_uploaded_file(request.FILES['signature'], current_date_time, 'signature_images')
+                s_extesion = os.path.splitext(
+                    str(request.FILES['signature']))[1]
+                handle_uploaded_file(
+                    request.FILES['signature'], current_date_time, 'signature_images')
                 s_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 if employee.signature == None:
@@ -1525,7 +1544,6 @@ def update_employee_emp(request, pk):
                 else:
                     s_file_name = employee.signature
 
-         
             # reporting_to = request.POST.get('reporting_to')
             # source_of_hire = request.POST.get('source_of_hire')
             # seating_location = request.POST.get('seating_location')
@@ -1591,7 +1609,7 @@ def update_employee_emp(request, pk):
                 date_of_exit = d3.strftime('%Y-%m-%d')
             else:
                 date_of_exit = None
-                
+
             gender = request.POST.get('gender')
             about_me = request.POST.get('about_me')
             expertise = request.POST.get('expertise')
@@ -1599,34 +1617,36 @@ def update_employee_emp(request, pk):
 
             date = request.POST.get('passport_exp_date')
             if date != "" and date != None:
-                #return HttpResponse(date)
+                # return HttpResponse(date)
                 d4 = datetime.datetime.strptime(date, '%d-%m-%Y')
                 passport_expir_date = d4.strftime('%Y-%m-%d')
             else:
                 passport_expir_date = None
 
             if request.FILES.get('psssport_url', False):
-                s_name = os.path.splitext(str(request.FILES['psssport_url']))[0]
-                s_extesion = os.path.splitext(str(request.FILES['psssport_url']))[1]
-                handle_uploaded_file(request.FILES['psssport_url'], current_date_time, 'passport_images')
+                s_name = os.path.splitext(
+                    str(request.FILES['psssport_url']))[0]
+                s_extesion = os.path.splitext(
+                    str(request.FILES['psssport_url']))[1]
+                handle_uploaded_file(
+                    request.FILES['psssport_url'], current_date_time, 'passport_images')
                 passport_file_name = s_name+"-"+current_date_time+""+s_extesion
             else:
                 passport_file_name = None
 
             passport_num = request.POST.get('passport_num')
 
-            
             # return HttpResponse(pk)
             obj = Employee.objects.filter(employee_id=pk).update(
                 employee_id=employee_id,
                 first_name=first_name,
-                last_name=last_name, 
-                email_id=email_id, 
+                last_name=last_name,
+                email_id=email_id,
                 nick_name=nick_name,
                 profile=file_name,
 
-                mobile_number = mobile_number,
-                work_phone = work_phone,
+                mobile_number=mobile_number,
+                work_phone=work_phone,
                 code_name=code_name,
                 code_num=code_num,
                 other_email=other_email,
@@ -1654,17 +1674,18 @@ def update_employee_emp(request, pk):
 
             role = role_name(request)
 
-            messages.success(request, first_name + ' Employee profile was updated! ')
+            messages.success(request, first_name +
+                             ' Employee profile was updated! ')
             if role == 'Admin':
                 return redirect('employees')
             else:
                 return redirect('profile')
 
-
     role = Group.objects.all()
     department = Department.objects.filter(is_active=1)
     reporting = Employee.objects.filter(is_active=1).exclude(employee_id=pk)
-    reporting_to = Reporting.objects.filter(is_active=1, employee_id=request.user.emp_id)
+    reporting_to = Reporting.objects.filter(
+        is_active=1, employee_id=request.user.emp_id)
     loc = Location.objects.filter(is_active=1)
     # print(reporting_to)
     context_role = {
@@ -1672,7 +1693,7 @@ def update_employee_emp(request, pk):
         'reporting': reporting,
         'department': department,
         'reporting_to': reporting_to,
-         'location': loc,
+        'location': loc,
     }
 
    # tes = Group.objects.all()
@@ -1680,7 +1701,6 @@ def update_employee_emp(request, pk):
     # print(context_role)
   #  context_role = {'form':form,'employee':employee}
     return render(request, "employee/update_employee.html", context_role)
-
 
 
 def delete_employee(request, pk):
@@ -1695,6 +1715,7 @@ def delete_employee(request, pk):
 
     messages.success(request, 'Employee was deleted! ')
     return redirect('employees')
+
 
 def status_employee(request, pk, val):
     # return HttpResponse(val)
@@ -1711,23 +1732,25 @@ def status_employee(request, pk, val):
 
 
 def reporting(request):
-    reporting_id=request.user.emp_id
+    reporting_id = request.user.emp_id
     # print(reporting_id)
-    reporting = Reporting.objects.select_related().filter(Q(is_active=1) & Q(reporting_id=reporting_id) )
+    reporting = Reporting.objects.select_related().filter(
+        Q(is_active=1) & Q(reporting_id=reporting_id))
     # print(reporting)
     # for report_employee in reporting:
     #     subj = report_employee.employee.first_name
     # # test=reporting.report_employee.first_name
     # print(subj)
     # reporting=Employee.objects.filter(is_active=1)
-    context = {'reporting': reporting }
+    context = {'reporting': reporting}
     return render(request, "employee/reporting.html", context)
+
 
 def filter_employee(request):
 
-#        print('dkldm')
+    #        print('dkldm')
     # ##employee = Employee.objects.filter(is_active='1')
-#     variables for filter
+    #     variables for filter
 
     employee = Employee.objects.select_related().all()
 
@@ -1737,29 +1760,28 @@ def filter_employee(request):
     department = request.GET.get('department')
 
     if request.GET.get('start_date') != '':
-      start = datetime.strptime(request.GET.get('start_date'),
-                  '%d-%m-%Y').strftime('%Y-%m-%d')
+        start = datetime.strptime(request.GET.get('start_date'),
+                                  '%d-%m-%Y').strftime('%Y-%m-%d')
     else:
-      start = ''
+        start = ''
 
     if request.GET.get('end_date') != '':
-      end = datetime.strptime(request.GET.get('end_date'),
-                              '%d-%m-%Y').strftime('%Y-%m-%d')
+        end = datetime.strptime(request.GET.get('end_date'),
+                                '%d-%m-%Y').strftime('%Y-%m-%d')
     else:
-      end = ''
+        end = ''
 
     if query != '':
-      employee = employee.filter(employee_id=query)
+        employee = employee.filter(employee_id=query)
     if name != '':
-      employee = employee.filter(first_name=name)
+        employee = employee.filter(first_name=name)
     if role != '':
-      employee = employee.filter(role=role)
+        employee = employee.filter(role=role)
     if department != '':
-      employee = employee.filter(department=department)
+        employee = employee.filter(department=department)
     if start != '' and end != '':
-      employee = employee.filter(date_of_joining__range=(start,
-                  end))
-
+        employee = employee.filter(date_of_joining__range=(start,
+                                                           end))
 
     obj = []
 
@@ -1770,7 +1792,7 @@ def filter_employee(request):
             reporting_name = \
                 Employee.objects.get(employee_id=reporting[0].reporting_id)
 
-                  # print(reporting_name.first_name)
+            # print(reporting_name.first_name)
 
             obj.append({
                 'employee_id': data.employee_id,
@@ -1778,10 +1800,10 @@ def filter_employee(request):
                 'email': data.email_id,
                 'is_active': data.is_active,
                 'reportee': reporting_name.first_name + ' '
-                    + reporting_name.last_name,
+                + reporting_name.last_name,
                 'role': (data.role.name if data.role else None),
                 'dept': (data.department.name if data.department else None),
-                })
+            })
         else:
             obj.append({
                 'employee_id': data.employee_id,
@@ -1791,7 +1813,7 @@ def filter_employee(request):
                 'reportee': None,
                 'role': (data.role.name if data.role else None),
                 'dept': (data.department.name if data.department else None),
-                })
+            })
 
             #     else:
             #         employee = Employee.objects.filter(is_active='1')
@@ -1811,31 +1833,33 @@ def filter_employee(request):
         employees = Employee.objects.filter(is_active='1')
         roles = Group.objects.all()
 
-            # return HttpResponse(employee)
-            #     print(employee);
+        # return HttpResponse(employee)
+        #     print(employee);
     department = Department.objects.filter(is_active=1)
-    context = {'employees': obj, 'roles': roles, 'emp': employees, 'department': department}
+    context = {'employees': obj, 'roles': roles,
+               'emp': employees, 'department': department}
     return render(request, 'employee/index.html', context)
 
 
 def view_more(request):
-    emp_id =    request.POST.get('id')
-    csrf =    request.POST.get('csrfmiddlewaretoken')
-    final_list = Employee.objects.filter(employee_id = emp_id).annotate(test=Subquery(Group.objects.filter(id = OuterRef('role')).values('role_type'))).annotate(test1=Subquery(Location.objects.filter(id = OuterRef('location_id')).values('location')))
+    emp_id = request.POST.get('id')
+    csrf = request.POST.get('csrfmiddlewaretoken')
+    final_list = Employee.objects.filter(employee_id=emp_id).annotate(test=Subquery(Group.objects.filter(id=OuterRef('role')).values(
+        'role_type'))).annotate(test1=Subquery(Location.objects.filter(id=OuterRef('location_id')).values('location')))
     test = final_list.values_list('role', flat=True)
     loc_id = list(final_list.values_list('location_id', flat=False))
     x = str(test)
-    y = int(x[11]) 
+    y = int(x[11])
     x1 = (loc_id[0])
-    if(x1 == "(None,)" ):
-     x1 = '53'
-     y1 = int(x1)
+    if(x1 == "(None,)"):
+        x1 = '53'
+        y1 = int(x1)
     else:
-     y1 = (x1[0]) 
-    roles = Group.objects.filter(id = y) 
-    locs = Location.objects.filter(id = y1) 
+        y1 = (x1[0])
+    roles = Group.objects.filter(id=y)
+    locs = Location.objects.filter(id=y1)
     final_list_arr = list(chain(final_list, roles, locs))
-    
+
     jsondata = serializers.serialize('json', final_list_arr)
    # return HttpResponse(y1)
     return HttpResponse(jsondata, content_type='application/json')

@@ -125,6 +125,39 @@
                    
                     </ul>
                 </div>
+            {% if role == "Business_head" %}     
+                <a class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}{% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}" 
+                href="#navbar-onboarding" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-onboarding">
+                <i class="fas fa-user-plus text-primary"></i>
+                    <span class="nav-link-text">Onboarding</span>
+                </a>
+                <div class="collapse {% if request.resolver_match.url_name == "business_approve" %}show{% endif %} " id="navbar-onboarding">
+                    <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#onboarding" data-toggle="collapse" {% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %} {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}    role="button" aria-expanded="true" aria-controls="navbar-leave">
+                            <span class="sidenav-mini-icon"> C </span>
+                            <span class="sidenav-normal"> Candidate </span>
+                        </a>
+                        <div id="onboarding" class="collapse {% if request.resolver_match.url_name == "business_approve" %}show{% endif %} " >
+                                    
+                            <ul>
+                                <li class="nav-item">
+                                    <a href="{% url 'business_approve' %}" class="nav-link {% if request.resolver_match.url_name == "business_approve" %}active{% endif %} ">
+                                        <span class="sidenav-mini-icon"> A </span>
+                                        <span class="sidenav-normal"> Approval </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        
+                    </li>
+                
+                    </ul>
+                </div>
+                
+            {% endif %}
 
             {% if role == "Manager" %}   
 
@@ -205,13 +238,40 @@
                 <i class="fas fa-user-plus text-primary"></i>
                     <span class="nav-link-text">Onboarding</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "onboard_employees" %}show{% endif %} {% if request.resolver_match.url_name == "add_onboard_employee" %}show{% endif %}" id="navbar-onboarding">
+                <div class="collapse {% if request.resolver_match.url_name == "onboard_employees" %}show{% endif %} {% if request.resolver_match.url_name == "add_onboard_employee" %}show{% endif %} {% if request.resolver_match.url_name == "approve" %}show{% endif %}" id="navbar-onboarding">
                     <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                        <a href="/onboard_employees/" class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %} {% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %} ">
-                        <span class="sidenav-mini-icon"> C </span>
-                        <span class="sidenav-normal"> Candidate </span>
+                        <a class="nav-link" href="#onboarding" data-toggle="collapse" {% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %} {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %}    role="button" aria-expanded="true" aria-controls="navbar-leave">
+                            <span class="sidenav-mini-icon"> C </span>
+                            <span class="sidenav-normal"> Candidate </span>
                         </a>
+                        <div id="onboarding" class="collapse {% if request.resolver_match.url_name == "add_onboard_employee" %}show{% endif %} {% if request.resolver_match.url_name == "onboard_employees" %}show{% endif %}{% if request.resolver_match.url_name == "approve" %}show{% endif %} " >
+                                    
+                            <ul>
+                                <li class="nav-item">
+                                    <a href="{% url 'add_onboard_employee' %}" class="nav-link {% if request.resolver_match.url_name == "add_onboard_employee" %}active{% endif %}  ">
+                                        <span class="sidenav-mini-icon"> L </span>
+                                        <span class="sidenav-normal"> Login </span>
+                                    </a>
+                                </li>
+                            
+                                 <li class="nav-item">
+                                    <a href="{% url 'onboard_employees' %}" class="nav-link {% if request.resolver_match.url_name == "onboard_employees" %}active{% endif %} ">
+                                        <span class="sidenav-mini-icon"> E </span>
+                                        <span class="sidenav-normal"> Enrollment </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'approve' %}" class="nav-link {% if request.resolver_match.url_name == "approve" %}active{% endif %} ">
+                                        <span class="sidenav-mini-icon"> A </span>
+                                        <span class="sidenav-normal"> Approval Status </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        
                     </li>
                    
                     </ul>
