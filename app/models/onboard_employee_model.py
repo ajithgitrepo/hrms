@@ -70,6 +70,7 @@ class Onboard_Employee(models.Model):
     is_approved = models.PositiveSmallIntegerField(default=0)
     offer_status = models.PositiveSmallIntegerField(default=0)
     job_description=models.TextField(blank = False, null = True)
+    validity_date=models.DateField(max_length=50, blank = True, null = True)
 
   
     class Meta:  

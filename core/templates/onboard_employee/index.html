@@ -324,6 +324,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                             <select class="form-control select2 position_select" required  id="TxtPosition">
                               <option value="">Select</option>
                               <option value="Merchandiser">Merchandiser</option>
+                              <option value="Field Manager">Field Manager</option>
                           </select>
                           </div>
                         </div>
@@ -383,6 +384,13 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         <div class="form-group"> 
                           <label class="form-control-label" for="input-email">Joining Date</label>
                           <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate" >
+
+                        </div>
+                      </div>
+                      <div class="col-lg-4"> 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Validity Date</label>
+                          <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="validity_date" >
 
                         </div>
                       </div>
@@ -466,6 +474,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                           <select class="form-control select2 position_select" required  id="update_position">
                             <option value="">Select</option>
                             <option value="Merchandiser">Merchandiser</option>
+                            <option value="Field Manager">Field Manager</option>
                         </select>
                         </div>
                       </div>
@@ -537,6 +546,14 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
 
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
+                        <label class="form-control-label" for="input-email">Validity Date</label>
+                        <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="update_validity_date" >
+
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4"> 
+                      <div class="form-group"> 
                         <label class="form-control-label" for="input-email">Approver</label>
                         <select class="form-control"  id="update_approver">
                           <option value="">Select</option>
@@ -585,11 +602,83 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
 <script src="/static/assets/vendor/moment.min.js"></script>
 <script src="/static/assets/vendor/bootstrap-datetimepicker.js"></script>
 <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 
   
 <script type="text/javascript">
 
 $("#just_wait").hide();
+
+CKEDITOR.replace("job_description");
+CKEDITOR.instances["job_description"].setData()
+$('#TxtPosition').on('change', function() {
+  value = this.value
+  html = ""
+  if(value == "Merchandiser")
+  {
+    html +='<ul>';
+      html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
+      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
+      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
+      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
+      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
+      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
+      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
+      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+      html +='<li>Gathering information on market trends and customers’ reactions to products.</li>';
+      html +='<li>Perform other duties as assigned.</li>';
+    html +='</ul>';
+  }
+  if(value == "Field Manager")
+  {
+    html +='<ul>';
+      html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
+      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
+      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
+      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
+      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
+      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
+      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
+      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+    html +='</ul>';
+  }
+  CKEDITOR.replace("job_description");
+  CKEDITOR.instances["job_description"].setData(html)
+});
+$('#update_position').on('change', function() {
+  value = this.value
+  html = ""
+  if(value == "Merchandiser")
+  {
+    html +='<ul>';
+      html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
+      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
+      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
+      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
+      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
+      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
+      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
+      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+      html +='<li>Gathering information on market trends and customers’ reactions to products.</li>';
+      html +='<li>Perform other duties as assigned.</li>';
+    html +='</ul>';
+  }
+  if(value == "Field Manager")
+  {
+    html +='<ul>';
+      html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
+      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
+      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
+      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
+      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
+      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
+      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
+      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+    html +='</ul>';
+  }
+  CKEDITOR.replace("update_job_description");
+  CKEDITOR.instances["update_job_description"].setData(html)
+});
 
 
 $('[data-type="adhaar-number"]').keyup(function() {
@@ -637,8 +726,10 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             var can_salary = $("#TxtSalary").val();
             var currency = $("#currency").val();
             var can_joindate = $("#TxtJoinDate").val();
+            var validity_date = $("#validity_date").val();
             var approver = $("#approver").val();
-            var job_description = $("#job_description").val();
+            //var job_description = $("#job_description").val();
+            var job_description = CKEDITOR.instances['job_description'].getData();
           
             $("#company").css("border", "1px solid black");
             $("#TxtPosition").css("border", "1px solid black");
@@ -647,6 +738,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             $("#TxtSalary").css("border", "1px solid black");
             $("#currency").css("border", "1px solid black");
             $("#TxtJoinDate").css("border", "1px solid black");
+            $("#validity_date").css("border", "1px solid black");
             $("#approver").css("border", "1px solid black");
             $("#job_description").css("border", "1px solid black");
             
@@ -689,17 +781,23 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                   $("#TxtJoinDate").focus();
                   
             }
-            if ($('#job_description').val() == "") {
+            if ($('#validity_date').val() == "") {
+              $("#validity_date").css("border", "1px solid red");
+              $("#validity_date").focus();
+              
+        }
+
+            {% comment %} if ($('#job_description').val() == "") {
                 $("#job_description").css("border", "1px solid red");
                 $("#job_description").focus();
                 
-          }
+          } {% endcomment %}
             {% comment %} if ($('#approver').val() == "") {
               $("#approver").css("border", "1px solid red");
               $("#approver").focus();
               
         } {% endcomment %}
-        if (company && can_joindate && can_salary && can_position && currency && job_type && business_unit && job_description) {
+        if (company && can_joindate && can_salary && can_position && currency && job_type && business_unit && validity_date) {
                 $("#just_wait").show();
                 swal({
                     title: 'Are you sure?',
@@ -716,7 +814,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                         $.ajax({  
                         type: "POST",  
                         url: "/enroll_info/",  
-                        data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description},
+                        data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description,validity_date:validity_date},
                         success: $.proxy(function(data) {
                             
                          // alert(data)
@@ -769,8 +867,12 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
         var can_salary = $("#update_salary").val();
         var currency = $("#update_currency").val();
         var can_joindate = $("#update_joinDate").val();
+        var update_validity_date = $("#update_validity_date").val();
         var approver = $("#update_approver").val();
-        var job_description = $("#update_job_description").val();
+        //var job_description = $("#update_job_description").val();
+        var job_description = CKEDITOR.instances['update_job_description'].getData();
+
+
      
             swal({
                 title: 'Are you sure?',
@@ -787,7 +889,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                     $.ajax({  
                     type: "POST",  
                     url: "/update_enroll_info/",  
-                    data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description},
+                    data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description,update_validity_date:update_validity_date},
                     success: $.proxy(function(data) {
                         
                      // alert(data)
@@ -985,7 +1087,9 @@ $(document).on('click', '.update', function(){
                                   if(check == false)
                                   {
                                         check = true;
-                                      
+                                        var joindate =item.fields.joining_date.split("-").reverse().join("-");
+                                        var validdate =item.fields.validity_date.split("-").reverse().join("-");
+                                       // alert(newdate)
                                         
                                         $('#update_company').val(item.fields.company);
                                         $('#update_position').val(item.fields.position);
@@ -993,10 +1097,13 @@ $(document).on('click', '.update', function(){
                                         $('#update_business_unit').val(item.fields.business_unit);
                                         $('#update_salary').val(item.fields.salary);
                                         $('#update_currency').val(item.fields.currency);
-                                        $('#update_joinDate').val(item.fields.joining_date);
+                                        $('#update_joinDate').val(joindate);
                                         $('#update_approver').val(item.fields.approver);
-                                        $('#update_job_description').val(item.fields.job_description);
+                                       // $('#update_job_description').val(item.fields.job_description);
+                                        $('#update_validity_date').val(validdate);
                                         //alert(item.fields.approver)
+                                        CKEDITOR.replace("update_job_description");
+                                        CKEDITOR.instances["update_job_description"].setData(item.fields.job_description)
                                      
                                         
                                   }

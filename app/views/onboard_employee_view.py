@@ -53,6 +53,7 @@ from django.contrib.auth.models import User
 import socket
 import random
 import inflect
+import re
 
 #from app.models import QuillModel
 
@@ -331,7 +332,8 @@ def add_onboard_employee(request):
 
                 c = min([len(dependent_name), len(
                     relationship), len(date_of_birth)])
-
+                messages.success(
+                    request, ' Candidate Added Successfully! ')
                 return redirect('onboard_employees')
             else:
                 role = Group.objects.all()
@@ -398,10 +400,11 @@ def send_offer_letter(request):
     allowance_text = p.number_to_words(allowance).split("point", 1)[0]
 
     # print(basic_text.replace(',', ''))
+    code = re.findall("\d+", details[0].code_num)[0]
 
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 
-        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
+        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
         'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 
         'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description, 
         'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance':allowance, 'basic_text': basic_text.replace(',', ''), 
@@ -434,9 +437,9 @@ def send_offer_letter(request):
                 offer_letter_url=filename,
             )
 
-            subject = 'Welcome to TTF'
+            subject = 'Congrats - Offer Letter'
             html_message = render_to_string('mail_templates/candidate_greetings.html', {
-                                            'fname': details[0].first_name, 'lname': details[0].last_name, 'hr_name': request.user.first_name})
+                                            'fname': details[0].first_name, 'lname': details[0].last_name, 'hr_name': request.user.first_name , 'company': details[0].company,'position': details[0].position})
             plain_message = strip_tags(html_message)
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [details[0].email_id]
@@ -481,6 +484,8 @@ def enroll_info(request):
     currency = request.POST.get('currency')
     joining_date = datetime.datetime.strptime(
         request.POST.get('can_joindate'), '%d-%m-%Y')
+    validity_date = datetime.datetime.strptime(
+        request.POST.get('validity_date'), '%d-%m-%Y')    
     job_description = request.POST.get('job_description')
     # print(joining_date)
     approver = request.POST.get('approver')
@@ -496,6 +501,7 @@ def enroll_info(request):
         currency=currency,
         joining_date=joining_date,
         job_description=job_description,
+        validity_date=validity_date,
         approver=approver if approver else None,
         is_approved=0 if approver else 1,
         updated_at=timezone.now()
@@ -515,11 +521,13 @@ def update_enroll_info(request):
     salary = request.POST.get('can_salary')
     currency = request.POST.get('currency')
     joining_date = datetime.datetime.strptime(
-        request.POST.get('can_joindate'), '%Y-%m-%d')
+        request.POST.get('can_joindate'), '%d-%m-%Y')
     job_description = request.POST.get('job_description')
+    update_validity_date=datetime.datetime.strptime(
+        request.POST.get('update_validity_date'), '%d-%m-%Y')
     # print(joining_date)
     approver = request.POST.get('approver')
-    # print(can_id)
+    # print(can_id) 
     # print(approver)
 
     update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
@@ -531,6 +539,7 @@ def update_enroll_info(request):
         currency=currency,
         joining_date=joining_date,
         job_description=job_description,
+        validity_date=update_validity_date,
         approver=approver if approver else None,
         is_approved=0 if approver else 1,
         updated_at=timezone.now()
@@ -552,13 +561,13 @@ def preview_offer_letter(request):
     allowance_text = p.number_to_words(allowance).split("point", 1)[0]
 
     # print(basic_text.replace(',', ''))
-
+    code = re.findall("\d+", details[0].code_num)[0]
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 
-        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 
-        'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 
-        'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description, 
-        'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance':allowance, 'basic_text': basic_text.replace(',', ''), 
+    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
+        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary,'validity_date': details[0].validity_date,
+        'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name,
+        'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
+        'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance':allowance, 'basic_text': basic_text.replace(',', ''),
         'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
     }
 

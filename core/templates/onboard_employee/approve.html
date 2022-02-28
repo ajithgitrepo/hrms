@@ -472,7 +472,9 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                                     type: 'success',
                                     buttonsStyling: false,
                                     confirmButtonClass: 'btn btn-primary'
-                                })
+                                }).then(function() {
+                                location.href = '/approve/';
+                            });
                             }
                             else{
                                 swal({
