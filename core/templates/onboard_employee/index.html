@@ -125,6 +125,27 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
     border-color: #f5365c !important;
 }
 
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
+.button4 {background-color: #2980b9;} 
+
+.modal-open .container-fluid, .modal-open  .container {
+    filter: blur(0px) !important;
+}
+
+
 </style>
 
 {% endblock stylesheets %}
@@ -206,8 +227,9 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                   <th>Name</th>
                   <!-- <th>Description</th> -->
                   <th>Email ID</th>
+                  <th>Documents</th>
                   <th>Enroll</th>
-                  {% comment %} <th>Status</th> {% endcomment %}
+                 
                   <th>Action</th>
                 </tr>
               </thead>
@@ -220,16 +242,26 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                     <td>{{emp.first_name}}</td>
                     <!-- <td>{{emp.description}}</td> -->
                     <td>{{emp.email_id}}</td>
+                    <td> 
+                      <a  href="javascript:void(0);"  data-toggle="modal" data-target="#documentModal" style="color: #5E72E4;"  class="" class="btn btn-info" onclick="view_more('{{emp.candidate_id}}')" title="View">View
+                      </a> 
+                      {% comment %} <a  href="{% static '' %}candidate_documents/cv/{{emp.cv}}" download data-toggle="tooltip" data-original-title="Download File">
+                      <i class="fas fa-download"></i></i>&nbsp;&nbsp;
+                      </a> {% endcomment %}
+                    </td>
 
                     <td> 
                        
                         {% if emp.company %}
                             <a   class="update " style="color: #5e72e4;" data-id="{{ emp.pk }}" data-toggle="tooltip" data-original-title="update" title="update ">Update</a>
+                            <button class="button button4" id="btn_preview_offer" value="{{ emp.candidate_id  }}">Preview</button></td>
                         {% else %}
                             <a class="use-mail" style="color: #5e72e4;" data-id="{{ emp.pk }}" data-toggle="tooltip" data-original-title="add" title="Add Enrollment"> Add +</a>
 
                         {% endif %}
+                       
 
+                        
                     </td>
                      {% comment %} <td>
                         {% if emp.is_active == 1 %}
@@ -282,6 +314,30 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
  
     
   </div>
+
+  <div class="modal fade bd-example-modal-lg" id="documentModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="exampleModalLabel"><b>Candidate Documents</b></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            
+            <div class="modal-body">
+              <div class="container">
+                <div id="accordion" class="accordion">
+                  <div class="card mb-0" id="documents">
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
   
   <div class="card-body">
       <div class="row">
@@ -308,6 +364,12 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                           <div class="form-group"> 
                             <label class="form-control-label" for="input-email">Company</label>
                             <select class="form-control select2 company_select" required  value="{{ form.data.company }}" name="company" id="company">
+                              <option value="">select</option>
+                                {% for comp in company %}
+                                    <option value="{{ comp.id }}" {% if form.data.company == "{{ comp.id }}" %} selected{% endif %}>  {{ comp.name }}</option>
+                                {% endfor %} 
+                              </select>
+                            {% comment %} <select class="form-control select2 company_select" required  value="{{ form.data.company }}" name="company" id="company">
                               <option value="" selected >Select</option>
                               <option value="Rhapsody Merchandising Services L.L.C">Rhapsody Merchandising Services L.L.C</option>
                               <option value="Rhapsody Advertising L.L.C">Rhapsody Advertising L.L.C</option>
@@ -315,12 +377,22 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                               <option value="Green Apple Software Trading L.L.C">Green Apple Software Trading L.L.C</option>
                               <option value="The Thought Factory DMCC">The Thought Factory DMCC</option>
                               <option value="TTF General Trading L.L.C">TTF General Trading L.L.C</option>
-                          </select>
+                          </select> {% endcomment %}
                           </div>
                         </div>
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Position Name</label>
+                            <label class="form-control-label" for="input-email">Business Unit</label>
+                            <select class="form-control" required id="business_unit">
+                              <option value="" selected >Select</option>
+                              
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4"> 
+                          <div class="form-group"> 
+                            <label class="form-control-label" for="input-email">Designation</label>
                             <select class="form-control select2 position_select" required  id="TxtPosition">
                               <option value="">Select</option>
                               <option value="Merchandiser">Merchandiser</option>
@@ -328,16 +400,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                           </select>
                           </div>
                         </div>
-                        <div class="col-lg-4"> 
-                          <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Job Type</label>
-                            <select class="form-control" required id="job_type">
-                              <option value="">Select</option>
-                              <option value="Permanent">Permanent</option>
-                              <option value="part_time">Part Time</option>
-                            </select>
-                          </div>
-                        </div>
+                       
                        
                       </div>
                     
@@ -346,14 +409,14 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
 
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Business Unit</label>
-                            <select class="form-control" required id="business_unit">
+                            <label class="form-control-label" for="input-email">Job Type</label>
+                            <select class="form-control" required id="job_type">
                               <option value="">Select</option>
-                              <option value="rms">RMS</option>
+                              <option value="Permanent">Permanent Employment</option>
+                              <option value="part_time">Part Time Work Permit</option>
                             </select>
                           </div>
                         </div>
-
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
                             <label class="form-control-label" for="input-email">Gross Salary</label>
@@ -420,7 +483,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                 
                 <div class="modal-footer">
 					        {% comment %} <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center> {% endcomment %}
-                 	<center><button id="btn_offer_letter" type="button" class="btn btn-success">Submit</button></center>
+                 	<center><button id="btn_offer_letter" type="button" class="btn btn-primary">Submit</button></center>
                    
                 </div>
                 {% comment %} <span style="float: right;color: red;" id="just_wait">Just wait..</span> {% endcomment %}
@@ -458,19 +521,40 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         <div class="form-group"> 
                           <label class="form-control-label" for="input-email">Company</label>
                           <select class="form-control select2 company_select" required name="company" id="update_company">
+                            <option value="">select</option>
+                              {% for comp in company %}
+                                  <option value="{{ comp.id }}" {% if form.data.company == "{{ comp.id }}" %} selected{% endif %}>  {{ comp.name }}</option>
+                              {% endfor %} 
+                            </select>
+                          {% comment %} <select class="form-control select2 company_select" required name="company" id="update_company">
                             <option value="" selected >Select</option>
                             <option value="Rhapsody Merchandising Services L.L.C" >Rhapsody Merchandising Services L.L.C</option>
                             <option value="Rhapsody Advertising L.L.C">Rhapsody Advertising L.L.C</option>
                             <option value="Woodworks Interior Decoration L.L.C">Woodworks Interior Decoration L.L.C</option>
                             <option value="Green Apple Software Trading L.L.C">Green Apple Software Trading L.L.C</option>
-                            <option value="The Thought Factory DMCC">The Thought Factory DMCC</option>
+                            <option value="The Thought Factory DMCC">The Thought Factocompanyry DMCC</option>
                             <option value="TTF General Trading L.L.C">TTF General Trading L.L.C</option>
-                        </select>
+                        </select> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4"> 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Business Unit</label>
+                          <select class="form-control" required id="update_business_unit">
+                             {% comment %} <option value="" selected >Select</option> {% endcomment %}
+                            {% comment %} <option value="Rhapsody Merchandising Services L.L.C" >Rhapsody Merchandising Services L.L.C</option>
+                            <option value="Rhapsody Advertising L.L.C">Rhapsody Advertising L.L.C</option>
+                            <option value="Woodworks Interior Decoration L.L.C">Woodworks Interior Decoration L.L.C</option>
+                            <option value="Green Apple Software Trading L.L.C">Green Apple Software Trading L.L.C</option>
+                            <option value="The Thought Factory DMCC">The Thought Factocompanyry DMCC</option>
+                            <option value="TTF General Trading L.L.C">TTF General Trading L.L.C</option> {% endcomment %} 
+                          </select>
                         </div>
                       </div>
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Position Name</label>
+                          <label class="form-control-label" for="input-email">Designation</label>
                           <select class="form-control select2 position_select" required  id="update_position">
                             <option value="">Select</option>
                             <option value="Merchandiser">Merchandiser</option>
@@ -478,16 +562,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         </select>
                         </div>
                       </div>
-                      <div class="col-lg-4"> 
-                        <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Job Type</label>
-                          <select class="form-control" required id="update_job_type">
-                            <option value="">Select</option>
-                            <option value="Permanent">Permanent</option>
-                            <option value="part_time">Part Time</option>
-                          </select>
-                        </div>
-                      </div>
+                      
                       {% comment %}                   
                         <div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
                         <div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
@@ -502,10 +577,11 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
 
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Business Unit</label>
-                          <select class="form-control" required id="update_business_unit">
+                          <label class="form-control-label" for="input-email">Job Type</label>
+                          <select class="form-control" required id="update_job_type">
                             <option value="">Select</option>
-                            <option value="rms">RMS</option>
+                            <option value="Permanent">Permanent Employment</option>
+                            <option value="part_time">Part Time Work Permit</option>
                           </select>
                         </div>
                       </div>
@@ -577,7 +653,7 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
               
               <div class="modal-footer">
                 {% comment %} <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center> {% endcomment %}
-                 <center><button id="update_enroll" type="button" class="btn btn-success">Update</button></center>
+                 <center><button id="update_enroll" type="button" class="btn btn-primary">Submit</button></center>
                  
               </div>
               {% comment %} <span style="float: right;color: red;" id="just_wait">Just wait..</span> {% endcomment %}
@@ -611,6 +687,46 @@ $("#just_wait").hide();
 
 CKEDITOR.replace("job_description");
 CKEDITOR.instances["job_description"].setData()
+
+$('#company').on('change', function() {
+  value = this.value;
+  //alert(value);
+      $.ajax({  
+        type: "POST",  
+        url: "/get_business_unit/",  
+        data: {csrfmiddlewaretoken : csrftoken,company_id :value},
+        success: $.proxy(function(data) {
+          //console.log(JSON.stringify(data))
+
+          var $dropdown = $("#business_unit");
+          jQuery.each(data, function(index, item) { //alert(item.model);
+            //alert(item.pk)
+             $dropdown.append($("<option />").val(item.pk).text(item.fields.business_unit));
+            });  
+        })
+      });
+
+});
+
+$('#update_company').on('change', function() {
+  value = this.value;
+  //alert(value);
+      $.ajax({  
+        type: "POST",  
+        url: "/get_business_unit/",  
+        data: {csrfmiddlewaretoken : csrftoken,company_id :value},
+        success: $.proxy(function(data) {
+
+          var $dropdown = $("#update_business_unit");
+          jQuery.each(data, function(index, item) { //alert(item.model);
+           // alert(item.fields.business_unit)
+             $dropdown.append($("<option />").val(item.pk).text(item.fields.business_unit));
+            });  
+        })
+      });
+
+});
+
 $('#TxtPosition').on('change', function() {
   value = this.value
   html = ""
@@ -931,108 +1047,26 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
   });
 
 
-	  
   $(document).on('click', '#btn_preview_offer', function(){
-
-
-
-		var csrftoken = getCookie('csrftoken');
-		// var can_name = $("#TxtName").val();
-		// var can_nation = $("#TxtNation").val();
-		// var can_mobile = $("#TxtMobileNumber").val();
-		var can_joindate = $("#TxtJoinDate").val();
-		// var can_acceptdate = $("#TxtAcceptDate").val();
-		var can_salary = $("#TxtSalary").val();
-    var currency = $("#currency").val();
-		var can_position = $("#TxtPosition").val();
-		// var can_email = $("#TxtEmailID").val();
-		// var can_aadhar = $("#TxtAadharNumber").val();
-		var can_id = $("#candidate_id").val();
-
-        // alert(can_joindate)
-
-		$("#TxtName").css("border", "1px solid black");
-		$("#TxtNation").css("border", "1px solid black");
-		$("#TxtMobileNumber").css("border", "1px solid black");
-		$("#TxtJoinDate").css("border", "1px solid black");
-		$("#TxtAcceptDate").css("border", "1px solid black");
-		$("#TxtSalary").css("border", "1px solid black");
-    $("#currency").css("border", "1px solid black");
-		$("#TxtPosition").css("border", "1px solid black");
-		$("#TxtEmailID").css("border", "1px solid black");
-		$("#TxtAadharNumber").css("border", "1px solid black");
-
-		// if ($('#TxtName').val() == "") {
-		//       $("#TxtName").css("border", "1px solid red");
-		//       $("#TxtName").focus()
-		// }
-		if ($('#TxtNation').val() == "") {
-			$("#TxtNation").css("border", "1px solid red");
-			$("#TxtNation").focus();
-		}
-		if ($('#TxtMobileNumber').val() == "") {
-			$("#TxtMobileNumber").css("border", "1px solid red");
-			$("#TxtMobileNumber").focus();
-			
-		}
-		if ($('#TxtJoinDate').val() == "") {
-			$("#TxtJoinDate").css("border", "1px solid red");
-			// $("#TxtJoinDate").focu s();
-			
-		}
-		if ($('#TxtAcceptDate').val() == "") {
-			$("#TxtAcceptDate").css("border", "1px solid red");
-			//  $("#TxtAcceptDate").focus();
-		
-		}
-		if ($('#TxtSalary').val() == "") {
-			$("#TxtSalary").css("border", "1px solid red");
-			$("#TxtSalary").focus();
-			
-		}
-    if ($('#currency').val() == "") {
-			$("#currency").css("border", "1px solid red");
-			$("#currency").focus();
-			
-		}
-		if ($('#TxtPosition').val() == "") {
-			$("#TxtPosition").css("border", "1px solid red");
-			$("#TxtPosition").focus();
-			
-		}
-		
-		if ($('#TxtAadharNumber').val() == "") {
-			$("#TxtAadharNumber").css("border", "1px solid red");
-			$("#TxtAadharNumber").focus();
-			
-		}
-
-		if (can_joindate && can_salary && can_position && currency) {
-			$("#just_wait").show();
-			$.ajax({  
-			type: "GET",  
-			url: "/preview_offer_letter/",  
-			data: {can_id : can_id, can_joindate : can_joindate, can_salary : can_salary, can_position : can_position, currency : currency},
-			success: $.proxy(function(data) {
-				
-				console.log(JSON.stringify(data));
-           		var host = window.location.protocol + "//" + window.location.host;
-        		// alert(host);
-
-				if(data !== 0){
-                    $("#just_wait").hide();
-					window.open('/'+'/'+window.location.host+"/static/offer_letters/"+data);
-				}
-			
-	
-			})
-			});
-
-			
-
-		}
-
-		});
+    var csrftoken = getCookie('csrftoken');
+    var can_id = $(this).val();
+    // alert(can_joindate)
+    if (can_id) {
+      $.ajax({  
+        type: "GET",  
+        url: "/preview_offer_letter/",  
+        data: {can_id : can_id},
+        success: $.proxy(function(data) {
+          console.log(JSON.stringify(data));
+                var host = window.location.protocol + "//" + window.location.host;
+              // alert(host);
+          if(data !== 0){
+            window.open('/'+'/'+window.location.host+"/static/offer_letters/"+data);
+          }
+        })
+      });
+    }
+  });
 
 
 $(document).ready(function(){
@@ -1083,6 +1117,9 @@ $(document).on('click', '.update', function(){
 
                             var check = false;
                             jQuery.each(data, function(index, item) {
+                              //alert(item.fields.business_unit)
+
+                              {% comment %} alert(item) {% endcomment %}
                                   
                                   if(check == false)
                                   {
@@ -1094,21 +1131,42 @@ $(document).on('click', '.update', function(){
                                         $('#update_company').val(item.fields.company);
                                         $('#update_position').val(item.fields.position);
                                         $('#update_job_type').val(item.fields.job_type);
-                                        $('#update_business_unit').val(item.fields.business_unit);
+                                        //$('#update_business_unit').val(item.fields.business_unit);
                                         $('#update_salary').val(item.fields.salary);
                                         $('#update_currency').val(item.fields.currency);
                                         $('#update_joinDate').val(joindate);
                                         $('#update_approver').val(item.fields.approver);
                                        // $('#update_job_description').val(item.fields.job_description);
                                         $('#update_validity_date').val(validdate);
-                                        //alert(item.fields.approver)
+                                        //alert(item.fields.business_unit)
                                         CKEDITOR.replace("update_job_description");
                                         CKEDITOR.instances["update_job_description"].setData(item.fields.job_description)
                                      
-                                        
+                                        var $dropdown = $("#update_business_unit");
+                                        jQuery.each(data, function(index, item) { //alert(item.model);
+                                         // alert(item.fields.business_unit)
+                                           $dropdown.append($("<option />").val(item.pk).text(item.fields.business_unit));
+                                          }); 
+                                        $('#update_business_unit').find('option').get(0).remove();
+                                        $('#update_business_unit').val(item.fields.business_unit);
+ 
                                   }
-                             //now you can access properties using dot notation
                            });
+
+                           {% comment %} jQuery.each(data[1], function(index, item) {
+                                  
+                            if(check == false)
+                            {
+                                  check = true;
+                                 
+                                  alert(item.fields.business_unit)
+                                  
+                                  $('#update_business_unit').val(item.fields.business_unit);
+                                 
+                                  
+                                  
+                            }
+                     }); {% endcomment %}
 
                             
                 
@@ -1223,6 +1281,131 @@ $(document).ready(function()
       });
 
 
+
+      
+function view_more(id){
+   //alert(id);
+      var csrf = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+           url: '/view_more/',
+          type: 'POST',
+          data: {"can_id" : id, "csrfmiddlewaretoken": csrftoken,},
+          dataType: 'json',
+          success: function( data ) {
+         
+            var html = '';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapsetwo">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Passport</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapsetwo" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+        
+                    $.each(data, function (key, val)
+                    {                      
+                          html+='<div class="col-lg-4"><span id="passport_copy" style="font-weight: 700;">Passport Document : </span></div>';      
+                          
+                          if(data[0].fields.passport_copy != "" && data[0].fields.passport_copy != null)
+                          {
+                                html += ' <div class="row-lg-6">';
+                                html += '<embed style="margin-bottom: 10px;" src="/static/candidate_documents/passport/'+data[0].fields.passport_copy+'" width="250" height="200" />';
+                                html += '<a style="font-size: 30px;" href="/static/candidate_documents/passport/'+data[0].fields.passport_copy+'" target="_blank"><i class="fa fa-download"></i></a>';
+                                html += ' </div>';
+                               
+                           //   var url = '/static/candidate_documents/passport/' + data[0].fields.passport_copy;
+                            // html+= "<div class='col-lg-2'><a href='/static/candidate_documents/passport/"+data[0].fields.passport_copy+"' id='passport_copy' class='float-left' target='_blank' data-toggle='tooltip' data-original-title='Download File'><i style='color: blue;font-size: x-large;' class='fas fa-file'></i></a></div>"; 
+                               
+                          }
+                          else
+                          {  
+                               
+                            html+='<div class="col-lg-4"><span id="passport_copy">Document Not Uploaded</span></div>';
+                              
+                          }
+
+                          html+="</div>";
+                         
+                      
+                    });
+                  
+                  html += '</div>';
+                  html += '</div>';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">CV</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapseOne" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    $.each(data, function (key, val)
+                    {                      
+                          html+='<div class="col-lg-4"><span id="cv" style="font-weight: 700;">CV Document : </span></div>';      
+
+                         
+                   
+                          if(data[0].fields.cv != "" && data[0].fields.cv != null)
+                          {
+                               
+                              html += ' <div class="row-lg-6">';
+                              html += '<embed style="margin-bottom: 10px;" src="/static/candidate_documents/cv/'+data[0].fields.cv+'" width="250" height="200" />';
+                              html += '<a style="font-size: 30px;" href="/static/candidate_documents/cv/'+data[0].fields.cv+'" target="_blank"><i class="fa fa-download"></i></a>';
+                              html += ' </div>'; 
+                               
+                          }
+                          else
+                          {  
+                               
+                            html+='<div class="col-lg-4"><span id="cv">Document Not Uploaded</span></div>';
+                              
+                          }
+
+                          html+="</div>";
+                         
+                      
+                    });
+                  html += '</div>';
+                  html += '</div>';
+                  html += '<div class="card-header collapsed" data-toggle="collapse" href="#collapsethree">';
+                  html += '<a class="card-title"><span style="font-weight: 700;color:#5e72e4;">Other Documents</span>';
+                  html += '</a>';
+                  html += '</div>';
+                  html += ' <div id="collapsethree" class="card-body collapse" data-parent="#accordion" >';
+                  html += ' <div class="row" >';
+                    $.each(data, function (key, val)
+                    {                      
+                          html+='<div class="col-lg-4"><span id="other_documents" style="font-weight: 700;">Other Documents : </span></div>';      
+                          if(data[0].fields.other_documents != "" && data[0].fields.other_documents != null)
+                          {
+                               
+                              html += ' <div class="row-lg-6">';
+                              html += '<embed style="margin-bottom: 10px;" src="/static/candidate_documents/other_documents/'+data[0].fields.other_documents+'" width="250" height="200" />';
+                              html += '<a style="font-size: 30px;" href="/static/candidate_documents/other_documents/'+data[0].fields.other_documents+'" target="_blank"><i class="fa fa-download"></i></a>';
+                              html += ' </div>';
+                               
+                          }
+                          else
+                          {  
+                               
+                            html+='<div class="col-lg-4"><span id="other_documents">Document Not Uploaded</span></div>';
+                              
+                          }
+
+                          html+="</div>";
+                         
+                      
+                    });
+                  html += '</div>';
+                  html += '</div>';
+
+              
+                  
+             $("#documents").html(html);
+            $('#documentModal').modal('show');
+           }
+      })
+    }
+      
+ 
+      
   </script>
 
 {% endblock javascripts %}

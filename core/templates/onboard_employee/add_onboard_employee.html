@@ -132,21 +132,21 @@ input[type=number] {
 
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
-                        <label class="form-control-label" for="input-email">First Name</label>
+                        <label class="form-control-label" for="input-email">First Name *</label>
                         <input type="text" name="first_name" value="{{ form.data.first_name }}"  class="form-control" placeholder="Enter First Name" >
                         {{ form.first_name.errors }}
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-email">Last Name</label>
+                        <label class="form-control-label" for="input-email">Last Name *</label>
                         <input type="text" name="last_name" value="{{ form.data.last_name }}" class="form-control" placeholder="Enter Last Name" >
                         {{ form.last_name.errors }}
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-username">Email ID</label>
+                        <label class="form-control-label" for="input-username">Email ID *</label>
                         <input type="text" name="email_id" value="{{ form.data.email_id }}" class="form-control" placeholder="Enter Email ID" >
                         {{ form.email_id.errors }}
                       </div>
@@ -158,7 +158,7 @@ input[type=number] {
                         <div class="col-md-4">
                               <div class="form-group">
                                    
-                                    <label class="form-control-label" for="input-address">Mobile No</label>
+                                    <label class="form-control-label" for="input-address">Mobile No *</label>
                                     <input type="hidden"  id="Hid_code_name" name ="code_name">
                                     <input id="mobile_number" name="mobile_number" value="{{ form.data.mobile_number }}" placeholder="Enter Mobile Phone" type="tel">
                                     <input type="hidden" id="Hid_code_num" name="code_num" >
@@ -168,28 +168,20 @@ input[type=number] {
                             </div>
 
                          
-                            <div class="col-lg-4">
+                            {% comment %} <div class="col-lg-4">
                               <div class="form-group">
                                 <label class="form-control-label" for="input-username">Emirates ID</label>
                                 <input type="text" name="emirate_id" value="{{ form.data.emirate_id }}" class="form-control" placeholder="Emirates ID " >
                                 {{ form.emirate_id.errors }}
                               </div>
-                            </div>
+                            </div> {% endcomment %}
 
-                            <!-- <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label class="form-control-label" for="input-username">Official Email ID</label>
-                                  <input type="text" name="official_email_id" value="{{ form.data.official_email_id }}" class="form-control" placeholder="Enter Official Email ID" >
-                                
-                                </div>
-                              </div>
-   -->
-
+    
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label class="form-control-label" for="input-country">Nationality</label>
+                                  <label class="form-control-label" for="input-country">Nationality *</label>
                                   <select name="country" class="form-control" id="country">
-                                      <option selected="selected">Select a Nationality ... </option>
+                                        <option selected="selected">Select a Nationality ... </option>
                                         <option value="Afghanistan">Afghanistan</option>
                                         <option value="Albania">Albania</option>
                                         <option value="Algeria">Algeria</option>
@@ -309,7 +301,7 @@ input[type=number] {
                                         <option value="Kyrgyzstan">Kyrgyzstan</option>
                                         <option value="Lao">Lao People's Democratic Republic</option>
                                         <option value="Latvia">Latvia</option>
-                                        <option value="Lebanon" selected>Lebanon</option>
+                                        <option value="Lebanon" >Lebanon</option>
                                         <option value="Lesotho">Lesotho</option>
                                         <option value="Liberia">Liberia</option>
                                         <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
@@ -441,14 +433,56 @@ input[type=number] {
                                   <input type="text" name="passport_no" value="{{ form.data.passport_no }}" class="form-control" placeholder="Enter Passport No" >
                                 </div>
                               </div>
-
-                            {% comment %} <div class="col-lg-4">
-                              <div class="form-group">
-                                    <label class="form-control-label" for="input-username">Photo</label>
-                                    <input type="file" accept="image/jpeg, image/png" name="photo_url"  class="form-control" >
-                                    
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="input-country">Visa Status</label>
+                                  <select name="visa_status" class="form-control" id="visa_status">
+                                        <option value="">Select </option>
+                                        <option value="Visit Visa/Tourist Visa">Visit Visa/Tourist Visa</option>
+                                        <option value="Cancelled Residence Visa">Cancelled Residence Visa</option>
+                                        <option value="Spouse Sponsored Visa">Spouse Sponsored Visa</option>
+                                        <option value="Parent Sponsored Visa">Parent Sponsored Visa</option>
+                                        <option value="Company Sponsored Visa">Company Sponsored Visa</option>
+                                    </select>
+                                 <!-- <input type="text" name="location" value="{{ form.data.location }}" class="form-control" placeholder="Enter Location" > -->
+                                </div>
                               </div>
-                              </div> {% endcomment %}
+                              
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label class="form-control-label" for="input-username">Passport Copy</label>
+                                    <input type="file" name="passport_copy"  class="form-control" id="file_select">
+                                  </div>
+                              </div>
+
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="input-username">CV File</label>
+                                  <input type="file" name="cv"  class="form-control" id="cv">
+                                </div>
+                            </div>
+
+                              {% comment %} <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="input-username">Company Policy *</label>
+                                  <input type="file" name="company_policy"  class="form-control" id="file_select">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label class="form-control-label" for="input-username">Acknowledgement *</label>
+                                <input type="file" name="acknowledgement"  class="form-control" id="file_select">
+                              </div>
+                          </div> {% endcomment %}
+
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Other Documents</label>
+                              <input type="file" name="other_documents"  class="form-control" id="file_select">
+                            </div>
+                        </div>
+
                   
                   </div>
 

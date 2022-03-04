@@ -526,7 +526,10 @@ function csrfSafeMethod(method) {
                             type: 'success',
                             buttonsStyling: false,
                             confirmButtonClass: 'btn btn-primary'
-                        });
+                        })
+                        .then(function() {
+                          location.href = '/compensatory_request_details/';
+                      });
                     }
                   
                    

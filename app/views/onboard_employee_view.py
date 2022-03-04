@@ -1,5 +1,7 @@
+from multiprocessing import context
 from turtle import up
 from app.models import onboard_employee_model
+from app.models.business_unit_model import Business_Unit
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NullBooleanField
@@ -50,6 +52,7 @@ from django.core.mail.message import EmailMessage
 import random
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
+from app.models.department_model import Department
 import socket
 import random
 import inflect
@@ -111,31 +114,53 @@ def onboard_employees(request):
    # return HttpResponse("employee")
     employee = Onboard_Employee.objects.filter(is_active__in=[1, 2])
     business_head = Employee.objects.filter(is_active=1, role_id=4)
+    company = Department.objects.filter(is_active=1)
     # print(business_head)
 
    # return HttpResponse(employee)
     # print(employee)
-    context = {'employees': employee, 'business_head': business_head, }
+    context = {'employees': employee,
+               'business_head': business_head, 'company': company}
     return render(request, "onboard_employee/index.html", context)
 
-def update_enroll(request):
- 
-    can_id = request.POST.get('can_id')
-    employee = Onboard_Employee.objects.filter(candidate_id=can_id)
-   
-    jsondata = serializers.serialize('json', employee)
 
-    return HttpResponse(jsondata, content_type='application/json')   
+def update_enroll(request):
+
+    can_id = request.POST.get('can_id')
+    # company_id = request.POST.get('company_id')
+    employee = Onboard_Employee.objects.filter(candidate_id=can_id)
+    company = Business_Unit.objects.filter(company=employee[0].company)
+
+    # context={'employee':employee,'company':company
+
+    # }
+    final_list_arr = list(chain(employee, company))
+
+    jsondata = serializers.serialize('json', final_list_arr)
+
+    return HttpResponse(jsondata, content_type='application/json')
+
 
 def enroll_more_info(request):
- 
+
     can_id = request.POST.get('can_id')
-    employee = Onboard_Employee.objects.filter(candidate_id=can_id)
-   
+    employee = Onboard_Employee.objects.select_related().filter(candidate_id=can_id)
+
     jsondata = serializers.serialize('json', employee)
 
-    return HttpResponse(jsondata, content_type='application/json')       
-   
+    return HttpResponse(jsondata, content_type='application/json')
+
+
+def get_business_unit(request):
+
+    company_id = request.POST.get('company_id')
+    # print(company_id)
+    company = Business_Unit.objects.filter(company=company_id)
+    # print(company)
+
+    jsondata = serializers.serialize('json', company)
+
+    return HttpResponse(jsondata, content_type='application/json')
 
 
 def approve(request):
@@ -148,7 +173,8 @@ def approve(request):
 
 def business_approve(request):
    # return HttpResponse("employee")
-    employee = Onboard_Employee.objects.filter(is_active=1,approver_id=request.user.emp_id)
+    employee = Onboard_Employee.objects.filter(
+        is_active=1, approver_id=request.user.emp_id)
 
     context = {'employees': employee}
     return render(request, "onboard_employee/business_approve.html", context)
@@ -181,21 +207,21 @@ def add_onboard_employee(request):
             """
             Photo_name = ""
 
-            if request.FILES:
+            # if request.FILES:
 
-                upload = request.FILES['photo_url']
+            #     upload = request.FILES['photo_url']
 
-                if upload != None:
-                    logoRoot = os.path.join(
-                        settings.MEDIA_ROOT, 'profile_images/')
+            #     if upload != None:
+            #         logoRoot = os.path.join(
+            #             settings.MEDIA_ROOT, 'profile_images/')
 
-                    #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
-                    logoRoot = logoRoot.replace("\\", "/")
-                    Photo_name = upload.name
-                # return HttpResponse(upload.name)
-                    fs = FileSystemStorage(location=logoRoot)
-                    file_name = fs.save(upload.name, upload)
-                    file_url = fs.url(file_name)
+            #         #logo_url = os.path.join(settings.MEDIA_URL, 'profile_images/')
+            #         logoRoot = logoRoot.replace("\\", "/")
+            #         Photo_name = upload.name
+            #     # return HttpResponse(upload.name)
+            #         fs = FileSystemStorage(location=logoRoot)
+            #         file_name = fs.save(upload.name, upload)
+            #         file_url = fs.url(file_name)
 
             number = random.randint(1000, 9999)
             res = str('CAD') + str(number)
@@ -213,9 +239,10 @@ def add_onboard_employee(request):
             code_name = request.POST.get('code_name')
             code_num = request.POST.get('code_num')
 
-            emirate_id = request.POST.get('emirate_id')
+            # emirate_id = request.POST.get('emirate_id')
 
             address = request.POST.get('address')
+            visa_status = request.POST.get('visa_status')
 
             state = request.POST.get('state')
             city = request.POST.get('city')
@@ -248,9 +275,53 @@ def add_onboard_employee(request):
             created_at = timezone.now()  # .strftime('%Y-%m-%d %H:%M:%S')
             updated_at = timezone.now()  # .strftime('%Y-%m-%d %H:%M:%S')
             is_active = '1'
+
+            current_date_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+
+            if request.FILES.get('cv', False):
+                cv(request.FILES['cv'], current_date_time)
+                name = os.path.splitext(str(request.FILES['cv']))[0]
+                extesion = os.path.splitext(str(request.FILES['cv']))[1]
+                cv_file = name+""+extesion
+            else:
+                cv_file = None
+
+            if request.FILES.get('passport_copy', False):
+                passport(request.FILES['passport_copy'], current_date_time)
+                passport_copy = os.path.splitext(
+                    str(request.FILES['passport_copy']))[0]
+                passport_copy_extesion = os.path.splitext(
+                    str(request.FILES['passport_copy']))[1]
+                passport_file = passport_copy+""+passport_copy_extesion
+            else:
+                passport_file = None
+
+            # company(request.FILES['company_policy'],current_date_time)
+            # company_policy = os.path.splitext(str(request.FILES['company_policy']))[0]
+            # company_policy_extesion = os.path.splitext(str(request.FILES['company_policy']))[1]
+
+            # acknowledge(request.FILES['acknowledgement'],current_date_time)
+            # acknowledgement = os.path.splitext(str(request.FILES['acknowledgement']))[0]
+            # acknowledgement_extesion = os.path.splitext(str(request.FILES['acknowledgement']))[1]
+
+            if request.FILES.get('other_documents', False):
+                others(request.FILES['other_documents'], current_date_time)
+                other_documents = os.path.splitext(
+                    str(request.FILES['other_documents']))[0]
+                other_documents_extesion = os.path.splitext(
+                    str(request.FILES['other_documents']))[1]
+                other_documents_file = other_documents+""+other_documents_extesion
+            else:
+                other_documents_file = None
+
             if not Onboard_Employee.objects.filter(Q(email_id=email_id)).exists():
                 obj = Onboard_Employee.objects.create(
                     candidate_id=res,
+                    cv=cv_file,
+                    passport_copy=passport_file,
+                    # company_policy =company_policy+""+company_policy_extesion,
+                    # acknowledgement =acknowledgement+""+acknowledgement_extesion,
+                    other_documents=other_documents_file,
                     first_name=first_name,
                     last_name=last_name, email_id=email_id,
                     mobile_number=mobile_number,
@@ -259,7 +330,8 @@ def add_onboard_employee(request):
                     code_num=code_num,
                     official_email_id=official_email_id,
                     photo_url=Photo_name,
-                    emirate_id=emirate_id,
+                    # emirate_id=emirate_id,
+                    visa_status=visa_status,
                     address=address,
                     state=state,
                     city=city,
@@ -387,10 +459,11 @@ def send_offer_letter(request):
 
     # send_mail('diditwork?', 'test message', 'from_email', ['to'], connection=connection)
 
-    details = Onboard_Employee.objects.filter(candidate_id=request.POST.get('can_id'))
+    details = Onboard_Employee.objects.filter(
+        candidate_id=request.POST.get('can_id'))
 
     p = inflect.engine()
-    
+
     basic_saraly = details[0].salary * 30/100
     accomodation = details[0].salary * 30/100
     allowance = details[0].salary * 40/100
@@ -403,13 +476,13 @@ def send_offer_letter(request):
     code = re.findall("\d+", details[0].code_num)[0]
 
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
-        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
-        'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 
-        'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description, 
-        'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance':allowance, 'basic_text': basic_text.replace(',', ''), 
-        'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
-    }
+    context_dict = {'fname': details[0].first_name, 'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
+                    'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
+                    'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name,
+                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
+                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),
+                    'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
+                    }
     template = get_template('mail_templates/appoinment.html')
     html = template.render(context_dict)
     result = BytesIO()
@@ -439,7 +512,7 @@ def send_offer_letter(request):
 
             subject = 'Congrats - Offer Letter'
             html_message = render_to_string('mail_templates/candidate_greetings.html', {
-                                            'fname': details[0].first_name, 'lname': details[0].last_name, 'hr_name': request.user.first_name , 'company': details[0].company,'position': details[0].position})
+                                            'fname': details[0].first_name, 'lname': details[0].last_name, 'hr_name': request.user.first_name, 'company': details[0].company, 'position': details[0].position})
             plain_message = strip_tags(html_message)
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [details[0].email_id]
@@ -455,8 +528,8 @@ def send_offer_letter(request):
             email.attach('offer_letter.pdf',
                          result.getvalue(), 'application/pdf')
             email.send()
-            update = Onboard_Employee.objects.filter(candidate_id=request.POST.get('can_id')).update(offer_status=1)
-
+            update = Onboard_Employee.objects.filter(
+                candidate_id=request.POST.get('can_id')).update(offer_status=1)
 
         # Download the file
         # download = request.GET.get("download")
@@ -485,7 +558,7 @@ def enroll_info(request):
     joining_date = datetime.datetime.strptime(
         request.POST.get('can_joindate'), '%d-%m-%Y')
     validity_date = datetime.datetime.strptime(
-        request.POST.get('validity_date'), '%d-%m-%Y')    
+        request.POST.get('validity_date'), '%d-%m-%Y')
     job_description = request.POST.get('job_description')
     # print(joining_date)
     approver = request.POST.get('approver')
@@ -523,11 +596,11 @@ def update_enroll_info(request):
     joining_date = datetime.datetime.strptime(
         request.POST.get('can_joindate'), '%d-%m-%Y')
     job_description = request.POST.get('job_description')
-    update_validity_date=datetime.datetime.strptime(
+    update_validity_date = datetime.datetime.strptime(
         request.POST.get('update_validity_date'), '%d-%m-%Y')
     # print(joining_date)
     approver = request.POST.get('approver')
-    # print(can_id) 
+    # print(can_id)
     # print(approver)
 
     update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
@@ -544,14 +617,17 @@ def update_enroll_info(request):
         is_approved=0 if approver else 1,
         updated_at=timezone.now()
     )
-    return HttpResponse(1)    
+    return HttpResponse(1)
+
 
 def preview_offer_letter(request):
 
-    details = Onboard_Employee.objects.filter(candidate_id=request.GET.get('can_id'))
+    details = Onboard_Employee.objects.select_related().filter(
+        candidate_id=request.GET.get('can_id'))
+    # print(details[0].business_unit.business_unit)
 
     p = inflect.engine()
-    
+
     basic_saraly = details[0].salary * 30/100
     accomodation = details[0].salary * 30/100
     allowance = details[0].salary * 40/100
@@ -563,13 +639,13 @@ def preview_offer_letter(request):
     # print(basic_text.replace(',', ''))
     code = re.findall("\d+", details[0].code_num)[0]
     myDate = datetime.datetime.now()
-    context_dict={'fname': details[0].first_name,'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
-        'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary,'validity_date': details[0].validity_date,
-        'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name,
-        'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
-        'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance':allowance, 'basic_text': basic_text.replace(',', ''),
-        'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
-    }
+    context_dict = {'fname': details[0].first_name, 'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
+                    'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
+                    'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,
+                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
+                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),
+                    'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
+                    }
 
     template = get_template('mail_templates/appoinment.html')
     html = template.render(context_dict)
@@ -709,3 +785,79 @@ def filter_onboard_employees(request, status):
    # return HttpResponse(employee)
     context = {'employees': employee}
     return render(request, "onboard_employee/index.html", context)
+
+
+def cv(f, name):
+
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+""+extesion
+    file_upload_dir = os.path.join(
+        settings.MEDIA_ROOT, 'candidate_documents/cv')
+
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def passport(f, name):
+
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+""+extesion
+    file_upload_dir = os.path.join(
+        settings.MEDIA_ROOT, 'candidate_documents/passport')
+
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def company(f, name):
+
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+""+extesion
+    file_upload_dir = os.path.join(
+        settings.MEDIA_ROOT, 'candidate_documents/company_policy')
+
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def acknowledge(f, name):
+
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+""+extesion
+    file_upload_dir = os.path.join(
+        settings.MEDIA_ROOT, 'candidate_documents/acknowledgement')
+
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def others(f, name):
+
+    name = os.path.splitext(str(f))[0]
+    extesion = os.path.splitext(str(f))[1]
+    file_name = name+""+extesion
+    file_upload_dir = os.path.join(
+        settings.MEDIA_ROOT, 'candidate_documents/other_documents')
+
+    with open(os.path.join(file_upload_dir, file_name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def view_more(request):
+
+    can_id = request.POST.get('can_id')
+    employee = Onboard_Employee.objects.filter(candidate_id=can_id)
+    # print(employee)
+
+    jsondata = serializers.serialize('json', employee)
+
+    return HttpResponse(jsondata, content_type='application/json')

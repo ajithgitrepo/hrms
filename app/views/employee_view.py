@@ -191,7 +191,7 @@ def add_employee(request):
             else:
                 date_of_joining = None
 
-            #d = datetime.strptime('11/11/2012', '%m/%d/%Y')
+            #d = datetime.strptime('11/11depa/2012', '%m/%d/%Y')
 
             # cr_date = datetime.strptime(date, '%Y-%m-%d')
             #date_of_joining = date.strftime("%Y-%m-%d")

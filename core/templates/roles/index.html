@@ -16,11 +16,11 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">Roles</h6>
+            <h6 class="h2 text-white d-inline-block mb-0">Designations</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                 <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">All Roles</a></li>
+                <li class="breadcrumb-item"><a href="#">All Designations</a></li>
                 <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
               </ol>
             </nav>
@@ -44,7 +44,7 @@
         <div class="card">
           <!-- Card header -->
           <div class="card-header">
-            <h3 class="mb-0">Roles</h3>
+            <h3 class="mb-0">Designations</h3>
             <!-- <p class="text-sm mb-0">
               This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
             </p> --> 
@@ -54,7 +54,7 @@
               <thead class="thead-light">
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
+                  <th>Designation</th>
                   <th>Type</th>
                   <th>Description</th>
                   <th>Created Date</th>
@@ -69,7 +69,8 @@
                     <td>{{role.role_type}}</td>
                     <td>{{role.description}}</td>
                     <td>{{role.created_at}}</td>
-                    <td><a class="fas fa-edit" title="Edit" href="{% url 'update_role' role.id %}"></a>
+                    <td>
+                      {% comment %} <a class="fas fa-edit" title="Edit" href="{% url 'update_role' role.id %}"></a> {% endcomment %}
                         <a class="confirm-delete fas fa-trash" title="Delete" href="{% url 'delete_role' role.id %}"></a>
                     </td>
                    

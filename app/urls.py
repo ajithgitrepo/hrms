@@ -56,6 +56,11 @@ urlpatterns = [
     path('update_department/<str:pk>/', views.department_view.update_department, name="update_department"),
     path('delete_department/<str:pk>/', views.department_view.delete_department, name="delete_department"),
 
+    # Business_unit 
+    path('business_units/', views.business_unit_view.business_units, name="business_units"),
+    path('add_business_unit/', views.business_unit_view.add_business_unit, name="add_business_unit"),
+    path('delete_business_unit/<str:pk>/', views.business_unit_view.delete_business_unit, name="delete_business_unit"),
+
     # leave_request 
     path('leave_request/', views.leave_request, name="leave_request"),
     path('add_leave_request/', views.add_leave_request, name="add_leave_request"),
@@ -94,6 +99,9 @@ urlpatterns = [
     path('update_enroll_info/', views.onboard_employee_view.update_enroll_info, name="update_enroll_info"),
     path('update_enroll/', views.onboard_employee_view.update_enroll, name="update_enroll"),
     path('enroll_more_info/', views.onboard_employee_view.enroll_more_info, name="enroll_more_info"),
+    path('view_more/', views.onboard_employee_view.view_more, name="view_more"),
+    path('get_business_unit/', views.onboard_employee_view.get_business_unit, name="get_business_unit"),
+
 
 
 

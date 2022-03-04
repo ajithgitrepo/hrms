@@ -39,7 +39,7 @@ def add_departments(request):
             # print(form.errors)
             # print(role_name)
             g1 = Department.objects.create(name=dept_name, description=description, device=device)
-            messages.success(request, dept_name +' Department was created! ')
+            messages.success(request, dept_name +' Company was created! ')
             return redirect('departments')
     # print(form.errors)
     context = {'form':form}
@@ -60,7 +60,7 @@ def update_department(request, pk):
             dept.updated_at = timezone.now()
             dept.save()
             form.save()
-            messages.success(request, dept_name +' Department was updated! ')
+            messages.success(request, dept_name +' Company was updated! ')
             return redirect('departments')
     context = {'form':form,'department':dept}
     return render(request, "department/update_department.html", context)
@@ -71,5 +71,5 @@ def delete_department(request, pk):
     data = Department.objects.get(id=pk)
     data.is_active = 0
     data.save()
-    messages.success(request, ' Department was deleted! ')
-    return redirect('depatments')
+    messages.success(request, ' Company was deleted! ')
+    return redirect('departments')

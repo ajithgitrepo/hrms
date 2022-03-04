@@ -13,7 +13,7 @@ class Onboard_EmployeeForm(forms.ModelForm):
     class Meta:  
         model = Onboard_Employee  
        # fields = "__all__",   "mobile_number",
-        fields =("first_name", "last_name",  "email_id", "mobile_number","emirate_id", "country")
+        fields =("first_name", "last_name",  "email_id", "mobile_number", "country")
         readonly_fields = ['created', 'updated_at', 'is_active', 'code_num']
 
 

@@ -66,6 +66,7 @@ def my_scheduled_job():
                         effective_on = each_effect.effective_on
                         effective_month = each_effect.effective_month
                         effective_no_of_days = each_effect.effective_no_of_days
+                        # logger.warning(effective_no_of_days)
                         effective_in = each_effect.effective_in
                         reset = each_effect.reset
                         reset_period = each_effect.reset_period
@@ -132,6 +133,7 @@ def my_scheduled_job():
                                 years = difference.years
                                 # return HttpResponse(months)
                                 leave_no_of_days = each_effect.effective_no_of_days
+                                # logger.warning(leave_no_of_days)
 
                                 if date_of_joing != "":
                                     if accrual == "1":  # ACCURAL
@@ -176,9 +178,12 @@ def my_scheduled_job():
                                     week = (monday2 - monday1).days / 7
                                     leave_no_of_days = float(
                                         float(each_effect.effective_no_of_days) * week)
+                                    # logger.warning(leave_no_of_days)
+    
                                 
                                 if not Leave_Balance.objects.filter(employee_id=each.employee_id, leave_type_id=leave_id, is_active=1).exists():
                                     # return HttpResponse(each.employee_id)
+                                    # logger.warning('dfg')
                                     balance_leave = Leave_Balance.objects.create(
                                         created_at=timezone.now(),
                                         updated_at=timezone.now(),
@@ -189,34 +194,45 @@ def my_scheduled_job():
                                         leave_type_id=leave_id,
                                         device='web',
                                         modified_by_id='Emp001',
+                                        
                                     )
                                 else:
                                    # return HttpResponse('dd')
                                     tot = Leave_Balance.objects.filter(
                                         employee_id=each.employee_id, leave_type_id=leave_id, is_active=1)
                                     tot_month = tot[0].total_month
+                                    # logger.warning(tot_month)
+                                    # logger.warning('dfgh')
+                                    
+
                                     date1 = datetime.strptime(str(date_of_joing), '%Y-%m-%d')
                                     dat = datetime.now().date()
                                     date2 = datetime.strptime(
                                         str(dat), '%Y-%m-%d')
 
                                     month_count = date2.month - date1.month
-                                   # return HttpResponse(month_count) 
+                                    # logger.warning('month_count')-logger.warning(month_count)         
+                                    # logger.warning(month_count)
+                                    # return HttpResponse(month_count) 
                                     if month_count < 0:
+                                        # logger.warning('coming')
+
                                         month_count = 0
                                     else:
+                                        # logger.warning(leave_no_of_days)
                                         # return HttpResponse(months)
-                                        if(str(tot_month) < str(month_count)):
-                                            #  return HttpResponse(months)
+                                        if(str(tot_month) >= str(effective_after)):
+                                          
                                             Leave_Balance.objects.filter(employee_id=each.employee_id, leave_type_id=leave_id).update(
                                                 balance=F(
-                                                    "balance") + float(each_effect.effective_no_of_days),
+                                                    "balance") + leave_no_of_days,
                                                 total_month=month_count,
                                                 #  type='CUSTOMIZED',
                                                 updated_at=timezone.now()
+                                                
 
                                             )
-    logger.warning('Leave Balance cron  run at '+str(datetime.now())+' hours!')
+                                            logger.warning('Leave Balance cron  run at '+str(datetime.now())+' hours!')
 
 def checkout():
     myDate = datetime.now()

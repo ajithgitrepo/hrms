@@ -89,7 +89,7 @@ def add_roles(request):
             # print(form.errors)
             # print(role_name)
             g1 = Group.objects.create(name=role_name, role_type=role_type, description=description)
-            messages.success(request, role_name +' Role was created! ')
+            messages.success(request, role_name +' Designation was created! ')
             return redirect('roles')
     # print(form.errors)
     context = {'form':form}
@@ -106,7 +106,7 @@ def update_role(request, pk):
             role.updated_at = timezone.now()
             role.save()
             form.save()
-            messages.success(request, role_name +' Role was updated! ')
+            messages.success(request, role_name +' Designation was updated! ')
             return redirect('roles')
     context = {'form':form,'role':role}
     return render(request, "roles/update_role.html", context)
@@ -115,5 +115,5 @@ def delete_role(request, pk):
     data = Group.objects.get(id=pk)
     data.is_active = 0
     data.save()
-    messages.success(request, ' Role was deleted! ')
+    messages.success(request, ' Designation was deleted! ')
     return redirect('roles')

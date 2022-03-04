@@ -17,11 +17,11 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">Roles</h6>
+            <h6 class="h2 text-white d-inline-block mb-0">Designations</h6>
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                 <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
-                <li class="breadcrumb-itssem"><a href="#">Add Roles</a></li>
+                <li class="breadcrumb-itssem"><a href="#">Add Designations</a></li>
                 <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
               </ol>
             </nav>
@@ -48,7 +48,7 @@
             <div class="card-header">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">Add Role </h3>
+                  <h3 class="mb-0">Add Designation </h3>
                 </div>
                 <div class="col-4 text-right">
                   <!-- <a href="#!" class="btn btn-sm btn-primary">Settings</a> -->
@@ -63,14 +63,14 @@
                   <div class="row">
                     <div class="col-lg-4">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-employeeid">Role Name</label>
+                        <label class="form-control-label" for="input-employeeid">Designation Name</label>
                         <input type="text" name="name"  value="{{ form.data.name }}" class="form-control" placeholder="Name" >
                        {{ form.errors.name }}
                       </div>
                     </div>
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
-                        <label class="form-control-label" for="input-email">Role Type</label>
+                        <label class="form-control-label" for="input-email">Designation Type</label>
                         <input type="text" name="role_type" value="{{ form.data.role_type }}" class="form-control" placeholder="Type" >
                         {{ form.errors.role_type }}
                       </div>

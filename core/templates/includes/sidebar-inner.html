@@ -277,12 +277,12 @@
                     </ul>
                 </div>
 
-                <a class="nav-link  {% if request.resolver_match.url_name == "employees" %}active{% endif %} {% if request.resolver_match.url_name == "add_employee" %}active{% endif %} {% if request.resolver_match.url_name == "update_employee" %}active{% endif %} {% if request.resolver_match.url_name == "roles" %}active{% endif %} {% if request.resolver_match.url_name == "departments" %}active{% endif %} {% if request.resolver_match.url_name == "new_hires" %}active{% endif %} {% if request.resolver_match.url_name == "birthdays" %}active{% endif %} {% if request.resolver_match.url_name == "exit_details" or request.resolver_match.url_name == "self_vaccination_details" %}active{% endif %} " 
+                <a class="nav-link  {% if request.resolver_match.url_name == "employees" %}active{% endif %} {% if request.resolver_match.url_name == "add_employee" %}active{% endif %} {% if request.resolver_match.url_name == "business_units" %}active{% endif %} {% if request.resolver_match.url_name == "add_business_unit" %}active{% endif %} {% if request.resolver_match.url_name == "update_employee" %}active{% endif %} {% if request.resolver_match.url_name == "roles" %}active{% endif %} {% if request.resolver_match.url_name == "departments" %}active{% endif %} {% if request.resolver_match.url_name == "new_hires" %}active{% endif %} {% if request.resolver_match.url_name == "birthdays" %}active{% endif %} {% if request.resolver_match.url_name == "exit_details" or request.resolver_match.url_name == "self_vaccination_details" %}active{% endif %} " 
                 href="#navbar-organization" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-organization">
                 <i class="fas fa-building text-primary"></i>
                     <span class="nav-link-text">Organization</span>
                 </a>
-                <div class="collapse {% if request.resolver_match.url_name == "employees" %}show{% endif %} {% if request.resolver_match.url_name == "add_employee" %}show{% endif %} {% if request.resolver_match.url_name == "update_employee" %}show{% endif %}   {% if request.resolver_match.url_name == "roles" %}show{% endif %} {% if request.resolver_match.url_name == "departments" %}show{% endif %} {% if request.resolver_match.url_name == "new_hires" %}show{% endif %} {% if request.resolver_match.url_name == "birthdays" %}show{% endif %} {% if request.resolver_match.url_name == "exit_details" or request.resolver_match.url_name == "self_vaccination_details" %}show{% endif %}  " id="navbar-organization">
+                <div class="collapse {% if request.resolver_match.url_name == "employees" %}show{% endif %} {% if request.resolver_match.url_name == "add_employee" %}show{% endif %} {% if request.resolver_match.url_name == "business_units" %}show{% endif %} {% if request.resolver_match.url_name == "update_employee" %}show{% endif %} {% if request.resolver_match.url_name == "add_business_unit" %}show{% endif %}  {% if request.resolver_match.url_name == "roles" %}show{% endif %} {% if request.resolver_match.url_name == "departments" %}show{% endif %} {% if request.resolver_match.url_name == "new_hires" %}show{% endif %} {% if request.resolver_match.url_name == "birthdays" %}show{% endif %} {% if request.resolver_match.url_name == "exit_details" or request.resolver_match.url_name == "self_vaccination_details" %}show{% endif %}  " id="navbar-organization">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == "employees" %}active{% endif %} {% if request.resolver_match.url_name == "add_employee" %}active{% endif %} {% if request.resolver_match.url_name == "update_employee"  %}active{% endif %}  " href="/employees/">
@@ -290,16 +290,23 @@
                                 <span class="sidenav-normal">Employees</span>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == "departments" %}active{% endif %}" href="/departments/">
+                            <a class="nav-link {% if request.resolver_match.url_name == "roles" %}active{% endif %}" href="/roles/">
                                 <span class="sidenav-mini-icon"> D </span>
-                                <span class="sidenav-normal">Department</span>
+                                <span class="sidenav-normal">Designations</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == "roles" %}active{% endif %}" href="/roles/">
-                                <span class="sidenav-mini-icon"> R </span>
-                                <span class="sidenav-normal">Role</span>
+                            <a class="nav-link {% if request.resolver_match.url_name == "departments" %}active{% endif %}" href="/departments/">
+                                <span class="sidenav-mini-icon"> C </span>
+                                <span class="sidenav-normal">Companies</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == "business_units" %}active{% endif %}" href="/business_units/">
+                                <span class="sidenav-mini-icon"> B </span>
+                                <span class="sidenav-normal">Business Units</span>
                             </a>
                         </li>
                         <li class="nav-item">
