@@ -61,6 +61,11 @@ urlpatterns = [
     path('add_business_unit/', views.business_unit_view.add_business_unit, name="add_business_unit"),
     path('delete_business_unit/<str:pk>/', views.business_unit_view.delete_business_unit, name="delete_business_unit"),
 
+    # Variable Salary 
+    path('variable_salaries/', views.variable_salary_view.variable_salaries, name="variable_salaries"),
+    path('add_variable_salary/', views.variable_salary_view.add_variable_salary, name="add_variable_salary"),
+    path('delete_variable_salary/<str:pk>/', views.variable_salary_view.delete_variable_salary, name="delete_variable_salary"),
+
     # leave_request 
     path('leave_request/', views.leave_request, name="leave_request"),
     path('add_leave_request/', views.add_leave_request, name="add_leave_request"),
@@ -101,7 +106,7 @@ urlpatterns = [
     path('enroll_more_info/', views.onboard_employee_view.enroll_more_info, name="enroll_more_info"),
     path('view_more/', views.onboard_employee_view.view_more, name="view_more"),
     path('get_business_unit/', views.onboard_employee_view.get_business_unit, name="get_business_unit"),
-
+    path('get_variable_salary/', views.onboard_employee_view.get_variable_salary, name="get_variable_salary"),
 
 
 

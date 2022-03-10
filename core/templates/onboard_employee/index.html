@@ -12,6 +12,10 @@
 
 
 <style>
+  .modal-header{
+    text-align: center;
+    display: ruby !important;
+  }
 
 .modal-open .container-fluid, .modal-open  .container {
   -webkit-filter: blur(1px);
@@ -380,6 +384,34 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                           </select> {% endcomment %}
                           </div>
                         </div>
+                        
+
+                        <div class="col-lg-4"> 
+                          <div class="form-group"> 
+                            <label class="form-control-label" for="input-email">Position</label>
+                            <select class="form-control select2 position_select" required  id="TxtPosition">
+                              <option value="">Select</option>
+                              <option value="Merchandiser">Merchandiser</option>
+                              <option value="Field Manager">Field Manager</option>
+                          </select>
+                          </div>
+                        </div>
+                        <div class="col-lg-4"> 
+                          <div class="form-group"> 
+                            <label class="form-control-label" for="input-email">Job Type</label>
+                            <select class="form-control" required id="job_type">
+                              <option value="">Select</option>
+                              <option value="Permanent">Permanent Employment</option>
+                              <option value="part_time">Part Time Work Permit</option>
+                            </select>
+                          </div>
+                        </div>
+                       
+                       
+                      </div>
+                    
+                    
+                      <div class="row">
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
                             <label class="form-control-label" for="input-email">Business Unit</label>
@@ -392,77 +424,51 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
 
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Designation</label>
-                            <select class="form-control select2 position_select" required  id="TxtPosition">
-                              <option value="">Select</option>
-                              <option value="Merchandiser">Merchandiser</option>
-                              <option value="Field Manager">Field Manager</option>
-                          </select>
+                            <label class="form-control-label" for="input-email">Joining Date</label>
+                            <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate" >
+  
                           </div>
                         </div>
-                       
-                       
-                      </div>
-                    
-                    
-                      <div class="row">
 
                         <div class="col-lg-4"> 
                           <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Job Type</label>
-                            <select class="form-control" required id="job_type">
-                              <option value="">Select</option>
-                              <option value="Permanent">Permanent Employment</option>
-                              <option value="part_time">Part Time Work Permit</option>
-                            </select>
+                            <label class="form-control-label" for="input-email"> Offer Validity Date</label>
+                            <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="validity_date" >
+  
                           </div>
                         </div>
-                        <div class="col-lg-4"> 
-                          <div class="form-group"> 
-                            <label class="form-control-label" for="input-email">Gross Salary</label>
-                            <input type="number" required id="TxtSalary" class="form-control" placeholder="Enter Gross Salary" >
-
-                          </div>
-                        </div>
-
-                        <div class="col-lg-4"> 
-                           <div class="form-group"> 
-                                <label class="form-control-label" for="input-email">Currency</label>
-                                <select class="form-control" required id="currency">
-                                <option value="">Select</option>
-                                <option value="AED">AED</option>
-                                <option value="INR">INR</option>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                </select>
-                            </div>
-                        </div>
-                      
-                          
-
+  
                       </div>
                     <div class="row">  
 
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Joining Date</label>
-                          <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate" >
-
+                          <label class="form-control-label" for="input-email">Currency</label>
+                          <select class="form-control" required id="currency">
+                          <option value="">Select</option>
+                          <option value="AED">AED</option>
+                          <option value="INR">INR</option>
+                          <option value="USD">USD</option>
+                          <option value="EUR">EUR</option>
+                          </select>
                         </div>
                       </div>
+
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Validity Date</label>
-                          <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="validity_date" >
+                          <label class="form-control-label" for="input-email">Gross Salary</label>
+                          <input type="number" required id="TxtSalary" class="form-control" placeholder="Enter Gross Salary" >
 
                         </div>
                       </div>
 
+                     
+                      
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
                           <label class="form-control-label" for="input-email">Approver</label>
                           <select class="form-control"  id="approver">
-                            <option value="">Select</option>
+                            <option value="">HR</option>
                             {% for head in business_head %}
                             <option value="{{head.employee_id}}">{{head.first_name}}({{head.employee_id}})</option>
                             {% endfor  %}
@@ -470,23 +476,50 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         </div>
                       </div>
                   
-                    </div>
-                    <div class="col-lg-12"> 
+                   
+                      <div class="col-lg-4" > 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Variable Salary</label>
+                          <select class="form-control"  id="variable_salary">
+                            <option value="">Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          
+                          </select>
+                        </div>
+
+
+                      </div>
+
+                      <div class="row"  style="padding:1rem" id="salary">
+                      </div>
+
+                      <div class="col-lg-12" id="customized" > 
+                        <div class="form-group"> 
+                            <label class="form-control-label" for="input-email">Customized Option</label>
+                            <textarea class="form-control " name="customized"  type="text" placeholder="Enter Customized Benefits" id="customized_value" ></textarea>
+  
+                        </div>
+                      </div>
+
+
+                  </div>
+                     <div class="col-lg-12"> 
                         <div class="form-group"> 
                             <label class="form-control-label" for="input-email">Job Description</label>
-                            <textarea class="form-control " required type="text" placeholder="Enter Job Description" id="job_description" ></textarea>
+                            <textarea class="form-control "  type="text" placeholder="Enter Job Description" id="job_description" ></textarea>
 
                         </div>
-                    </div>
+                      </div>
                   </div>
                 </form>
                 
                 <div class="modal-footer">
-					        {% comment %} <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center> {% endcomment %}
+					        <!-- {% comment %} <center><button id="btn_preview_offer" type="button" class="btn btn-primary  ml-auto">Preview</button></center> {% endcomment %} -->
                  	<center><button id="btn_offer_letter" type="button" class="btn btn-primary">Submit</button></center>
                    
                 </div>
-                {% comment %} <span style="float: right;color: red;" id="just_wait">Just wait..</span> {% endcomment %}
+                <!-- {% comment %} <span style="float: right;color: red;" id="just_wait">Just wait..</span> {% endcomment %} -->
                 </div>
               </div>
             </div>
@@ -538,23 +571,10 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         </div>
                       </div>
 
+                     
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Business Unit</label>
-                          <select class="form-control" required id="update_business_unit">
-                             {% comment %} <option value="" selected >Select</option> {% endcomment %}
-                            {% comment %} <option value="Rhapsody Merchandising Services L.L.C" >Rhapsody Merchandising Services L.L.C</option>
-                            <option value="Rhapsody Advertising L.L.C">Rhapsody Advertising L.L.C</option>
-                            <option value="Woodworks Interior Decoration L.L.C">Woodworks Interior Decoration L.L.C</option>
-                            <option value="Green Apple Software Trading L.L.C">Green Apple Software Trading L.L.C</option>
-                            <option value="The Thought Factory DMCC">The Thought Factocompanyry DMCC</option>
-                            <option value="TTF General Trading L.L.C">TTF General Trading L.L.C</option> {% endcomment %} 
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-lg-4"> 
-                        <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Designation</label>
+                          <label class="form-control-label" for="input-email">Position</label>
                           <select class="form-control select2 position_select" required  id="update_position">
                             <option value="">Select</option>
                             <option value="Merchandiser">Merchandiser</option>
@@ -562,19 +582,6 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                         </select>
                         </div>
                       </div>
-                      
-                      {% comment %}                   
-                        <div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
-                        <div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
-                        
-                        <div class="col-lg-3"><span style="color: blue;">Joining Date : </span></div>
-                        <div class="col-lg-3"> <input  required class="form-control startdate" type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate"></input></div> {% endcomment %}
-
-                    </div>
-                  
-                  
-                    <div class="row">
-
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
                           <label class="form-control-label" for="input-email">Job Type</label>
@@ -585,54 +592,80 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                           </select>
                         </div>
                       </div>
+                      
+                      <!-- {% comment %}                   
+                        <div class="col-lg-3"><span style="color: blue;">Position :</span> </div> 
+                        <div class="col-lg-3"><input class="form-control" required type="text" placeholder="Enter Position" id="TxtPosition"></input></div>
+                        
+                        <div class="col-lg-3"><span style="color: blue;">Joining Date : </span></div>
+                        <div class="col-lg-3"> <input  required class="form-control startdate" type="text" placeholder="dd-mm-yyyy" id="TxtJoinDate"></input></div> {% endcomment %} -->
 
+                    </div>
+                  
+                  
+                    <div class="row">
                       <div class="col-lg-4"> 
                         <div class="form-group"> 
-                          <label class="form-control-label" for="input-email">Gross Salary</label>
-                          <input type="number" required id="update_salary" class="form-control" placeholder="Enter Gross Salary" >
-
+                          <label class="form-control-label" for="input-email">Business Unit</label>
+                          <select class="form-control" required id="update_business_unit">
+                            <!-- {% comment %} <option value="" selected >Select</option> {% endcomment %}
+                            {% comment %} <option value="Rhapsody Merchandising Services L.L.C" >Rhapsody Merchandising Services L.L.C</option>
+                            <option value="Rhapsody Advertising L.L.C">Rhapsody Advertising L.L.C</option>
+                            <option value="Woodworks Interior Decoration L.L.C">Woodworks Interior Decoration L.L.C</option>
+                            <option value="Green Apple Software Trading L.L.C">Green Apple Software Trading L.L.C</option>
+                            <option value="The Thought Factory DMCC">The Thought Factocompanyry DMCC</option>
+                            <option value="TTF General Trading L.L.C">TTF General Trading L.L.C</option> {% endcomment %}  -->
+                          </select>
                         </div>
                       </div>
 
                       <div class="col-lg-4"> 
-                         <div class="form-group"> 
-                              <label class="form-control-label" for="input-email">Currency</label>
-                              <select class="form-control" required id="update_currency">
-                              <option value="">Select</option>
-                              <option value="AED">AED</option>
-                              <option value="INR">INR</option>
-                              <option value="USD">USD</option>
-                              <option value="EUR">EUR</option>
-                              </select>
-                          </div>
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Joining Date</label>
+                          <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="update_joinDate" >
+  
+                        </div>
                       </div>
-                    
-                        
-
+  
+                      <div class="col-lg-4"> 
+                        <div class="form-group"> 
+                          <label class="form-control-label" for="input-email">Offer Validity Date</label>
+                          <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="update_validity_date" >
+  
+                        </div>
+                      </div>
                     </div>
                   <div class="row">  
 
+                    
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
-                        <label class="form-control-label" for="input-email">Joining Date</label>
-                        <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="update_joinDate" >
+                        <label class="form-control-label" for="input-email">Currency</label>
+                        <select class="form-control" required id="update_currency">
+                        <option value="">Select</option>
+                        <option value="AED">AED</option>
+                        <option value="INR">INR</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4"> 
+                      <div class="form-group"> 
+                        <label class="form-control-label" for="input-email">Gross Salary</label>
+                        <input type="number" required id="update_salary" class="form-control" placeholder="Enter Gross Salary" >
 
                       </div>
                     </div>
 
-                    <div class="col-lg-4"> 
-                      <div class="form-group"> 
-                        <label class="form-control-label" for="input-email">Validity Date</label>
-                        <input class="form-control startdate" required type="text" placeholder="dd-mm-yyyy" id="update_validity_date" >
 
-                      </div>
-                    </div>
+                   
 
                     <div class="col-lg-4"> 
                       <div class="form-group"> 
                         <label class="form-control-label" for="input-email">Approver</label>
                         <select class="form-control"  id="update_approver">
-                          <option value="">Select</option>
+                          <option value="">HR</option>
                           {% for head in business_head %}
                           <option value="{{head.employee_id}}">{{head.first_name}}({{head.employee_id}})</option>
                           {% endfor  %}
@@ -641,13 +674,13 @@ span.confirm-change.custom-toggle-slider1.rounded-circle {
                     </div>
                 
                   </div>
-                  <div class="col-lg-12"> 
+                    <div class="col-lg-12"> 
                       <div class="form-group"> 
                           <label class="form-control-label" for="input-email">Job Description</label>
                           <textarea class="form-control " required type="text" placeholder="Enter Job Description" id="update_job_description" ></textarea>
 
                       </div>
-                  </div>
+                    </div>
                 </div>
               </form>
               
@@ -708,6 +741,73 @@ $('#company').on('change', function() {
 
 });
 
+$("#customized"). hide()
+
+$('#variable_salary').on('change', function() {
+  value = this.value;
+  //alert(value)
+  business_unit=$('#business_unit').val();
+  //alert(business_unit)
+  
+
+  if (value == 'yes')
+  {
+    $("#customized"). show()
+    $("#salary").html('')
+
+    // $("#salary"). show()
+    $.ajax({  
+      type: "POST",  
+      url: "/get_variable_salary/",  
+      data: {csrfmiddlewaretoken : csrftoken,variable_salary :value,business_unit:business_unit },
+      success: $.proxy(function(data) {
+        html="";
+        jQuery.each(data, function(index, item) { 
+          // alert(item.fields.name);
+
+            html+= '<div class="col-lg-4" >';
+            html+= '<div class="form-group">' ;
+            html+= '<label class="form-control-label" for="input-email" >'+(item.fields.name)+'</label>';
+            html+= '<br>';
+            html+= '<label style="padding:5px" > Yes';
+            html+='<input class="salary_components" type="radio" style="margin-right:10px ; margin-left: 5px" id="sim_card" name="'+(item.fields.name)+'" value="'+(item.pk)+'" >';
+            html+='</label>';
+            html+= '<label style="padding:5px" >No';
+            html+= '<input  type="radio" style="margin-right:10px ; margin-left: 5px" id="sim_card" name="'+(item.fields.name)+'">';
+            html+='</label>';
+              
+             
+            html+='</div>';
+            html+= '</div>';
+            
+          }); 
+          // html+='<div class="col-lg-12" >'; 
+          // html+='<div class="form-group"> '; 
+          // html+='<label class="form-control-label" for="input-email">Customized Option</label>'; 
+          // html+='<textarea class="form-control " required type="text" placeholder="Enter Job Description" id="customized" ></textarea>'; 
+          // html+='</div>'; 
+          // html+='</div>'; 
+
+          
+          $("#salary").append(html).show()
+          
+      })
+
+    });
+
+
+  }
+
+  if (value == 'no')
+    {
+      $("#customized"). hide()   
+      $("#salary"). hide()
+    }
+
+
+
+});  
+
 $('#update_company').on('change', function() {
   value = this.value;
   //alert(value);
@@ -749,13 +849,7 @@ $('#TxtPosition').on('change', function() {
   {
     html +='<ul>';
       html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
-      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
-      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
-      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
-      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
-      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
-      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
-      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+      
     html +='</ul>';
   }
   CKEDITOR.replace("job_description");
@@ -783,13 +877,7 @@ $('#update_position').on('change', function() {
   {
     html +='<ul>';
       html +='<li>Collaborating with suppliers, manufacturers, and stores to ensure proper execution of plans.</li>';
-      html +='<li>Creating and organizing promotions and advertising campaigns.</li>';
-      html +='<li>Managing layout plans of store and maintain inventory of products.</li>';
-      html +='<li>Present at the designated outlet, during stock receiving.  </li>';
-      html +='<li>Ensure that products appear in the right store, at the appropriate time and in the correct quantities.</li>';
-      html +='<li>Managing the freshness of the products based on FIFO (first in first out) inventory management.</li>';
-      html +='<li>Compliance with execution guidelines & journey plan adherence.</li>';
-      html +='<li>Timely submission of reports i.e. Out of stock reports, plan-o-gram compliance, journey plan adherence, time in motion etc.</li>';
+     
     html +='</ul>';
   }
   CKEDITOR.replace("update_job_description");
@@ -842,10 +930,34 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             var can_salary = $("#TxtSalary").val();
             var currency = $("#currency").val();
             var can_joindate = $("#TxtJoinDate").val();
+            // alert(can_joindate)
             var validity_date = $("#validity_date").val();
+            // alert(validity_date)
             var approver = $("#approver").val();
             //var job_description = $("#job_description").val();
             var job_description = CKEDITOR.instances['job_description'].getData();
+            // var salary_components=$(".salary_components").val(
+            // alert(salary_components)
+            var customized = $("#customized_value").val();
+            // alert(customized)
+
+            
+
+            var answersList = [];
+           
+            // var v= $('input[type=radio].salary_components:checked');
+            $('input[type=radio].salary_components:checked').each(function() {
+                var salary_components=this.value
+              
+                answersList.push(salary_components);
+                //alert(answersList)
+           
+            });
+
+            
+
+            // alert(answersList)
+   
           
             $("#company").css("border", "1px solid black");
             $("#TxtPosition").css("border", "1px solid black");
@@ -856,7 +968,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             $("#TxtJoinDate").css("border", "1px solid black");
             $("#validity_date").css("border", "1px solid black");
             $("#approver").css("border", "1px solid black");
-            $("#job_description").css("border", "1px solid black");
+            // $("#job_description").css("border", "1px solid black");
             
 
             // if ($('#TxtName').val() == "") {
@@ -894,27 +1006,23 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
             }
             if ($('#TxtJoinDate').val() == "") {
                   $("#TxtJoinDate").css("border", "1px solid red");
-                  $("#TxtJoinDate").focus();
+                  // $("#TxtJoinDate").focus();
                   
             }
             if ($('#validity_date').val() == "") {
               $("#validity_date").css("border", "1px solid red");
-              $("#validity_date").focus();
+              // $("#validity_date").focus();
               
         }
 
-            {% comment %} if ($('#job_description').val() == "") {
-                $("#job_description").css("border", "1px solid red");
-                $("#job_description").focus();
-                
-          } {% endcomment %}
-            {% comment %} if ($('#approver').val() == "") {
-              $("#approver").css("border", "1px solid red");
-              $("#approver").focus();
-              
-        } {% endcomment %}
+            
         if (company && can_joindate && can_salary && can_position && currency && job_type && business_unit && validity_date) {
-                $("#just_wait").show();
+          //  alert(answersList)
+          if (validity_date < can_joindate){
+              alert('Offer Validity Date Should Be Greater Than The Joining Date ')
+              return false;
+            }
+
                 swal({
                     title: 'Are you sure?',
                     text: "You want to enroll this info!",
@@ -925,12 +1033,14 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                     confirmButtonText: 'Yes, send it!',
                     cancelButtonClass: 'btn btn-secondary'
                 }).then((result) => {
+                  
                     if (result.value) {
+                      // alert(answersList)
                         // Show confirmation
                         $.ajax({  
                         type: "POST",  
                         url: "/enroll_info/",  
-                        data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description,validity_date:validity_date},
+                        data: {csrfmiddlewaretoken : csrftoken,can_id :can_id,company : company, can_position : can_position,job_type : job_type,business_unit : business_unit, can_salary : can_salary, currency : currency,can_joindate : can_joindate,approver : approver,job_description:job_description,validity_date:validity_date ,'salary_comp[]':answersList,customized:customized},
                         success: $.proxy(function(data) {
                             
                          // alert(data)
@@ -1009,7 +1119,7 @@ $('[data-type="adhaar-number"]').on("change, blur", function() {
                     success: $.proxy(function(data) {
                         
                      // alert(data)
-                        console.log(JSON.stringify(data));
+                        // console.log(JSON.stringify(data));
 
                         if(data == 1){
                             $('#offer_letter')[0].reset();
@@ -1088,14 +1198,14 @@ $(".use-mail").click(function() {
 
 });
 
-{% comment %} $(".update").click(function() { 
-  var id = $(this).data('id');
-  //alert(id)
-  $("#candidate_id").val(id);
-  $('#update_modal').modal('show');
+// {% comment %} $(".update").click(function() { 
+//   var id = $(this).data('id');
+//   //alert(id)
+//   $("#candidate_id").val(id);
+//   $('#update_modal').modal('show');
 
 
-}); {% endcomment %}
+// }); {% endcomment %}
 
 $(document).on('click', '.update', function(){
 
@@ -1119,7 +1229,6 @@ $(document).on('click', '.update', function(){
                             jQuery.each(data, function(index, item) {
                               //alert(item.fields.business_unit)
 
-                              {% comment %} alert(item) {% endcomment %}
                                   
                                   if(check == false)
                                   {
@@ -1153,20 +1262,20 @@ $(document).on('click', '.update', function(){
                                   }
                            });
 
-                           {% comment %} jQuery.each(data[1], function(index, item) {
+                    //        {% comment %} jQuery.each(data[1], function(index, item) {
                                   
-                            if(check == false)
-                            {
-                                  check = true;
+                    //         if(check == false)
+                    //         {
+                    //               check = true;
                                  
-                                  alert(item.fields.business_unit)
+                    //               alert(item.fields.business_unit)
                                   
-                                  $('#update_business_unit').val(item.fields.business_unit);
+                    //               $('#update_business_unit').val(item.fields.business_unit);
                                  
                                   
                                   
-                            }
-                     }); {% endcomment %}
+                    //         }
+                    //  }); {% endcomment %}
 
                             
                 

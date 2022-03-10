@@ -1,19 +1,19 @@
 
 from django.db import models
 from django.contrib.auth.models import User 
-from app.models.department_model import Department 
+from app.models.business_unit_model import Business_Unit 
 
 
 
 # Create your models here.
 
-class Business_Unit(models.Model):  
+class Variable_Salary(models.Model):  
    
     id = models.AutoField(primary_key=True)
-    business_unit = models.CharField(max_length=100, blank = False, null = False)
-    company = models.ForeignKey(Department, max_length=50, blank=True, related_name='department', null=True, on_delete= models.SET_NULL)
+    name = models.CharField(max_length=30, blank = False, null = False)
+    businessunit = models.ForeignKey(Business_Unit, max_length=50, blank=True, related_name='businessunit', null=True, on_delete= models.SET_NULL)
   
-    description = models.CharField(max_length=300, blank = False, null = False)  
+    description = models.TextField(blank = False, null = False)  
     
     added_by = models.CharField(max_length=30,blank = True, null = True) 
     updated_by = models.CharField(max_length=30,blank = True, null = True)
@@ -24,4 +24,9 @@ class Business_Unit(models.Model):
 
       
     class Meta:  
-        db_table = "business_unit"  
+        db_table = "variable_salary"  
+
+    def __str__(self):
+        return self.name
+
+ 

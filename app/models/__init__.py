@@ -36,3 +36,4 @@ from .project_model import *
 from .timelogs import *
 from .manual_checkin_model import *
 from .business_unit_model import *
+from .variable_salary_model import *

@@ -1,0 +1,113 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Variable Salary Components {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <!-- Page plugins -->
+ 
+
+  <!-- Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Variable Salary </h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-user"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">All Variable Salary Components</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">Datatables</li> -->
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <a href="{% url 'add_variable_salary' %}" class="btn btn-sm btn-neutral">Add</a> 
+            {% comment %} <a href="#" class="btn btn-sm btn-neutral">Filters</a> {% endcomment %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    
+    <!-- Table -->
+    <div class="row">
+      <div class="col">
+      
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header">
+            <h3 class="mb-0">Variable Salary Components</h3>
+            <!-- <p class="text-sm mb-0">
+              This is an exmaple of datatable using the well known datatables.net plugin. This is a minimal setup in order to get started fast.
+            </p> --> 
+          </div>
+          <div class="table-responsive py-4">
+            <table class="table table-flush" id="datatable-basic">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Business Unit</th> 
+                  <th>Description</th>
+                  {% comment %} <th>Created Date</th> {% endcomment %}
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <!-- <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Office</th>
+                  <th>Age</th>
+                  <th>Start date</th>
+                  <th>Salary</th>
+                </tr>
+              </tfoot> -->
+              <tbody>
+                {% for salary in variable_salary %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{salary.name}}</td>
+                    <td>{{salary.businessunit.business_unit}}</td>
+                    <td>{{salary.description}}</td>
+                    {% comment %} <td>{{department.created_at|date:"Y-m-d H:i a"}} </td> {% endcomment %}
+                    <td>
+                      {% comment %} <a class="fas fa-edit" title="Edit" href="{% url 'update_department' department.id %}"></a> {% endcomment %}
+                        <a class="confirm-delete fas fa-trash" title="Delete" href="{% url 'delete_variable_salary' salary.id %}"></a>
+                    </td>
+                   
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this variable_salary?');
+        })
+
+
+    </script>
+
+{% endblock javascripts %}
+
+

@@ -89,56 +89,118 @@
             
             <p>Basic Salary {{ currency }} {{ basic_saraly }} ({{ basic_text }} only)<br>Accommodation Allowance {{ currency }} {{ accomodation }} ({{ accomodation_text }} only)<br>Other Allowance {{ currency }} {{ allowance }} ({{ allowance_text }} only) </p>
             {% if job_type == "Permanent" %}
-                <p>Over & above your salary your entitled to:</p>
+                
                 
                 {% if position == "Merchandiser" and business == "MERCHANDISING_MARS" or business == "MERCHANDISING_COCA_COLA" %}
-            
-                    <ul>
-                        <li>Sim card subscribed to a corporate mobile plan. </li>
-                        <li>Company car to execute assigned official duties. </li>
-                        <li>Company car - An allowance of AED 500.00 towards fuel, salik & parking expenses.  </li>
-                        <li>Car Maintenance Allowance - An allowance of AED 500.00 towards car maintenance.</li>
-                        <li>Fuel, Salik & Parking Expenses Allowance - An allowance of AED 500.00 towards fuel, salik & parking.</li>
-                        <li>Bike Allowance - An allowance of AED 500.00 towards Bike maintenance.</li>
-                        <li>Transport Allowance - An allowance of AED 200.00 towards transportation.</li>
-                    </ul> 
-                    <p><b>Incentives:</b></p>
-                    <p>Based on your performance on the job, you shall be eligible for monthly incentives, in according with the company policy.</p>
-                   
+                    {% if  var_list %}
+                        <p>Over & above your salary your entitled to:</p>
+                        <ul>
+                            {{var_list|safe}}
+
+                            {% if customize %}
+                             <ul>   <li> {{customize}}</li></ul>
+                            {% endif%}
+                            
+                        
+                        </ul> 
+                        {% if var_incen %}
+                            <p><b>Incentives:</b></p>
+                            {{var_incen|safe}}
+                        {% endif%}
+                    {% endif%}    
+
+                    
                 {% endif %}
                 {% if position == "Merchandiser" and business == "MERCHANDISING_TRANSMED" %}
-                    <ul>
-                        <li>An allowance of AED 500.00  towards car maintenance.</li>
-                    </ul> 
+                    {% if  var_list %}
+                        <p>Over & above your salary your entitled to:</p>
+                        <ul>
+                            {{var_list|safe}}
+
+                            {% if customize %}
+                             <ul>   <li> {{customize}}</li></ul>
+                            {% endif%}
+                            
+                        
+                        </ul> 
+                        {% if var_incen %}
+                            <p><b>Incentives:</b></p>
+                            {{var_incen|safe}}
+                        {% endif%}
+                    {% endif%}     
                 {% endif %}
                 {% if position == "Merchandiser" and business == "MERCHANDISING_AL_SAFI_DANONE" %}
-                    <ul>
-                        <li>Sim card subscribed to a corporate mobile plan. </li>
-                    </ul> 
-                    <p><b>Incentives:</b></p>
-                    <p>Based on your performance on the job, you shall be eligible for monthly incentives, in according with the company policy.</p>
+                    {% if  var_list %}
+                        <p>Over & above your salary your entitled to:</p>
+                        <ul>
+                            {{var_list|safe}}
+
+                            {% if customize %}
+                             <ul>   <li> {{customize}}</li></ul>
+                            {% endif%}
+                            
+                        
+                        </ul> 
+                        {% if var_incen %}
+                            <p><b>Incentives:</b></p>
+                            {{var_incen|safe}}
+                        {% endif%}
+                    {% endif%}    
                 {% endif %}
                 {% if position == "Merchandiser" and business == "MERCHANDISING_SAT_GLOBAL" or business == "MERCHANDISING_SAVATON_MERCHANSIDING"  %}
-                    <ul>
-                        <li>Sim card subscribed to a corporate mobile plan. </li>
-                        <li>Transport Allowance - An allowance of AED 200.00 towards transportation. </li>
-                        <li>Transport Allowance - An allowance of AED 350.00 towards transportation.</li>
-                    </ul> 
-                    <p><b>Incentives:</b></p>
-                    <p>Based on your performance on the job, you shall be eligible for monthly incentives, in according with the company policy.</p>
+                    {% if  var_list %}
+                        <p>Over & above your salary your entitled to:</p>
+                        <ul>
+                            {{var_list|safe}}
+
+                            {% if customize %}
+                             <ul>   <li> {{customize}}</li></ul>
+                            {% endif%}
+                            
+                        
+                        </ul> 
+                        {% if var_incen %}
+                            <p><b>Incentives:</b></p>
+                            {{var_incen|safe}}
+                        {% endif%}
+                    {% endif%}    
                 {% endif %}
-                {% if position == "SUPPORT" and business == "MERCHANDISING_ACCOUNTS_&_FINANCE" or business == "MERCHANDISING_HUMAN_RESOURCES"  %}
-                    <ul>
-                        <li>Sim card subscribed to a corporate mobile plan. </li>
-                    </ul> 
+                {% if  business == "SUPPORT_ACCOUNTS_&_FINANCE" or business == "SUPPORT_GROUP_HUMAN_RESOURCES"  %}
+                     {% if  var_list %}
+                        <p>Over & above your salary your entitled to:</p>
+                        <ul>
+                            {{var_list|safe}}
+
+                            {% if customize %}
+                             <ul>   <li> {{customize}}</li></ul>
+                            {% endif%}
+                            
+                        
+                        </ul> 
+                        {% if var_incen %}
+                            <p><b>Incentives:</b></p>
+                            {{var_incen|safe}}
+                        {% endif%}
+                    {% endif%}    
                 {% endif %}
                     
             {% endif %}
-            <p><b>Job Responsibilities:</b></p>
-            {% if position == "Merchandiser" %}
-                {{ job_description|safe }}
+
+
+
+            {% if job_description %}
+
+                <p><b>Job Responsibilities:</b></p>
+                    {% if position == "Merchandiser" %}
+
+                    <ul> {{ job_description|safe }}</ul>
+                    {% endif %}
+                    {% if position == "Field Manager" %}
+
+                      <ul>  {{ job_description|safe }}</ul>
+                    {% endif %}
+                <br><br>    
             {% endif %}
-            <br><br>
            
             {% if job_type == "Permanent" %}
                 <p><b>Visa:</b></p>
@@ -186,7 +248,8 @@
             <p>We are very excited about your joining <b>{{ company }}</b>. I hope that you will accept this offer and I look forward to a productive and mutually beneficial working relationship. Please let me know if I can answer any questions for you about any of the matters outlined in this letter. </p>
             <p>Welcome aboard <b> {{ company }} </b>  </p>
             <p>Sincerely,  </p><br><br>
-            <p>________________<br> Benito Seelan <br> Human Resources <br>{{ company }}</p>
+            <img src="https://hrms.thethoughtfactory.ae/static/signature_images/{{signature}}">
+            <p>________________<br> {{first_name}} {{last_name}} <br> Human Resources <br>{{ company }}</p>
             <hr>
             <p><b>ACCEPTANCE</b></p>
             <P>I,  <b>{{ fname }} {{ lname }}</b>  acknowledge I have read and agree to the terms and conditions set out in this Offer of Employment and accept this offer of a <b>{{ position }}</b>  with <b>{{ company }}</b>. Upon execution of this Offer of Employment, I understand and agree that this Offer of Employment shall constitute a formal contract of employment.</P>

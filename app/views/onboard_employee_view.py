@@ -1,6 +1,7 @@
 from multiprocessing import context
 from turtle import up
 from app.models import onboard_employee_model
+from app.models import variable_salary_model
 from app.models.business_unit_model import Business_Unit
 from app.models.onboard_employee_model import Onboard_Employee, Onboard_Work_Experience, Onboard_Education
 from django.contrib.auth.decorators import login_required
@@ -55,6 +56,7 @@ from django.contrib.auth.models import User
 from app.models.department_model import Department
 import socket
 import random
+from app.models.variable_salary_model import Variable_Salary
 import inflect
 import re
 
@@ -184,9 +186,11 @@ def approve_status(request):
 
     id = request.POST.get('id')
     value = request.POST.get('value')
+    reason=request.POST.get('reason')
 
     update = Onboard_Employee.objects.filter(candidate_id=id).update(
         is_approved=value,
+        reject_reason=reason,
         updated_at=timezone.now()
     )
     return HttpResponse(1)
@@ -459,8 +463,17 @@ def send_offer_letter(request):
 
     # send_mail('diditwork?', 'test message', 'from_email', ['to'], connection=connection)
 
-    details = Onboard_Employee.objects.filter(
+    details = Onboard_Employee.objects.select_related().filter(
         candidate_id=request.POST.get('can_id'))
+
+    employee =Employee.objects.filter(
+        employee_id=request.user.emp_id)    
+
+    signature=employee[0].signature
+    first_name=employee[0].first_name
+    last_name=employee[0].last_name
+    # print(first_name)
+    # print(details[0].business_unit.business_unit)
 
     p = inflect.engine()
 
@@ -468,21 +481,46 @@ def send_offer_letter(request):
     accomodation = details[0].salary * 30/100
     allowance = details[0].salary * 40/100
 
+    salary_comp=details[0].salary_components 
+    li = list(salary_comp.split(","))
+    # print(li)
+    var_list=""
+    var_incen=""
+    if salary_comp:
+        variable_salary=Variable_Salary.objects.filter(pk__in=li)
+    
+       
+        for var in variable_salary:
+
+            var_descri=var.description
+        
+            var_name=var.name
+            if var_name=="Incentives":
+                var_incen=var.description
+                # print('fgh')
+            else:
+                var_descri=var.description
+                # print(var_incen)
+                var_list+=var_descri
+
+
+    # print(var_list)
+
     basic_text = p.number_to_words(basic_saraly).split("point", 1)[0]
     accomodation_text = p.number_to_words(accomodation).split("point", 1)[0]
     allowance_text = p.number_to_words(allowance).split("point", 1)[0]
 
     # print(basic_text.replace(',', ''))
     code = re.findall("\d+", details[0].code_num)[0]
-
     myDate = datetime.datetime.now()
     context_dict = {'fname': details[0].first_name, 'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
                     'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
-                    'company': details[0].company, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name,
-                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
-                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),
+                    'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,'customize': details[0].customize,
+                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,'var_list':var_list, 'var_incen':var_incen,
+                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),'signature':signature,'first_name':first_name,'last_name':last_name,
                     'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
                     }
+
     template = get_template('mail_templates/appoinment.html')
     html = template.render(context_dict)
     result = BytesIO()
@@ -505,6 +543,8 @@ def send_offer_letter(request):
         with open(os.path.join(file_upload_dir, filename), 'wb+') as output:
             appoinment_letter = pisa.pisaDocument(
                 BytesIO(html.encode("UTF-8")), output)
+
+       
 
             update = Onboard_Employee.objects.filter(candidate_id=request.GET.get('can_id')).update(
                 offer_letter_url=filename,
@@ -562,8 +602,15 @@ def enroll_info(request):
     job_description = request.POST.get('job_description')
     # print(joining_date)
     approver = request.POST.get('approver')
-    # print(can_id)
-    # print(approver)
+    salary_comp=request.POST.getlist('salary_comp[]')
+    #to remove single quotes
+    list_var='[%s]' % ', '.join(map(str, salary_comp))
+    #to remove the brackets
+    str_var=str(list_var)[1:-1]
+    # print(str_var)
+    customize=request.POST.get('customized')
+    # print(customize)
+   
 
     update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
         company=company,
@@ -575,6 +622,8 @@ def enroll_info(request):
         joining_date=joining_date,
         job_description=job_description,
         validity_date=validity_date,
+        salary_components=str_var,
+        customize=customize if customize else None,
         approver=approver if approver else None,
         is_approved=0 if approver else 1,
         updated_at=timezone.now()
@@ -624,6 +673,10 @@ def preview_offer_letter(request):
 
     details = Onboard_Employee.objects.select_related().filter(
         candidate_id=request.GET.get('can_id'))
+
+    # employee =Employee.objects.filter(
+    #     employee_id=request.user.emp_id)    
+    # signature=employee[0].signature
     # print(details[0].business_unit.business_unit)
 
     p = inflect.engine()
@@ -631,6 +684,31 @@ def preview_offer_letter(request):
     basic_saraly = details[0].salary * 30/100
     accomodation = details[0].salary * 30/100
     allowance = details[0].salary * 40/100
+
+    salary_comp=details[0].salary_components 
+    li = list(salary_comp.split(","))
+    # print(li)
+    var_list=""
+    var_incen=""
+    if salary_comp:
+        variable_salary=Variable_Salary.objects.filter(pk__in=li)
+    
+       
+        for var in variable_salary:
+
+            var_descri=var.description
+        
+            var_name=var.name
+            if var_name=="Incentives":
+                var_incen=var.description
+                # print('fgh')
+            else:
+                var_descri=var.description
+                # print(var_incen)
+                var_list+=var_descri
+
+
+    # print(var_list)
 
     basic_text = p.number_to_words(basic_saraly).split("point", 1)[0]
     accomodation_text = p.number_to_words(accomodation).split("point", 1)[0]
@@ -641,8 +719,8 @@ def preview_offer_letter(request):
     myDate = datetime.datetime.now()
     context_dict = {'fname': details[0].first_name, 'lname': details[0].last_name, 'nationality': details[0].country, 'code': code,
                     'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
-                    'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,
-                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,
+                    'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,'customize': details[0].customize,
+                    'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,'var_list':var_list, 'var_incen':var_incen,
                     'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),
                     'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
                     }
@@ -859,5 +937,17 @@ def view_more(request):
     # print(employee)
 
     jsondata = serializers.serialize('json', employee)
+
+    return HttpResponse(jsondata, content_type='application/json')
+
+
+def get_variable_salary(request):
+
+    business_unit=request.POST.get('business_unit')
+
+    variable_salary = Variable_Salary.objects.filter(businessunit=business_unit)
+    # print(variable_salary)
+
+    jsondata = serializers.serialize('json', variable_salary)
 
     return HttpResponse(jsondata, content_type='application/json')

@@ -39,6 +39,7 @@ from .manual_checkin_view import *
 from .reportingto_view import *
 from .emp_mapping_view import *
 from .business_unit_view import *
+from .variable_salary_view import *
 
 
 
