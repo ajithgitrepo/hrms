@@ -59,6 +59,8 @@ import random
 from app.models.variable_salary_model import Variable_Salary
 import inflect
 import re
+from app.views.restriction_view import admin_only,role_name
+
 
 #from app.models import QuillModel
 
@@ -118,11 +120,11 @@ def onboard_employees(request):
     business_head = Employee.objects.filter(is_active=1, role_id=4)
     company = Department.objects.filter(is_active=1)
     # print(business_head)
-
+    hr=Employee.objects.filter(is_active=1, role_id=1)
    # return HttpResponse(employee)
     # print(employee)
     context = {'employees': employee,
-               'business_head': business_head, 'company': company}
+               'business_head': business_head, 'company': company,'hr':hr}
     return render(request, "onboard_employee/index.html", context)
 
 
@@ -517,7 +519,7 @@ def send_offer_letter(request):
                     'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
                     'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,'customize': details[0].customize,
                     'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,'var_list':var_list, 'var_incen':var_incen,
-                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),'signature':signature,'first_name':first_name,'last_name':last_name,
+                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),'signature':signature,'first_name':first_name,'last_name':last_name,'salary_description':details[0].salary_description,
                     'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
                     }
 
@@ -609,25 +611,47 @@ def enroll_info(request):
     str_var=str(list_var)[1:-1]
     # print(str_var)
     customize=request.POST.get('customized')
-    # print(customize)
-   
+    description = request.POST.get('description')
+    # print(description)
 
-    update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
-        company=company,
-        position=position,
-        job_type=job_type,
-        business_unit=business_unit,
-        salary=salary,
-        currency=currency,
-        joining_date=joining_date,
-        job_description=job_description,
-        validity_date=validity_date,
-        salary_components=str_var,
-        customize=customize if customize else None,
-        approver=approver if approver else None,
-        is_approved=0 if approver else 1,
-        updated_at=timezone.now()
-    )
+    # print(customize)
+    role = role_name(request)
+    if role=="HR_Admin":
+        update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
+            company=company,
+            position=position,
+            job_type=job_type,
+            business_unit=business_unit,
+            salary=salary,
+            currency=currency,
+            joining_date=joining_date,
+            job_description=job_description,
+            salary_description=description,
+            validity_date=validity_date,
+            salary_components=str_var,
+            customize=customize if customize else None,
+            approver=approver if approver else None,
+            is_approved=1,
+            updated_at=timezone.now()
+        )
+    else:
+        update = Onboard_Employee.objects.filter(candidate_id=can_id).update(
+            company=company,
+            position=position,
+            job_type=job_type,
+            business_unit=business_unit,
+            salary=salary,
+            currency=currency,
+            joining_date=joining_date,
+            job_description=job_description,
+            salary_description=description,
+            validity_date=validity_date,
+            salary_components=str_var,
+            customize=customize if customize else None,
+            approver=approver if approver else None,
+            is_approved=0 if approver else 1,
+            updated_at=timezone.now()
+        )
 
     return HttpResponse(1)
 
@@ -721,7 +745,7 @@ def preview_offer_letter(request):
                     'mobile': details[0].mobile_number, 'joining_date': details[0].joining_date, 'salary': details[0].salary, 'validity_date': details[0].validity_date,
                     'company': details[0].company.name, 'position': details[0].position, 'email': details[0].email_id, 'hr_name': request.user.first_name, 'business': details[0].business_unit.business_unit,'customize': details[0].customize,
                     'currency': details[0].currency, 'passport': details[0].passport_no, 'job_type': details[0].job_type, 'job_description': details[0].job_description,'var_list':var_list, 'var_incen':var_incen,
-                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),
+                    'basic_saraly': basic_saraly, 'accomodation': accomodation, 'allowance': allowance, 'basic_text': basic_text.replace(',', ''),'salary_description':details[0].salary_description,
                     'accomodation_text': accomodation_text.replace(',', ''), 'allowance_text': allowance_text.replace(',', '')
                     }
 

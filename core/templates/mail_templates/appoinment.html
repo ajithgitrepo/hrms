@@ -95,7 +95,7 @@
                     {% if  var_list %}
                         <p>Over & above your salary your entitled to:</p>
                         <ul>
-                            {{var_list|safe}}
+                            {{salary_description|safe}}
 
                             {% if customize %}
                              <ul>   <li> {{customize}}</li></ul>
@@ -115,7 +115,7 @@
                     {% if  var_list %}
                         <p>Over & above your salary your entitled to:</p>
                         <ul>
-                            {{var_list|safe}}
+                            {{salary_description|safe}}
 
                             {% if customize %}
                              <ul>   <li> {{customize}}</li></ul>
@@ -133,7 +133,7 @@
                     {% if  var_list %}
                         <p>Over & above your salary your entitled to:</p>
                         <ul>
-                            {{var_list|safe}}
+                            {{salary_description|safe}}
 
                             {% if customize %}
                              <ul>   <li> {{customize}}</li></ul>
@@ -151,7 +151,7 @@
                     {% if  var_list %}
                         <p>Over & above your salary your entitled to:</p>
                         <ul>
-                            {{var_list|safe}}
+                            {{salary_description|safe}}
 
                             {% if customize %}
                              <ul>   <li> {{customize}}</li></ul>
@@ -165,7 +165,7 @@
                         {% endif%}
                     {% endif%}    
                 {% endif %}
-                {% if  business == "SUPPORT_ACCOUNTS_&_FINANCE" or business == "SUPPORT_GROUP_HUMAN_RESOURCES"  %}
+                {% if  business == "SUPPORT_GROUP_ACCOUNTS_&_FINANCE" or business == "SUPPORT_GROUP_HUMAN_RESOURCES"  %}
                      {% if  var_list %}
                         <p>Over & above your salary your entitled to:</p>
                         <ul>

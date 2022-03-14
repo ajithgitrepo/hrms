@@ -93,6 +93,7 @@ class Onboard_Employee(models.Model):
         visa_status = models.CharField(max_length=50, blank=True, null=True)
         customize=models.TextField(blank=True, null=True)
         reject_reason = models.CharField(max_length=450 , blank = True, null = True)
+        salary_description = models.TextField(blank=False, null=True)
 
 
         class Meta:
