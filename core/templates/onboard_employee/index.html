@@ -847,7 +847,7 @@ $('#variable_salary').on('change', function() {
             html+='<input class="salary_components sal_descri" onchange="salary();"  type="radio" style="margin-right:10px ; margin-left: 5px" id="sim_card" name="'+(item.fields.name)+'" value="'+(item.pk)+'" description="'+(item.fields.description)+'" >';
             html+='</label>';
             html+= '<label style="padding:5px" >No';
-            html+= '<input  class="sal_descri" type="radio" style="margin-right:10px ; margin-left: 5px" id="sim_card" name="'+(item.fields.name)+'">';
+            html+= '<input  class="sal_descri" type="radio" style="margin-right:10px ; margin-left: 5px" id="sim_card" name="'+(item.fields.name)+'" description="">';
             html+='</label>';
               
              
@@ -888,10 +888,10 @@ function car(){
   html+= '<div class="form-group">' ;
   html+= '<label class="form-control-label" for="input-email" >Car - Fuel</label>';
   html+= '<br>';
-  html+= '<label style="padding:5px" > yes ';
+  html+= '<label style="padding:5px" > Yes ';
   html+='<input class=" sal_descri" onchange="salary();"  type="radio" style="margin-right:10px ; margin-left: 5px" name="car_fuel" description="<li> An allowance of AED 500.00 towards fuel, salik & parking expenses.</li>"> ';
   html+='</label>';
-  html+= '<label style="padding:5px" >no';
+  html+= '<label style="padding:5px" >No';
   html+= '<input  class="sal_descri" type="radio"  onchange="salary();"style="margin-right:10px ; margin-left: 5px"name="car_fuel" description="" >';
   html+='</label>';
 
@@ -903,10 +903,10 @@ function car(){
   html+= '<div class="form-group">' ;
   html+= '<label class="form-control-label" for="input-email" >Car - Maintenance</label>';
   html+= '<br>';
-  html+= '<label style="padding:5px" > yes ';
+  html+= '<label style="padding:5px" > Yes ';
   html+='<input class="sal_descri" onchange="salary();"  type="radio" style="margin-right:10px ; margin-left: 5px"  name="car_maintain"  description="<li>An allowance of AED 500.00 towards car maintenance.</li>">';
   html+='</label>';
-  html+= '<label style="padding:5px" >no';
+  html+= '<label style="padding:5px" >No';
   html+= '<input  class="sal_descri" type="radio"  onchange="salary();"style="margin-right:10px ; margin-left: 5px"  name="car_maintain" description="">';
   html+='</label>';
   html+='</div>';
