@@ -538,7 +538,7 @@ function csrfSafeMethod(method) {
                                 var time = d.getTime();
                                 var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
                                 var result = day + "-" + month + "-" + year + " " + time;
-                                var tot = parseInt(item.fields.total_days) + 1
+                                var tot = parseInt(item.fields.total_days)
                                 check = true;
                                 var reject_reason=item.fields.reject_reason
                                 if(item.fields.leave_mode == "half")
